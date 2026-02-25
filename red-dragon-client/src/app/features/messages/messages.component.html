@@ -1,0 +1,60 @@
+<div class="page-content">
+  <h2>✉️ Wiadomości</h2>
+  <div class="toast" *ngIf="message">{{ message }}</div>
+
+  <div class="tabs">
+    <button [class.active]="tab === 'inbox'" (click)="tab = 'inbox'">Odebrane ({{ inbox.length }})</button>
+    <button [class.active]="tab === 'sent'" (click)="tab = 'sent'">Wysłane</button>
+    <button [class.active]="tab === 'compose'" (click)="tab = 'compose'">Nowa wiadomość</button>
+  </div>
+
+  <div *ngIf="!loading; else loadingTpl">
+    <!-- Inbox -->
+    <div *ngIf="tab === 'inbox'" class="msg-list">
+      <div class="msg-card" *ngFor="let m of inbox" [class.unread]="!m.isRead" (click)="markRead(m.id)">
+        <div class="msg-header">
+          <strong>Od: {{ m.senderName }}</strong>
+          <span class="date">{{ m.sentAt | date:'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+        <div class="msg-subject">{{ m.subject || '(brak tematu)' }}</div>
+        <div class="msg-body">{{ m.body }}</div>
+      </div>
+      <p *ngIf="inbox.length === 0" class="empty">Brak wiadomości.</p>
+    </div>
+
+    <!-- Sent -->
+    <div *ngIf="tab === 'sent'" class="msg-list">
+      <div class="msg-card" *ngFor="let m of sent">
+        <div class="msg-header">
+          <strong>Do: {{ m.receiverName }}</strong>
+          <span class="date">{{ m.sentAt | date:'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+        <div class="msg-subject">{{ m.subject || '(brak tematu)' }}</div>
+        <div class="msg-body">{{ m.body }}</div>
+      </div>
+      <p *ngIf="sent.length === 0" class="empty">Brak wysłanych wiadomości.</p>
+    </div>
+
+    <!-- Compose -->
+    <div *ngIf="tab === 'compose'" class="compose-form">
+      <div class="form-group">
+        <label>Do:</label>
+        <select [(ngModel)]="newTo">
+          <option [ngValue]="0">-- Wybierz odbiorcę --</option>
+          <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Temat:</label>
+        <input type="text" [(ngModel)]="newSubject" placeholder="Temat wiadomości" />
+      </div>
+      <div class="form-group">
+        <label>Treść:</label>
+        <textarea [(ngModel)]="newBody" rows="6" placeholder="Treść wiadomości..."></textarea>
+      </div>
+      <button class="btn-send" (click)="sendMessage()">Wyślij</button>
+    </div>
+  </div>
+
+  <ng-template #loadingTpl><div class="loading">Ładowanie...</div></ng-template>
+</div>

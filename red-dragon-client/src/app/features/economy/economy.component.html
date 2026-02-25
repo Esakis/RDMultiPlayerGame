@@ -1,0 +1,41 @@
+<div class="page-content" *ngIf="kingdom; else loadingTpl">
+  <h2>💰 Gospodarka</h2>
+  <div class="toast" *ngIf="message">{{ message }}</div>
+
+  <!-- Kupno ziemi -->
+  <div class="card">
+    <h3>Kupno Ziemi</h3>
+    <p class="info">Aktualna ziemia: <strong>{{ kingdom.land }} akrów</strong> | Cena: 500 złota/akr</p>
+    <div class="buy-controls">
+      <input type="number" [(ngModel)]="landAmount" min="1" max="1000" />
+      <span class="cost">Koszt: {{ landAmount * 500 | numberFormat }} 💰</span>
+      <button class="btn-action" (click)="buyLand()">Kup ziemię</button>
+    </div>
+  </div>
+
+  <!-- Zawody -->
+  <div class="card">
+    <h3>Zarządzanie Zawodami</h3>
+    <p class="info">Populacja: {{ kingdom.population | numberFormat }} | Przydziel pracowników do zawodów</p>
+
+    <div class="profession-table">
+      <div class="prof-row header-row">
+        <span>Zawód</span><span>Pracownicy</span><span>Produkcja/turę</span><span>Akcje</span>
+      </div>
+      <div class="prof-row" *ngFor="let p of kingdom.professions">
+        <span class="prof-name">{{ p.displayName }}</span>
+        <span class="prof-count">{{ p.workerCount | numberFormat }}</span>
+        <span class="prof-prod">{{ getProductionInfo(p.professionType) }}</span>
+        <div class="prof-actions" *ngIf="p.professionType !== 'Unemployed'">
+          <input type="number" [(ngModel)]="assignAmounts[p.professionType]"
+                 min="1" max="10000" placeholder="ilość" />
+          <button class="btn-sm btn-assign" (click)="assign(p.professionType, assignAmounts[p.professionType] || 10)">+</button>
+          <button class="btn-sm btn-remove" (click)="unassign(p.professionType, assignAmounts[p.professionType] || 10)">−</button>
+        </div>
+        <span *ngIf="p.professionType === 'Unemployed'" class="idle">Czekają na przydział</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTpl><div class="loading">Ładowanie...</div></ng-template>

@@ -1,0 +1,20 @@
+<div class="page-content">
+  <h2>🏆 Ranking</h2>
+  <div *ngIf="!loading; else loadingTpl">
+    <div class="ranking-table">
+      <div class="rank-row header">
+        <span>#</span><span>Księstwo</span><span>Rasa</span><span>Ziemia</span><span>Populacja</span><span>Koalicja</span>
+      </div>
+      <div class="rank-row" *ngFor="let k of kingdoms; let i = index" [class.top3]="i < 3">
+        <span class="pos">{{ i + 1 }}</span>
+        <span class="name">{{ k.name }}</span>
+        <span>{{ k.race }}</span>
+        <span class="land">{{ k.land }}</span>
+        <span>{{ k.population | numberFormat }}</span>
+        <span class="tag">{{ k.coalitionTag || '-' }}</span>
+      </div>
+      <p *ngIf="kingdoms.length === 0" class="empty">Brak graczy.</p>
+    </div>
+  </div>
+  <ng-template #loadingTpl><div class="loading">Ładowanie...</div></ng-template>
+</div>

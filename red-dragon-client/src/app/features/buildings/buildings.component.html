@@ -1,0 +1,47 @@
+<div class="page-content">
+  <h2>🏗️ Budynki</h2>
+  <div class="toast" *ngIf="message">{{ message }}</div>
+
+  <div *ngIf="!loading; else loadingTpl">
+    <div *ngFor="let cat of categories" class="category-section">
+      <h3>{{ getCategoryName(cat) }}</h3>
+      <div class="buildings-grid">
+        <div class="building-card" *ngFor="let def of getByCategory(cat)"
+             [class.cannot-build]="!def.canBuild">
+          <div class="building-header">
+            <strong>{{ def.displayName }}</strong>
+            <span class="owned" *ngIf="getOwned(def.buildingType) as owned">
+              Posiadasz: {{ owned.quantity }}
+            </span>
+          </div>
+          <p class="desc">{{ def.description }}</p>
+          <div class="costs">
+            <span *ngIf="def.costGold">💰{{ def.costGold }}</span>
+            <span *ngIf="def.costWood">🪵{{ def.costWood }}</span>
+            <span *ngIf="def.costStone">🪨{{ def.costStone }}</span>
+            <span *ngIf="def.costIron">⚒️{{ def.costIron }}</span>
+            <span *ngIf="def.costMana">🔮{{ def.costMana }}</span>
+            <span>🏞️{{ def.costLand }}</span>
+            <span>⏱️{{ def.buildTime }}t</span>
+          </div>
+          <div class="bonuses" *ngIf="def.productionBonus || def.defenseBonus || def.populationCapacity || def.bonusTurnsPerDay">
+            <span *ngIf="def.productionBonus">📈+{{ def.productionBonus * 100 }}% prod</span>
+            <span *ngIf="def.defenseBonus">🛡️+{{ def.defenseBonus * 100 }}% obr</span>
+            <span *ngIf="def.populationCapacity">👥+{{ def.populationCapacity }}</span>
+            <span *ngIf="def.bonusTurnsPerDay">⏳+{{ def.bonusTurnsPerDay }} tur/dzień</span>
+          </div>
+          <div class="build-controls" *ngIf="def.canBuild">
+            <input type="number" [(ngModel)]="quantities[def.buildingType]" min="1" max="100"
+                   *ngIf="!def.isSpecial" />
+            <button class="btn-build" (click)="construct(def)">Buduj</button>
+          </div>
+          <div class="cannot-reason" *ngIf="!def.canBuild">
+            {{ def.cannotBuildReason }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTpl><div class="loading">Ładowanie...</div></ng-template>
+</div>

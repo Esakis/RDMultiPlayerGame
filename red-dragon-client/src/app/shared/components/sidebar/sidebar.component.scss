@@ -1,0 +1,41 @@
+.sidebar {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  bottom: 0;
+  width: 200px;
+  background: linear-gradient(180deg, #140808, #0d0404);
+  border-right: 1px solid #3a1515;
+  padding-top: 12px;
+  overflow-y: auto;
+  z-index: 90;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  color: #aa8866;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+
+  &:hover {
+    background: rgba(139, 0, 0, 0.15);
+    color: #ddd;
+  }
+
+  &.active {
+    background: rgba(139, 0, 0, 0.25);
+    color: #ff6644;
+    border-left-color: #ff4444;
+  }
+
+  .nav-icon {
+    font-size: 1.1rem;
+    width: 24px;
+    text-align: center;
+  }
+}

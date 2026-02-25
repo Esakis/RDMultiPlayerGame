@@ -1,0 +1,61 @@
+<div class="page-content">
+  <h2>⚔️ Armia</h2>
+  <div class="toast" *ngIf="message">{{ message }}</div>
+
+  <div *ngIf="!loading; else loadingTpl">
+    <!-- Rekrutacja -->
+    <div class="card">
+      <h3>Rekrutacja jednostek</h3>
+      <div class="units-grid">
+        <div class="unit-card" *ngFor="let def of unitDefs" [class.cannot]="!def.canRecruit">
+          <div class="unit-header">
+            <strong>{{ def.displayName }}</strong>
+            <span class="owned" *ngIf="getOwned(def.unitType) as owned">Posiadasz: {{ owned.quantity }}</span>
+          </div>
+          <p class="desc">{{ def.description }}</p>
+          <div class="stats">
+            <span>⚔️{{ def.attackPower }}</span>
+            <span>🛡️{{ def.defensePower }}</span>
+            <span>🍖{{ def.upkeep }}/t</span>
+            <span>⏱️{{ def.trainingTime }}t</span>
+          </div>
+          <div class="costs">
+            <span *ngIf="def.costGold">💰{{ def.costGold }}</span>
+            <span *ngIf="def.costIron">⚒️{{ def.costIron }}</span>
+            <span *ngIf="def.costWood">🪵{{ def.costWood }}</span>
+            <span *ngIf="def.costFood">🌾{{ def.costFood }}</span>
+          </div>
+          <div class="recruit-controls" *ngIf="def.canRecruit">
+            <input type="number" [(ngModel)]="recruitQty[def.unitType]" min="1" max="10000" />
+            <button class="btn-recruit" (click)="recruit(def.unitType)">Rekrutuj</button>
+          </div>
+          <div class="cannot-reason" *ngIf="!def.canRecruit">{{ def.cannotRecruitReason }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Atak -->
+    <div class="card">
+      <h3>Planowanie Ataku</h3>
+      <p class="info">Ataki wykonywane są podczas codziennego przeliczenia o 5:00.</p>
+      <div class="attack-form">
+        <div class="form-group">
+          <label>Cel ataku:</label>
+          <select [(ngModel)]="attackTarget">
+            <option [ngValue]="0">-- Wybierz cel --</option>
+            <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }} ({{ k.race }}, {{ k.land }} akrów)</option>
+          </select>
+        </div>
+        <div class="attack-units">
+          <div *ngFor="let u of myArmy" class="attack-unit-row">
+            <span>{{ u.displayName }} ({{ u.quantity }})</span>
+            <input type="number" [(ngModel)]="attackUnits[u.unitType]" min="0" [max]="u.quantity" placeholder="0" />
+          </div>
+        </div>
+        <button class="btn-attack" (click)="sendAttack()">⚔️ Zakolejkuj Atak</button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTpl><div class="loading">Ładowanie...</div></ng-template>
+</div>

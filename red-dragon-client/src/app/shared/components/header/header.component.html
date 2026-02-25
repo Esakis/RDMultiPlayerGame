@@ -1,0 +1,45 @@
+<header class="game-header">
+  <div class="header-left">
+    <h1 class="logo" routerLink="/dashboard">🐉 Red Dragon</h1>
+  </div>
+
+  <div class="resource-bar" *ngIf="kingdom">
+    <div class="resource" title="Złoto">
+      <span class="res-icon">💰</span>
+      <span class="res-val">{{ kingdom.gold | numberFormat }}</span>
+    </div>
+    <div class="resource" title="Żywność">
+      <span class="res-icon">🌾</span>
+      <span class="res-val">{{ kingdom.food | numberFormat }}</span>
+    </div>
+    <div class="resource" title="Drewno">
+      <span class="res-icon">🪵</span>
+      <span class="res-val">{{ kingdom.wood | numberFormat }}</span>
+    </div>
+    <div class="resource" title="Kamień">
+      <span class="res-icon">🪨</span>
+      <span class="res-val">{{ kingdom.stone | numberFormat }}</span>
+    </div>
+    <div class="resource" title="Żelazo">
+      <span class="res-icon">⚒️</span>
+      <span class="res-val">{{ kingdom.iron | numberFormat }}</span>
+    </div>
+    <div class="resource" title="Mana">
+      <span class="res-icon">🔮</span>
+      <span class="res-val">{{ kingdom.mana | numberFormat }}</span>
+    </div>
+    <div class="resource" title="Ziemia">
+      <span class="res-icon">🏞️</span>
+      <span class="res-val">{{ kingdom.land }}</span>
+    </div>
+    <div class="resource turns" title="Tury">
+      <span class="res-icon">⏳</span>
+      <span class="res-val">{{ kingdom.turnsAvailable }}/{{ kingdom.maxTurns }}</span>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <span class="username">{{ username }}</span>
+    <button class="btn-logout" (click)="logout()">Wyloguj</button>
+  </div>
+</header>

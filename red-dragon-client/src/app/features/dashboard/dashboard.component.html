@@ -1,0 +1,92 @@
+<div class="page-content" *ngIf="kingdom; else loadingTpl">
+  <div class="toast" *ngIf="message">{{ message }}</div>
+
+  <div class="kingdom-header">
+    <h2>{{ kingdom.name }}</h2>
+    <span class="race-badge">{{ kingdom.race }}</span>
+    <span class="age-badge">Wiek: {{ kingdom.age }}</span>
+  </div>
+
+  <div class="dashboard-grid">
+    <!-- Zasoby -->
+    <div class="card">
+      <h3>Zasoby</h3>
+      <div class="resource-list">
+        <div class="res-row"><span>💰 Złoto</span><strong>{{ kingdom.gold | numberFormat }}</strong></div>
+        <div class="res-row"><span>🌾 Żywność</span><strong>{{ kingdom.food | numberFormat }}</strong></div>
+        <div class="res-row"><span>🪵 Drewno</span><strong>{{ kingdom.wood | numberFormat }}</strong></div>
+        <div class="res-row"><span>🪨 Kamień</span><strong>{{ kingdom.stone | numberFormat }}</strong></div>
+        <div class="res-row"><span>⚒️ Żelazo</span><strong>{{ kingdom.iron | numberFormat }}</strong></div>
+        <div class="res-row"><span>🔮 Mana</span><strong>{{ kingdom.mana | numberFormat }}</strong></div>
+        <div class="res-row"><span>🏞️ Ziemia</span><strong>{{ kingdom.land }} akrów</strong></div>
+      </div>
+    </div>
+
+    <!-- Ludność i Tury -->
+    <div class="card">
+      <h3>Ludność i Tury</h3>
+      <div class="resource-list">
+        <div class="res-row"><span>👥 Populacja</span><strong>{{ kingdom.population | numberFormat }}</strong></div>
+        <div class="res-row"><span>📈 Przyrost/turę</span><strong>+{{ kingdom.populationGrowthRate }}</strong></div>
+        <div class="res-row highlight"><span>⏳ Tury</span><strong>{{ kingdom.turnsAvailable }} / {{ kingdom.maxTurns }}</strong></div>
+        <div class="res-row"><span>📅 Tury/dzień</span><strong>{{ kingdom.turnsPerDay }}</strong></div>
+      </div>
+      <button class="btn-action" (click)="useTurn()" [disabled]="kingdom.turnsAvailable === 0">
+        ⏳ Użyj tury (generuj zasoby)
+      </button>
+    </div>
+
+    <!-- Budynki -->
+    <div class="card">
+      <h3>Budynki ({{ kingdom.buildings.length }})</h3>
+      <div class="item-list" *ngIf="kingdom.buildings.length > 0; else emptyBuildings">
+        <div class="item-row" *ngFor="let b of kingdom.buildings">
+          <span>{{ b.displayName }}</span>
+          <strong>x{{ b.quantity }} <span *ngIf="b.isUnderConstruction" class="building-tag">🔨 budowa</span></strong>
+        </div>
+      </div>
+      <ng-template #emptyBuildings><p class="empty-text">Brak budynków. Rozpocznij budowę!</p></ng-template>
+      <a routerLink="/buildings" class="btn-link">Zarządzaj budynkami →</a>
+    </div>
+
+    <!-- Armia -->
+    <div class="card">
+      <h3>Armia</h3>
+      <div class="item-list" *ngIf="kingdom.militaryUnits.length > 0; else emptyArmy">
+        <div class="item-row" *ngFor="let u of kingdom.militaryUnits">
+          <span>{{ u.displayName }}</span>
+          <strong>x{{ u.quantity }} <span *ngIf="u.inTraining > 0" class="building-tag">+{{ u.inTraining }} szkolenie</span></strong>
+        </div>
+      </div>
+      <ng-template #emptyArmy><p class="empty-text">Brak armii. Rekrutuj wojsko!</p></ng-template>
+      <a routerLink="/military" class="btn-link">Zarządzaj armią →</a>
+    </div>
+
+    <!-- Zawody -->
+    <div class="card wide">
+      <h3>Zawody</h3>
+      <div class="profession-grid">
+        <div class="prof-item" *ngFor="let p of kingdom.professions">
+          <span class="prof-name">{{ p.displayName }}</span>
+          <span class="prof-count">{{ p.workerCount | numberFormat }}</span>
+        </div>
+      </div>
+      <a routerLink="/economy" class="btn-link">Zarządzaj gospodarką →</a>
+    </div>
+
+    <!-- Koalicja -->
+    <div class="card">
+      <h3>Koalicja</h3>
+      <div *ngIf="kingdom.coalitionId; else noCoalition">
+        <p><strong>{{ kingdom.coalitionName }}</strong></p>
+        <p class="sub">Rola: {{ kingdom.coalitionRole }}</p>
+      </div>
+      <ng-template #noCoalition><p class="empty-text">Nie należysz do koalicji.</p></ng-template>
+      <a routerLink="/coalition" class="btn-link">Koalicje →</a>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading">Ładowanie księstwa...</div>
+</ng-template>

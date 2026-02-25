@@ -1,0 +1,11 @@
+main {
+  &.with-layout {
+    margin-top: 56px;
+    margin-left: 200px;
+    min-height: calc(100vh - 56px);
+  }
+}
+
+.page-content {
+  padding: 24px 30px;
+}

@@ -1,0 +1,23 @@
+h2 { color: #ff6644; margin: 0 0 20px 0; }
+h3 { color: #e8d5b5; margin: 20px 0 12px 0; }
+
+.tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.tech-card {
+  background: rgba(20, 10, 10, 0.8); border: 1px solid #3a1515; border-radius: 8px; padding: 16px;
+  &.completed { border-color: #2e7d32; background: rgba(46, 125, 50, 0.08); }
+  &.in-progress { border-color: #f57f17; background: rgba(245, 127, 23, 0.08); }
+  .tech-header { display: flex; justify-content: space-between; margin-bottom: 6px;
+    strong { color: #e8d5b5; }
+    .status-badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; background: rgba(46,125,50,0.2); color: #81c784;
+      &.progress { background: rgba(245,127,23,0.2); color: #ffb74d; } } }
+  .desc { color: #888; font-size: 0.82rem; margin: 0 0 8px 0; }
+  .costs { display: flex; gap: 12px; margin-bottom: 8px;
+    span { color: #aa8866; font-size: 0.82rem; } }
+  .req { margin-bottom: 8px; span { color: #ff8a65; font-size: 0.8rem; } }
+  .btn-research { width: 100%; padding: 8px; background: linear-gradient(135deg, #1565c0, #1976d2); color: #fff;
+    border: none; border-radius: 4px; cursor: pointer; &:hover { background: linear-gradient(135deg, #1976d2, #2196f3); } }
+  .cannot-reason { color: #ff6666; font-size: 0.8rem; font-style: italic; }
+}
+
+.toast { background: rgba(76,175,80,0.15); border: 1px solid #4caf50; color: #81c784; padding: 10px 16px; border-radius: 6px; margin-bottom: 16px; }
+.loading { color: #888; text-align: center; padding: 40px 0; }

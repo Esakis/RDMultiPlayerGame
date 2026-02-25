@@ -1,0 +1,36 @@
+<div class="page-content">
+  <h2>📚 Badania</h2>
+  <div class="toast" *ngIf="message">{{ message }}</div>
+
+  <div *ngIf="!loading; else loadingTpl">
+    <div *ngFor="let cat of categories" class="category-section">
+      <h3>{{ getCatName(cat) }}</h3>
+      <div class="tech-grid">
+        <div class="tech-card" *ngFor="let def of getByCategory(cat)"
+             [class.completed]="getResearchStatus(def.techType)?.isCompleted"
+             [class.in-progress]="getResearchStatus(def.techType)?.isInProgress">
+          <div class="tech-header">
+            <strong>{{ def.displayName }}</strong>
+            <span class="status-badge" *ngIf="getResearchStatus(def.techType)?.isCompleted">✅ Zbadane</span>
+            <span class="status-badge progress" *ngIf="getResearchStatus(def.techType)?.isInProgress">🔬 W toku</span>
+          </div>
+          <p class="desc">{{ def.description }}</p>
+          <div class="costs">
+            <span>💰{{ def.costGold | numberFormat }}</span>
+            <span>⏱️{{ def.researchTime }} dni</span>
+          </div>
+          <div class="req" *ngIf="def.requiredTech">
+            <span>Wymaga: {{ def.requiredTech }}</span>
+          </div>
+          <button class="btn-research" *ngIf="def.canResearch && !getResearchStatus(def.techType)"
+                  (click)="startResearch(def.techType)">Rozpocznij badanie</button>
+          <div class="cannot-reason" *ngIf="!def.canResearch && !getResearchStatus(def.techType)">
+            {{ def.cannotResearchReason }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTpl><div class="loading">Ładowanie...</div></ng-template>
+</div>

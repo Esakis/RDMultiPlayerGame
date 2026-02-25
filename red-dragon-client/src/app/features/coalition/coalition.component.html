@@ -1,0 +1,45 @@
+<div class="page-content">
+  <h2>🤝 Koalicje</h2>
+  <div class="toast" *ngIf="message">{{ message }}</div>
+
+  <div *ngIf="!loading; else loadingTpl">
+    <!-- Twoja koalicja -->
+    <div class="card" *ngIf="kingdom?.coalitionId">
+      <h3>Twoja Koalicja: {{ kingdom?.coalitionName }}</h3>
+      <p>Rola: <strong>{{ kingdom?.coalitionRole }}</strong></p>
+      <button class="btn-danger" (click)="leaveCoalition()">Opuść koalicję</button>
+    </div>
+
+    <!-- Utwórz koalicję -->
+    <div class="card" *ngIf="!kingdom?.coalitionId">
+      <h3>Utwórz nową koalicję</h3>
+      <div class="create-form">
+        <input type="text" [(ngModel)]="newName" placeholder="Nazwa koalicji" />
+        <input type="text" [(ngModel)]="newTag" placeholder="Tag (max 10 znaków)" maxlength="10" />
+        <button class="btn-action" (click)="createCoalition()">Utwórz</button>
+      </div>
+    </div>
+
+    <!-- Lista koalicji -->
+    <div class="card">
+      <h3>Dostępne koalicje</h3>
+      <div class="coalition-list">
+        <div class="coalition-row header">
+          <span>Nazwa</span><span>Tag</span><span>Lider</span><span>Członkowie</span><span>PSO</span><span></span>
+        </div>
+        <div class="coalition-row" *ngFor="let c of coalitions">
+          <span class="name">{{ c.name }}</span>
+          <span class="tag">[{{ c.tag }}]</span>
+          <span>{{ c.leaderName || '-' }}</span>
+          <span>{{ c.memberCount }}/{{ c.maxMembers }}</span>
+          <span class="pso">{{ c.psoProgress }}%</span>
+          <button class="btn-sm" *ngIf="!kingdom?.coalitionId && c.memberCount < c.maxMembers"
+                  (click)="joinCoalition(c.id)">Dołącz</button>
+        </div>
+        <p *ngIf="coalitions.length === 0" class="empty">Brak koalicji.</p>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTpl><div class="loading">Ładowanie...</div></ng-template>
+</div>

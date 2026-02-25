@@ -1,0 +1,32 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Red Dragon</h1>
+      <p>Strategiczna gra turowa MMO</p>
+    </div>
+
+    <h2>Logowanie</h2>
+
+    <div class="error-msg" *ngIf="error">{{ error }}</div>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="twoj@email.pl" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Hasło</label>
+        <input type="password" id="password" [(ngModel)]="password" name="password" placeholder="Hasło" />
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="loading">
+        {{ loading ? 'Logowanie...' : 'Zaloguj się' }}
+      </button>
+    </form>
+
+    <p class="auth-link">
+      Nie masz konta? <a routerLink="/register">Zarejestruj się</a>
+    </p>
+  </div>
+</div>
