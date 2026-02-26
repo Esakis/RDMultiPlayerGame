@@ -7,14 +7,16 @@
     <button class="tab-btn" [class.active]="activeTab === 'coalition'" (click)="switchTab('coalition')">Forum Koalicji</button>
   </div>
 
+  <!-- Subforum tabs for coalition -->
+  <div class="subforum-tabs" *ngIf="activeTab === 'coalition'">
+    <button class="subforum-btn" [class.active]="activeSubForum === 'Ważne'" (click)="switchSubForum('Ważne')">Ważne</button>
+    <button class="subforum-btn" [class.active]="activeSubForum === 'Pogawędki'" (click)="switchSubForum('Pogawędki')">Pogawędki</button>
+  </div>
+
   <div *ngIf="!loading; else loadingTpl">
     <!-- New post form -->
     <div class="card new-post-card">
-      <h3>Nowy temat</h3>
-      <div class="form-row">
-        <label>Temat:</label>
-        <input type="text" [(ngModel)]="newSubject" placeholder="Temat wiadomości..." />
-      </div>
+      <h3>Nowa wiadomość</h3>
       <div class="form-row">
         <label>Treść:</label>
         <textarea [(ngModel)]="newBody" rows="4" placeholder="Napisz wiadomość..."></textarea>
@@ -24,14 +26,14 @@
 
     <!-- Posts list -->
     <div class="posts-list">
-      <div class="post-card" *ngFor="let post of posts">
+      <div class="post-card" *ngFor="let post of posts" [ngClass]="getRoleClass(post.authorCoalitionRole)">
         <div class="post-header">
           <span class="post-author">{{ post.authorName }}
-            <span class="coalition-tag" *ngIf="post.authorCoalitionTag">*{{ post.authorCoalitionTag }}*</span>
+            <span class="role-badge" *ngIf="post.authorCoalitionRole !== 'Member'">{{ getRoleDisplay(post.authorCoalitionRole) }}</span>
+            <span class="coalition-tag" *ngIf="post.authorCoalitionTag">✗{{ post.authorCoalitionTag }}✗</span>
           </span>
           <span class="post-date">{{ post.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
         </div>
-        <div class="post-subject">{{ post.subject }}</div>
         <div class="post-body">{{ post.body }}</div>
         <div class="post-actions">
           <button class="btn-sm btn-reply" (click)="startReply(post)">Odpowiedz</button>
@@ -49,10 +51,11 @@
 
         <!-- Replies -->
         <div class="replies" *ngIf="post.replies && post.replies.length > 0">
-          <div class="reply-card" *ngFor="let reply of post.replies">
+          <div class="reply-card" *ngFor="let reply of post.replies" [ngClass]="getRoleClass(reply.authorCoalitionRole)">
             <div class="reply-header">
               <span class="post-author">{{ reply.authorName }}
-                <span class="coalition-tag" *ngIf="reply.authorCoalitionTag">*{{ reply.authorCoalitionTag }}*</span>
+                <span class="role-badge" *ngIf="reply.authorCoalitionRole !== 'Member'">{{ getRoleDisplay(reply.authorCoalitionRole) }}</span>
+                <span class="coalition-tag" *ngIf="reply.authorCoalitionTag">✗{{ reply.authorCoalitionTag }}✗</span>
               </span>
               <span class="post-date">{{ reply.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
             </div>

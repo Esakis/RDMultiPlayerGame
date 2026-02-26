@@ -67,6 +67,7 @@ public class KingdomSummaryDto
     public int Land { get; set; }
     public int Population { get; set; }
     public string? CoalitionTag { get; set; }
+    public string? CoalitionRole { get; set; }
 }
 
 public class AssignWorkersDto

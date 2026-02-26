@@ -44,7 +44,8 @@ public class CoalitionController : ControllerBase
                     Name = m.Name,
                     Race = m.Race,
                     Land = m.Land,
-                    Population = m.Population
+                    Population = m.Population,
+                    CoalitionRole = m.CoalitionRole
                 }).ToList()
             })
             .ToListAsync();
@@ -78,7 +79,7 @@ public class CoalitionController : ControllerBase
         await _context.SaveChangesAsync();
 
         kingdom.CoalitionId = coalition.Id;
-        kingdom.CoalitionRole = "Leader";
+        kingdom.CoalitionRole = "Imperator";
         await _context.SaveChangesAsync();
 
         return Ok(new ServiceResult { Success = true, Message = $"Koalicja '{dto.Name}' została utworzona." });
@@ -140,7 +141,7 @@ public class CoalitionController : ControllerBase
             if (newLeader != null)
             {
                 coalition.LeaderKingdomId = newLeader.Id;
-                newLeader.CoalitionRole = "Leader";
+                newLeader.CoalitionRole = "Imperator";
             }
             else
             {
@@ -153,6 +154,70 @@ public class CoalitionController : ControllerBase
         await _context.SaveChangesAsync();
 
         return Ok(new ServiceResult { Success = true, Message = "Opuszczono koalicję." });
+    }
+
+    [HttpPost("appoint-main-commander")]
+    public async Task<ActionResult<ServiceResult>> AppointMainCommander([FromBody] AppointMainCommanderDto dto)
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null) return BadRequest("Nie należysz do żadnej koalicji.");
+        if (kingdom.CoalitionRole != "Imperator") return BadRequest("Tylko Imperator może mianować Głównodowodzącego.");
+
+        var coalition = await _context.Coalitions
+            .Include(c => c.Members)
+            .FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+
+        if (coalition == null) return NotFound("Koalicja nie istnieje.");
+
+        var targetKingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.Id == dto.KingdomId && k.CoalitionId == coalition.Id);
+
+        if (targetKingdom == null) return NotFound("Wybrane księstwo nie należy do tej koalicji.");
+        if (targetKingdom.Id == kingdom.Id) return BadRequest("Nie możesz mianować siebie.");
+
+        // Remove existing MainCommander if any
+        var existingCommander = coalition.Members.FirstOrDefault(m => m.CoalitionRole == "MainCommander");
+        if (existingCommander != null)
+        {
+            existingCommander.CoalitionRole = "Member";
+        }
+
+        // Appoint new MainCommander
+        targetKingdom.CoalitionRole = "MainCommander";
+        await _context.SaveChangesAsync();
+
+        return Ok(new ServiceResult { Success = true, Message = $"Mianowano {targetKingdom.Name} na Głównodowodzącego." });
+    }
+
+    [HttpPost("remove-main-commander")]
+    public async Task<ActionResult<ServiceResult>> RemoveMainCommander()
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null) return BadRequest("Nie należysz do żadnej koalicji.");
+        if (kingdom.CoalitionRole != "Imperator") return BadRequest("Tylko Imperator może usunąć Głównodowodzącego.");
+
+        var coalition = await _context.Coalitions
+            .Include(c => c.Members)
+            .FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+
+        if (coalition == null) return NotFound("Koalicja nie istnieje.");
+
+        var commander = coalition.Members.FirstOrDefault(m => m.CoalitionRole == "MainCommander");
+        if (commander == null) return BadRequest("Nie ma Głównodowodzącego w koalicji.");
+
+        commander.CoalitionRole = "Member";
+        await _context.SaveChangesAsync();
+
+        return Ok(new ServiceResult { Success = true, Message = $"Usunięto {commander.Name} z funkcji Głównodowodzącego." });
+    }
+
+    private async Task<Kingdom?> GetCurrentKingdom()
+    {
+        var userId = GetUserId();
+        return await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
     }
 
     private int GetUserId()

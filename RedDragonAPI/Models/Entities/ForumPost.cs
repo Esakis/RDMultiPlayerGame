@@ -16,8 +16,11 @@ public class ForumPost
 
     public int AuthorKingdomId { get; set; }
 
-    [Required, MaxLength(200)]
-    public string Subject { get; set; } = string.Empty;
+    [MaxLength(50)]
+    public string? AuthorCoalitionRole { get; set; }
+
+    [MaxLength(50)]
+    public string? SubForum { get; set; } // "Ważne" or "Pogawędki" for coalition forum
 
     [Required]
     public string Body { get; set; } = string.Empty;

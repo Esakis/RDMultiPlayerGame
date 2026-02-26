@@ -16,8 +16,9 @@ export class ForumService {
     return this.http.get<ForumPost[]>(`${this.apiUrl}/general`);
   }
 
-  getCoalitionPosts(): Observable<ForumPost[]> {
-    return this.http.get<ForumPost[]>(`${this.apiUrl}/coalition`);
+  getCoalitionPosts(subForum?: string): Observable<ForumPost[]> {
+    const params = subForum ? `?subForum=${subForum}` : '';
+    return this.http.get<ForumPost[]>(`${this.apiUrl}/coalition${params}`);
   }
 
   getPost(id: number): Observable<ForumPost> {

@@ -9,11 +9,11 @@ import { ForumPost } from '../../core/models/kingdom.model';
 })
 export class ForumComponent implements OnInit {
   activeTab: 'general' | 'coalition' = 'general';
+  activeSubForum: string | null = 'Ważne'; // For coalition forum
   posts: ForumPost[] = [];
   loading = true;
   message = '';
 
-  newSubject = '';
   newBody = '';
   replyingTo: ForumPost | null = null;
   replyBody = '';
@@ -27,6 +27,15 @@ export class ForumComponent implements OnInit {
   switchTab(tab: 'general' | 'coalition'): void {
     this.activeTab = tab;
     this.replyingTo = null;
+    if (tab === 'coalition' && !this.activeSubForum) {
+      this.activeSubForum = 'Ważne';
+    }
+    this.loadPosts();
+  }
+
+  switchSubForum(subForum: string): void {
+    this.activeSubForum = subForum;
+    this.replyingTo = null;
     this.loadPosts();
   }
 
@@ -34,7 +43,7 @@ export class ForumComponent implements OnInit {
     this.loading = true;
     const obs = this.activeTab === 'general'
       ? this.forumService.getGeneralPosts()
-      : this.forumService.getCoalitionPosts();
+      : this.forumService.getCoalitionPosts(this.activeSubForum || undefined);
 
     obs.subscribe({
       next: (posts) => { this.posts = posts; this.loading = false; },
@@ -46,18 +55,21 @@ export class ForumComponent implements OnInit {
   }
 
   submitPost(): void {
-    if (!this.newSubject.trim() || !this.newBody.trim()) {
-      this.message = 'Wypełnij temat i treść.';
+    if (!this.newBody.trim()) {
+      this.message = 'Wpisz treść wiadomości.';
       return;
     }
-    const dto = { subject: this.newSubject, body: this.newBody, parentPostId: null };
+    const dto = { 
+      body: this.newBody, 
+      subForum: this.activeTab === 'coalition' ? this.activeSubForum : null,
+      parentPostId: null 
+    };
     const obs = this.activeTab === 'general'
       ? this.forumService.createGeneralPost(dto)
       : this.forumService.createCoalitionPost(dto);
 
     obs.subscribe({
       next: () => {
-        this.newSubject = '';
         this.newBody = '';
         this.message = 'Post dodany.';
         this.loadPosts();
@@ -82,7 +94,11 @@ export class ForumComponent implements OnInit {
 
   submitReply(): void {
     if (!this.replyingTo || !this.replyBody.trim()) return;
-    const dto = { subject: 'Re: ' + this.replyingTo.subject, body: this.replyBody, parentPostId: this.replyingTo.id };
+    const dto = { 
+      body: this.replyBody, 
+      subForum: this.activeTab === 'coalition' ? this.activeSubForum : null,
+      parentPostId: this.replyingTo.id 
+    };
     const obs = this.activeTab === 'general'
       ? this.forumService.createGeneralPost(dto)
       : this.forumService.createCoalitionPost(dto);
@@ -100,6 +116,22 @@ export class ForumComponent implements OnInit {
         this.clearMsg();
       }
     });
+  }
+
+  getRoleClass(role: string): string {
+    switch (role) {
+      case 'Imperator': return 'imperator';
+      case 'MainCommander': return 'main-commander';
+      default: return '';
+    }
+  }
+
+  getRoleDisplay(role: string): string {
+    switch (role) {
+      case 'Imperator': return '[Imperator]';
+      case 'MainCommander': return '[Głównodowodzący]';
+      default: return '';
+    }
   }
 
   private clearMsg(): void {

@@ -28,4 +28,12 @@ export class CoalitionService {
   leave(): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/leave`, {});
   }
+
+  appointMainCommander(kingdomId: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/appoint-main-commander`, { kingdomId });
+  }
+
+  removeMainCommander(): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/remove-main-commander`, {});
+  }
 }

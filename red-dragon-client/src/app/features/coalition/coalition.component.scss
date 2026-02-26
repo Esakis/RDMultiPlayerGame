@@ -40,3 +40,101 @@ h2 { color: #ffd700; margin: 0 0 15px 0; font-size: 20px; text-shadow: 1px 1px 3
 .empty { color: #888; font-style: italic; }
 .toast { background: rgba(0,0,0,0.4); border: 1px solid #66ff66; color: #66ff66; padding: 8px 14px; margin-bottom: 10px; font-size: 13px; }
 .loading { color: #888; text-align: center; padding: 40px 0; font-size: 14px; }
+
+// Members section
+.members-section {
+  margin: 15px 0;
+  h4 { color: #ffd700; font-size: 14px; margin-bottom: 8px; }
+}
+
+.member-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.member-item {
+  padding: 6px 10px;
+  background: rgba(42, 8, 8, 0.5);
+  border: 1px solid #8b0000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &.imperator {
+    background: rgba(0, 80, 0, 0.6);
+    border: 1px solid #004d00;
+  }
+
+  &.main-commander {
+    background: rgba(0, 0, 80, 0.6);
+    border: 1px solid #003366;
+  }
+
+  .member-name {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 13px;
+  }
+
+  .member-role {
+    color: #ffd700;
+    font-size: 11px;
+    padding: 2px 6px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 3px;
+  }
+}
+
+// Commander management
+.commander-management {
+  margin: 15px 0;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #4a0808;
+
+  h4 { color: #ffd700; font-size: 14px; margin-bottom: 10px; }
+
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 10px;
+
+    label {
+      color: #d4c5b0;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    select {
+      padding: 6px 10px;
+      background: #1a0505;
+      border: 1px solid #8b0000;
+      color: #d4c5b0;
+      font-size: 13px;
+
+      &:focus {
+        outline: none;
+        border-color: #ffd700;
+      }
+    }
+  }
+
+  .current-commander {
+    margin-top: 10px;
+    padding: 8px;
+    background: rgba(0, 0, 80, 0.3);
+    border: 1px solid #003366;
+
+    p {
+      color: #d4c5b0;
+      margin: 0 0 8px 0;
+      font-size: 13px;
+
+      strong {
+        color: #ffd700;
+      }
+    }
+  }
+}

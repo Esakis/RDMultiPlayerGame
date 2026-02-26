@@ -41,6 +41,7 @@ export interface KingdomSummary {
   land: number;
   population: number;
   coalitionTag: string | null;
+  coalitionRole?: string;
 }
 
 export interface AssignWorkersDto {
@@ -220,7 +221,8 @@ export interface ForumPost {
   authorKingdomId: number;
   authorName: string;
   authorCoalitionTag: string | null;
-  subject: string;
+  authorCoalitionRole: string;
+  subForum: string | null;
   body: string;
   parentPostId: number | null;
   createdAt: string;
@@ -229,8 +231,8 @@ export interface ForumPost {
 }
 
 export interface CreateForumPost {
-  subject: string;
   body: string;
+  subForum: string | null;
   parentPostId: number | null;
 }
 

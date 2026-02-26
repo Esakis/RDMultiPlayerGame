@@ -8,7 +8,8 @@ public class ForumPostDto
     public int AuthorKingdomId { get; set; }
     public string AuthorName { get; set; } = string.Empty;
     public string? AuthorCoalitionTag { get; set; }
-    public string Subject { get; set; } = string.Empty;
+    public string AuthorCoalitionRole { get; set; } = "Member";
+    public string? SubForum { get; set; }
     public string Body { get; set; } = string.Empty;
     public int? ParentPostId { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -18,7 +19,7 @@ public class ForumPostDto
 
 public class CreateForumPostDto
 {
-    public string Subject { get; set; } = string.Empty;
     public string Body { get; set; } = string.Empty;
+    public string? SubForum { get; set; }
     public int? ParentPostId { get; set; }
 }

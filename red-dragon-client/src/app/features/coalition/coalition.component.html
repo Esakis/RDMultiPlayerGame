@@ -6,7 +6,41 @@
     <!-- Twoja koalicja -->
     <div class="card" *ngIf="kingdom?.coalitionId">
       <h3>Twoja Koalicja: {{ kingdom?.coalitionName }}</h3>
-      <p>Rola: <strong>{{ kingdom?.coalitionRole }}</strong></p>
+      <p>Rola: <strong>{{ kingdom?.coalitionRole || 'Member' }}</strong></p>
+      
+      <!-- Członkowie koalicji -->
+      <div class="members-section" *ngIf="coalitionMembers.length > 0">
+        <h4>Członkowie:</h4>
+        <div class="member-list">
+          <div class="member-item" *ngFor="let member of coalitionMembers" [ngClass]="getMemberRoleClass(member.coalitionRole)">
+            <span class="member-name">{{ member.name }}</span>
+            <span class="member-role" *ngIf="member.coalitionRole !== 'Member'">{{ getRoleDisplay(member.coalitionRole) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zarządzanie Głównodowodzącym (dla Imperatora) -->
+      <div class="commander-management" *ngIf="kingdom?.coalitionRole === 'Imperator'">
+        <h4>Zarządzanie Głównodowodzącym</h4>
+        <div class="form-row">
+          <label>Mianuj Głównodowodzącego:</label>
+          <select [(ngModel)]="selectedCommanderId">
+            <option [value]="null">Wybierz księstwo...</option>
+            <option *ngFor="let member of coalitionMembers"
+                    [value]="member.id"
+                    [disabled]="member.id === kingdom?.id || member.coalitionRole === 'MainCommander'">
+              {{ member.name }} {{ member.coalitionRole === 'MainCommander' ? '(Głównodowodzący)' : '' }}
+            </option>
+          </select>
+          <button class="btn-action" (click)="appointMainCommander()"
+                  [disabled]="!selectedCommanderId">Mianuj</button>
+        </div>
+        <div *ngIf="currentMainCommander" class="current-commander">
+          <p>Obecny Głównodowodzący: <strong>{{ currentMainCommander.name }}</strong></p>
+          <button class="btn-danger" (click)="removeMainCommander()">Usuń z funkcji</button>
+        </div>
+      </div>
+
       <button class="btn-danger" (click)="leaveCoalition()">Opuść koalicję</button>
     </div>
 

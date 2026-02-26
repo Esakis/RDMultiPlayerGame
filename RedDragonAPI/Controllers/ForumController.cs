@@ -38,14 +38,21 @@ public class ForumController : ControllerBase
     }
 
     [HttpGet("coalition")]
-    public async Task<ActionResult<List<ForumPostDto>>> GetCoalitionPosts()
+    public async Task<ActionResult<List<ForumPostDto>>> GetCoalitionPosts([FromQuery] string? subForum = null)
     {
         var kingdom = await GetCurrentKingdom();
         if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
         if (kingdom.CoalitionId == null) return BadRequest("Nie należysz do żadnej koalicji.");
 
-        var posts = await _context.ForumPosts
-            .Where(f => f.ForumType == "Coalition" && f.CoalitionId == kingdom.CoalitionId && f.ParentPostId == null)
+        var query = _context.ForumPosts
+            .Where(f => f.ForumType == "Coalition" && f.CoalitionId == kingdom.CoalitionId && f.ParentPostId == null);
+
+        if (!string.IsNullOrEmpty(subForum))
+        {
+            query = query.Where(f => f.SubForum == subForum);
+        }
+
+        var posts = await query
             .OrderByDescending(f => f.CreatedAt)
             .Take(100)
             .Include(f => f.AuthorKingdom)
@@ -84,7 +91,7 @@ public class ForumController : ControllerBase
         {
             ForumType = "General",
             AuthorKingdomId = kingdom.Id,
-            Subject = dto.Subject,
+            AuthorCoalitionRole = kingdom.CoalitionRole,
             Body = dto.Body,
             ParentPostId = dto.ParentPostId
         };
@@ -108,7 +115,8 @@ public class ForumController : ControllerBase
             ForumType = "Coalition",
             CoalitionId = kingdom.CoalitionId,
             AuthorKingdomId = kingdom.Id,
-            Subject = dto.Subject,
+            AuthorCoalitionRole = kingdom.CoalitionRole,
+            SubForum = dto.SubForum,
             Body = dto.Body,
             ParentPostId = dto.ParentPostId
         };
@@ -138,7 +146,8 @@ public class ForumController : ControllerBase
             AuthorKingdomId = post.AuthorKingdomId,
             AuthorName = post.AuthorKingdom?.Name ?? "???",
             AuthorCoalitionTag = post.AuthorKingdom?.Coalition?.Tag,
-            Subject = post.Subject,
+            AuthorCoalitionRole = post.AuthorCoalitionRole ?? "Member",
+            SubForum = post.SubForum,
             Body = post.Body,
             ParentPostId = post.ParentPostId,
             CreatedAt = post.CreatedAt,

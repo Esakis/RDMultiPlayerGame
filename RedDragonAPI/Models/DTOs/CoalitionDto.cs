@@ -23,3 +23,8 @@ public class JoinCoalitionDto
 {
     public int CoalitionId { get; set; }
 }
+
+public class AppointMainCommanderDto
+{
+    public int KingdomId { get; set; }
+}
