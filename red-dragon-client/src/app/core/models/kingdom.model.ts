@@ -2,24 +2,33 @@ export interface Kingdom {
   id: number;
   name: string;
   race: string;
+  isMagicRace: boolean;
   land: number;
   gold: number;
   food: number;
-  wood: number;
   stone: number;
-  iron: number;
+  budulec: number;
+  budulecStored: number;
+  weapons: number;
   mana: number;
   population: number;
-  populationGrowthRate: number;
+  popularity: number;
+  wages: number;
+  education: number;
   turnsAvailable: number;
   turnsPerDay: number;
   maxTurns: number;
+  turnNumber: number;
   age: number;
+  currentSpecialBuilding: string | null;
+  specialBuildingProgress: number;
+  specialBuildingCost: number;
   coalitionId: number | null;
   coalitionName: string | null;
   coalitionRole: string | null;
   eraId: number;
   eraName: string | null;
+  isProtected: boolean;
   buildings: Building[];
   militaryUnits: MilitaryUnit[];
   professions: Profession[];
@@ -62,11 +71,11 @@ export interface BuildingDefinition {
   displayName: string;
   description: string | null;
   costGold: number;
-  costWood: number;
-  costStone: number;
-  costIron: number;
-  costMana: number;
+  costBudulec: number;
   costLand: number;
+  row: number;
+  col: number;
+  baseCost: number;
   buildTime: number;
   requiredBuildingType: string | null;
   requiredTechnology: string | null;
@@ -103,8 +112,7 @@ export interface UnitDefinition {
   displayName: string;
   description: string | null;
   costGold: number;
-  costIron: number;
-  costWood: number;
+  costWeapons: number;
   costFood: number;
   attackPower: number;
   defensePower: number;
@@ -125,7 +133,10 @@ export interface Profession {
   professionType: string;
   displayName: string;
   workerCount: number;
+  noviceCount: number;
+  maxCapacity: number;
   productionPerTurn: number;
+  novicePercent: number;
 }
 
 export interface TechDefinition {
@@ -193,6 +204,34 @@ export interface GameMessage {
 export interface ServiceResult {
   success: boolean;
   message: string | null;
+}
+
+export interface TurnResult {
+  success: boolean;
+  message: string | null;
+  turnsRemaining: number;
+  deltas: { [key: string]: number };
+}
+
+export interface ForumPost {
+  id: number;
+  forumType: string;
+  coalitionId: number | null;
+  authorKingdomId: number;
+  authorName: string;
+  authorCoalitionTag: string | null;
+  subject: string;
+  body: string;
+  parentPostId: number | null;
+  createdAt: string;
+  replyCount: number;
+  replies: ForumPost[];
+}
+
+export interface CreateForumPost {
+  subject: string;
+  body: string;
+  parentPostId: number | null;
 }
 
 export interface AuthResponse {

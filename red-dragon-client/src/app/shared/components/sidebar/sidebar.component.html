@@ -1,9 +1,19 @@
 <nav class="sidebar">
-  <a *ngFor="let item of menuItems"
-     [routerLink]="item.route"
-     routerLinkActive="active"
-     class="nav-item">
-    <span class="nav-icon">{{ item.icon }}</span>
-    <span class="nav-label">{{ item.label }}</span>
-  </a>
+  <div class="menu-buttons">
+    <a *ngFor="let item of menuItems"
+       [routerLink]="item.route"
+       routerLinkActive="active"
+       class="menu-btn">
+      {{ item.label }}
+    </a>
+    <button class="menu-btn logout-btn" (click)="logout()">Wyloguj się</button>
+  </div>
+
+  <div class="turn-button-container">
+    <button class="turn-btn" (click)="onTurnClick()" title="Użyj tury">
+      <div class="turn-circle-outer">
+        <div class="turn-circle-inner"></div>
+      </div>
+    </button>
+  </div>
 </nav>

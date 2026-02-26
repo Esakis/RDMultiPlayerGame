@@ -22,11 +22,11 @@ public class BuildingDefinitionDto
     public string? Description { get; set; }
 
     public int CostGold { get; set; }
-    public int CostWood { get; set; }
-    public int CostStone { get; set; }
-    public int CostIron { get; set; }
-    public int CostMana { get; set; }
+    public int CostBudulec { get; set; }
     public int CostLand { get; set; }
+    public int Row { get; set; }
+    public int Col { get; set; }
+    public int BaseCost { get; set; }
     public int BuildTime { get; set; }
 
     public string? RequiredBuildingType { get; set; }

@@ -46,15 +46,15 @@ export class EconomyComponent implements OnInit {
 
   getProductionInfo(profType: string): string {
     const map: {[k:string]:string} = {
-      'Unemployed': '-',
-      'Stonemason': '+100 🪨/turę (z kamieniołomem)',
-      'Builder': 'Przyśpiesza budowę',
-      'Merchant': '+10 💰/turę',
-      'Alchemist': '+20 💰/turę',
-      'Druid': '+5 🔮/turę',
-      'Mage': 'Czary bojowe',
-      'Scientist': 'Przyśpiesza badania',
-      'Soldier': 'Obrona'
+      'Bezrobotni': '-',
+      'Alchemicy': '+10 złota/turę',
+      'Chłopi': '+5 jedzenia/turę',
+      'Druidzi': '+1 many/turę',
+      'Kamieniarze': '+5 kamienia/turę',
+      'Murarze': 'kamień → budulec',
+      'Płatnerze': '+3 broni/turę',
+      'Kupcy': '+1000 złota/turę',
+      'Naukowcy': '+edukacja'
     };
     return map[profType] || '-';
   }

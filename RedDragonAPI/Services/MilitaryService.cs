@@ -37,8 +37,7 @@ public class MilitaryService : IMilitaryService
                 DisplayName = d.DisplayName,
                 Description = d.Description,
                 CostGold = d.CostGold,
-                CostIron = d.CostIron,
-                CostWood = d.CostWood,
+                CostWeapons = d.CostWeapons,
                 CostFood = d.CostFood,
                 AttackPower = d.AttackPower,
                 DefensePower = d.DefensePower,
@@ -100,26 +99,23 @@ public class MilitaryService : IMilitaryService
         if (!canRecruit)
             return ServiceResult.Fail(reason!);
 
-        // Sprawdź koszty
+        // Sprawdź koszty (Red Dragon: gold + weapons per unit)
         long totalGold = (long)unitDef.CostGold * dto.Quantity;
-        long totalIron = (long)unitDef.CostIron * dto.Quantity;
-        long totalWood = (long)unitDef.CostWood * dto.Quantity;
+        long totalWeapons = (long)unitDef.CostWeapons * dto.Quantity;
         long totalFood = (long)unitDef.CostFood * dto.Quantity;
 
         if (kingdom.Gold < totalGold) return ServiceResult.Fail($"Za mało złota. Potrzeba: {totalGold}");
-        if (kingdom.Iron < totalIron) return ServiceResult.Fail($"Za mało żelaza. Potrzeba: {totalIron}");
-        if (kingdom.Wood < totalWood) return ServiceResult.Fail($"Za mało drewna. Potrzeba: {totalWood}");
+        if (kingdom.Weapons < totalWeapons) return ServiceResult.Fail($"Za mało broni. Potrzeba: {totalWeapons}");
         if (kingdom.Food < totalFood) return ServiceResult.Fail($"Za mało żywności. Potrzeba: {totalFood}");
 
         // Sprawdź populację (żołnierze biorą się z bezrobotnych)
-        var unemployed = kingdom.Professions.FirstOrDefault(p => p.ProfessionType == "Unemployed");
+        var unemployed = kingdom.Professions.FirstOrDefault(p => p.ProfessionType == "Bezrobotni");
         if (unemployed == null || unemployed.WorkerCount < dto.Quantity)
             return ServiceResult.Fail($"Za mało bezrobotnych do rekrutacji. Dostępnych: {unemployed?.WorkerCount ?? 0}");
 
         // Odejmij surowce
         kingdom.Gold -= totalGold;
-        kingdom.Iron -= totalIron;
-        kingdom.Wood -= totalWood;
+        kingdom.Weapons -= totalWeapons;
         kingdom.Food -= totalFood;
         unemployed.WorkerCount -= dto.Quantity;
 

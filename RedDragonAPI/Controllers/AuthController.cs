@@ -49,7 +49,7 @@ public class AuthController : ControllerBase
             return BadRequest("Brak aktywnej ery.");
 
         // Utwórz księstwo
-        var kingdom = await _kingdomService.CreateKingdomAsync(user.Id, dto.KingdomName, activeEra.Id);
+        var kingdom = await _kingdomService.CreateKingdomAsync(user.Id, dto.KingdomName, dto.Race, activeEra.Id);
 
         var token = _jwtHelper.GenerateToken(user, kingdom.Id);
 

@@ -88,9 +88,8 @@ public static class BattleCalculator
         {
             Gold = (long)(defender.Gold * 0.2),
             Food = (long)(defender.Food * 0.15),
-            Wood = (long)(defender.Wood * 0.15),
             Stone = (long)(defender.Stone * 0.15),
-            Iron = (long)(defender.Iron * 0.15)
+            Weapons = (long)(defender.Weapons * 0.15)
         };
     }
 

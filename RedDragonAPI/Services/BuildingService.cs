@@ -36,11 +36,11 @@ public class BuildingService : IBuildingService
                 DisplayName = d.DisplayName,
                 Description = d.Description,
                 CostGold = d.CostGold,
-                CostWood = d.CostWood,
-                CostStone = d.CostStone,
-                CostIron = d.CostIron,
-                CostMana = d.CostMana,
+                CostBudulec = d.CostBudulec,
                 CostLand = d.CostLand,
+                Row = d.Row,
+                Col = d.Col,
+                BaseCost = d.BaseCost,
                 BuildTime = d.BuildTime,
                 RequiredBuildingType = d.RequiredBuildingType,
                 RequiredTechnology = d.RequiredTechnology,
@@ -107,33 +107,21 @@ public class BuildingService : IBuildingService
 
         int quantity = definition.IsSpecial ? 1 : dto.Quantity;
 
-        // Pobierz koszty
+        // Red Dragon: economic buildings cost gold + 1 budulec per building + land
         long totalCostGold = (long)definition.CostGold * quantity;
-        long totalCostWood = (long)definition.CostWood * quantity;
-        long totalCostStone = (long)definition.CostStone * quantity;
-        long totalCostIron = (long)definition.CostIron * quantity;
-        long totalCostMana = (long)definition.CostMana * quantity;
+        int totalCostBudulec = quantity; // 1 budulec per economic building
         int totalCostLand = definition.CostLand * quantity;
 
         if (kingdom.Gold < totalCostGold)
             return ServiceResult.Fail($"Za mało złota. Potrzeba: {totalCostGold}");
-        if (kingdom.Wood < totalCostWood)
-            return ServiceResult.Fail($"Za mało drewna. Potrzeba: {totalCostWood}");
-        if (kingdom.Stone < totalCostStone)
-            return ServiceResult.Fail($"Za mało kamienia. Potrzeba: {totalCostStone}");
-        if (kingdom.Iron < totalCostIron)
-            return ServiceResult.Fail($"Za mało żelaza. Potrzeba: {totalCostIron}");
-        if (kingdom.Mana < totalCostMana)
-            return ServiceResult.Fail($"Za mało many. Potrzeba: {totalCostMana}");
+        if (kingdom.BudulecStored < totalCostBudulec)
+            return ServiceResult.Fail($"Za mało budulca. Potrzeba: {totalCostBudulec}");
         if (kingdom.Land < totalCostLand)
             return ServiceResult.Fail($"Za mało ziemi. Potrzeba: {totalCostLand}");
 
         // Odejmij surowce
         kingdom.Gold -= totalCostGold;
-        kingdom.Wood -= totalCostWood;
-        kingdom.Stone -= totalCostStone;
-        kingdom.Iron -= totalCostIron;
-        kingdom.Mana -= totalCostMana;
+        kingdom.BudulecStored -= totalCostBudulec;
 
         // Znajdź lub utwórz rekord budynku
         var building = kingdom.Buildings.FirstOrDefault(b => b.BuildingType == dto.BuildingType);
@@ -207,10 +195,7 @@ public class BuildingService : IBuildingService
 
         // Sprawdź zasoby
         if (kingdom.Gold < definition.CostGold) return (false, "Za mało złota");
-        if (kingdom.Wood < definition.CostWood) return (false, "Za mało drewna");
-        if (kingdom.Stone < definition.CostStone) return (false, "Za mało kamienia");
-        if (kingdom.Iron < definition.CostIron) return (false, "Za mało żelaza");
-        if (kingdom.Mana < definition.CostMana) return (false, "Za mało many");
+        if (kingdom.BudulecStored < 1 && !definition.IsSpecial) return (false, "Za mało budulca");
         if (kingdom.Land < definition.CostLand) return (false, "Za mało ziemi");
 
         return (true, null);

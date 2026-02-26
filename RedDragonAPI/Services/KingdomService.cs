@@ -44,37 +44,63 @@ public class KingdomService : IKingdomService
         return MapToDto(kingdom);
     }
 
-    public async Task<Kingdom> CreateKingdomAsync(int userId, string name, int eraId)
+    private static readonly HashSet<string> MagicRaces = new()
     {
+        "Ludzie", "Elfy", "Mroczne Elfy", "Dżiny", "Gnomy",
+        "Br-Ougowie", "Meduzy", "Ożywieńcy", "Plemiona Feniksa"
+    };
+
+    private static readonly HashSet<string> NonMagicRaces = new()
+    {
+        "Krasnoludy", "Orkowie", "Gobliny", "Niziołki", "Enty", "Olbrzymy"
+    };
+
+    public static readonly HashSet<string> AllRaces = new(MagicRaces.Concat(NonMagicRaces));
+
+    public async Task<Kingdom> CreateKingdomAsync(int userId, string name, string race, int eraId)
+    {
+        if (!AllRaces.Contains(race))
+            race = "Ludzie";
+
+        bool isMagic = MagicRaces.Contains(race);
+        bool isGoblin = race == "Gobliny";
+
         var kingdom = new Kingdom
         {
             UserId = userId,
             Name = name,
-            Race = "Human",
+            Race = race,
+            IsMagicRace = isMagic,
             EraId = eraId,
             Land = 100,
             Gold = 50000,
             Food = 10000,
-            Wood = 5000,
             Stone = 2000,
-            Iron = 1000,
-            Mana = 500,
+            Budulec = 0,
+            BudulecStored = 0,
+            Weapons = 0,
+            Mana = 0,
             Population = 1000,
-            PopulationGrowthRate = 50,
-            TurnsAvailable = 15,
-            TurnsPerDay = 15,
-            MaxTurns = 49,
-            Age = 0
+            Popularity = 100,
+            Wages = 50,
+            Education = 0,
+            TurnsAvailable = isGoblin ? 17 : 15,
+            TurnsPerDay = isGoblin ? 17 : 15,
+            MaxTurns = isGoblin ? 61 : 49,
+            TurnNumber = 0,
+            Age = 0,
+            IsProtected = true,
+            ProtectionDaysLeft = 5
         };
 
         _context.Kingdoms.Add(kingdom);
         await _context.SaveChangesAsync();
 
-        // Utwórz domyślne profesje
+        // Red Dragon professions: Bezrobotni + 6 basic + 2 specialist
         var professionTypes = new[]
         {
-            "Unemployed", "Stonemason", "Builder", "Merchant",
-            "Alchemist", "Druid", "Mage", "Scientist", "Soldier"
+            "Bezrobotni", "Alchemicy", "Chłopi", "Druidzi",
+            "Kamieniarze", "Murarze", "Płatnerze", "Kupcy", "Naukowcy"
         };
 
         foreach (var profType in professionTypes)
@@ -83,8 +109,11 @@ public class KingdomService : IKingdomService
             {
                 KingdomId = kingdom.Id,
                 ProfessionType = profType,
-                WorkerCount = profType == "Unemployed" ? 1000 : 0,
-                ProductionPerTurn = 0
+                WorkerCount = profType == "Bezrobotni" ? 1000 : 0,
+                NoviceCount = 0,
+                MaxCapacity = 0,
+                ProductionPerTurn = 0,
+                NovicePercent = 0
             });
         }
 
@@ -109,7 +138,7 @@ public class KingdomService : IKingdomService
             return ServiceResult.Fail("Nieznany typ profesji.");
 
         var unemployed = kingdom.Professions
-            .FirstOrDefault(p => p.ProfessionType == "Unemployed");
+            .FirstOrDefault(p => p.ProfessionType == "Bezrobotni");
 
         if (unemployed == null)
             return ServiceResult.Fail("Brak danych o bezrobotnych.");
@@ -184,24 +213,33 @@ public class KingdomService : IKingdomService
             Id = kingdom.Id,
             Name = kingdom.Name,
             Race = kingdom.Race,
+            IsMagicRace = kingdom.IsMagicRace,
             Land = kingdom.Land,
             Gold = kingdom.Gold,
             Food = kingdom.Food,
-            Wood = kingdom.Wood,
             Stone = kingdom.Stone,
-            Iron = kingdom.Iron,
+            Budulec = kingdom.Budulec,
+            BudulecStored = kingdom.BudulecStored,
+            Weapons = kingdom.Weapons,
             Mana = kingdom.Mana,
             Population = kingdom.Population,
-            PopulationGrowthRate = kingdom.PopulationGrowthRate,
+            Popularity = kingdom.Popularity,
+            Wages = kingdom.Wages,
+            Education = kingdom.Education,
             TurnsAvailable = kingdom.TurnsAvailable,
             TurnsPerDay = kingdom.TurnsPerDay,
             MaxTurns = kingdom.MaxTurns,
+            TurnNumber = kingdom.TurnNumber,
             Age = kingdom.Age,
+            CurrentSpecialBuilding = kingdom.CurrentSpecialBuilding,
+            SpecialBuildingProgress = kingdom.SpecialBuildingProgress,
+            SpecialBuildingCost = kingdom.SpecialBuildingCost,
             CoalitionId = kingdom.CoalitionId,
             CoalitionName = kingdom.Coalition?.Name,
             CoalitionRole = kingdom.CoalitionRole,
             EraId = kingdom.EraId,
             EraName = kingdom.Era?.Name,
+            IsProtected = kingdom.IsProtected,
             Buildings = kingdom.Buildings.Select(b => new BuildingDto
             {
                 Id = b.Id,
@@ -230,24 +268,13 @@ public class KingdomService : IKingdomService
             Professions = kingdom.Professions.Select(p => new ProfessionDto
             {
                 ProfessionType = p.ProfessionType,
-                DisplayName = GetProfessionDisplayName(p.ProfessionType),
+                DisplayName = p.ProfessionType,
                 WorkerCount = p.WorkerCount,
-                ProductionPerTurn = p.ProductionPerTurn
+                NoviceCount = p.NoviceCount,
+                MaxCapacity = p.MaxCapacity,
+                ProductionPerTurn = p.ProductionPerTurn,
+                NovicePercent = p.NovicePercent
             }).ToList()
         };
     }
-
-    private static string GetProfessionDisplayName(string profType) => profType switch
-    {
-        "Unemployed" => "Bezrobotni",
-        "Stonemason" => "Kamieniarze",
-        "Builder" => "Murarze",
-        "Merchant" => "Kupcy",
-        "Alchemist" => "Alchemicy",
-        "Druid" => "Druidzi",
-        "Mage" => "Magowie",
-        "Scientist" => "Naukowcy",
-        "Soldier" => "Żołnierze",
-        _ => profType
-    };
 }

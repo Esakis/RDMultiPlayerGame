@@ -1,88 +1,118 @@
-<div class="page-content" *ngIf="kingdom; else loadingTpl">
+<div class="stolica-page" *ngIf="kingdom; else loadingTpl">
   <div class="toast" *ngIf="message">{{ message }}</div>
 
-  <div class="kingdom-header">
-    <h2>{{ kingdom.name }}</h2>
-    <span class="race-badge">{{ kingdom.race }}</span>
-    <span class="age-badge">Wiek: {{ kingdom.age }}</span>
+  <div class="kingdom-title-bar">
+    <div class="portrait-area">
+      <div class="portrait-frame">
+        <div class="portrait-placeholder race-img">{{ kingdom.race }}</div>
+      </div>
+      <div class="kingdom-meta">
+        <span class="online-info">online {{ kingdom.age }} ID: {{ kingdom.id }}</span>
+      </div>
+    </div>
+    <div class="kingdom-name-area">
+      <h2>{{ kingdom.name }}
+        <span class="coalition-tag" *ngIf="kingdom.coalitionName">*{{ kingdom.coalitionName }}*</span>
+        {{ kingdom.turnsAvailable }}/{{ kingdom.maxTurns }}
+      </h2>
+    </div>
   </div>
 
-  <div class="dashboard-grid">
-    <!-- Zasoby -->
-    <div class="card">
-      <h3>Zasoby</h3>
-      <div class="resource-list">
-        <div class="res-row"><span>💰 Złoto</span><strong>{{ kingdom.gold | numberFormat }}</strong></div>
-        <div class="res-row"><span>🌾 Żywność</span><strong>{{ kingdom.food | numberFormat }}</strong></div>
-        <div class="res-row"><span>🪵 Drewno</span><strong>{{ kingdom.wood | numberFormat }}</strong></div>
-        <div class="res-row"><span>🪨 Kamień</span><strong>{{ kingdom.stone | numberFormat }}</strong></div>
-        <div class="res-row"><span>⚒️ Żelazo</span><strong>{{ kingdom.iron | numberFormat }}</strong></div>
-        <div class="res-row"><span>🔮 Mana</span><strong>{{ kingdom.mana | numberFormat }}</strong></div>
-        <div class="res-row"><span>🏞️ Ziemia</span><strong>{{ kingdom.land }} akrów</strong></div>
-      </div>
+  <div class="stolica-content">
+    <div class="stats-panel">
+      <table class="stats-table">
+        <tr>
+          <th colspan="3">
+            Ostatnie zgłoszenie: {{ kingdom.age }} dni temu
+          </th>
+        </tr>
+        <tr class="table-header-row">
+          <td></td>
+          <td class="col-value">Liczba</td>
+          <td class="col-change">Zmiana</td>
+        </tr>
+        <tr>
+          <td class="stat-label">ludność</td>
+          <td class="stat-value">{{ kingdom.population | numberFormat }}</td>
+          <td class="stat-change" [ngClass]="getDeltaClass('population')">{{ getDelta('population') }}</td>
+        </tr>
+        <tr>
+          <td class="stat-label">popularność</td>
+          <td class="stat-value">{{ kingdom.popularity }}%</td>
+          <td class="stat-change" [ngClass]="getDeltaClass('popularity')">{{ getDelta('popularity') }}</td>
+        </tr>
+        <tr>
+          <td class="stat-label">akry</td>
+          <td class="stat-value">{{ kingdom.land | numberFormat }}</td>
+          <td class="stat-change"></td>
+        </tr>
+        <tr>
+          <td class="stat-label">pensje</td>
+          <td class="stat-value">{{ kingdom.wages }}</td>
+          <td class="stat-change"></td>
+        </tr>
+        <tr>
+          <td class="stat-label">złoto</td>
+          <td class="stat-value">{{ kingdom.gold | numberFormat }}</td>
+          <td class="stat-change" [ngClass]="getDeltaClass('gold')">{{ getDelta('gold') }}</td>
+        </tr>
+        <tr>
+          <td class="stat-label">jedzenie</td>
+          <td class="stat-value">{{ kingdom.food | numberFormat }}</td>
+          <td class="stat-change" [ngClass]="getDeltaClass('food')">{{ getDelta('food') }}</td>
+        </tr>
+        <tr>
+          <td class="stat-label">kamienie</td>
+          <td class="stat-value">{{ kingdom.stone | numberFormat }}</td>
+          <td class="stat-change" [ngClass]="getDeltaClass('stone')">{{ getDelta('stone') }}</td>
+        </tr>
+        <tr>
+          <td class="stat-label">budulec</td>
+          <td class="stat-value">{{ kingdom.budulecStored | numberFormat }}</td>
+          <td class="stat-change" [ngClass]="getDeltaClass('budulecStored')">{{ getDelta('budulecStored') }}</td>
+        </tr>
+        <tr>
+          <td class="stat-label">bronie</td>
+          <td class="stat-value">{{ kingdom.weapons | numberFormat }}</td>
+          <td class="stat-change" [ngClass]="getDeltaClass('weapons')">{{ getDelta('weapons') }}</td>
+        </tr>
+        <tr>
+          <td class="stat-label">mana</td>
+          <td class="stat-value">{{ kingdom.mana | numberFormat }}</td>
+          <td class="stat-change" [ngClass]="getDeltaClass('mana')">{{ getDelta('mana') }}</td>
+        </tr>
+        <tr>
+          <td class="stat-label">edukacja</td>
+          <td class="stat-value">{{ kingdom.education }}%</td>
+          <td class="stat-change"></td>
+        </tr>
+      </table>
     </div>
 
-    <!-- Ludność i Tury -->
-    <div class="card">
-      <h3>Ludność i Tury</h3>
-      <div class="resource-list">
-        <div class="res-row"><span>👥 Populacja</span><strong>{{ kingdom.population | numberFormat }}</strong></div>
-        <div class="res-row"><span>📈 Przyrost/turę</span><strong>+{{ kingdom.populationGrowthRate }}</strong></div>
-        <div class="res-row highlight"><span>⏳ Tury</span><strong>{{ kingdom.turnsAvailable }} / {{ kingdom.maxTurns }}</strong></div>
-        <div class="res-row"><span>📅 Tury/dzień</span><strong>{{ kingdom.turnsPerDay }}</strong></div>
-      </div>
-      <button class="btn-action" (click)="useTurn()" [disabled]="kingdom.turnsAvailable === 0">
-        ⏳ Użyj tury (generuj zasoby)
-      </button>
-    </div>
-
-    <!-- Budynki -->
-    <div class="card">
-      <h3>Budynki ({{ kingdom.buildings.length }})</h3>
-      <div class="item-list" *ngIf="kingdom.buildings.length > 0; else emptyBuildings">
-        <div class="item-row" *ngFor="let b of kingdom.buildings">
-          <span>{{ b.displayName }}</span>
-          <strong>x{{ b.quantity }} <span *ngIf="b.isUnderConstruction" class="building-tag">🔨 budowa</span></strong>
+    <div class="right-panels">
+      <div class="advisor-panel">
+        <div class="advisor-header">Doradca Sekretarz: Tutorial</div>
+        <div class="advisor-body">
+          <p>Obok nazwy Twojego księstwa i nazwy <em>koalicji</em> - o ile już do jakiejś przystąpiłeś - znajduje się informacja o ilości <strong>tur</strong>, jaką masz do wykorzystania w danym dniu.</p>
+          <p>Uwaga - <em>dzień</em> w krainie Red Dragona zaczyna się po <em>przeliczeniu</em> o godzinie 5 rano i kończy następnego dnia o tej samej godzinie, kolejnym <em>przeliczeniem</em>.</p>
         </div>
       </div>
-      <ng-template #emptyBuildings><p class="empty-text">Brak budynków. Rozpocznij budowę!</p></ng-template>
-      <a routerLink="/buildings" class="btn-link">Zarządzaj budynkami →</a>
-    </div>
 
-    <!-- Armia -->
-    <div class="card">
-      <h3>Armia</h3>
-      <div class="item-list" *ngIf="kingdom.militaryUnits.length > 0; else emptyArmy">
-        <div class="item-row" *ngFor="let u of kingdom.militaryUnits">
-          <span>{{ u.displayName }}</span>
-          <strong>x{{ u.quantity }} <span *ngIf="u.inTraining > 0" class="building-tag">+{{ u.inTraining }} szkolenie</span></strong>
+      <div class="preview-cards">
+        <div class="preview-card">
+          <div class="preview-image special-building-img">
+            <span *ngIf="!kingdom.currentSpecialBuilding">Brak</span>
+            <span *ngIf="kingdom.currentSpecialBuilding">{{ kingdom.currentSpecialBuilding }}</span>
+          </div>
+          <div class="preview-label" *ngIf="kingdom.currentSpecialBuilding">
+            {{ kingdom.currentSpecialBuilding }}
+            [{{ kingdom.specialBuildingCost > 0 ? ((kingdom.specialBuildingProgress / kingdom.specialBuildingCost) * 100 | number:'1.0-0') : 0 }}%]
+          </div>
+          <div class="preview-label" *ngIf="!kingdom.currentSpecialBuilding">
+            Nic [0%]
+          </div>
         </div>
       </div>
-      <ng-template #emptyArmy><p class="empty-text">Brak armii. Rekrutuj wojsko!</p></ng-template>
-      <a routerLink="/military" class="btn-link">Zarządzaj armią →</a>
-    </div>
-
-    <!-- Zawody -->
-    <div class="card wide">
-      <h3>Zawody</h3>
-      <div class="profession-grid">
-        <div class="prof-item" *ngFor="let p of kingdom.professions">
-          <span class="prof-name">{{ p.displayName }}</span>
-          <span class="prof-count">{{ p.workerCount | numberFormat }}</span>
-        </div>
-      </div>
-      <a routerLink="/economy" class="btn-link">Zarządzaj gospodarką →</a>
-    </div>
-
-    <!-- Koalicja -->
-    <div class="card">
-      <h3>Koalicja</h3>
-      <div *ngIf="kingdom.coalitionId; else noCoalition">
-        <p><strong>{{ kingdom.coalitionName }}</strong></p>
-        <p class="sub">Rola: {{ kingdom.coalitionRole }}</p>
-      </div>
-      <ng-template #noCoalition><p class="empty-text">Nie należysz do koalicji.</p></ng-template>
-      <a routerLink="/coalition" class="btn-link">Koalicje →</a>
     </div>
   </div>
 </div>

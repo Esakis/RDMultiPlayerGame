@@ -1,14 +1,14 @@
 <div class="page-content">
-  <h2>📜 Raporty Bitew</h2>
+  <h2>Walka - Raporty</h2>
   <div *ngIf="!loading; else loadingTpl">
     <div class="report-list" *ngIf="reports.length > 0; else emptyTpl">
       <div class="report-card" *ngFor="let r of reports" [class.victory]="r.result === 'Victory'" [class.defeat]="r.result === 'Defeat'">
         <div class="report-header">
-          <span class="result-badge">{{ r.result === 'Victory' ? '🏆 Zwycięstwo' : '💀 Porażka' }}</span>
+          <span class="result-badge">{{ r.result === 'Victory' ? 'Zwycięstwo' : 'Porażka' }}</span>
           <span class="date">{{ r.occurredAt | date:'dd.MM.yyyy HH:mm' }}</span>
         </div>
         <div class="report-body">
-          <p><strong>{{ r.attackerName }}</strong> ⚔️ <strong>{{ r.defenderName }}</strong></p>
+          <p><strong>{{ r.attackerName }}</strong> vs <strong>{{ r.defenderName }}</strong></p>
           <p>Typ: {{ r.battleType }} | Zdobyte akry: {{ r.landCaptured }}</p>
         </div>
       </div>

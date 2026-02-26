@@ -22,8 +22,7 @@ public class UnitDefinition
 
     // Koszty
     public int CostGold { get; set; } = 0;
-    public int CostIron { get; set; } = 0;
-    public int CostWood { get; set; } = 0;
+    public int CostWeapons { get; set; } = 0;
     public int CostFood { get; set; } = 0;
 
     // Statystyki

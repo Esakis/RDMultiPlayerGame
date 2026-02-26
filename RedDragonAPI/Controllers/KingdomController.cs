@@ -52,13 +52,13 @@ public class KingdomController : ControllerBase
     }
 
     [HttpPost("use-turn")]
-    public async Task<ActionResult> UseTurn()
+    public async Task<ActionResult<TurnResultDto>> UseTurn()
     {
         var userId = GetUserId();
         var result = await _turnService.UseTurnAsync(userId);
 
         if (!result.Success)
-            return BadRequest(result.Message);
+            return BadRequest(result);
 
         return Ok(result);
     }

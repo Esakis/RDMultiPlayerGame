@@ -1,0 +1,69 @@
+<div class="page-content">
+  <h2>Forum</h2>
+  <div class="toast" *ngIf="message">{{ message }}</div>
+
+  <div class="forum-tabs">
+    <button class="tab-btn" [class.active]="activeTab === 'general'" (click)="switchTab('general')">Forum Ogólne</button>
+    <button class="tab-btn" [class.active]="activeTab === 'coalition'" (click)="switchTab('coalition')">Forum Koalicji</button>
+  </div>
+
+  <div *ngIf="!loading; else loadingTpl">
+    <!-- New post form -->
+    <div class="card new-post-card">
+      <h3>Nowy temat</h3>
+      <div class="form-row">
+        <label>Temat:</label>
+        <input type="text" [(ngModel)]="newSubject" placeholder="Temat wiadomości..." />
+      </div>
+      <div class="form-row">
+        <label>Treść:</label>
+        <textarea [(ngModel)]="newBody" rows="4" placeholder="Napisz wiadomość..."></textarea>
+      </div>
+      <button class="btn-action" (click)="submitPost()">Wyślij</button>
+    </div>
+
+    <!-- Posts list -->
+    <div class="posts-list">
+      <div class="post-card" *ngFor="let post of posts">
+        <div class="post-header">
+          <span class="post-author">{{ post.authorName }}
+            <span class="coalition-tag" *ngIf="post.authorCoalitionTag">*{{ post.authorCoalitionTag }}*</span>
+          </span>
+          <span class="post-date">{{ post.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+        <div class="post-subject">{{ post.subject }}</div>
+        <div class="post-body">{{ post.body }}</div>
+        <div class="post-actions">
+          <button class="btn-sm btn-reply" (click)="startReply(post)">Odpowiedz</button>
+          <span class="reply-count" *ngIf="post.replyCount > 0">Odpowiedzi: {{ post.replyCount }}</span>
+        </div>
+
+        <!-- Reply form -->
+        <div class="reply-form" *ngIf="replyingTo?.id === post.id">
+          <textarea [(ngModel)]="replyBody" rows="3" placeholder="Twoja odpowiedź..."></textarea>
+          <div class="reply-actions">
+            <button class="btn-sm btn-action" (click)="submitReply()">Wyślij</button>
+            <button class="btn-sm btn-cancel" (click)="cancelReply()">Anuluj</button>
+          </div>
+        </div>
+
+        <!-- Replies -->
+        <div class="replies" *ngIf="post.replies && post.replies.length > 0">
+          <div class="reply-card" *ngFor="let reply of post.replies">
+            <div class="reply-header">
+              <span class="post-author">{{ reply.authorName }}
+                <span class="coalition-tag" *ngIf="reply.authorCoalitionTag">*{{ reply.authorCoalitionTag }}*</span>
+              </span>
+              <span class="post-date">{{ reply.createdAt | date:'dd.MM.yyyy HH:mm' }}</span>
+            </div>
+            <div class="reply-body">{{ reply.body }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="no-posts" *ngIf="posts.length === 0">Brak wiadomości na forum.</div>
+    </div>
+  </div>
+
+  <ng-template #loadingTpl><div class="loading">Ładowanie forum...</div></ng-template>
+</div>

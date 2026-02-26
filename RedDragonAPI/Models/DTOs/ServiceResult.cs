@@ -24,9 +24,16 @@ public class ResourcesStolen
 {
     public long Gold { get; set; }
     public long Food { get; set; }
-    public long Wood { get; set; }
     public long Stone { get; set; }
-    public long Iron { get; set; }
+    public long Weapons { get; set; }
+}
+
+public class TurnResultDto
+{
+    public bool Success { get; set; }
+    public string? Message { get; set; }
+    public int TurnsRemaining { get; set; }
+    public Dictionary<string, long> Deltas { get; set; } = new();
 }
 
 public class MilitaryAttackData

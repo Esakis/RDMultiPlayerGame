@@ -1,11 +1,12 @@
 main {
   &.with-layout {
-    margin-top: 56px;
-    margin-left: 200px;
-    min-height: calc(100vh - 56px);
+    margin-top: 130px;
+    margin-left: 140px;
+    min-height: calc(100vh - 130px);
+    background: linear-gradient(180deg, #2a0a0a 0%, #1a0505 100%);
   }
 }
 
 .page-content {
-  padding: 24px 30px;
+  padding: 15px 20px;
 }

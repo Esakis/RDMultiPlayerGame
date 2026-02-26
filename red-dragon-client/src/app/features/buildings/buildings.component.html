@@ -1,5 +1,5 @@
 <div class="page-content">
-  <h2>🏗️ Budynki</h2>
+  <h2>Budowa</h2>
   <div class="toast" *ngIf="message">{{ message }}</div>
 
   <div *ngIf="!loading; else loadingTpl">
@@ -16,19 +16,17 @@
           </div>
           <p class="desc">{{ def.description }}</p>
           <div class="costs">
-            <span *ngIf="def.costGold">💰{{ def.costGold }}</span>
-            <span *ngIf="def.costWood">🪵{{ def.costWood }}</span>
-            <span *ngIf="def.costStone">🪨{{ def.costStone }}</span>
-            <span *ngIf="def.costIron">⚒️{{ def.costIron }}</span>
-            <span *ngIf="def.costMana">🔮{{ def.costMana }}</span>
-            <span>🏞️{{ def.costLand }}</span>
-            <span>⏱️{{ def.buildTime }}t</span>
+            <span *ngIf="def.costGold">złoto: {{ def.costGold }}</span>
+            <span *ngIf="def.costBudulec">budulec: {{ def.costBudulec }}</span>
+            <span *ngIf="def.costLand">ziemia: {{ def.costLand }}</span>
+            <span *ngIf="def.baseCost">koszt bazowy: {{ def.baseCost }}</span>
+            <span>czas: {{ def.buildTime }}t</span>
           </div>
           <div class="bonuses" *ngIf="def.productionBonus || def.defenseBonus || def.populationCapacity || def.bonusTurnsPerDay">
-            <span *ngIf="def.productionBonus">📈+{{ def.productionBonus * 100 }}% prod</span>
-            <span *ngIf="def.defenseBonus">🛡️+{{ def.defenseBonus * 100 }}% obr</span>
-            <span *ngIf="def.populationCapacity">👥+{{ def.populationCapacity }}</span>
-            <span *ngIf="def.bonusTurnsPerDay">⏳+{{ def.bonusTurnsPerDay }} tur/dzień</span>
+            <span *ngIf="def.productionBonus">+{{ def.productionBonus * 100 }}% produkcji</span>
+            <span *ngIf="def.defenseBonus">+{{ def.defenseBonus * 100 }}% obrony</span>
+            <span *ngIf="def.populationCapacity">+{{ def.populationCapacity }} ludności</span>
+            <span *ngIf="def.bonusTurnsPerDay">+{{ def.bonusTurnsPerDay }} tur/dzień</span>
           </div>
           <div class="build-controls" *ngIf="def.canBuild">
             <input type="number" [(ngModel)]="quantities[def.buildingType]" min="1" max="100"

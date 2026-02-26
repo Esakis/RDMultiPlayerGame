@@ -1,5 +1,5 @@
 <div class="page-content">
-  <h2>📚 Badania</h2>
+  <h2>Szkoła</h2>
   <div class="toast" *ngIf="message">{{ message }}</div>
 
   <div *ngIf="!loading; else loadingTpl">
@@ -11,13 +11,13 @@
              [class.in-progress]="getResearchStatus(def.techType)?.isInProgress">
           <div class="tech-header">
             <strong>{{ def.displayName }}</strong>
-            <span class="status-badge" *ngIf="getResearchStatus(def.techType)?.isCompleted">✅ Zbadane</span>
-            <span class="status-badge progress" *ngIf="getResearchStatus(def.techType)?.isInProgress">🔬 W toku</span>
+            <span class="status-badge" *ngIf="getResearchStatus(def.techType)?.isCompleted">Zbadane</span>
+            <span class="status-badge progress" *ngIf="getResearchStatus(def.techType)?.isInProgress">W toku</span>
           </div>
           <p class="desc">{{ def.description }}</p>
           <div class="costs">
-            <span>💰{{ def.costGold | numberFormat }}</span>
-            <span>⏱️{{ def.researchTime }} dni</span>
+            <span>złoto: {{ def.costGold | numberFormat }}</span>
+            <span>czas: {{ def.researchTime }} tur</span>
           </div>
           <div class="req" *ngIf="def.requiredTech">
             <span>Wymaga: {{ def.requiredTech }}</span>

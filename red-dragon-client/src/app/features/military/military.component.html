@@ -1,5 +1,5 @@
 <div class="page-content">
-  <h2>⚔️ Armia</h2>
+  <h2>Wojsko</h2>
   <div class="toast" *ngIf="message">{{ message }}</div>
 
   <div *ngIf="!loading; else loadingTpl">
@@ -14,16 +14,15 @@
           </div>
           <p class="desc">{{ def.description }}</p>
           <div class="stats">
-            <span>⚔️{{ def.attackPower }}</span>
-            <span>🛡️{{ def.defensePower }}</span>
-            <span>🍖{{ def.upkeep }}/t</span>
-            <span>⏱️{{ def.trainingTime }}t</span>
+            <span>Atak: {{ def.attackPower }}</span>
+            <span>Obr: {{ def.defensePower }}</span>
+            <span>Utrz: {{ def.upkeep }}/t</span>
+            <span>Czas: {{ def.trainingTime }}t</span>
           </div>
           <div class="costs">
-            <span *ngIf="def.costGold">💰{{ def.costGold }}</span>
-            <span *ngIf="def.costIron">⚒️{{ def.costIron }}</span>
-            <span *ngIf="def.costWood">🪵{{ def.costWood }}</span>
-            <span *ngIf="def.costFood">🌾{{ def.costFood }}</span>
+            <span *ngIf="def.costGold">złoto: {{ def.costGold }}</span>
+            <span *ngIf="def.costWeapons">broń: {{ def.costWeapons }}</span>
+            <span *ngIf="def.costFood">jedzenie: {{ def.costFood }}</span>
           </div>
           <div class="recruit-controls" *ngIf="def.canRecruit">
             <input type="number" [(ngModel)]="recruitQty[def.unitType]" min="1" max="10000" />
@@ -52,7 +51,7 @@
             <input type="number" [(ngModel)]="attackUnits[u.unitType]" min="0" [max]="u.quantity" placeholder="0" />
           </div>
         </div>
-        <button class="btn-attack" (click)="sendAttack()">⚔️ Zakolejkuj Atak</button>
+        <button class="btn-attack" (click)="sendAttack()">Zakolejkuj Atak</button>
       </div>
     </div>
   </div>

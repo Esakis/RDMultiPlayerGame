@@ -13,6 +13,7 @@ import { CoalitionComponent } from './features/coalition/coalition.component';
 import { ReportsComponent } from './features/reports/reports.component';
 import { MessagesComponent } from './features/messages/messages.component';
 import { RankingComponent } from './features/ranking/ranking.component';
+import { ForumComponent } from './features/forum/forum.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard] },
   { path: 'messages', component: MessagesComponent, canActivate: [AuthGuard] },
   { path: 'ranking', component: RankingComponent, canActivate: [AuthGuard] },
+  { path: 'forum', component: ForumComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/dashboard' }
 ];
 

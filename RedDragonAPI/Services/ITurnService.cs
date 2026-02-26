@@ -4,5 +4,5 @@ namespace RedDragonAPI.Services;
 
 public interface ITurnService
 {
-    Task<ServiceResult> UseTurnAsync(int userId);
+    Task<TurnResultDto> UseTurnAsync(int userId);
 }

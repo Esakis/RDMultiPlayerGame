@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedDragonAPI.Data;
 
@@ -11,9 +12,11 @@ using RedDragonAPI.Data;
 namespace RedDragonAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260226114933_RedDragonV2")]
+    partial class RedDragonV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1451,54 +1454,9 @@ namespace RedDragonAPI.Migrations
                             Id = 1,
                             IsActive = true,
                             Name = "Era Przebudzenia",
-                            StartedAt = new DateTime(2026, 2, 26, 12, 28, 0, 199, DateTimeKind.Utc).AddTicks(7953),
+                            StartedAt = new DateTime(2026, 2, 26, 11, 49, 32, 968, DateTimeKind.Utc).AddTicks(7116),
                             Theme = "Pierwsza era nowego świata Red Dragon"
                         });
-                });
-
-            modelBuilder.Entity("RedDragonAPI.Models.Entities.ForumPost", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AuthorKingdomId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CoalitionId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ForumType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int?>("ParentPostId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorKingdomId");
-
-                    b.HasIndex("CoalitionId");
-
-                    b.HasIndex("ParentPostId");
-
-                    b.ToTable("ForumPosts");
                 });
 
             modelBuilder.Entity("RedDragonAPI.Models.Entities.Kingdom", b =>
@@ -3102,31 +3060,6 @@ namespace RedDragonAPI.Migrations
                     b.Navigation("WinningCoalition");
                 });
 
-            modelBuilder.Entity("RedDragonAPI.Models.Entities.ForumPost", b =>
-                {
-                    b.HasOne("RedDragonAPI.Models.Entities.Kingdom", "AuthorKingdom")
-                        .WithMany()
-                        .HasForeignKey("AuthorKingdomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RedDragonAPI.Models.Entities.Coalition", "Coalition")
-                        .WithMany()
-                        .HasForeignKey("CoalitionId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("RedDragonAPI.Models.Entities.ForumPost", "ParentPost")
-                        .WithMany("Replies")
-                        .HasForeignKey("ParentPostId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("AuthorKingdom");
-
-                    b.Navigation("Coalition");
-
-                    b.Navigation("ParentPost");
-                });
-
             modelBuilder.Entity("RedDragonAPI.Models.Entities.Kingdom", b =>
                 {
                     b.HasOne("RedDragonAPI.Models.Entities.Coalition", "Coalition")
@@ -3270,11 +3203,6 @@ namespace RedDragonAPI.Migrations
                     b.Navigation("Coalitions");
 
                     b.Navigation("Kingdoms");
-                });
-
-            modelBuilder.Entity("RedDragonAPI.Models.Entities.ForumPost", b =>
-                {
-                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("RedDragonAPI.Models.Entities.Kingdom", b =>

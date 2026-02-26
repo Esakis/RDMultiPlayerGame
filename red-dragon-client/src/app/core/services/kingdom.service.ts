@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Kingdom, KingdomSummary, AssignWorkersDto, ServiceResult } from '../models/kingdom.model';
+import { Kingdom, KingdomSummary, AssignWorkersDto, ServiceResult, TurnResult } from '../models/kingdom.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +25,8 @@ export class KingdomService {
     return this.http.get<KingdomSummary[]>(`${this.apiUrl}/all${params}`);
   }
 
-  useTurn(): Observable<ServiceResult> {
-    return this.http.post<ServiceResult>(`${this.apiUrl}/use-turn`, {});
+  useTurn(): Observable<TurnResult> {
+    return this.http.post<TurnResult>(`${this.apiUrl}/use-turn`, {});
   }
 
   assignWorkers(dto: AssignWorkersDto): Observable<ServiceResult> {

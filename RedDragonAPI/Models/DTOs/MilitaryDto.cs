@@ -21,8 +21,7 @@ public class UnitDefinitionDto
     public string DisplayName { get; set; } = string.Empty;
     public string? Description { get; set; }
     public int CostGold { get; set; }
-    public int CostIron { get; set; }
-    public int CostWood { get; set; }
+    public int CostWeapons { get; set; }
     public int CostFood { get; set; }
     public int AttackPower { get; set; }
     public int DefensePower { get; set; }

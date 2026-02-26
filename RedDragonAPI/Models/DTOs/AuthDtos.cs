@@ -15,6 +15,9 @@ public class RegisterDto
 
     [Required, MinLength(3), MaxLength(200)]
     public string KingdomName { get; set; } = string.Empty;
+
+    [Required, MaxLength(50)]
+    public string Race { get; set; } = "Ludzie";
 }
 
 public class LoginDto

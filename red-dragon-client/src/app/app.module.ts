@@ -24,6 +24,7 @@ import { CoalitionComponent } from './features/coalition/coalition.component';
 import { ReportsComponent } from './features/reports/reports.component';
 import { MessagesComponent } from './features/messages/messages.component';
 import { RankingComponent } from './features/ranking/ranking.component';
+import { ForumComponent } from './features/forum/forum.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { RankingComponent } from './features/ranking/ranking.component';
     CoalitionComponent,
     ReportsComponent,
     MessagesComponent,
-    RankingComponent
+    RankingComponent,
+    ForumComponent
   ],
   imports: [
     BrowserModule,

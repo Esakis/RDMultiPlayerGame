@@ -1,5 +1,5 @@
 <app-header *ngIf="showLayout" [kingdom]="kingdom"></app-header>
-<app-sidebar *ngIf="showLayout"></app-sidebar>
+<app-sidebar *ngIf="showLayout" (turnUsed)="useTurn()"></app-sidebar>
 
 <main [class.with-layout]="showLayout">
   <router-outlet></router-outlet>

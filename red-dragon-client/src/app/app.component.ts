@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthService } from './core/services/auth.service';
 import { KingdomService } from './core/services/kingdom.service';
+import { TurnService } from './core/services/turn.service';
 import { Kingdom } from './core/models/kingdom.model';
 
 @Component({
@@ -17,6 +18,7 @@ export class AppComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private kingdomService: KingdomService,
+    private turnService: TurnService,
     private router: Router
   ) {}
 
@@ -35,6 +37,16 @@ export class AppComponent implements OnInit {
   loadKingdom(): void {
     this.kingdomService.getMyKingdom().subscribe({
       next: (k) => this.kingdom = k,
+      error: () => {}
+    });
+  }
+
+  useTurn(): void {
+    this.kingdomService.useTurn().subscribe({
+      next: (res) => {
+        this.turnService.emitDeltas(res.deltas || {});
+        this.loadKingdom();
+      },
       error: () => {}
     });
   }

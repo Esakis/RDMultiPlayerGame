@@ -166,12 +166,10 @@ public class BattleService : IBattleService
             defender.Gold -= resourcesStolen.Gold;
             attacker.Food += resourcesStolen.Food;
             defender.Food -= resourcesStolen.Food;
-            attacker.Wood += resourcesStolen.Wood;
-            defender.Wood -= resourcesStolen.Wood;
             attacker.Stone += resourcesStolen.Stone;
             defender.Stone -= resourcesStolen.Stone;
-            attacker.Iron += resourcesStolen.Iron;
-            defender.Iron -= resourcesStolen.Iron;
+            attacker.Weapons += resourcesStolen.Weapons;
+            defender.Weapons -= resourcesStolen.Weapons;
         }
 
         // Raport

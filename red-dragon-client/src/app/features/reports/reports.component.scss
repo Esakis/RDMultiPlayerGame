@@ -1,13 +1,14 @@
-h2 { color: #ff6644; margin: 0 0 20px 0; }
-.report-list { display: flex; flex-direction: column; gap: 12px; }
+:host { display: block; padding: 10px 15px; }
+h2 { color: #ffd700; margin: 0 0 15px 0; font-size: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.6); }
+.report-list { display: flex; flex-direction: column; gap: 8px; }
 .report-card {
-  background: rgba(20,10,10,0.8); border: 1px solid #3a1515; border-radius: 8px; padding: 16px;
-  &.victory { border-left: 4px solid #4caf50; }
-  &.defeat { border-left: 4px solid #f44336; }
-  .report-header { display: flex; justify-content: space-between; margin-bottom: 8px;
-    .result-badge { font-weight: 700; font-size: 0.95rem; }
-    .date { color: #888; font-size: 0.8rem; } }
-  .report-body { color: #bbb; font-size: 0.9rem; p { margin: 4px 0; } strong { color: #e8d5b5; } }
+  background: linear-gradient(180deg, #4a1818 0%, #2a0a0a 100%); border: 2px solid #8b0000; padding: 12px;
+  &.victory { border-left: 4px solid #66ff66; }
+  &.defeat { border-left: 4px solid #ff6666; }
+  .report-header { display: flex; justify-content: space-between; margin-bottom: 6px;
+    .result-badge { font-weight: bold; font-size: 14px; }
+    .date { color: #888; font-size: 12px; } }
+  .report-body { color: #ccc; font-size: 13px; p { margin: 3px 0; } strong { color: #ffd700; } }
 }
-.empty { color: #666; font-style: italic; text-align: center; padding: 40px 0; }
-.loading { color: #888; text-align: center; padding: 40px 0; }
+.empty { color: #888; font-style: italic; text-align: center; padding: 40px 0; }
+.loading { color: #888; text-align: center; padding: 40px 0; font-size: 14px; }

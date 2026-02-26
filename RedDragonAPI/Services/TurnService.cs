@@ -15,7 +15,7 @@ public class TurnService : ITurnService
         _resourceService = resourceService;
     }
 
-    public async Task<ServiceResult> UseTurnAsync(int userId)
+    public async Task<TurnResultDto> UseTurnAsync(int userId)
     {
         var kingdom = await _context.Kingdoms
             .Include(k => k.Buildings).ThenInclude(b => b.Definition)
@@ -23,10 +23,23 @@ public class TurnService : ITurnService
             .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
 
         if (kingdom == null)
-            return ServiceResult.Fail("Nie znaleziono księstwa.");
+            return new TurnResultDto { Success = false, Message = "Nie znaleziono księstwa." };
 
         if (kingdom.TurnsAvailable <= 0)
-            return ServiceResult.Fail("Brak dostępnych tur.");
+            return new TurnResultDto { Success = false, Message = "Brak dostępnych tur." };
+
+        // Snapshot before
+        var before = new Dictionary<string, long>
+        {
+            ["gold"] = kingdom.Gold,
+            ["food"] = kingdom.Food,
+            ["stone"] = kingdom.Stone,
+            ["budulecStored"] = kingdom.BudulecStored,
+            ["weapons"] = kingdom.Weapons,
+            ["mana"] = kingdom.Mana,
+            ["population"] = kingdom.Population,
+            ["popularity"] = kingdom.Popularity
+        };
 
         kingdom.TurnsAvailable--;
         kingdom.Age++;
@@ -37,6 +50,25 @@ public class TurnService : ITurnService
 
         await _context.SaveChangesAsync();
 
-        return ServiceResult.Ok($"Tura wykorzystana. Pozostało tur: {kingdom.TurnsAvailable}");
+        // Calculate deltas
+        var deltas = new Dictionary<string, long>
+        {
+            ["gold"] = kingdom.Gold - before["gold"],
+            ["food"] = kingdom.Food - before["food"],
+            ["stone"] = kingdom.Stone - before["stone"],
+            ["budulecStored"] = kingdom.BudulecStored - before["budulecStored"],
+            ["weapons"] = kingdom.Weapons - before["weapons"],
+            ["mana"] = kingdom.Mana - before["mana"],
+            ["population"] = kingdom.Population - before["population"],
+            ["popularity"] = kingdom.Popularity - before["popularity"]
+        };
+
+        return new TurnResultDto
+        {
+            Success = true,
+            Message = $"Tura wykorzystana. Pozostało tur: {kingdom.TurnsAvailable}",
+            TurnsRemaining = kingdom.TurnsAvailable,
+            Deltas = deltas
+        };
     }
 }

@@ -1,42 +1,88 @@
-<div class="auth-container">
-  <div class="auth-card">
-    <div class="auth-header">
-      <h1>Red Dragon</h1>
-      <p>Strategiczna gra turowa MMO</p>
+<div class="registration-page">
+  <div class="registration-panel">
+    <div class="panel-corner corner-tl"></div>
+    <div class="panel-corner corner-tr"></div>
+    <div class="panel-corner corner-bl"></div>
+    <div class="panel-corner corner-br"></div>
+
+    <div class="panel-header">
+      <h1>Rejestracja <span class="version">(wersja 1.0 beta)</span></h1>
     </div>
 
-    <h2>Rejestracja</h2>
-
-    <div class="error-msg" *ngIf="error">{{ error }}</div>
-
-    <form (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="twoj@email.pl" />
+    <div class="panel-body">
+      <div class="intro-text">
+        Ten formularz założy dla Ciebie <strong>nowe konto</strong>, oraz Twoje pierwsze księstwo.<br>
+        Jeżeli masz już konto - nie zakładaj kolejnego - <a routerLink="/login">zaloguj się na nie</a>
       </div>
 
-      <div class="form-group">
-        <label for="username">Nazwa użytkownika</label>
-        <input type="text" id="username" [(ngModel)]="username" name="username" placeholder="Nazwa gracza" />
+      <div class="error-msg" *ngIf="error">{{ error }}</div>
+
+      <form class="registration-form" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <label class="form-label">Nazwa konta</label>
+          <input type="text" class="form-input" [(ngModel)]="username" name="username" required>
+          <span class="validation-text">Pod nią będziesz widniany np. na forum.</span>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Hasło</label>
+          <input type="password" class="form-input" [(ngModel)]="password" name="password" required>
+          <span class="validation-text" [ngClass]="passwordStrengthClass">{{ passwordStrength }}</span>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Powtórz hasło</label>
+          <input type="password" class="form-input" [(ngModel)]="passwordConfirm" name="passwordConfirm" required>
+          <span class="validation-text" [ngClass]="passwordMatchClass">{{ passwordMatch }}</span>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" [(ngModel)]="email" name="email" required>
+          <span class="validation-text">Nie będzie potwierdzany, ale podając nieprawidłowy nie będziesz w stanie np. odzyskać hasła.</span>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Nazwa księstwa</label>
+          <input type="text" class="form-input" [(ngModel)]="kingdomName" name="kingdomName" required>
+          <span class="validation-text">Nazwa Twojego pierwszego księstwa w grze.</span>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Rasa</label>
+          <select class="form-input" [(ngModel)]="race" name="race">
+            <option *ngFor="let r of races" [value]="r">{{ r }}
+              <span *ngIf="magicRaces.includes(r)"> (magiczna)</span>
+            </option>
+          </select>
+          <span class="validation-text">
+            Rasa określa cechy Twojego księstwa.
+            <span *ngIf="magicRaces.includes(race)" class="magic-tag">Rasa magiczna</span>
+            <span *ngIf="race === 'Gobliny'" class="goblin-tag">+2 tury dziennie, max 61 tur</span>
+          </span>
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="accept_rules" [(ngModel)]="acceptRules" name="acceptRules">
+          <label for="accept_rules">
+            Akceptuję <a href="javascript:void(0)">Regulamin</a>
+          </label>
+        </div>
+
+        <div class="submit-button-wrapper">
+          <button type="submit" class="btn-submit" [disabled]="loading">
+            {{ loading ? 'Rejestracja...' : 'Zarejestruj się' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel-footer">
+      <div class="footer-help">
+        Problemy z rejestracją? <a href="javascript:void(0)">Pomoc</a>
       </div>
-
-      <div class="form-group">
-        <label for="password">Hasło</label>
-        <input type="password" id="password" [(ngModel)]="password" name="password" placeholder="Min. 6 znaków" />
-      </div>
-
-      <div class="form-group">
-        <label for="kingdomName">Nazwa Księstwa</label>
-        <input type="text" id="kingdomName" [(ngModel)]="kingdomName" name="kingdomName" placeholder="Nazwa Twojego księstwa" />
-      </div>
-
-      <button type="submit" class="btn-primary" [disabled]="loading">
-        {{ loading ? 'Rejestracja...' : 'Załóż Księstwo' }}
-      </button>
-    </form>
-
-    <p class="auth-link">
-      Masz już konto? <a routerLink="/login">Zaloguj się</a>
-    </p>
+    </div>
   </div>
+
+  <a routerLink="/login" class="back-link">do strony głównej</a>
 </div>

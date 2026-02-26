@@ -1,32 +1,67 @@
-<div class="auth-container">
-  <div class="auth-card">
-    <div class="auth-header">
-      <h1>Red Dragon</h1>
-      <p>Strategiczna gra turowa MMO</p>
+<div class="login-page">
+  <div class="login-header">
+    <div class="header-bg">
+      <h1 class="logo-text">RED DRAGON</h1>
+    </div>
+    <div class="login-box">
+      <form (ngSubmit)="onSubmit()">
+        <div class="login-field">
+          <label>Login:</label>
+          <input type="email" [(ngModel)]="email" name="email">
+        </div>
+        <div class="login-field">
+          <label>Hasło:</label>
+          <input type="password" [(ngModel)]="password" name="password">
+        </div>
+        <button type="submit" class="btn-login" [disabled]="loading">
+          {{ loading ? 'Logowanie...' : 'Zaloguj się' }}
+        </button>
+      </form>
+      <div class="error-msg" *ngIf="error">{{ error }}</div>
+    </div>
+  </div>
+
+  <div class="top-menu">
+    <a href="javascript:void(0)">Gra</a>
+    <a href="javascript:void(0)">Społeczność</a>
+    <a href="javascript:void(0)">Pomoc</a>
+    <a href="javascript:void(0)">Twoje Konto</a>
+  </div>
+
+  <div class="content-wrapper">
+    <div class="left-sidebar">
+      <div class="sidebar-section">
+        <h3>Statystyki:</h3>
+        <p>Dzień ery 1 / ~105</p>
+        <h4>Koalicje:</h4>
+        <p>Aktywnych: 0<br>Wszystkich: 0</p>
+      </div>
     </div>
 
-    <h2>Logowanie</h2>
+    <div class="main-content">
+      <h2>RedDragon jako gra oferuje:</h2>
+      <ul class="features">
+        <li><strong>Bezpłatność i uczciwość</strong> - gra jest w pełni darmowa.</li>
+        <li><strong>Rozbudowaną mechanikę</strong> - budynki, wojsko, magia, złodzieje.</li>
+        <li><strong>Koalicje</strong> - graj z innymi graczami, buduj sojusze.</li>
+        <li><strong>System turowy</strong> - planuj strategicznie swoje ruchy.</li>
+        <li><strong>Codzienne przeliczenie</strong> - codziennie o 5:00 rano.</li>
+      </ul>
 
-    <div class="error-msg" *ngIf="error">{{ error }}</div>
-
-    <form (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="twoj@email.pl" />
+      <div class="register-cta">
+        <h3>Dołącz i graj!</h3>
+        <p>Rejestracja to pół minuty, a potem rządzisz własnym księstwem!</p>
+        <a routerLink="/register" class="btn-register-cta">Załóż księstwo</a>
       </div>
+    </div>
 
-      <div class="form-group">
-        <label for="password">Hasło</label>
-        <input type="password" id="password" [(ngModel)]="password" name="password" placeholder="Hasło" />
-      </div>
+    <div class="right-sidebar">
+      <h3>Informacje:</h3>
+      <p>Red Dragon to turowa gra strategiczna MMO osadzona w świecie fantasy.</p>
+    </div>
+  </div>
 
-      <button type="submit" class="btn-primary" [disabled]="loading">
-        {{ loading ? 'Logowanie...' : 'Zaloguj się' }}
-      </button>
-    </form>
-
-    <p class="auth-link">
-      Nie masz konta? <a routerLink="/register">Zarejestruj się</a>
-    </p>
+  <div class="page-footer">
+    <p>Red Dragon &copy; 2024 - Strategiczna gra turowa MMO</p>
   </div>
 </div>

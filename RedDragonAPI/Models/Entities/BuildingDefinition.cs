@@ -22,14 +22,16 @@ public class BuildingDefinition
 
     // Koszty budowy
     public int CostGold { get; set; } = 0;
-    public int CostWood { get; set; } = 0;
-    public int CostStone { get; set; } = 0;
-    public int CostIron { get; set; } = 0;
-    public int CostMana { get; set; } = 0;
+    public int CostBudulec { get; set; } = 1;
     public int CostLand { get; set; } = 1;
 
-    // Czas budowy
+    // Czas budowy (tury)
     public int BuildTime { get; set; } = 1;
+
+    // Pozycja w drzewku budynków specjalnych (row 1-7, column 1-6)
+    public int Row { get; set; } = 0;
+    public int Col { get; set; } = 0;
+    public int BaseCost { get; set; } = 0;
 
     // Wymagania
     [MaxLength(100)]
@@ -49,4 +51,5 @@ public class BuildingDefinition
     public decimal DefenseBonus { get; set; } = 0;
 
     public int PopulationCapacity { get; set; } = 0;
+    public int WorkshopCapacity { get; set; } = 0;
 }
