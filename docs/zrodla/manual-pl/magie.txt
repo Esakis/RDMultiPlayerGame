@@ -1,0 +1,675 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+ 	
+			
+				
+				
+ 
+ 
+ 	
+
+
+			
+				
+				
+ 
+
+      Magic is a very powerful weapon. It is used to strengthen your or your allies' Kingdoms or to weaken your enemy. Although magic can't conquer new territories it is an essential part of warfare. Magical spells can destroy your opponents economy, thus making his Govern non-useful for his Alliance. Moreover, it can weaken the military defense of a Kingdom. That means you can use less troops to attack it successfully. The Magic Menu allows you to choose the target and type of spell you want to cast. The selection is very similar to that one in the War menu. You can select a target from your own Alliance by clicking it on the list in the 'Choose target from your own alliance' section. You cannot cast a spell on a Govern during its protectorate or a Govern that is 4 times smaller or 4 times greater than yours. The target that you have casted your last spell will be automatically selected as a target for the next spell - this shortens the time needed to cast numerous spells on one Govern. If both enemy and friendly Governs are selected the spell is cast on the foe. You can cast spells only on allied Governs or Governs from Alliances that you have declared war on (if you have casted Spells ona Govern in an Alliances on which you have not declared war, those Spells are deleted at the Recount by the Server). What is more, retreating from an Alliance won't protect you from enemy magic - your Govern is still treated as a member of this Alliance.
+	
+
+
+			
+				 
+				
+
+target selection panel
+
+ 
+
+
+				 	
+
+
+			
+				
+				
+
+
+
+      After you cast a spell information about it is shown under the target selection panel (if the spell was successful). To cast spells you need Mages. The more mages you employ the higher the chance of success is.
+
+
+  
+ 				
+
+
+			
+				
+ 
+ 
+      The next panel contains information about the amount of manna left on stock (depended from your present manna production), the expense level (which inreases after every casted Spell), the amount of your gold and the present price of manna on the market. After casting each spell the expense level raises by 10 % (Genies by 9%, Gnomes 11%).  After clicking a turn the expense level drops to (expenselevel/2)+45 but it will never go under 100%. The current spell cost is displayed in the list on the left next to the spell. Every spell requires a specified amount of manna - if you don't have enough the spell won't be cast. Luckily you can buy manna on the market. To toggle this option go to the 'Automatization' menu. You are informed of every transaction on the Market after casting each Spell.
+
+
+
+ 	
+
+
+			
+				
+ 
+ 
+
+      Just below are two Checkboxes - the first one when selected turns the manna purchases info off, the second one when selected turns the successful spell display off. It is especially useful for players using modems etc. If you refresh the window, both checkboxes are unchecked, so you see all those information again.
+
+	
+
+
+			
+				
+				
+ 
+      The list on the left allows you to select the spell needed (the variety of spells is determined by the number of Spellbooks you have). If you build SB Magical Palace you can cast Spell Dragon Breath and you gain another Spellbook. When you build it, a new textbox appears on the top of this menu, allowing you to select the additional Spellbook.
+
+				
+				
+ 			
+
+      You can cast a spell on one Govern more than once. Just key in the number of times you want to cast this spell (in the 'How many times you want to cast' textbox) and than click the 'Cast the spell' or 'Cast on yourself' button. You cannot cast a spell more than 30 times on one Govern per click. Do not worry about accidentally casting negative Spells on your allies or positive Spells on your opponents because the server automatically writes a warning and stops the Spell.
+
+				
+				
+ 			
+
+      You can also erase spells. To do this select the 'Dispel magic' spell from the left list and at the same time the spell you want to get rid off. After that simply press the 'Cast on yourself' button. If successful, the power of the spell will drop by 20% or by the doubled power of your Mages (depends what is greater). If you do not select any Spell to erase, the Spell 'Dispel magic' will be casted but nothing will happen.
+
+				
+
+                                
+				
+ 			
+
+      Beneath the Spells` selection panel is the list of successfully casted Spells on other Kingdoms. They will influence those Kingdoms only after the Recount. Next to each you will find a checkbox - check it and click the 'Cancel' button to cancel casting this Spell.
+
+
+                                
+				
+
+
+      You cast spells with the power between 80% and 120% of your Mages power. The spell power will rise by 20% if you have built the Special Building : Magical Lens. The spells will function with the power when they were cast, regardless if you have any Mages employed at the Recount. Spells are also reflected with the same power as they were cast (look at the discription of "Magic Mirror"). Generals-Mages increase the offensive power of the spell making it easier to break your opponents magical defense. During Recount spells are computed in the order determined by the wave number in which they were cast (so remember to cast spells lowering your opponents magical defense in the lowest waves possible). If Spells are casted in the same wave, the time in which they were casted determines the order in which they are calculated. Reflected spells are computed after all the other spells (also in order determined by wave number). Positive spells are always computed as the first ones.
+
+								
+				
+ 			
+
+      Your Mages defend themselves(and your Govern) from enemy magic with the strength that they had during the Recount. Your defense is lowered by every successful spell of your opponent. Mages from allied Kingdoms can help you defend if you have magical pacts signed with them. Also spells like Magical Fluid and Special Buildings increase your magical defense. The efficiency of spells increasing magical and military defense is dynamically changed during the Recount. That means, if spells like Stupidity have broken your defense it is lowered instantly and other spells have a greater chance of breaking it again. Some spells are limited - only a restricted number of them will function, even if more have broken the defense (i.e. you have successfully casted 9 Earthquake on one Govern, but the limit is 5, so only 5 out of those 9 will be efficient). Thus, discuss this matter with your allies so that you don't cast unnecessary spells. Also keep in mind that when demolishing houses yourself the number of Mages that lived in those houses will become novice. Houses destroyed by your opponent during the Recount do not make any mages become novice.
+
+  
+ 				
+
+
+			
+				 
+
+
+ spell selection panel
+
+ 
+
+
+				 	
+
+
+			
+				
+ 
+ 
+
+      While casting spells players can determine in which wave is the spell cast. The spells are (as said before) computed according to their wave number. This makes it easier for players to share spells between themselves.
+
+ 	
+
+
+			
+				
+				
+ 
+
+
+ 
+ 	
+
+
+			
+				
+				
+ 
+
+      There are two types of spells : ones that affect the Govern instantly(only during Recount) and ones that affect it during a number of turns. Long-term spells are listed in the Central screen. Their power (and efficiency) decreases by about 50% after every turn. If there are multiple long-term spells casted of the same type the spell power is the sum of all their powers. There are two types of long-term spells - 1) the effect doesn't depend on the spell power, it only has to be present (Fertility for instance - of course, a Spell casted with a greater power will last for longer and will be harder to erase), 2) the effect is proportional to the Spell`s power and Govern size (the larger the Govern, the stronger the Spell has to be to make the same effect). Spells that affect your Govern in a positive way will never be reflected by Mages of an allied Govern, if you cast such a spell on it. The only visual sign of Spells that affected your Kingdom at the Recount are the devastations done by them.
+	
+
+
+			
+				
+ 
+ 
+
+ 
+
+
+ 	
+
+
+			
+				
+ 
+			
+
+	Spell Index
+
+
+
+
+	Instant Spells
+
+
+	Spell	
+	shortcut	
+	
+	cost	
+	
+	description
+
+
+
+	Dispel Magic	
+	
+	DM	
+	
+	125	
+	
+	Weakens the power of a spell by the doubled power of your Mages(not less than 20% of the spells power). When the power of the spell reaches 0 or less it stops affecting your Govern. Cannot be casted on other Kingdoms.
+
+
+	Mannamorphosis	
+	
+	M	
+	
+	85	
+	
+	
+	Changes manna into Gold. For every manna unit you will gain 200 pieces of gold. Especially useful when your Govern has lost the Special Building : Market and the manna price is low.
+
+
+
+	Eagle's Eye	
+	
+	EE	
+	
+	20	
+	
+	
+	If successful this spells shows some basic information about your opponents Govern (the amount of E2, E1, E0, Thieves, Mages and War Machines left in this Govern during Recount). Furthermore, this spell, casted with a minimal power, is used as an probe - to test which enemys` Governs do not have any Mages or magical pacts.
+
+
+	Summon Dragon	
+	
+	SD	
+	
+	Equations	
+	
+	
+	Basic cost is determined by the amount of Dragons in your Govern - attracts a Red Dragon into your army. Cannot be casted on other Governs. 
+
+
+
+	Dragon Breath	
+	
+	DB	
+	
+	1500	
+	
+	The most powerful spell in the game. To be able to cast it you must build the Special Building 'Magical Palace'. Only 5 spells will affect enemy Governs (3 if the target is a Goblin, 4 if it's a Dwarf). One spell destroys 1-2% of buildings, 3-5% of enemy army, kills 5-10% of enemy population and may even destroy an  Special Building. The chance for the Dragon Breath to destroy a SB is always 50%. In opposite to the Spell Earthquake, for which the chance is 50%*x, where x is the percentage of Special Buildings left in a Govern.
+
+
+  
+
+ 
+
+	Earthquake	
+	
+	EQ	
+	
+	190	
+	
+	
+	Destroys between 1% to 2% of enemy infrastructure buildings and possibly one Special Building with a chance of 50%*x, where x is the percentage of Special Buildings left in a Govern (per spell). Only 5 spells will affect enemy Governs (3 if the target is a Goblin, 4 if it's a Dwarf).  
+
+
+
+	Hurricane	
+	
+	H	
+	
+	255	
+	
+	Kills 4% of people hired in the 'Professions' menu (doesn't affect armies and thieves). 7 Spells per day will be effective (6 if the target is a Dwarf and 5 if a Goblin).
+
+
+
+	Burn Thieves	
+	
+	BT	
+	
+	210	
+	
+	5% to 10% of enemy thieves will be burned to death. Only 7 spells will affect the Govern (6 if the target is a Dwarf and 0 if a Goblin). Although it's an instant spell, it is sometimes regarded as an long-term one, because it lowers thievish defense for the forthcoming Recount. Goblins are not affected by this Spell.
+
+
+	Fiery Rainfall	
+	
+	FR	
+	
+	340	
+	
+	2-4% of the target's inhabitants (army + workers) are killed when this spell is successfully cast. Only 5 spells will affect enemy Governs (3 if the target is a Goblin, 4 if it's a Dwarf).
+
+
+	Destroy Supplies	
+	
+	DS	
+	
+	125	
+	
+	Destroys 20% of Govern's resources.
+
+
+	Doom of Fallen Legions	
+	
+	DFL	
+	
+	100	
+	
+	Returns the ghost warriors back to their graves. The power of the Fallen Legions spell is decreased by the power of the Doom of Fallen Legions spell. If there are no Fallen Legions this spell takes any effect.
+
+
+
+	Long-term Spells (the effect doesn't depend on the spell power)
+
+
+
+	Spell	
+	shortcut	
+	
+	cost	
+	
+	description
+
+
+	Good Mood	
+	
+	GM	
+	
+	125	
+	
+	The effect of this spell is similar to the 'Red Dragon Inn' Special Building. It increases the popularity of the Governor each turn by +1. This means you can lower your wages by 4 and still have a maximum popularity of 100 points.
+
+
+	Fertility	
+	
+	Fer	
+	
+	210	
+	
+	Increases population growth by +30%.
+
+
+	Misfortune	
+	
+	MF	
+	
+	65	
+	
+	Decreases population growth by -10%. It also affects several 'random situations' like finding gold in the Gold Mine. It doesn't, however, affect your Luck in the Labyrinth nor does it affect the Recount.
+
+
+
+	Castration	
+	
+	C	
+	
+	85	
+	
+	The opposite of Fertility - decreases population growth by -50%.
+
+
+
+	Bad Mood 	
+	
+	BD	
+	
+	65	
+	
+	The opposite of GM - lowers your popularity by -1 each turn.
+
+
+	Long-term Spells(the effect does depend on the spell power)
+
+
+	Spell	
+	shortcut 	
+	
+	cost	
+	
+	description
+
+
+	Fortune	
+	
+	Frt	
+	
+	210	
+	
+	Increases the chance of luring a Dragon, finding gold in the Gold Mine, coming of a General, successfully casting a Spell, casting a Spell by a General with the secondary ability Light Magic, reflecting enemys` Spells. It also affects your luck in the Labyrinth, so when entering it, have the Spell`s effect at it maximum - 49%. However, it does not influence the chance of loosing a Special Building nor stopping enemys` Spells. Increases population growth by +10%.
+
+
+	Diligence	
+	
+	Dil	
+	
+	340	
+	
+	Increases the efficiency of all non-magical workers by up to +49%.
+
+
+
+
+	Magical Fluidum	
+	
+	MF	
+	
+	210	
+	
+	Increases the efficiency of all magical workers by up to +49%.
+
+
+	Anti-magical Shield	
+	
+	AMS	
+	
+	210	
+	
+	Increases your magical defense by up to 24%. Does not work through pacts (in opposite to Military Shield). Increases defence only on the Kingdom it influences, so cast it on every Kingdom which has mages employed during the Recount or has magical pacts signed.
+
+
+	Magic Mirror	
+	
+	MM	
+	
+	680	
+	
+	Increases the chance of reflecting enemy spells, if they did not break your magical defence. When the Special Building 'Magical Lens' is build the power of the reflected spell is greater by +20%. Yet, the reflected Spells loose the influence of Generals-Mages of the enemy Kingdom. The maximal effect is 24%, so you have a 24% chance of relfecting any unsuccessfully casted Spells on your Kingdom. Cast this Spell only on magically protected Governs.
+
+
+	Military Shield	
+	
+	MS	
+	
+	380	
+	
+	Increases your military defence by up to +24%. This spell doesn't influence defence given through military pacts. Increases only the defence provided by your own citizens. You should cast this spell on Governs that leave their armies home.
+
+
+	Fallen Legions	
+	
+	FL	
+	
+	425	
+	
+	Gives an extra military defenc by summoning ghosts of dead warriors. The effect of this spell is equal to the number of Mages in your Govern or the power of this Spell (depends what is smaller). This Spell can be only erased by the 'Doom of Fallen Legions' spell, and only by this Spell. Military Shield and Weakness do not affect this spell but the General-Defender does. The effect of this Spells decreases if you loose any mages (through Spells, thivish actions or military attacks).
+
+
+
+	Plague	
+	
+	Pl	
+	
+	275	
+	
+	Every turn up to 3% of your population dies of an fatal disease. It is a very powerful spell, affecting the targets economy strongly(doesn't affect Giants).
+
+
+	Locusts	
+	
+	Loc	
+	
+	125	
+	
+	Most of the Govern's food is eaten by these pests, therefore your citizens need up to 300% more food then normally. It also destroys 9% of the food on stock. Doesn't affect Necromants armies, because these units need no food - they're already dead.
+
+
+	Imps	
+	
+	I	
+	
+	125	
+	
+	Destroys a part of War Machines each turn (doesn't affect Gnomes because they do not use War Machines). It's a waste of manna to cast it on Governs without War Machines.
+	 
+
+
+
+	Sleepwalking 	
+	
+	Slp	
+	
+	105	
+	
+	The opposite of the Diligence. It decreases the efficiency of the non-magical workers by up to -50%.
+
+
+	Stupidity	
+	
+	S	
+	
+	85	
+	
+	Decreases the efficiency of druids and mages by up to -25%. Decreases the magical defence of a Kingdom, which has any Mages employed for the Recount, and the defence of any other Kingdoms that have magical pacts signed with the Kingdom.
+
+
+
+	Weakness	
+	
+	W	
+	
+	85	
+	
+	Decreases your military defense by up to -24%. Decreases onyl the defence provided by the citizens of the attacked Kingdom, not the defence given through pacts for the attacked Kingdom.
+
+
+ 	
+
+
+			
+
+
+ 
+ 
+ The costs provided here are the basic costs of a spell (basic cost = cost at 100 Acres). The cost of spells raises as you gain more and more land. You can find out how this cost changes in the right section of this manual.
+
+ 	
+
+
+			
+
+
+
+
+ 
+			
+ 
+
+
+
+
+    	Ostatnia aktualizacja: 2007-02-24 20:06:01
+
+					

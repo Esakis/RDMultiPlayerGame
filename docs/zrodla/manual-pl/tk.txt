@@ -1,0 +1,332 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+
+ 
+
+      
+
+
+
+
+
+
+The panel can be found in the right-hand side of the starting screen (white arrow). After clicking on the button, the panel above appears. Here you will see 5 menus (by default you are sent to the Kingdoms menu). Now we will go to each one.
+
+
+
+
+
+
+
+
+
+
+As you can see, here you have the full list of your kingdoms (from the left):
+
+-ID
+
+-Kingdom (name)
+
+-Alliance
+
+-Age
+
+-Paid (Yes or No)
+
+
+Under the table, you can find info regarding your Kingdoms' number:
+
+- Unpaid
+
+- In Alliance /Nauka/
+
+- How many you must pay for.
+
+On the bottom, you will find info on how to pay for your Governs.
+
+
+Now let us skip to the next menu : Payments
+
+
+
+
+
+
+
+
+
+
+As you can see, before you go to the proper menu screen, you must confirm your Identity by typing in your RDAccount password. After you successfully do this, a screen appears:
+
+
+
+
+
+
+
+
+
+In this menu you can find:
+
+- How much money do you have on your RDAccount
+
+- History of your payments.
+
+
+
+The next menu is the Shared IP menu:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+In this menu, you can report a shard IP, if you are playing on the same computer with someone else (your friend, brother, etc.). Such a report is essential to deal with any cheaters, trying to play more than one free Kingdom.
+
+
+
+
+
+
+
+
+
+
+
+The menu Actions is basically our Command Centre. As you can see on the screen above, you select one Govern and then choose the right action form the list:
+
+- Pay for the Kingdom
+
+- Pay for the Kingdom via Text Message
+
+- give the Kingdom a VIP status (you have to be a VIP to be able to choose this action)
+
+
+Attention! More info on VIP status and Luxuries inside the menu!
+
+
+- Luxury : Fast start (to be able to use this action, the selected Govern has to be Paid) - changes your Govern to a properly developed one
+
+- Luxury : Change Race (changes the race to a new one)
+
+- Luxury : Recruit a General (we choose a primary and secondary ability of a new General - he has 0 level and 0 experience)
+
+- Retrieve Login/Password - Zwith this action you can retrieve your lost login or password
+
+- Change name - you can change the name of a Govern to a new one, only one change per Age
+
+- Move to another RDAccount - changes the RDAccount to which the Govern is signed
+
+- Delete multikingdom - deletes all reported multikingdoms on the Govern.
+
+The last menu is the e-payments :
+
+
+
+
+
+
+
+Here you type in the desired amount of money you wish to transfer to your RD Account and the form of the payment. After all fields are filled, press the 'Create payment' button:
+
+
+
+
+
+
+Read the information carefully and press the 'Pay via Platnosci.pl'. A new window will open, concerning further info about the payment.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 	
+
+
+
+
+    	Ostatnia aktualizacja: 2006-09-28 18:18:30
+
+					

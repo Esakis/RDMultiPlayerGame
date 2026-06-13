@@ -19,6 +19,8 @@ builder.Services.AddScoped<IMilitaryService, MilitaryService>();
 builder.Services.AddScoped<IBattleService, BattleService>();
 builder.Services.AddScoped<ITurnService, TurnService>();
 builder.Services.AddScoped<IResourceService, ResourceService>();
+builder.Services.AddScoped<IGeneralService, GeneralService>();
+builder.Services.AddScoped<IPactService, PactService>();
 builder.Services.AddSingleton<JwtHelper>();
 
 // Background service dla przeliczenia

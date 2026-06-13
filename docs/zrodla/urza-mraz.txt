@@ -1,0 +1,55 @@
+
+
+Red Dragon - manuál
+
+
+ 
+
+  
+     	
+    	
+    	
+    	
+
+
+  
+    
+    
+
+    
+    	
+     	
+    
+
+
+      
+
+   
+      
+	
+          Tlačítko Zmrazit slouží k zmražení vašeho gubernátu pro určitý počet dnů. Po tuto dobu nelze za váš gubernát hrát (ani se přihlásit) a
+  nemůžete být napadeni. Ve výpisu aliance se zmražený gubernát projevuje modrým zbarvením jména gubernátu. Po stisku tohoto tlačítka se Ti zobrazí obrazovka, na které zadáš počet dnů, po které má být gubernát zmražen. Minimální počet jsou dva přepočty. Zmražení nezačne působit okamžitě, ale až po čtyřech přepočtech. Při pokusu o zmražení musí být aliance sama ve skupině (krom ní v té skupině nesmí být nikdo další), jméno skupiny se tedy musí shodovat s názvem aliance (co jsou skupiny se dozvíš v kapitole o slávě), navíc nesmí být z aliance nikomu vyhlášena válka, obranná válka, nesmí na nikoho chystat přepad, ani s nikým svádět souboj. Pokud některá z podmínek není splněna, pokus o zmražení je neúspěšný. Od doby zmražení nesmí aliance po dobu čtyř dnů (počítáno od chvíle, kdy byla zmražena, až do čtvrtého přepočtu) nikomu vyhlašovat přepady, ani nabízet či přijímat souboje. Smí vyhlašovat jen obranné války a normální války, nicméně normální války může vyhlásit jen tehdy, kdy by směla vyhlásit obrannou válku (nad tím hráči nemusí nijak bádat, systém stejně nedovolí udělat cokoliv jiného). Během tohoto času též nesmí opouštět svou skupinu; smí však do ní kohokoliv přijmout. Na konci čtvrtého přepočtu gubernát zmrzne a dál na něj není možno posílat žádné akce. Když je zmražen na dva dny, není možno na něj útočit (a logovat se do něj) ještě přepočet páty a šestý. Po rozmražení bude gubernát ve stejném stavu, jako byl po čtvrtém přepočtu (kdy skončil odpočet). Během čtyř dnů, které odpočítávají zmražení, nelze odpočet zastavit, ale zároveň ani není nikde zvenku vidět (v gubernátu vidět je). Příklad zmražení: zmražení bylo nastaveno v pondělí v 16:00, počet dnů 2 (to znamená, že v pondělí v 16 hodin byla aliance sama ve své skupině a nic nikomu nevyhlašovala, ani nepřepadala - jí mohlo být vyhlášeno cokoliv). Po zadání zmražení jsi odstartoval odpočet. Počítají se čtyři přepočty, tedy po/út, út/st, st/čt, čt/pá (ale odpočet je vidět jen uvnitř gubernátu). Když skončí přepočet čt/pá (během kterého všechny akce na gubernát proběhnou), do gubernátu se nelze nalogovat a nic na něj posílat po dobu dvou dalších přepočtů, tedy pá/so a so/ne je zmražen. Po přepočtu ne/po (tedy v pondělí) je možné se do gubernátu zas nalogovat a první přepočet, kdy lze na gubernát opět útočit, je přepočet po/út, tedy po celé pondělí lze na gubernát už zakládat akce.
+
+	    Tlačítko Abdikovat je určeno k ukončení 
+      Tvé účasti ve hře Red Dragon. Po jeho zmáčknutí jsi ještě jednou dotázán 
+      zda opravdu chceš ukončit svou účast ve hře Red Dragon. Pokud potvrdíš, že 
+      ano, bude zahájen čtyřdenní odpočet, během kterého nebudeš moci posílat 
+      žádné válčné akce (ale narozdíl od zmražení můžeš mít vyhlášeno komukoliv cokoliv a můžeš se nacházet v jakékoliv skupině). Po čtyřech prepočtech je Tvůj gubernát vymazán. Abdikaci můžeš do uplynutí dvou přepočtů ještě ukončit, pak už to možné není. Odpočet před vymazáním gubernátu je veřejný a mohou ho vidět ostatní hráči. Příklad abdikace: v pondělí v 16 hodin se rozhodneš zničit svou zem. Odstartuješ odpočet, který poběží přes přepočet po/út a stále ho budeš moci zastavit. Když proběhne přepočet út/st a Tys předtím odpočet nezastavil, už tuto možnost nemáš. Po přepočtu čt/pá přestane Tvá zem existovat.
+
+	    Jakmile je ve Tvém gubernátu odstartován nějaký odpočet (ať už se jedná o mražení nebo abdikaci), zmizí možnost gubernát abdikovat i mrazit, dokud odpočet nezrušíš (což třeba u mražení nejde, takže se dobře rozhoduj, než se svým gubernátem něco podnikneš).
+
+	    Možná Tě zajímá, proč jsou pravidla pro mražení a abdikaci gubernátu tak složitá, proč probíhá nějaký odpočet a proč to nelze udělat hned. Inu, můžou za to vypočítaví hráči, kteří se snažili možností mražení a abdikací gubernátů různě využívat ve svůj prospěch - například někoho přepadli a zmrazili svou zem, takže se přepadený nemohl bránit, ani si vzít zpátky to, co mu náleží. Jiní se zas vyhýbali zodpovědnosti za své činy tím, že gubernát střídavě mrazili a nechali roztávat pod dvou dnech a jen kontrolovali, jestli se náhodou ve hře nezměnila situace. Byli i tací, kteří mražení a abdikaci (tu především) používali jako hysterické gesto, kterým chtěli něčeho dosáhnout a pak chodili s prosíkem za Administrátory, aby jim smazané gubernáty obnovovali. Mražení země je tu proto, když někdo jede na dovolenou, aby pak nenašel svůj gubernát v troskách a ne proto, aby se lidé schovávali před nebezpečním, které jim ve hře hrozí. Proto je zaveden tento limit, během kterého nemohou nikomu ubližovat. Odpočet není možno u mražení rušit proto, aby hráči nemohli spekulovat s tím, jak se vyvine jejich herní situace a podle toho mražení rušit. Abdikaci je možno ze začátku zrušit proto, aby si zbrklí hráči mohli svou volbu ještě rozmyslet. Naopak na konci nejde zrušit, aby nemohla být využívána hysterickými hráči ke konání velkých gest, kdy gubernát nechají abdiknout, stěžují si po fórech na nespravedlnosti světa, které je donutili odejít a následně odpočet pět minut před posledním přepočtem zruší.
+ 
+      
+      
+	Zpět na změny
+
+
+     
+      	
+     	
+
+
+
+
+

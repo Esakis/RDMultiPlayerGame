@@ -1,0 +1,1026 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+
+ 
+
+        Some equations are known to more experienced players, so to even the chances, we listed some of them here. This does not however mean that you need to play with a calculator. The difference in clicking turns by 'mathematicians' and players basing on their intuition, prove to be very slim. The feel of the game is surely more important than perfect calculating skills.
+
+
+
+
+Infrastructure Points limit = 100 * land_size
+
+Gold limit = 120,000 * land_size
+
+Resources limit = gold + 300 * manna + 10 * food + 100 * stone + 100* weapons
+
+
+
+(all resources and infra points exceeding the limit will be lost during the Recount; Br-Ougs have a doubled limit of infra points)
+
+
+
+
+1. Spells' cost.
+
+
+
+(Except Dragon's Breath and Cast Dragon)
+
+
+
+The spells' cost is mainly determined by your land size and increases according to these equation:
+
+
+
+cost = bsc * (1 + z/200) * (el/100) * (1 - msl/100) * [1 - (gl/3)/100] * (1 glWM/100)
+
+
+
+bsc - basic spell's cost
+
+z - land size in acres
+
+el - expense level
+
+msl - magic science level
+
+gl - general's level - the level of a General Mage with the secondary ability of a Spellbook from which the spell is casted (i.e. the spell 'Shield' is in the Power Spellbook, so a general Mage with the secondary ability Power, decreases its cost)
+glWM - general's level White Magic - the level of a General Mage with the secondary ability White Magic.
+
+
+
+
+The equation for the 'Cast Dragon' spell's cost:
+
+
+
+CS = (2000 + dn^2 * (dn/130^10) * (1 + z/2000) * (el/100)
+
+
+
+dn - dragons' number in your Govern
+
+z - land size in acres
+
+el - expense level
+
+
+
+The equation for the 'Dragon's Breath' spell's cost:
+
+
+
+DB = 1500 * (1 + z/2000) * (el/100) * (1 - msl/100) * [1 - 0,3*dn/(dn+50)]
+
+
+
+dn - dragons' number in your Govern
+
+z - land size in acres
+
+el - expense level
+
+msl - magic science level
+
+
+
+Keep in mind that the cost of the spell shown in the Magic menu is not always the same as the calculated cost on your calculator because the expansion level shown in the menu is rounded up to full %. However, the exact % is calculated by the server. The difference is less than 1%, so there is nothing to worry about, really&#8230;
+
+
+
+
+2. Summed magical defence of a Kingdom.
+
+
+
+Magical Defence = (omp + pmp*pe/100) * (1 + sbmw/100) * (1 + ms/100) * (1 + gm/100)
+
+
+
+omp - own mages' power (from the professions menu)
+
+pmp - pacts mages' power (from the pacter's professions menu)
+
+pe - pact's efficiency
+
+sbmw - Special Building 'Magical Walls' - if build adds 25% to defence
+
+ms - Magical Shield - a spell increasing magical defence - max. 24%
+
+gm - Generals Mages - their influence during the Recount
+
+
+
+
+3. Casted spells' power:
+
+
+
+Magical Attack = omp * (1 + sbml/100) * rgn(0,8 to1,2)
+
+
+
+omp - own mages' power (from the professions menu)
+
+sbml - Special Building 'Magical Lance' - increases magical attack by 20%
+
+rgn(0,8 to 1,2) - randomly generated number from 0,8 to 1,2
+
+
+
+The chance of successfully breaking the defence is furthermore increased by your General Mages. Their influence is calculated (according to their summed level from the Recount, see equations below). If you send your Generals to battle than their influence is not added to the chance of breaking the defence. If your Generals are wounded by enemy thieves than their level drops to 0 (and they do not increase the chance of breaking the defence).
+
+
+This equation is used to calculate the chance of a spell breaking a defence (we do add the general mages influence here):
+
+
+
+Magical Attack = omp * (1 + sbml/100) * (1 + gm/100) * rgn(0,8 to1,2)
+
+
+
+
+omp - own mages' power (from the professions menu)
+
+sbml - Special Building 'Magical Lance' - increases magical attack by 20%
+
+rgn(0,8 to 1,2) - randomly generated number from 0,8 to 1,2
+
+gm - Generals Mages - their influence on spells chance of breaking a defence (in %)
+
+
+
+
+
+4. Popularity.
+
+Popularity is determined by your current wages :
+
+
+
+popularity = wages * 2 (max. 100 pts)
+
+
+
+If the spell 'Good Mood' is casted on your Govern, you can keep your popularity at 100 pts even at wages lowered to 46. What is more, when the Special Building 'Red Dragon Inn' is also built, you can lower the wages to 42 and still have a maximum popularity of 100 pts.
+
+
+
+5. Efficiency.
+
+
+
+The equation below defines the summed efficiency in a profession (all inputs are % values from 0 to 100) :
+
+
+
+efficiency = (100 - np*9/10) * (1 + rb/100) * [1 + sp/100*(1 + ugs/100)] * (1 + gui/100) * (1 + psp/100) * (1 - nsp/100)
+
+
+
+np - novice percentage
+
+rb - racial' bonuses
+
+sp - scholars in a profession (max 100)
+
+ugs - Universities and General Scientists' input
+
+gui - Guilds' input
+
+psp - positive spell's percentage ( 'Magical Fluid' for mages and druids, 'Diligence' for the rest)
+
+nsp - negative spell's percentage ( 'Stupidity for mages and druids, 'Lunatics' for the rest)
+
+The equation works if your scholars have developed a profession fully. If sp 
+
+6. Maximal number of citizens
+
+
+
+mnc = nh * [3 - br*2 + sbb * (1 - gia*0,5 + gno*1 - elf*0,5) + sbwt*(0,5 + 0,5*gno) + sbs*(1,5 - gia*0,5 - elf*1)] + z {[2 + sbaq*(0,5 + br*2) + rb] * (pop/100) + 1} - 1
+
+
+nh - number of Houses built
+sbb - Special Building 'Basements' - if built 1, else 0
+
+sbwt - Special Building 'Water Tower' - if built 1, else 0
+
+sbs - Special Building 'Sewers' - if built 1, else 0
+
+sbaq - Special Building 'Aqueduct - if built 1, else 0
+
+pop - Popularity - form 0 to 100 pts
+
+rb - racial bonuses to one acre (i.e. Hobbits, Humans 0,5)
+
+br - 1 if Br-Oug, else 0
+
+gia - 1 if Giant, else 0
+
+gno - 1 if Gnome, else 0
+
+elf - 1 if Elf, else 0
+
+
+
+
+7. Special Buildings cost:
+
+
+
+cost = bc * (1+z/5000)
+
+bc - basic cost
+
+z - land size
+
+What is more, each level of Architecture lowers the cost of Special Buildings.
+
+
+
+Acre cost (without Colonization):
+
+
+
+cost = [(z+ba)^4 - z^4] / (60*10^6)
+
+z - land size
+
+ba - bought acres
+
+
+
+
+Acre cost (with developed Colonization):
+
+
+
+cost = [(z+ba)^4 - z^4] / (40*10^6) * z / (z+30000)
+
+
+z - land size
+
+ba - bought acres
+
+
+
+
+8. Generals' influence:
+
+
+lvl - the sum of all generals of the same primary ability in the Kingdom
+
+
+Scientist:
+
+The influence of General(s) Scientist(s) is added to the influence of Universities according to the equation:
+
+
+influence = lvl * 100 / (lvl * 2 +50)
+
+
+
+Mage and Thieve:
+
+influence = 100 * lvl / (lvl + 50)
+
+
+
+Merchants:
+
+influence = 1,5 * [lvl / (lvl + 50)]
+
+
+Professor:
+
+influence = lvl
+
+
+
+
+9. Amount of War machines destroyed each turn by the spell 'Imps'
+
+
+
+amount = (number of War Machines / Land Size) * 3 / 200
+
+
+
+I.e. a Kingdom with 50 000 Acres and 200 000 War Machines : each turn 'Imps' will destroy 6% of War Machines in the Govern.
+
+
+
+
+10. Amount Experience Points in Labyrinth:
+
+
+
+[level^4 - (level-1)^4]*5 (but at least 1 point) - this amount is modified by a randomly generated number from 0,8 to 1,2. However, taking Expo Points 5 times in the Labyrinth gives a General a new level, as experienced players say.
+
+
+
+
+11. Guilds' influence:
+
+
+
+percentage = 100 * (bg / (ec * 0,08 + bg + 99)
+
+
+
+bg - built Guilds for the profession
+
+ec - employed citizens in the profession
+
+Only the modus is shown in the Buildings menu. However, the server uses the exact value in calculations.
+
+
+
+
+12. Universities' influence:
+
+
+
+percentage = 100 * (un / (ec * 0,08 + un + 99)
+
+
+un - Universities build
+
+ec - employed citizens in all profession
+
+Only the modus is shown in the Buildings menu. However, the server uses the exact value in calculations.
+
+
+
+
+13. Merchants efficiency (without Guilds, Spells and Scholars):
+
+
+
+efficiency = 500 * z / (z + nom*10)
+
+
+
+z - land size with pacts
+
+nom - number of merchants
+
+
+
+
+14. Manufactures production:
+
+
+
+p = [z / (z + nom*25)] * k * [1 + gm / (gm + 50)] * nom
+
+
+
+z - land size
+
+nom - number of manufactures
+
+gm - level of a general with a secondary ability Manufacturer
+
+k - 400 for orchards, 4000 for diamond mines, 40 for quarries and magical lakes
+
+
+
+Developing Science 'Wooden machines construction; increases manufactures productivity by 10%.
+
+
+
+15. Training (schools and barracks):
+
+
+
+t = 100 / [6 - 500 * nsb / (z + 100 * nsb + 99)]
+
+
+
+t - training rate
+
+z - land size
+
+nsb - number of schools or barracks
+
+
+
+
+16. Defence form Towers:
+
+
+
+d = not * 15 * [1 + 4 not / (not + 400)] * (1 - 1/3 * br)
+
+
+
+d - defence from Towers
+
+not - number of towers
+
+br - if Br-Oug 1, else 0
+
+
+
+
+17. Summed defence:
+
+
+
+d= [ ( { ( [h + (nh/10)]*(1+sbdmm) + [e1+(en1/10)]*(s1+k) + [e2+(en2/10)]*(s2+k) + p*[(2-0,5*br+0,5*gi)+k]*d + v*15*[1+4*v/(v+400)]*(1 - 1/3*br) + [ht+(nht/10)]*5 ) *[1+d/(d+50)]+d*100 } *(1+0,05*sbdw)*(1+0,07*sbdb)*(1+0,1*sbc)*(1+mis/100)+fl ) *(1-w/100) ] *(1+gd/100)
+
+
+
+d - defence
+
+h - trained hoplites
+
+nh - novice hoplites
+
+sbdmm - if Special Building 'Dragon Monks Monastery' built 1, else 0
+
+e1 - trained Elite 1 units
+
+en1 - novice Elite 1 units
+
+e2 - trained Elite 2 units
+
+en2 - novice Elite 2 units
+
+s1 - defence points of the E1 unit, without 'Dragon Monks Monastery'
+
+s2 - defence points of the E2 unit, without 'Dragon Monks Monastery'
+
+p - population employed during the Recount
+
+gi - 1 if Giant, else 0
+
+br - 1 if Br-Oug, else 0
+
+d - 1 if Militia is turned on, else 0
+
+v - number of Towers in the Kingdom
+
+ht - trained Hoplites in Towers
+
+nht - novice Hoplites in Towers
+
+d - Dragons
+
+sbdw - Special Building 'Dragon's Walls' if built 1, else 0
+
+sbdb - Special Building 'Dragon's Barrier' if built 1, else 0
+
+sbc - Special Building 'Castle' if built 1, else 0
+
+mis - spell Military Shield (in %)
+
+fl - Fallen Legions
+
+w - spell 'Weakness' (in %)
+
+gd - General Defender's level
+
+
+
+
+18. Summed attack power (without Generals, refers also to joined attacks, however, Weaknesses and SBs are calculated individually) :
+
+
+
+a=(((10*h-9*nh)/10*(1+sbbc) + (10*e1-9*en1)/10*(s1+sbbc) + (10*e2-9*en2)/10*(s2+sbbc+sbp))*(1+d/(50+d))+d*100+15*s)*(1+0,2*sbgq)*(1-w/100)
+
+
+
+a - attack
+
+h - trained hoplites
+
+nh - novice hoplites
+
+sbbc - Special Building 'Berserkers' Camp' if built 1, else 0
+
+e1 - trained Elite 1 units
+
+en1 - novice Elite 1 units
+
+e2 - trained Elite 2 units
+
+en2 - novice Elite 2 units
+
+s1 - defence points of the E1 unit, without 'Berserkers' Camp'
+
+s2 - defence points of the E2 unit, without 'Berserkers' Camp' and 'Palace'
+
+sbp - Special Building 'Place' if built 1, else 0
+
+sbgq - Special Building 'General's Quarters' if built 1, else 0
+
+s - number of war machines
+
+w - spell 'Weakness' (in %)
+
+d - Dragons
+
+
+
+
+19. Calculating strength in the Alliance menu:
+
+
+
+s = a + d + m + z*(5+h*1,3+b*1,2+d*1,2)
+
+
+
+s - strength
+
+a - attack, with SB and Weakness, without novice units
+
+d - defence, with SB and Spells, without novice units
+
+m - mages' power = their power in the Professions menu
+
+z - number of thieves
+
+h - if Hobbit 1, else 0
+
+b - if Br-Oug 1, else 0
+
+d - if Human 1, else 0
+
+
+
+
+20. Points from spells, buildings and Generals, magical and thievish defence from pacts :
+
+
+
+- magical defence is influenced by spells 'Magical Fluid' and 'Stupidity' on the Kingdom with which the pact is signed,
+
+- 'Magical Shield' and SB 'Magical Walls' are only calculated if present on the attacked Govern,
+
+- Commanders in joint attacks do increase the attack power of units form other Governs.
+
+
+
+
+21. Generals Mages' and Thieves' input (when present) :
+
+
+
+input = 100 * lvl / (50 + level)
+
+
+
+lvl - the sum of all Generals of the same primary ability present
+
+
+
+
+22. Population growth:
+
+
+
+basic growth = free_space * (emplyed + unemployed + 0,75*troops) / 3 / max. population
+
+
+
+Min. value is 10% of free space, afterwards, the basic growth is multiplied by several factors (*1,3 if Fertility casted, *1,1 if Fortune casted, *0,9 if Bad Luck casted, *0,5 if Castration casted and *1,25 if SB 'Dragon Tail Brothel' built)
+
+
+
+
+basic decrease (in %) = (1,0 - citizens_exceeding_limit * 1/3 / max. population) * 100%
+
+
+
+the maximal decrease is 33%, it is not determined by any spells or SBs.
+
+
+
+
+23. The chance of a successful thievish attack:
+
+
+
+p - the ratio between attack and defence, with races' bonuses, pacts and Generals
+
+p= attack/defence
+
+
+
+k - the chance of successfully carrying out an attack by thieves:
+
+p = 0,5 - k = 0% - 100% chance of discovering the attack
+
+p = 1 - k = 50% - 50% chance of discovering the attack
+
+p = 1,5 - k = 95% - 5% chance of discovering the attack
+
+p = 2 - k = 100% - 0% chance of discovering the attack
+
+
+
+Between these points the chances increase linearly. General Camouflage and Espionage increases the chance of discovering an attack if on the attacked Kingdom and decreases the chance of discovering an attack if on the attacking Kingdom.
+
+
+
+When attacking someone without declaring a war, the chance of successfully carrying out an attack stays the same, but the chance of discovering the attack increases:
+
+
+
+p = 0,5 - 100% chance of discovering the attack
+
+p = 1 - 75% chance of discovering the attack
+
+p = 1,5 - 50% chance of discovering the attack
+
+p = 2 - 25% chance of discovering the attack
+
+p = 2,5 - 0% chance of discovering the attack
+
+
+Between these points the chance of discovering the attack increases linearly.
+
+
+
+
+24. Losses in thievish attacks:
+
+
+
+The basic losses in thievish attacks are 10% for the attacker and the defender. However, the higher the ratio between the attack and the defence, the attacker looses fewer thieves (the losses decrease until they reach 0%) and the defender looses more thieves (the losses increase until they reach 20%). This works also in the opposite direction.
+
+
+
+
+25. Losses in military attacks:
+
+
+
+The basic losses are 15% for the attacker and the defender. Special buildings and General Healer's influence are also calculated. However, the higher the ratio between the attack and the defence, the attacker looses fewer troops (the losses decrease until they reach 0%) and the defender looses more troops (the losses increase until they reach 20%). This works also in the opposite direction.
+
+The losses of civilians are at a level of 25% of the military losses, if the Militia is turned off. With the Militia turned on, the losses are at a level of 50% of the military losses in case of a successful defence and equal the military losses if the attack was successful. Special Buildings and General Commander Blood Thirst and Sodomy do affect the losses.
+
+
+
+
+26. Chances of a successful attack:
+
+
+p - the ratio between attack and defence
+
+p = attack / defence
+
+
+
+p  1,15 - the attack is always successful (the chance is 100%)
+
+
+
+Between these two points the chance increases linearly.
+
+
+27. Cost of economical buildings (without any Science bonuses):
+
+
+
+The cost of building a economical building increases, until your land size reaches 20 000 Acres. Above this threshold the cost remains at the same level (without taking any Science bonuses into account):
+
+- 300 Infra Pts and 60 000 gold for Br-Ougs,
+
+- 200 Infra Pts and 40 000 gold for other races.
+
+
+
+Infra Pts cost of economical buildings for Br-ougs (buildings are 1,5 times more expensive):
+
+Cost = int(223,5*z/15000+1)
+
+int - integer - only the whole number is calculated
+
+z - land size
+
+Gold cost of economical buildings for Br-ougs (buildings are 1,5 times more expensive):
+
+Cost = int(149*z/15000+1)
+
+int - integer - only the whole number is calculated
+
+z - land size
+
+
+
+Infra Pts cost of economical buildings for other races:
+
+Cost = int(149*z/15000+1)
+
+int - integer - only the whole number is calculated
+
+z - land size
+
+Gold cost of economical buildings for Br-ougs (buildings are 1,5 times more expensive):
+
+Cost = Infra Pts cost * 200
+
+
+
+What is more, each level in Engineering decreases economical buildings costs.
+
+
+28. Alliance's Power:
+
+
+
+sqrt(10*((kingdom1^1.75 + .... + kingdom17^1.75) + numer_of_kingdoms^ 1,75 / 17 ^1,75 * (kingdom1^1.75 + kingdom2^1.75 + kingdom3^1.75)), where all kingdoms are sorted by size
+
+
+sqrt - square root
+
+
+
+
+
+29. General's level:
+
+
+
+levels - experience points needed
+
+01 - 1,00
+
+02 - 100,00
+
+03 - 1 600,00
+
+04 - 8 100,00
+
+05 - 25 600,00
+
+06 - 62 500,00
+
+07 - 129 600,00
+
+08 - 240 100,00
+
+09 - 409 600,00
+
+10 - 656 100,00
+
+11 - 1 000 000,00
+
+12 - 1 464 100,00
+
+13 - 2 073 600,00
+
+14 - 2 856 100,00
+
+15 - 3 841 600,00
+
+16 - 5 062 500,00
+
+17 - 6 553 600,00
+
+18 - 8 352 100,00
+
+19 - 10 497 600,00
+
+20 - 13 032 100,00
+
+21 - 16 000 000,00
+
+22 - 19 448 100,00
+
+23 - 23 425 600,00
+
+24 - 27 984 100,00
+
+25 - 33 177 600,00
+
+26 - 39 062 500,00
+
+27 - 45 697 600,00
+
+28 - 53 144 100,00
+
+29 - 61 465 600,00
+
+30 - 70 728 100,00
+
+31 - 81 000 000,00
+
+32 - 92 352 100,00
+
+33 - 104 857 600,00
+
+34 - 118 592 100,00
+
+35 - 133 633 600,00
+
+36 - 150 062 500,00
+
+37 - 167 961 600,00
+
+38 - 187 416 100,00
+
+39 - 208 513 600,00
+
+40 - 231 344 100,00
+
+41 - 256 000 000,00
+
+42 - 282 576 100,00
+
+43 - 311 169 600,00
+
+44 - 341 880 100,00
+
+45 - 374 809 600,00
+
+46 - 410 062 500,00
+
+47 - 447 745 600,00
+
+48 - 487 968 100,00
+
+49 - 530 841 600,00
+
+50 - 576 480 100,00
+
+
+
+
+ 
+
+
+
+ 
+ 	
+ 
+
+    	Ostatnia aktualizacja: 2006-09-28 18:14:30
+
+					

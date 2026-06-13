@@ -44,33 +44,28 @@ public class KingdomService : IKingdomService
         return MapToDto(kingdom);
     }
 
-    private static readonly HashSet<string> MagicRaces = new()
+    // Rasy oryginalnego Red Dragon: 10 z reddragon.cz + Gnom i Br-Oug
+    // z polskiego serwera reddragon.pl (definicje: RaceDefinitions, docs/MECHANIKA.md)
+    public static readonly HashSet<string> AllRaces = new()
     {
-        "Ludzie", "Elfy", "Mroczne Elfy", "Dżiny", "Gnomy",
-        "Br-Ougowie", "Meduzy", "Ożywieńcy", "Plemiona Feniksa"
+        "Człowiek", "Elf", "Krasnolud", "Hobbit", "Nekromant",
+        "Dżin", "Goblin", "Ent", "Wampir", "Olbrzym", "Gnom", "Br-Oug"
     };
-
-    private static readonly HashSet<string> NonMagicRaces = new()
-    {
-        "Krasnoludy", "Orkowie", "Gobliny", "Niziołki", "Enty", "Olbrzymy"
-    };
-
-    public static readonly HashSet<string> AllRaces = new(MagicRaces.Concat(NonMagicRaces));
 
     public async Task<Kingdom> CreateKingdomAsync(int userId, string name, string race, int eraId)
     {
         if (!AllRaces.Contains(race))
-            race = "Ludzie";
+            race = "Człowiek";
 
-        bool isMagic = MagicRaces.Contains(race);
-        bool isGoblin = race == "Gobliny";
+        var raceDef = await _context.RaceDefinitions.FirstOrDefaultAsync(r => r.Name == race);
+        int turnsPerDay = raceDef?.TurnsPerDay ?? 15;
 
         var kingdom = new Kingdom
         {
             UserId = userId,
             Name = name,
             Race = race,
-            IsMagicRace = isMagic,
+            IsMagicRace = (raceDef?.MagicBooks ?? 0) > 0,
             EraId = eraId,
             Land = 100,
             Gold = 50000,
@@ -84,9 +79,10 @@ public class KingdomService : IKingdomService
             Popularity = 100,
             Wages = 50,
             Education = 0,
-            TurnsAvailable = isGoblin ? 17 : 15,
-            TurnsPerDay = isGoblin ? 17 : 15,
-            MaxTurns = isGoblin ? 61 : 49,
+            TurnsAvailable = turnsPerDay,
+            TurnsPerDay = turnsPerDay,
+            // „trojtah" — maksymalnie potrójny dzienny przydział (+4, by standard dawał 49)
+            MaxTurns = turnsPerDay * 3 + 4,
             TurnNumber = 0,
             Age = 0,
             IsProtected = true,
@@ -96,11 +92,12 @@ public class KingdomService : IKingdomService
         _context.Kingdoms.Add(kingdom);
         await _context.SaveChangesAsync();
 
-        // Red Dragon professions: Bezrobotni + 6 basic + 2 specialist
+        // Profesje oryginalnego RD: bezrobotni + farmerzy, kamieniarze, murarze,
+        // kupcy, alchemicy, płatnerze, druidzi, magowie, naukowcy
         var professionTypes = new[]
         {
             "Bezrobotni", "Alchemicy", "Chłopi", "Druidzi",
-            "Kamieniarze", "Murarze", "Płatnerze", "Kupcy", "Naukowcy"
+            "Kamieniarze", "Murarze", "Płatnerze", "Kupcy", "Magowie", "Naukowcy"
         };
 
         foreach (var profType in professionTypes)
@@ -178,7 +175,8 @@ public class KingdomService : IKingdomService
         if (amount <= 0)
             return ServiceResult.Fail("Nieprawidłowa ilość.");
 
-        long cost = amount * 500L; // 500 złota za akr
+        // Oryginalny wzór: cena = ((z+x)^3,5 − z^3,5) / 600 000
+        long cost = CalculateLandCost(kingdom.Land, amount);
         if (kingdom.Gold < cost)
             return ServiceResult.Fail($"Za mało złota. Potrzeba: {cost}, posiadasz: {kingdom.Gold}");
 
@@ -204,6 +202,13 @@ public class KingdomService : IKingdomService
                 CoalitionTag = k.Coalition != null ? k.Coalition.Tag : null
             })
             .ToListAsync();
+    }
+
+    public static long CalculateLandCost(int currentLand, int amount)
+    {
+        double z = currentLand;
+        double cost = (Math.Pow(z + amount, 3.5) - Math.Pow(z, 3.5)) / 600_000d;
+        return Math.Max(1, (long)Math.Ceiling(cost));
     }
 
     private static KingdomDto MapToDto(Kingdom kingdom)

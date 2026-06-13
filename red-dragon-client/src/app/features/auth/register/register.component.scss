@@ -258,3 +258,76 @@ select.form-input {
     width: 100%;
   }
 }
+
+// Panel informacji o rasie (charakterystyki jak na oficjalnej stronie RD)
+.race-info {
+  margin: 10px 0 16px;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid #5a3a1a;
+  border-radius: 4px;
+
+  .race-desc {
+    margin: 0 0 10px;
+    font-style: italic;
+    color: #e8d5b0;
+    font-size: 13px;
+  }
+
+  .race-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 18px;
+  }
+
+  .race-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+
+    .stat-label {
+      width: 70px;
+      color: #c9a86a;
+    }
+
+    .stat-bar {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+
+      .stat-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #8a2b1a, #d9542b);
+        border-radius: 4px;
+      }
+    }
+
+    .stat-value {
+      width: 28px;
+      text-align: right;
+      color: #e8d5b0;
+    }
+  }
+}
+
+.race-info .race-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+
+  .race-img {
+    width: 84px;
+    height: 84px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.6));
+    flex-shrink: 0;
+  }
+
+  .race-desc {
+    margin: 0;
+  }
+}

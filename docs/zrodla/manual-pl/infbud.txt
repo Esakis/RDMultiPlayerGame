@@ -1,0 +1,530 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+		
+			
+			 
+ 
+			 
+ 	
+
+
+		
+			
+			
+
+
+      Economical Buildings are used by your citizens. To build a building you need to fulfill certain conditions. First of all, you need to have free space for the building. Each building occupies one Acre. If you do not have any free lands, you cannot build any buildings. Furthermore, you need Infrastructure Points. They are produced by bricklayers - you can call them bricks that houses are built from. At the beginning, for each building you need to have 2 Infra Points. The cost of each building increases with every bought or gained Acre, though. This disables an unlimited growth of Kingdoms and protects new players from more experienced ones, with larger Kingdoms. You will see more similar rules in Red Dragon. The last thing needed to build a building is gold. The cost in gold also increases with your Kingdoms development.
+
+	
+
+
+		
+			 
+			
+
+
+			 	
+
+
+		
+			
+			
+
+
+      On the top of the screen is the 'Infrastructure points rate' text box. Here you have to type in a number between 0 and 100. This number defines what % of present bricklayers' production will be used to make Infra Points. The rest of their work is used to built Special Buildings. If you are not building any Special Buildings this number is unimportant - all of the bricklayer's production is used for making Infra Points. For example, you have 5000 bricklayers with a production of 24000 points (bricks) per turn. If you type in 40 (%) than each turn 9600 Infra Points will be produced. The rest, 14400 points that is, will be used to built Special Buildings. Below you can find information concerning your present status : how many buildings you can build, how many free acres you have, how much gold and Infra Points you posses, how much gold and Infra Points does one building cost.
+
+	
+
+
+		
+			
+			
+			
+      A separate part is devoted to houses. Houses are one of the most important buildings in your Kingdom. The more houses you have the more citizens can live in your Govern. 'Effect' indicates how many people can possibly live in your present number of houses. After building all special buildings, enhancing houses' capacity, up to 6 people can live in one house. Houses capacity is, in opposite to land capacity, in depended from popularity.
+
+	
+
+
+		
+			
+			
+			
+
+      Managing all economical buildings is the same. If you want to build any, out of 29 possible buildings, just type in the desired number in the text box next to the building's name and confirm. If you type in an amount greater than the number of buildings you can afford only the number of buildings you can afford will be built. If you order to build several types of buildings they will be built from the top to the bottom. For example, if you instruct to build 40 houses and 50 universities, but you can only afford to build 56 buildings, 40 houses and 16 universities will be built.
+
+
+      There are several similar buttons in this menu - 'Do' and 'Tear down' - each one works with the whole menu not just the part it is in.
+
+	
+
+
+		
+			
+
+
+			
+			
+ The Do button
+
+			 	
+
+
+		
+			
+			
+			
+
+      If you wish to get rid off some buildings and build new ones on their place, you must type in the amount you wish to demolish in the text box next to their name and press the 'Tear down' button. After you destroy a building yourself 50% (100% for Necromants) of the cost in Infra Points is restored. Use this option wisely and carefully - always check if you have typed in the right number.
+
+	
+
+
+		
+			
+
+
+			
+			
+ The Destroy button
+
+			 	
+
+
+                
+			
+			
+
+
+
+Wastelands are lands devastated by wars, mainly uninhabited and ravaged, shown in a separate box in the Buildings menu. They do not affect Kingdom`s maximum population. When talking about Wastelands we cannot mention Controlled Lands.
+
+Controlled Lands are all the territories of your Kingdom on which you can establish your reigns during warfare. Usually it is not equal to your present land size. The factors influencing your Controlled Lands are:
+
+
+- Kingdom`s land size - the larger the Kingdom, the harder it gets to control all of its territories. So, all the other factors will affect he Kingdom stronger (the Controlled area of a Kingdom cannot drop below 25 000 Acres - the state itself provides this Controlled land),
+
+- Alliance`s land size - as Kingdoms' land size, the larger the Alliance, the harder it is to control all of its lands,
+
+- Destroyed Special Buildings - they show the lack of efficiency of the ruler and therefore (not linearly!) decrease the Controlled land size,
+
+- Black magic - in all kinds, slows your economy and also decreases your Controlled land size,
+
+- Number of Governs in the Alliance - the less Kingdoms, the more efficiently rulers and their administrations work and, therefore, the other factors decreasing Controlled land size affect each Govern weaker,
+
+- Army at home - the number of troops at home does greatly increase your Controlled lands' size by helping the state. Elite2 troops increase the Controlled land size mostly, Elite1 troops a little less, while Elite0 (Hoplites) increase it the least (Giants troops increase it by 50% more than other races' troops),
+
+- Defense Towers - they provide extra control over the Kingdom and increase the Controlled lands' size (Defense Towers of Br-Ougs are 1/3 less efficient than other Races`).
+
+	
+
+
+                
+			
+			
+			
+
+
+			 	
+
+
+		
+			
+			
+		
+
+      Workshops are the places where craftsam work. The basic amount of craftsman able to work in a profession is 500. If you want to employ more you have to build workshops. In every workshop (that occupies 1 acre) can work up to 100 craftsmen. So if you want to hire 2000 farmers you have to build 15 workshops for them (farms). 'Effect' indicates how many workers you can hire. If you have a maximum number of craftsman employed or place for just 25 or less, this field turns red. Workshops only define the number of craftsman that can be hired in you Govern. They do not influence their productivity.
+
+	
+
+
+		
+			 
+			
+ Screen - Workshops and Guild menu
+
+ 
+
+
+			 	
+
+
+		
+			
+			
+		
+
+      Guilds raise the productivity of professions. 'Effect' indicates how much. It is given in percentages. For example, a bonus of 30% means that craftsman produce 1,3 times more than normally. This effect is defined by the number of Guilds and the number of citizens employed in the craft. The more Guilds you have the greater their bonus is. However, the more citizens you employ the smaller their effect is. You can find the equation in 'Equations' (chapter of this manual). Theoretically they can raise craftsman productivity by up to 99%. The amount of Guilds varies due to playing strategy. Most experienced players keep them between 20% and 40%.
+
+			 	
+
+
+		
+			
+			
+		
+ Guilds, Workshops and Manufactures Table 
+ 
+ 			
+
+
+		
+			
+		
+ 
+
+ 
+		surowiec	
+		zawód	
+		warsztat	
+		cech	
+		manufaktura
+
+ 
+		Food	
+		Farmers	
+		Farm	
+		Compost	
+		Orchard
+
+ 
+		Stone	
+		Stonemasons	
+		Quarry	
+		Stonemasons' guild	
+		Quarry
+
+
+  
+		 	
+		Bricklayers	
+		Bricklayers' workshop	
+		Brick still	 
+
+
+ 
+		Gold	
+		Merchants	
+		Market	
+		Shop	
+		Diamond mine
+
+ 
+		Alchemists	
+		Alchemy lab	
+		Alchemists' guild
+
+
+ 
+		Weapons	
+		Armourers	
+		Armoury	
+		Armourers' guild	 
+
+
+ 
+		Manna	
+		Druids	
+		Druids' forest	
+		Sanctuary	
+		Mana pond
+
+  
+		 	
+		Mages	
+		Magic tower	
+		Magic powerline	 
+
+
+
+  
+		 	
+		Scientists	
+		Science lab	
+		Library	 
+
+
+ 
+ 
+ 			
+
+
+		
+			
+
+
+			
+			
+
+
+			 	
+
+
+		
+			
+			
+		
+
+
+      Manufactures produce goods themselves, without the need of employing any workers. However, their productivity is defined by land size and number of manufactures. The larger your Kingdom is the more they produce. Yet, adding a new manufacture raises their summed production but their individual productivity decreases. The optimal number of manufactures is determined by land size. More experienced players do not use them on larger Kingdoms.
+
+	
+
+
+		
+			 
+			
+ Manufacture screen
+
+ 
+
+
+			 	
+
+
+		
+			
+			
+		
+      'Effect(one)' defines manufactures' production per turn. This concerns all of them accept manna lakes. 'Effect' here defines the amount of manna the lakes can fill themselves up. Yet, only one third of the difference between produced manna and possessed manna is given to you. Manna cannot be stored (except for Elves - the only Race that can store manna).
+
+	
+
+
+		
+			 
+			
+
+
+			 	
+
+
+		
+			
+		
+      There are 5 types of buildings accept of houses, manufactures, workshops and guilds.
+
+	
+
+
+		
+			 
+			
+ The rest of the buildings
+
+ 
+
+
+			 	
+
+
+		
+			
+			
+		
+
+Schools: raise the training rate in professions. Without any schools 16% of workers become trained per turn. At 300 schools the training rate is at about 20%. The higher the number of schools the quicker you train your workers. Also any Professors in your Govern and your Govern's land size influence the training rate. Number of workers employed does not affect this rate.
+
+
+	 Barracks: these military facilities raise the training rate of your troops. Also any Professors in your Govern and your Govern's land size influence the training rate. Number of troops does not affect the rate.
+
+
+
+	 War machines' workshops: war machines are cheap but a non-efficient military unit. They are produced in war machines' workshops. The more workshops you have the more machines are produced per turn. One workshop produces one war machine per turn (a General with a secondary ability Manufacturer raises the number of machines produced per turn). These machines cannot be used in defence. Machines are maintained by hoplites and Elite1 troops. One hoplite can take care of three machines and one Elite1 troop of only one war machine. If any war machine does not have someone to take care of them it decays. During attack both hoplites and E1 troops can attack with only one war machine.
+
+
+	 Defensive towers: these towers help to defend you Kingdom. They defend themselves from each attack. The more towers you have the more defence they give. One tower blockes 15 war machines and destroyes 3 (except for Br-Ougs - their towers block 10 war machines and destroy just 2). A tower can have up to 75 defence. What is more, each tower can shelter 3 hoplites raising their defence by +5. However, those who cannot go into these towers receive no bonus. Towers' defence can by boosted by dragons, Special Buildings and Magic. If you have a General-Defender their defence will also increase. If an attack is unsuccessful you will lose no towers. However, if the attack succeeds a part of the towers will be lost.
+
+Equation for towers` defence:
+
+
+d = v * 15 * (1 + 4*v/(v+400)) * (1 - 1/3*br)
+
+d - defence of one tower
+
+v - summed amount of towers
+
+br - 1 if Br-Oug, if not 0
+
+
+	 Universities: they are one of the most important buildings in you Kingdom. They can raise the efficiency of all your professions. Normally, Scientists can increase crafts' efficiencies by up to 100%. Universities increase the efficiency by the percentage in the 'Effect' box. The more universities you have the larger their bonus is. However, this bonus is affected by the number of citizens employed. The more people hired the lower the bonus. The exact equation can be found in the right chapter of this manual. Experienced players keep universities' bonus between 40%-70%. Universities are strictly connected with Scientists. More about this in the chapter concerning administration of your Kingdom.
+	
+
+
+		
+		
+
+
+		
+
+
+
+
+ 
+			
+ 
+
+
+
+
+    	Ostatnia aktualizacja: 2007-02-19 16:01:43
+
+					

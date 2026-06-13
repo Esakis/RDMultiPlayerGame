@@ -57,11 +57,22 @@ public class DailyResetService : BackgroundService
 
         try
         {
-            // 1. Wykonaj zakolejkowane ataki
-            var pendingActions = await context.QueuedActions
+            // 1. Wykonaj zakolejkowane akcje w oryginalnej kolejności faz:
+            //    złodziejska → magiczna → wojskowa (potem budowy)
+            var phaseOrder = new Dictionary<string, int>
+            {
+                ["ThiefAction"] = 0,
+                ["Spell"] = 1,
+                ["MilitaryAttack"] = 2,
+                ["Construction"] = 3
+            };
+
+            var pendingActions = (await context.QueuedActions
                 .Where(a => a.Status == "Pending" && a.ScheduledFor <= DateTime.UtcNow)
-                .OrderBy(a => a.CreatedAt)
-                .ToListAsync();
+                .ToListAsync())
+                .OrderBy(a => phaseOrder.GetValueOrDefault(a.ActionType, 9))
+                .ThenBy(a => a.CreatedAt)
+                .ToList();
 
             foreach (var action in pendingActions)
             {
@@ -99,6 +110,14 @@ public class DailyResetService : BackgroundService
             var resourceService = scope.ServiceProvider.GetRequiredService<IResourceService>();
             await resourceService.GenerateResourcesForAllAsync();
 
+            // 2b. Przychodzenie generałów + powroty z ataków i wyleczenia
+            var generalService = scope.ServiceProvider.GetRequiredService<IGeneralService>();
+            await generalService.ProcessGeneralArrivalsAsync();
+
+            var outsideGenerals = await context.Generals.Where(g => g.IsOutside).ToListAsync();
+            foreach (var general in outsideGenerals)
+                general.IsOutside = false;
+
             // 3. Odnów tury
             var kingdoms = await context.Kingdoms
                 .Include(k => k.Buildings).ThenInclude(b => b.Definition)
@@ -111,11 +130,30 @@ public class DailyResetService : BackgroundService
                     .Where(b => !b.IsUnderConstruction && b.Quantity > 0 && b.Definition != null)
                     .Sum(b => b.Definition.BonusTurnsPerDay * b.Quantity);
 
+                // Goblin: Wieża Czasu daje +2 tury zamiast +1 (rebalans 31. wieku)
+                if (kingdom.Race == "Goblin" && kingdom.Buildings.Any(b =>
+                        b.BuildingType == "ZachodniaWiezaCzasu" && b.Quantity > 0 && !b.IsUnderConstruction))
+                {
+                    bonusTurns += 1;
+                }
+
                 int totalTurnsToAdd = kingdom.TurnsPerDay + bonusTurns;
+
+                // „trojtah": kumulacja maksymalnie do potrójnego dziennego przydziału
+                int maxTurns = (kingdom.TurnsPerDay + bonusTurns) * 3 + 4;
+                kingdom.MaxTurns = maxTurns;
 
                 kingdom.TurnsAvailable = Math.Min(
                     kingdom.TurnsAvailable + totalTurnsToAdd,
-                    kingdom.MaxTurns);
+                    maxTurns);
+
+                kingdom.Age++;
+                if (kingdom.IsProtected)
+                {
+                    kingdom.ProtectionDaysLeft--;
+                    if (kingdom.ProtectionDaysLeft <= 0)
+                        kingdom.IsProtected = false;
+                }
             }
 
             // 4. Zakończ szkolenie jednostek
@@ -130,12 +168,32 @@ public class DailyResetService : BackgroundService
                 unit.TrainingCompletesAt = null;
             }
 
-            // 5. Usuń wygasłe czary
-            var expiredSpells = await context.ActiveSpells
-                .Where(s => s.ExpiresAt.HasValue && s.ExpiresAt <= DateTime.UtcNow)
+            // 5. Spadek siły zaklęć (oryginalny wzór):
+            //    biała magia: nowa = siła·0,45 − ziemia/100
+            //    czarna magia: nowa = siła·0,6 − ziemia/100
+            //    (bonusy generała z Białą magią — do uzupełnienia po systemie generałów)
+            var activeSpells = await context.ActiveSpells
+                .Include(s => s.Spell)
+                .Include(s => s.Kingdom)
                 .ToListAsync();
 
-            context.ActiveSpells.RemoveRange(expiredSpells);
+            foreach (var spell in activeSpells)
+            {
+                bool isPositive = spell.Spell != null &&
+                    (spell.Spell.Category == "Biała" || spell.Spell.Category == "Tarcze");
+                decimal decayFactor = isPositive ? 0.45m : 0.6m;
+                int newPower = (int)(spell.Power * decayFactor - spell.Kingdom.Land / 100);
+
+                if (newPower <= 0 ||
+                    (spell.ExpiresAt.HasValue && spell.ExpiresAt <= DateTime.UtcNow))
+                {
+                    context.ActiveSpells.Remove(spell);
+                }
+                else
+                {
+                    spell.Power = newPower;
+                }
+            }
 
             // 6. Zakończ badania
             var completedResearch = await context.Researches

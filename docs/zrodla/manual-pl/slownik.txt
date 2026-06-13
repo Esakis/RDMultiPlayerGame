@@ -1,0 +1,283 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+
+ 
+ 
+ 
+      Dear player! Red Dragon, as every internet society, has its own, specific language. To be able to communicate properly with other player, you must know some basic words, not used by other communities, yet very popular among RD players.
+
+
+
+RD - Red Dragon - the world, you are currently in ;)
+
+
+
+Admin - Administrator - There are many administrators in the game, usually responsible for the game's code, the game's rules, etc. They make sure every player follows the Game`s Rules and they make decisions in situations that players themselves cannot resolve.
+
+
+
+Break - Break - A group of negative spells casted on enemy`s potential mages to break and weaken their magical defence, so taht the next spells have a greater chance in breaking it also. Break consists of : Stupidity, Hurricane, Fierily Rainfall, Dragon Breath, Earthquake.
+
+
+
+Bug - a malfunction of the game, a mistake in the game's code. Please report any bugs to Kingdom Smola - BUGS. Using bugs can result in a termination of your RDAccount.
+
+
+
+LJP - Last Justice Palace - Special Building, which ends the Age when built.
+
+
+
+Gub - Gubernat - your kingdom - all the lands you rule. In your Kingdom you have your citizens and buildings, with which you can do whatever you desire.
+
+
+
+Gov - Govern - also your kingdom.
+
+
+
+Ally - Alliance - is a group of Kingdoms (Governs), lead by the Emperor and Commanders.
+
+
+
+Emp - Emperor - the leader of an Alliance. Usually responsible for politics and keeping an eye on the Alliance's members. You elect an Emperor in the Politics/Elections menu.
+
+
+
+Com - Commander - a person nominated by the Emperor to help him in leading an Alliance. Usually responsible for strategies, attacks, magic, thieves, warfare.
+
+
+
+FA - free attacks - if your Alliance is loosing a war and there is no sign of a possible victory, your Emperor or Commander can surrender and offer the wining Alliance some Acres, to end the war.
+
+
+
+NB - Notice Board - in the Forum/Notice Board panel, the Emperor and Commanders can put useful information, like Generals that each Govern should have, Alliance`s members contact details, etc.
+
+
+
+IPts - Infrastructure Points - each Building (economical or special) costs some Infra Points. Not having any IPts, means you cannot build any buildings. Bricklayers produce IPts from stones.
+
+
+
+Infra - Infrastructure/Economical buildings - all building found in the Buildings/Economical Buildings menu. Depended from your current IPts supplies and resources, you can build Economical Buildings and change your Infrastructure - based on your race and what you wish to do with your Kingdom. One building occupies one Acre.
+
+
+
+SB/Specials - Special Buildings - there are 39 Special Buildings. Each one increasing your Governs possibilities. It is essential to build all of them as soon as possible and rebuild them after wars.
+
+
+
+Reversed infra - infrastructure that lets you rebuild your Govern after each Recount during warfare. Ask your Emperor or Commander for details.
+
+
+
+Market - thanks to this SB you gain access to the RD Market, where you can trade your goods (go to the Politics - Buy/Sell menu to trade).
+
+
+
+Automaton - casting your spells, buying food, stone and manna by the server automatically - not to these actions each turn by hand, you can set them in the Options/Autmoatization menu (after you have build SB Market).
+
+
+
+
+
+In the RD world not only happenings and people have special names, but also races, units, SBs. Here is a list of the most common:
+
+
+
+
+e0/e1/e2 - hoplites/ Elite 1 units/ Elite 2 units - abbreviations for your military units.
+
+
+
+Pop - Popularity - your popularity points.
+
+
+
+TCS  - The Creator's Sanctuary - SB, which allows you to enter the Labyrinth twice a day.
+
+
+
+Gob/Necro/Hob/Boug - Goblins, Necromants, Hobbits, Br-Ougs - abbreviations for full races' names.
+
+
+
+WM/White - White magic - all positive spells, casted on you and your Allies, to level all negative spells.
+
+
+
+
+
+
+
+
+ 
+
+
+ 	
+
+
+
+
+    	Ostatnia aktualizacja: 2007-02-06 16:40:29
+
+					

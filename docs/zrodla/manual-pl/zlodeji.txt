@@ -1,0 +1,437 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+	
+		
+
+
+		 	
+
+
+	
+		
+		
+      Rumors say that some Governs never use their people for honest work. They rely on robbing other Kingdoms of their hard-earned gold and resources. May seem funny but only until they rob you... Thieves are a very important part of Red Dragon warfare. They can support your magic by killing enemy mages or wounding enemy Generals. They can get the enemy soldiers drunk so that they cannot fight and defend their Homeland. They're perfect in sabotaging everything that is important for your enemy. Besides that, they can gather useful information about enemy economy and army. There is only one way to protect yourself from them - having your own thieves that will outwit the enemy.
+						
+
+
+	
+		
+		 
+		
+				Target selection panel
+
+
+
+
+				
+				
+		 	
+
+
+	
+		
+				      At the top of the panel is the 'target selection' section. There you can choose which Alliance to attack and which Govern from that Ally will be the target. In the middle is the 'power and type of action' menu. There you select how many times will an action be performed, what wave will it be, how many thieves are to perform it and lastly what type of action should it be. To send an action simply press the 'Do' button at the bottom of the panel.
+
+
+		
+
+
+      There is also an alternative way of sending thievish attacks. Instead of writing how many thieves to send you can check the 'Use power for action sending ' checkbox and key in the power of the action. The server will automatically calculate the needed number of thieves.
+
+
+		
+
+      Those are the basics. To make sending complex thievish actions easier we came up with some helpful solutions. You can select how many times to send one action on one Gubarnate. You can even make the next actions weaker than the first one (key in the right % in the 'Degrease (%)' field). This is very useful when taking enemy losses into account. Last but not least, you can send an action on every enemy Govern with one click (instead of selecting one target check the 'all' checkbox).
+
+
+		
+
+
+      Every sent action is shown under the panel. On the list you will see (from the left-hand side) : a checkbox, attack's wave number, target Govern, number of thieves sent, power of attack, type of action. If you check the checkbox on the left and press the 'Cancel' button your thieves will return home. You can also change the wave number of the attack (check the checkbox, key in the right wave number and press the 'Do' button).
+
+      You can send your thieves to attack only after doing 5 turns (you must be at least in the 6/xx turn). If you send more than one action on one Govern the actions will be computed according to their wave number. During one Recount you can send up to 600 thievish actions from one Kingdom.
+
+
+
+		
+
+      Thieves are not paid at all. You can train unemployed citizens for thieves in the 'Army' menu. The basic cost of thieves is 2000, 1200 for Hobbits, 1500 for Gnomes and Humans. The cost can be reduced by developing Science in the 'Buildings' menu.
+
+
+		
+
+
+
+      Your thieves' power is determined by their number, racial bonuses, the Generals, their novice percentage and the Special Building 'Thieves' Guild' that increases thievish attack by +25%(Hobbits by +35%). And it's the thievish power of defense or attack that is calculated during the Recount (not only the number of your thieves!).
+
+	
+
+
+	
+		
+		 
+		
+				 	
+
+
+	
+		
+		      In the descriptions of thievish missions we will use 'PTA' for 'Power of Thievish Attack' - the difference between the power of attacking and defending thieves. If the difference is negative, PTA will be zero. Another value, 'RTA' or 'Rate of Thievish Attack' will be regarded as the power of attacking thieves divided by the power of defending thieves.
+			
+			
+				
+
+
+	
+		
+		
+
+In Example : power of attacking thieves is 300 000 and the power of defending thieves is 100 000. So PTA is 200 000 and RTA is 3.
+
+
+
+Espionage:
+
+
+Can be sent without declaring war as well as during warfare.
+When a war is declared, espionage action can be successful if RTA is =0,25. If RTA is lower than 1, the actions are always detected (but not stopped!). If RTA >1 the chance of detecting the action is calculated with a new equation and the action itself gives full information. For RTA >3 they give extra information. Without declaring war, all these values are four times greater - for an action to be successful the RTA has to be larger than 1. For RTA 4 they give full info and the chance of detection is calculated with a different equation and is far greater than the one during warfare. When detected, they are regarded as an ambush (an ambush is declared on the attacked Alliance by the server). Espionage actions are : Spy enemy Generals, Detect enemy Pacts, Military espionage, Civil espionage.
+
+
+
+
+
+			
+			
+				
+
+
+	
+		
+			
+			
+			
+			
+				
+				akcja	
+				
+				opis	
+
+
+
+			
+				
+				Wound enemy Generals	
+				
+				this action can assure a few days of advantage as the enemy Generals will be recovering (they will be unable to help your opponents Govern) or can be a preparation for their assassination. If RTA is lower than 1 then the chance of wounding one General is 5%. If RTA is greater than 10 then the chance of wounding all General is 100%. Between these two points the chance rises linearly. A wounded General is regarded as having a 0 level - you can still send him to attacks, go into the Labyrinth, etc. He will be recovering for 3-4 Recounts (4-5 of you don't have the Special Building : Palace). In Allies without an active war the effect will disappear two times quicker. In Governs without an ally this effect will disappear normally.	
+
+
+
+
+
+				
+				Assassin enemy Generals	
+				
+				Your thieves attempt to finish the career of an enemy General. For the action to be successful the General must be wounded before the Recount and be present in the enemy Govern. If RTA is lower than 1 the chance of killing one general is 5% and if RTA is grater than 10 the chance of killing all generals is 100%. Between these two pints the chance rises linearly.	
+
+
+			
+			
+				
+				Kill enemy Mages	
+				
+				A very efficient way of decreasing your opponent's magical defense. During one successful action your thieves will murder 40% of PTA enemy Mages (but not more than 22% of all).	
+
+
+
+			
+				
+				Kidnap enemy Citizens	
+				
+				Your thieves will kidnap PTA of Govern's citizens (you CAN NOT abduct soldiers or mages). One action will take not more than 50% of Govern's population.	
+
+
+			
+				
+				Kill enemy Dragons	
+				
+				The thieves are so wicked that they even dare to kill the noblest of creatures, sneaking into their lairs and poisoning them with a mysterious potion. The percentage of killed dragons ranges from 20% (for RTA below one) to 10% (for RTA over 10), growing linearly for middle values.
+	
+
+
+
+			
+				
+				Sabotage enemy Defence Systems 	
+				
+				Alchemists supply your thieves with many explosive devices and gadgets that can be used to destroy enemy Defense Towers. Thieves will blow up PTA/3 towers.
+
+	
+
+
+						
+				
+				Sabotage Houses	
+				
+				Your thieves destroy innocent people's homes. They will demolish 10% houses, only 5 attacks are successful. The attack has only to break the defence.	
+
+
+			
+
+				
+				Gang War	
+				
+				This action is very popular among thieves as it allows them to get rid of unwanted 'colleagues' from other Governs. On top of the usual losses that result from clashes with the defending thieves, the attackers will kill PTA/2 enemy thieves, but not more than 40%. Those extra losses also affect Governs that have a thievish pact signed with the target. The total losses will be displayed in the News of the defending Govern only so that the other Governs won't know what hit them. GW also kills land/20 defending thieves but only in the attacked Govern. The action will do not less thieves than the Alliances land size /100. It will also intoxicate up to 30% of gnome E1 troops.	
+
+
+			
+				
+				Sabotage enemy Special Building	
+				
+				Thieves have the capability of destroying enemy Special Buildings. The action is limited - you can not use it during an ambush and only one action per Recount will affect opponents Govern. For an Special Building to be destroyed the PTA must be greater than the SpecialBuildingCost*0,25 (for Militia, Magical Walls and Defensive Fortresses System the PTA must be greater than SpecialBulidingCost*0,4).
+	
+
+
+
+				
+				Intoxicate Army	
+
+				
+				Thieves smuggle a great amount of alcohol to enemy barracks that certainly doesn't affect soldiers in a positive way... PZA/3 soldiers will get drunk (not more than 25%) only 5 actions per Recount are successful.	
+
+
+			
+				
+				Revolts	
+				
+				Thieves steal from the rich and give to the poor - this reduces the popularity of the Governor by 20 pts if RTA is lower than one and by 100 pts if RTA is greater than 10. Between these points increases linearly.	
+
+
+			
+
+				
+				Spy enemy Generals	
+				
+				Thieves start to follow their victims and gather useful information about them (works only on Generals present in the Govern). For RTA lower than 0,25, you get information only about 1 General, for RTA >1 you get info about all Generals	
+
+
+			
+				
+				Detect enemy Pacts	
+				
+				By a mixed combination of bribes and threats, political links of the target Govern are uncovered. The spies learn both about existing pacts and pacts that are being prepared for the Recount. Pacts that are being cancelled during the Recount are not shown. Generals gain no experience for this mission. For RTA 1 about all pacts.	
+
+
+
+			
+				
+				Military espionage	
+				
+				Thieves bribe some of the targets soldiers to give them an overall status of the targets army (that means the number of E0, E1, E2 in the Govern and sent to attack, the number of War Machines and Defence Towers). For RTA 1 full information, for RTA >3 gives additional information. Generals gain no experience for this mission.	
+
+
+			
+				
+				Civil espionage	
+
+				
+				Thieves bribe some of the targets citizens and gain information about the targets economy (number of turns, Govern's Science, etc.). For RTA 1 full information, for RTA >3 gives additional information. Generals gain no experience for this mission.	
+
+
+			
+				
+				Steal enemy Supplies	
+				
+				Your thieves will steal 7000*PTA of gold, 70*PTA of stones and weapons, 700*PTA of food and 35*PTA of manna (but not more than 20%). The resources sent to the Market will also be stolen. It is the only action that can be sent without declaring war on an Alliance. When war is declared the limit of stolen resources per action is 50% and Generals do gain experience.The resources are added after cutting down supplies over the limit. This action is the only way to have more than 100% supplies after the Recount.	
+
+
+			
+
+			
+				
+
+
+	
+
+
+
+
+			
+			
+			
+				
+				
+					
+
+					
+				
+				
+					
+					
+
+
+			
+			
+			
+
+    	Ostatnia aktualizacja: 2006-09-28 17:50:21
+
+					

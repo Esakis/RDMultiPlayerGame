@@ -1,0 +1,367 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+ 
+  
+   
+   
+
+ 
+ 	
+
+
+  
+   
+   
+
+ 
+    The chummy scroungers. These short creatures live on the southern borders of the Red Dragon world. They are very attached to their homeland, nonetheless some of them migrate north, hoping for a better living.
+Many hobbits earn their living by jugglery and of course dancing. The Shadow Dance is how they called their main proffesion.
+
+
+      Has a hobbit passed near you? Check your pockets... all empty... Hobbits love good food, drinking and singing aloud. They would spend their last money on pleasure and fun in the nearest inn. They are 'peaceful and cheerful', as many said before.
+
+ Every year in every hobbit town or village a new Shadow King is elected. There are always many pretenders, who have to accomplish a go on a mission set up by the old King. They are usually very difficult - one must use his intelligence and wit to acquire something very precious.
+
+  Hobbits use a special 'Shadow suit' made from a costly, black cloth, which composition is know only by person in the world! Unfortunately he is at the end of his days. The Shadow Games are endangered. If he died, the hobbit would lose the the source of their maintenance and become slaves of the other races. Who knows the secret of the black cloth and how to find him? The question remains unanswered. The one who manages to find this man will be be the savoir of the hobbit race.
+ 	
+
+
+  
+   
+   
+
+
+
+   
+   
+      Hobbits are the best farmers and alchemists. Their thieves are known for their skill and precision. An old joke says that a hobbit can hide in an empty room! They also have a strong defense. Therefore, as a hobbit you must have plenty of thieves who can be send to kill of your opponents mages and help your allies tactically. Hobbits themselves have weak mages.
+
+    
+      	
+
+
+  
+   
+   
+ 
+
+ 
+ 	
+
+
+  
+   
+
+    	
+   
+   
+
+   The Mudstepper	
+   
+   
+
+   The Burrower	
+   
+    	
+
+
+  
+    	
+   
+   
+
+   	
+   
+   
+
+   	
+   
+    	
+
+
+  
+   
+
+    	
+   
+
+   2 4	
+   
+   
+
+   5 9	
+    	
+
+
+  
+
+
+    	
+
+
+  
+    	
+   
+
+   +20% to farmers	
+    	
+
+
+
+  
+    	
+   
+
+   +10% to alchemists	
+    	
+
+
+
+    	
+   
+
+   -10%  to stonemasons	
+    	
+
+
+  
+    	
+   
+
+   -15% to druids	
+    	
+
+
+  
+    	
+   
+
+   -25% to mages	
+    	
+
+
+  
+    	
+   
+
+   +0,5 maximum population per acre 
+ 
+   	
+    	
+
+
+  
+    	
+   
+
+   War machines: 5 attack	
+    	
+
+
+  
+    	
+   
+
+   Thief cost: 1200 gold pieces	
+   
+    	
+
+
+
+    	
+   
+
+   
+Special building : Thieves' Guild adds 60% to thievish attack(instead of 25%)	
+   
+    	
+
+
+
+    	
+   
+
+   
+They can select 1 spellbook at the start of the game	
+   
+    	
+
+
+  
+ 
+
+
+
+
+
+ 
+  	
+
+ 
+
+
+
+ 
+
+    	Ostatnia aktualizacja: 2007-02-08 17:25:37
+
+					

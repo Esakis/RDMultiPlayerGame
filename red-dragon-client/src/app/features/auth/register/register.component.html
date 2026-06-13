@@ -51,15 +51,31 @@
         <div class="form-row">
           <label class="form-label">Rasa</label>
           <select class="form-input" [(ngModel)]="race" name="race">
-            <option *ngFor="let r of races" [value]="r">{{ r }}
-              <span *ngIf="magicRaces.includes(r)"> (magiczna)</span>
-            </option>
+            <option *ngFor="let r of races" [value]="r.name">{{ r.name }}</option>
           </select>
           <span class="validation-text">
             Rasa określa cechy Twojego księstwa.
-            <span *ngIf="magicRaces.includes(race)" class="magic-tag">Rasa magiczna</span>
-            <span *ngIf="race === 'Gobliny'" class="goblin-tag">+2 tury dziennie, max 61 tur</span>
+            <span *ngIf="selectedRace.books > 0" class="magic-tag">Księgi magii: {{ selectedRace.books }}</span>
+            <span *ngIf="selectedRace.books === 0" class="goblin-tag">Rasa niemagiczna</span>
+            <span *ngIf="race === 'Goblin'" class="goblin-tag">+2 tury dziennie (17)</span>
+            <span *ngIf="race === 'Ent'" class="goblin-tag">-2 tury dziennie (13)</span>
           </span>
+        </div>
+
+        <div class="race-info">
+          <div class="race-header">
+            <img class="race-img" [src]="selectedRace.img" [alt]="selectedRace.name">
+            <p class="race-desc">{{ selectedRace.desc }}</p>
+          </div>
+          <div class="race-stats">
+            <div class="race-stat" *ngFor="let label of statLabels; let i = index">
+              <span class="stat-label">{{ label }}</span>
+              <div class="stat-bar">
+                <div class="stat-fill" [style.width.%]="selectedRace.stats[i]"></div>
+              </div>
+              <span class="stat-value">{{ selectedRace.stats[i] }}</span>
+            </div>
+          </div>
         </div>
 
         <div class="checkbox-row">

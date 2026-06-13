@@ -1,0 +1,558 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+		
+			
+			
+
+
+			
+
+
+			
+
+
+			 	
+
+
+		
+			
+			
+
+ 
+ Development is an important and inseparable part of society. Wheater it concerns building techniques, better training, lowering costs, you will always be amazed how it helps your Kingdom. Science Points, produced by Scientists, can be used to specialize your Govern. You can invest these points in 6 multi-level branches and one single-level branch. The maximum Science Points produced per turn is 20 000. However, developing the branch 'Development' rises this limit up to 150 000 per turn. Humans have the limit greater by +33% and goblins lower by -20%. The studies are a permanent bonus - they can not be destroyed by any action.
+
+ If your Science Points' production is greater than your turn limit your Scientists invest the overproduction in their own studies. These can lead to a breakthrough - you can gain few times more Science Points in one turn than your turn limit. The chance of a breakthrough is determined by the overproduction of your Scientists - it spans from 1% (for no overproduction) to 10% (for overproduction equal to your turn limit) - and is influenced by spells Good Luck or Bad Luck. Statistically, breakthroughs speed your scientific development up by 4% to 40% (depends on your chance of a breakthrough).
+
+ 
+
+
+ 
+ 			
+
+
+		
+			
+ 
+ 
+
+
+
+
+
+
+	
+Now there are 3 three-level branches, 2 two-level and 2 one-level:
+
+
+
+
+Wooden machine construction (2M): raises the production of manufactures and war machines' workshops by +10%.
+
+
+
+
+Colonization (0,3M): decreases acres' costs.
+
+
+
+
+DracoAstronomy(2M)/DracoAnatomy(3M)/DracoDynamics(4M): increases the number of Dragons able to live in your Kingdom without SB Dragon Trap by 6/16/20 %, increases the chance of luring a Dragon through the Portal and their number found in the Labyrinth, increases the influence of Generals Dragon Killing and the effect of thievish attack Dragon slaying.
+
+
+
+
+Weapon Sharpening(2M): decreases the cost Elite 2 units by -5 weapons, increases the amount of weapons gained from the Armourers workshop by +5%.
+
+
+
+
+Weapon repairing(4M): decreases the cost Elite 2 units by -15 weapons, increases the amount of weapons gained from the Armourers workshop by +15% (Necromancers cannot develop this branch).
+
+
+
+
+Weapon reforging (6M): decreases the cost Elite 2 units by -20 weapons and Elite 1 units by -5 weapons, increases the amount of weapons gained from the Armourers workshop by +20%(Necromancers, Br-Ougs and Gnomes cannot develop this branch).
+
+
+
+
+Reclamation (3M): the second level for Colonization, decreases the cost of rebuilding Wastelands by -33%.
+
+
+
+
+Occultism (2M): gives an additional Spellbook.
+
+
+
+
+Calculating (2M): decreases the tax on the Market to 12% for food, stones and weapons.
+
+
+
+
+Reckoning (4M): decreases the tax on the Market to 8% for food, stones and weapons.
+
+
+
+
+Accountancy (6M): decreases the tax on the Market to 5% for food, stones and weapons.
+
+
+
+
+Time Bend (0,3M): gives you an additional trippled turn limit (3*15 without Western and Eastern Towers of Time, 3*17 with those two SB, does work only on Kingdoms younger than 10 days).
+
+
+
+
+Time Collapse (0,3M): gives you an additional turn limit (15 turns without Eastern and Western Towers of Time, 17 with both SB, can be developed at any time during the Age).
+
+
+
+
+Empirics(5M): increases the chance of a breakthrough by +10%, increases breakthrough value by +10%.
+
+
+
+	
+
+
+	
+
+
+	
+		
+All multi-level branches have 5 levels. To gain a new level you have to gather the needed amount of Science Points. You can invest SP in these fields of studies :
+
+	
+
+
+	
+
+
+
+ 
+  Development:  raises the maximum number of Science Points produced per turn.
+
+		
+ Architecture: lowers the cost of Special Buildings (except LJP).
+
+		
+ Engineering: lowers the cost of Economical Buildings.
+
+		
+ Magic: lowers the cost of casting spells.
+
+		
+ Training: speeds up training of military units.
+
+		
+ Recruitment: lowers the cost of recruiting thieves.
+
+	
+
+
+	
+
+
+	
+
+
+	
+
+
+		
+
+	
+
+
+		
+			
+ 
+ 
+ 
+ 
+			Level	
+			
+			
+			Needed SP	
+			
+			Development	
+			
+			Architecture	
+			
+			Engineering	
+			
+			Magic	
+			
+			Training	
+			
+			Recruitment
+
+ 
+			Primitive	
+			
+			300 000	
+			
+			35 000	
+			
+			4,5%	
+			4,5%	
+			
+			3%	
+			
+			E0>E1 - 1%
+
+			E1>E2 - 0,2%	
+			
+			8%
+
+ 
+			Basic	
+			
+			3 000 000	
+			
+			50 000	
+			
+			9%	
+			9%	
+			
+			6%	
+			
+ 
+ 
+ 	E0>E1 - 2%
+
+			E1>E2 - 0,5%	
+			
+			16%
+
+ 
+			Developed	
+			
+			9 000 000	
+			
+			100 000	
+			
+			24%	
+			
+			24%	
+			
+			16%	
+			
+ 
+ 
+ 	E0>E1 - 5%
+
+			E1>E2 - 1,3%	
+			
+			40%
+
+
+ 
+			Advanced	
+			
+			15 000 000	
+			
+			130 000	
+			
+			33%	
+			
+			33%	
+			
+			22%	
+			
+ 
+ 
+ 	E0>E1 - 6%
+
+			E1>E2 - 2%	
+			
+			55%
+
+ 
+			Modern	
+			
+			21 000 000	
+			
+			150 000	
+			
+			38%	
+			38%	
+			25%	
+ 
+ 
+ 	E0>E1 - 7%
+
+			E1>E2 - 2,2%	
+			
+			65%
+
+ 
+
+
+ 
+ 
+ 			
+
+
+		
+			
+ 
+
+
+	
+
+
+	
+
+
+		 	
+
+
+
+			
+
+
+
+
+
+		
+			
+			
+			 
+			
+ 
+ 			Developing Science is very similar to building Special Buildings. If you want to develop a branch simply choose it from the list and confirm. The overproduction of SP will be transferred to it. Keep in mind that you Scientists use produced Science Points to maintain Development in Professions at the highest level and, if there are some left, use them for developing Science.
+
+Changing an unfinished Specialization to another new one leads to loosing 1/3 of the invested Science Points for the change - only 2/3 will be transferred to the new Branch.
+
+
+
+The differences in branches` costs and their availability for Races:
+
+
+
+Humans - Empirics costs only 25% of the normal price.
+
+
+
+Gnomes - Wooden machine construction costs only 25% of the normal price, Weapon reforging not available.
+
+ 
+
+Elves - DracoAstronomy/DracoAnatomy/DracoDynamics 20% cheaper
+
+
+
+Hobbits - Primitive Magic costs 1M, Calculating/Reckoning/Accountancy 20% cheaper.
+
+
+ 
+Dwarves - Engineering and Architecture (all levels) 20% cheaper.
+
+
+
+Genies - Primitive Training costs 1M.
+
+
+
+Goblins - Development, Engineering and Architecture, Magic (all levels) 10% more expensive.
+
+
+
+Necromants - Weapon repairing / Weapon reforging not available, Primitive Engineering costs 1M.
+
+
+
+Br-Ougs - all 5th levels are 10% more expensive, Weapon reforging not available.
+
+
+
+Giants - no Recruiting, Weapon sharpening / Weapon repairing / Weapon reforging 20% cheaper.
+
+
+
+ 
+ 			
+
+
+				
+		
+		
+ 
+ 
+
+
+
+ 
+ 
+			
+
+ 
+
+
+
+    	Ostatnia aktualizacja: 2007-02-21 21:02:09
+
+					

@@ -1,0 +1,362 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+	
+		
+		
+
+ 	
+
+
+	
+		
+		
+       Are they dead? Nobody knows. There are uncountable legends about them. The oldest one describes their origin. It says, that the world of Red Dragon was originally occupied by six races. These races have been fighting for land and power. Of course there were some peaceful Kingdoms which tried to develop trade, arts and settle their problems diplomatically.
+
+		
+
+      'The One' could not stand this any more, so He decided to sentence all the sinners to infernal suffering. So, everyone who was filled with evil died, but their soul did not leave their body. They had to wonder the world as the 'living dead'. Their body is continuously eaten by Xu worms, causing them unspoken pain. You can kill a necromant by only separating his head from his body (usually done with a sharp sword). They also die from eating anything that the living eat. They don't develop their own magic but they can use other races' magic very well.	
+
+
+	
+		
+		
+ 	      Necromants are skilled mages, but their armies are even more powerful. Their military units do not eat food and all Zombies, Dragons or Hoplites that die, are revived to Skeletons. They usually are used to gain land for their alliance.
+	
+
+
+	
+		
+		 
+		
+ 	 	
+
+
+	
+		 	
+		
+
+
+ 	Skeleton	
+		
+
+
+ 	Zombie	
+		 	
+
+
+	
+		 	
+		
+
+
+ 		
+		
+
+
+ 		
+		 	
+
+
+	
+		 	
+		
+
+
+ 40	
+		
+
+
+ 106	
+		 	
+
+
+	
+		
+ 
+
+
+
+ 	
+
+
+	
+		
+		 	
+		
+		
+
+ 	+10% to Mages	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+
+ 	+10% to Druids	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+
+ 	-10% to Alchemists	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		They regain 100% of Infra Points when demolishing buildings	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		War machines : 5 attack	
+		
+		 	
+
+
+	
+		 	
+		
+		
+
+ 	Military units and thieves do not need food	
+		 	
+
+
+	
+		 	
+		
+		
+
+ 	Dragons, Zombies and Hoplites, when killed in battle, are revived as Skeletons	
+		 	
+
+
+	
+		 	
+		
+		
+
+ 	They can select 4 Spellbooks at the start of the game 	
+		 	
+
+
+
+		
+		 	
+		
+		
+
+ 	If one of their Generals dies, he is revived as a Skeleton General that cannot die nor be wounded, but cannot go into the Labyrinth (has the same primary ability as a Commander and also revives all enemy units that died in battle to Skeletons)	
+		
+		 	
+
+
+
+		
+		 	
+		
+		
+
+ 	Spells 'Dragon Breathe' and 'Earthqauke' turn 10% of destroyed buildings to waste areas 	
+		
+		 	
+
+
+	
+
+
+
+
+
+ 
+ 
+ 
+ 
+			
+ 	
+
+ 
+			
+
+
+
+    	Ostatnia aktualizacja: 2007-02-06 17:18:08
+
+					

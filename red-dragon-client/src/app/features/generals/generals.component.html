@@ -1,0 +1,49 @@
+<div class="game-panel">
+  <h2 class="panel-title">
+    <img src="assets/img/role/napastnik.png" alt="Generał" class="title-icon">
+    Generałowie
+  </h2>
+
+  <div class="info-msg" *ngIf="message">{{ message }}</div>
+  <div class="error-msg" *ngIf="error">{{ error }}</div>
+  <div class="loading" *ngIf="loading">Wczytywanie generałów...</div>
+
+  <p class="hint">
+    Generałowie przychodzą losowo podczas przeliczenia — im więcej ich masz, tym
+    rzadziej zjawiają się nowi. Wódz zwiększa siłę ataku o swój poziom w procentach,
+    Obrońca tak samo wzmacnia obronę. Generał prowadzący atak wraca po przeliczeniu.
+  </p>
+
+  <table class="rd-table" *ngIf="generals.length > 0">
+    <thead>
+      <tr>
+        <th>Imię</th>
+        <th>Cecha główna</th>
+        <th>Cecha drugorzędna</th>
+        <th>Poziom</th>
+        <th>Doświadczenie</th>
+        <th>Stan</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let g of generals">
+        <td class="g-name">{{ g.name }}</td>
+        <td>{{ trait(g.primaryTrait) }}</td>
+        <td>{{ trait(g.secondaryTrait) }}</td>
+        <td class="num">{{ g.level }}</td>
+        <td class="num">{{ g.experience }}</td>
+        <td>{{ g.status }}</td>
+        <td>
+          <button class="btn-dismiss" (click)="dismiss(g)" [disabled]="g.status !== 'W domu'">
+            Zwolnij
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="hint" *ngIf="!loading && generals.length === 0">
+    Nie masz jeszcze żadnych generałów — czekaj cierpliwie, któryś zjawi się po przeliczeniu.
+  </p>
+</div>

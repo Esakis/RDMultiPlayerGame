@@ -15,7 +15,7 @@ public class Kingdom
     public string Name { get; set; } = string.Empty;
 
     [MaxLength(50)]
-    public string Race { get; set; } = "Ludzie";
+    public string Race { get; set; } = "Człowiek";
 
     public bool IsMagicRace { get; set; } = true;
 

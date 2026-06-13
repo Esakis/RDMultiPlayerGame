@@ -1,0 +1,119 @@
+Vážení hráči,
+dnešním článkem zahajujeme seriál o revolučních změnách ras. Jako první se představí džin a hobit.
+Džin
+Eluzivní pouštní tvorové jsou nejsilnějšími a zároveň nejtěžšími mágy na odehrávku. Daní za těžce přístupné a nehostinné prostředí, ve kterém se usídlují je závislost na budovách. Přispívá k ní také jejich touha po pohodlí a luxusní potřeby velkých mágů. Svou náročnost ale oplácí schopností a elegancí, s jakou dovedou nakládat s manou. Džini se nejlépe uplatní jako průrazoví mágové a také magičtí obránci
+Základ na domek: 2 
+ Vodárna: +1 
+ Norový systém: +1 
+ Kanalizace: +2 
+ Celkem na domek: 6
+Základ na akr: 2 
+ Vodotok: +1,5 
+ Celkem na akr: 3,5
+Hoplíti: 1/1 
+ E1: 2/2 
+ E2: 4/6 
+ Válečný stroj: 5/0
+1) +40% mágové 
+ 2) +10% druidi 
+ 3) -30% farmáři 
+ 4) -10% kameníci 
+ 5) -10% zedníci 
+ 6) 5 magických knih
+ 7) Zloději jsou o 15% slabší
+ 8) Po dostavbě 
+Magického paláce
+ jsou magické pakty poskytované džiny o 5% účinnější. Jeden magický pakt uzavřený s džinem má pro příjemce paktu účinnost 55%. Dva magické pakty, z nichž jeden je uzavřený s ne-džinem a jeden s džinem, mají účinnost 45%, respektive 50%. Tři magické pakty, z nichž dva jsou uzavřené s ne-džinem a jeden s džinem, mají účinnost 40%, 40% a 45%.
+ 9) Padlé legie mají obranu a účinnost větší o 200% (tedy max. 3x počet zacvičených mágů)
+ 10) Každý džin v gubernátu je schopen udržet a skladovat jednu jednotku many
+11) Získávají přístup k unikátním kouzlům 
+Metamagie
+ – dlouhodobá kouzla 
+Posílená magie
+ a 
+Zrychlená magie
+, u kterých stačí přítomnost. 
+Posílená magie
+ umožní sesílat kouzla o 10% silnější a o 25% dražší. 
+Zrychlená magie
+ umožní sesílat kouzla o 10% levnější a o 25% slabší. Obě kouzla mají základní cenu 210. Kouzla lze sesílat pouze na sebe. Vždy lze mít aktivní pouze jedno, tedy, pokud nemá na sobě džin ani 
+Posílenou
+, ani 
+Zrychlenou magii
+, bude mít v nabídce k seslání obě dvě kouzla. Pokud gubernát na sebe sešle 
+Posílenou magii
+, bude si moci dále kouzlit jen 
+Posílenou magii
+, dokud se jí nezbaví 
+Odstraněním kouzla
+ nebo odehráním tahů, pak se do nabídky vrátí i 
+Zrychlená magie
+ (analogicky je to i v případě seslané 
+Zrychlené magie).
+Hobit
+Hobiti jsou nejlepšími a vůči vojenským útokům značně odolnými zloději s rozvinutou ekonomikou. Zloději jsou nejvíc užitkové povolání ze všech tří, a tak by každý měl mít nějaké další překvapivé využití. U hobita je to velmi dobrá obrana, která je ale vytvářena obtížněji získatelnými jednotkami E2. Hobiti nejsou velmi nadaní mágové, proto dostávají méně magických knížek a roli kouzlících zlodějů zastanou lépe jiné rasy. Díky své dobré farmě však pořád zvládnou seslat obstojné množství kouzel, ale se ztrátou jedné knížky přijdou o rozmach.
+Základ na domek: 3 
+ Vodárna: +0,5 
+ Norový systém: +1 
+ Kanalizace: +1,5 
+ Celkem na domek: 6
+Základ na akr: 3,5 
+ Vodotok: +0,5 
+ Celkem na akr: 4
+Hoplíti: 1/1 
+ E1: 2/4 
+ E2: 4/10 
+ Válečný stroj: 5/0
+1) +30% farmáři 
+ 2) +10% obchodníci 
+ 3) -20% mágové 
+ 4) 1 magická kniha 
+ 5) Zloději hobitů jsou o 25% levnější i silnější 
+ 6) Kouzlo 
+Zničení zásob
+ má na hobity pouze poloviční efekt 
+ 7) Snižování popularity 
+Podněcováním revolty
+, 
+Dračím dechem
+, 
+vojenskými útoky
+ i 
+stroji
+ má ně pouze poloviční efekt 
+ 8) Imunní na 
+Špatnou náladu
+ 9) Menší ztráty pozemků - jako by na ně již prošel jeden útok (první útok bere 9% místo 11%, resp. 7% místo 9% pokud stojí 
+Síť vojenských pevností
+)
+10) Získávají unikátní mechaniku: 
+Hodokvas
+. Spouští se v profesích napravo ve spodním informačním řádku, jednoduše 
+Spustit hodokvas
+. Po spuštění se text změní na 
+Ukončit hodokvas
+ a začne odpočet tahů k jeho možnému ukončení. Nejdříve lze 
+hodokvas
+ ukončit po 4 tazích. Jeho spuštění vyžaduje popularitu 80+. Po spuštění okamžitě navýší popularitu o 20 bodů, i nad maximální 100 a toto navýšení popularity bude ovlivňovat zalidnění na akr. Při popularitě 110 bude mít zalidnění 4,3 a při popularitě 120 zalidnění 4,6. Po spuštění 
+hodokvasu
+ se spotřeba jídla okamžitě zvedne na 5 jednotek na osobu a zaškolování klesne o 40% (edit: o 40% z aktuální hodnoty zaškolování, nikoli absolutně). Zároveň se zvedne přírůstek obyvatel o 50%. 
+Hodokvas
+ trvá minimálně 4 tahy, poté ho může hráč ručně ukončit, nebo držet tak dlouho, jak jen bude chtít. 
+Hodokvas
+ není ukončen přepočtem, možnost jeho ukončení je podmíněná minimálně 4 odkliknutými tahy. Po ukončení 
+hodokvasu
+ klesne spotřeba jídla okamžitě na 1 jednotku za osobu a zmizí malus na zaškolování. Popularita po ukončení 
+hodokvasu
+ se vždy vrátí okamžitě na 100 se všemi svými efekty jako postupný úbytek přebytečného obyvatelstva (edit: toto platí jen pokud má gubernát popularitu vyšší nebo rovnu 100, pokud je popularita nižší než 100, zůstane po deaktivaci 
+hodokvasu
+ na aktuální hodnotě). Navýšení popularity nemá vliv na výši platů pro její udržení, stále platí 42 pro udržení maxima s H
+ospodou U Červeného draka
+ a 
+Dobrou náladou
+. Popularita během 
+hodokvasu
+ nestoupá, zůstává na hodnotě počáteční popularita při spuštění (min.80) + 20. Může jenom klesat, pokud nebude jídlo, peníze. Pokud 
+hodokvas
+ trvá přes přepočet, popularita je snižována všemi akcemi, ale jen poloviční mírou, viz bod 7.
+Věříme, že popis prvních dvou ras podnítil vaši fantazii ke tvoření všemožných strategií :) Zítra se můžete těšit na představení další dvojice ras,
+RD-Team

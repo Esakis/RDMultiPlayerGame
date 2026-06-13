@@ -1,0 +1,81 @@
+Vážení hráči,
+pokračujeme v představování nových ras. Dnešní článek se zaměří na dvě obranné rasy a jejich rozdílný přístup k jejímu budování.
+Trpaslík
+Silní a tvrdí bojovníci vysoce odolní v obraně a schopní i v útoku. Jeho univerzální vojenské využití podtrhuje unikátní mechanika, díky které může dozbrojovat své jednotky a zvyšovat tak jejich sílu. Při dozbrojování využije své silné hospodářství, neboť i pro takový národ stavitelů a kovářů, jakým trpaslíci jsou, je dodatečná výzbroj značnou zátěží.
+Základ na domek: 3 
+ Vodárna: +0,5 
+ Norový systém: +1 
+ Kanalizace: +1,5 
+ Celkem na domek: 6
+Základ na akr: 3 
+ Vodotok: +0,5 
+ Celkem na akr: 3,5
+Hoplíti: 1/1 
+ E1: 5/6 
+ E2: 10/11 
+ Válečný stroj: 5/0
+1) +20% kameníci 
+ 2) +30% zbrojaři 
+ 3) +20% zedníci 
+ 4) -30% druidi 
+ 5) -20% mágové 
+ 6) 1 magická kniha 
+ 7) Na trpaslíky prochází o jedno limitované kouzlo méně 
+ 8) O 10% levnější speciální budovy 
+ 9) -15% k síle zlodějů 
+ 10) Uzavřené zlodějské pakty mají o 10% nižší účinnost, jeden uzavřený zlodějský pakt má účinnost 45%.
+ 11) Ve vojenském útoku i obraně mají o 25% nižší ztráty oproti ostatním rasám. 
+ 12) Jednotky trpaslíků zabíjejí o 20% více draků 
+ 13) Získávají unikátní herní mechaniku: 
+Dodatečná výzbroj
+. Trpaslíci získávají možnost přidělit E1 nebo E2 až dva body k útoku nebo obraně. Mohou použít libovolnou kombinaci vylepšení v libovolném pořadí (útok E1 + obrana E2, útok E2 + obrana E1, útok E1 + obrana E1, útok E2 + obrana E2 atd.), ale vždy mají k dispozici maximálně dva body. První bod vylepšení stojí rozloha*50 zbraní. Druhý bod vylepšení stojí rozloha*100 zbraní. Po přepočtu se bonusy vyresetují. Body se kupují kliknutím na útočný nebo obranný štítek zvolené jednotky a potvrzením.
+Elf
+Elfové jsou klasickou magicko - vojenskou rasou. Jejich mágové se sice nemohou rovnat džinům, ale i tak je velmi obtížné je překonat. Soustředí se především na bílou magii a pomoc spřáteleným gubernátům. To se promítá i v jejich unikátní mechanice. V obraně elfové nedisponují takovou silou jako enti ani odolností jako trpaslíci, ale nahrazují to určitou nepředvídatelností.
+Základ na domek: 3 
+ Vodárna: +0,5 
+ Norový systém: +1 
+ Kanalizace: +1,5 
+ Celkem na domek: 6
+Základ na akr: 3 
+ Vodotok: +0,5 
+ Celkem na akr: 3,5
+Hoplíti: 1/1 
+ E1: 4/6 
+ E2: 8/11 
+ Válečný stroj: 5/0
+1) +20% zbrojaři 
+ 2) +20% druidové 
+ 3) +30% mágové 
+ 4) -10% kameníci 
+ 5) -10% zedníci 
+ 6) 3 magické knihy 
+ 7) 
+Strašidelný lesík
+ vystraší 10% invazní armády 
+ 8) 
+Magický palác
+ snižuje růst náročnosti kouzlení na 9% 
+ 9) 
+Bílá magie
+ je pro elfy o 25% levnější 
+ 10) 1,5x tolik z labyrintu při výběru surovin, zlata nebo infrastrukturních bodů 
+ 11) Vojenské jednotky elfů disponují magickou silou a mohou tak sesílat kouzla i se samy bránit. E1 má sílu 0,5, E2 má sílu 1. Edit: Tato síla je fixní a neovlivňují ji siločáry, univerzity, magické fluidum ani stupidita. Sílu a průchod kouzel ovlivňují speciální budovy i generálové. Do magické obrany se počítají opět speciální budovy a generálové, ale i antimagický štít. Do magického paktu přispívají standardně v závislosti na své síle a účinnosti uzavřeného paktu.
+ 12) Získávají unikátní herní mechaniku: 
+Komando lučištníků
+. Elfové si mohou zvolit gubernát v alianci, se kterým mají uzavřený platný vojenský pakt a podpořit jeho obranu na úkor své vlastní. Zvolený gubernát získává +20% do vlastní obrany, zatímco elf -20% do vlastní obrany. 
+Komando
+ lze vyslat pouze 1x za přepočet a po přepočtu se deaktivuje. Objeví se v záložce Založit útok napravo od Výběr cíle útoku s textem 
+Poslat komando lučištníků na pomoc gubernátu
+. Na rozkliknutí se objeví gubernáty s uzavřenými plnohodnotnými vojenskými pakty a klikem se vybere ten zamýšlený. 
+Komando
+ lze vyslat až po odehrání pěti tahů jako standardní vojenské útoky. Po odeslání lze 
+komando
+ v záložce Založit útok také zrušit. Jeden gubernát může přijmout maximálně jedno 
+komando
+. Elfové 
+komando
+ nemohou přijímat. 
+Komando
+ neovlivňuje výši vojenských paktů.
+Zítra se ohlásíme s další várkou ras. Děkujeme za všechny dosavadní reakce, poctivě je čteme. S gratulací Arkoně k tvrdě vybojované PPSce a zaslouženému zápisu do Knihy cti se loučí,
+RD-Team

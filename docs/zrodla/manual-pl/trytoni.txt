@@ -1,0 +1,634 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+	
+		
+		
+
+
+		 	
+
+
+	
+		
+
+ 
+     It is commonly thought, among common people and the wise ones, too, that gnomes are the youngest race in Red Dragon - but the truth is a bit more mysterious. These fascinating creatures  simply did not want to interfere in the battles and wars of the other races and not many mortals had seen them. Yet, recent events made these distant relatives of the dwarves leave their cosy homes and take part in the never - ending conflict raging in the world of Red Dragon for centuries.
+
+Gnomes are about 100-120 cm tall and weights not more that 30 kilograms. Every astute observer would ask himself whether those were the determinants of their past passiveness and them being unnoticed.  But for now let us just continue the official version  - they just did not interfere.  time.
+
+ 
+
+
+ 
+		   Although weak and small, during warfare gnomish troops use all sorts of strange inventions and devices (i.e. bombs) and miraculously become one of the main forces on the battlefield. Well, can there be anything more inconspicuous than a small guy charging his enemy with a stick... a spear, I mean?  What is more, gnomish forces are trained in detecting and thwart thievish attacks. They are also very efficient in exterminating the enemy's troops. However, all their merits are atoned by a certain flaw. Our smal allies do not use war machines, not because their engineering incompetence.
+
+ 
+		   Gnomish houses, after building the Lair system and the Public Bath, are much more roomy than the other races' ones. Regarding their size (believe me, please, I am not patronizing, far be it from me)   , it is not so hard to pack a few more of them in a chamber not bigger than a store - room, and by the way it would just be an excuse for joy and merriment.
+
+Gnomes are famous alchemists and it seems they have a natural talent when it comes to gold creation. We can simply say that instead of blood they have this precious ore pulsing in their veins..Gnomish thieves are also one of the cheapest to hire. Analyzing the other branches of the economical accomplishments of the Small Race, it is impossible to omit their incompetence, well, let us say - a mere weakness, in stonemasonry and bricklaying (it is a bit hard to handle big rocks when you are 1,20 m tall). In this branch they are far behind the Old Race.
+Gnomy są tu, w świecie Red Dragona, i zamierzają pokazać, kto tu rządzi. Od dziś uważaj, nigdy nie wiesz, kiedy gnomie oddziały wkroczą na ziemie Twojego księstwa zostawiając za sobą ruiny i zgliszcza... 
+Gnomes are here to stay and show what they are made of. So watch out, because you never know when they will march into your kingdom leaving only a trail of ruins and destruction behind...
+
+ 
+
+
+ 
+
+
+ 	
+
+
+	
+		
+		
+		 
+		
+
+		 	
+
+
+	
+		 	
+		
+		
+		
+ 	Night Guard 	
+		
+		
+		
+ 	Sapper	
+		 	
+
+
+	
+		 	
+		
+		
+		
+ 	
+		
+		
+		
+ 	
+		 	
+
+
+	
+		 	
+		
+		
+		
+ 15
+ thievish defense 0,5	
+		
+		
+		
+ 87	
+		 	
+
+
+	
+		
+		 
+		
+  	
+
+
+	
+		 	
+		
+		
+		'Public bath' increases house capacity by +1	
+		
+		 	
+
+
+	
+		 	
+		
+		
+		'Lair system' adds +2 to house capacity	
+		
+		 	
+
+
+        
+		 	
+		
+		
+		The spell expense level increases by +11% for every casted spell (usually +10%)	
+		
+		 	
+
+
+	
+		 	
+		
+		
+		-5% to bricklayers	
+		
+		 	
+
+
+	
+		 	
+		
+		
+		-5% to stonemasons	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		+10% to alchemists	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		Thief cost: 1500 gold pieces	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		War machines: 0 attack	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		Sappers' special ability : ExtraUnitsKilled = AmountofBombers/3 (max. 150%)	
+		
+		 	
+
+
+
+
+		
+		 	
+		
+		
+		
+When E1 to E2 training is turned off, the E0 to E1 training is boosted (5% + science)
+	
+		
+		 	
+
+
+
+
+		 	
+		
+		
+		Trained Elite 1 troops give an additional 0,5 of thievish defence (does not work via pacts) 	
+		
+		 	
+
+
+
+
+	
+		 	
+		
+		
+		They can select 3 spellbooks at the beginning of the game	
+		
+		 	
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+ 
+	
+	
+ 	
+ 
+ 
+	
+ 
+ 	
+
+
+ 
+	
+		
+		
+
+
+		 	
+
+
+	
+		
+
+ 
+     It is commonly thought, among common people and the wise ones, too, that gnomes are the youngest race in Red Dragon - but the truth is a bit more mysterious. These fascinating creatures  simply did not want to interfere in the battles and wars of the other races and not many mortals had seen them. Yet, recent events made these distant relatives of the dwarves leave their cosy homes and take part in the never - ending conflict raging in the world of Red Dragon for centuries.
+
+Gnomes are about 100-120 cm tall and weights not more that 30 kilograms. Every astute observer would ask himself whether those were the determinants of their past passiveness and them being unnoticed.  But for now let us just continue the official version  - they just did not interfere.  time.
+
+ 
+
+
+ 
+		   Although weak and small, during warfare gnomish troops use all sorts of strange inventions and devices (i.e. bombs) and miraculously become one of the main forces on the battlefield. Well, can there be anything more inconspicuous than a small guy charging his enemy with a stick... a spear, I mean?  What is more, gnomish forces are trained in detecting and thwart thievish attacks. They are also very efficient in exterminating the enemy's troops. However, all their merits are atoned by a certain flaw. Our smal allies do not use war machines, not because their engineering incompetence.
+
+ 
+		   Gnomish houses, after building the Lair system and the Public Bath, are much more roomy than the other races' ones. Regarding their size (believe me, please, I am not patronizing, far be it from me)   , it is not so hard to pack a few more of them in a chamber not bigger than a store - room, and by the way it would just be an excuse for joy and merriment.
+
+Gnomes are famous alchemists and it seems they have a natural talent when it comes to gold creation. We can simply say that instead of blood they have this precious ore pulsing in their veins..Gnomish thieves are also one of the cheapest to hire. Analyzing the other branches of the economical accomplishments of the Small Race, it is impossible to omit their incompetence, well, let us say - a mere weakness, in stonemasonry and bricklaying (it is a bit hard to handle big rocks when you are 1,20 m tall). In this branch they are far behind the Old Race.
+Gnomy są tu, w świecie Red Dragona, i zamierzają pokazać, kto tu rządzi. Od dziś uważaj, nigdy nie wiesz, kiedy gnomie oddziały wkroczą na ziemie Twojego księstwa zostawiając za sobą ruiny i zgliszcza... 
+Gnomes are here to stay and show what they are made of. So watch out, because you never know when they will march into your kingdom leaving only a trail of ruins and destruction behind...
+
+ 
+
+
+ 
+
+
+ 	
+
+
+	
+		
+		
+		 
+		
+
+		 	
+
+
+	
+		 	
+		
+		
+		
+ 	Night Guard 	
+		
+		
+		
+ 	Sapper	
+		 	
+
+
+	
+		 	
+		
+		
+		
+ 	
+		
+		
+		
+ 	
+		 	
+
+
+	
+		 	
+		
+		
+		
+ 15
+ thievish defense 0,5	
+		
+		
+		
+ 87	
+		 	
+
+
+	
+		
+		 
+		
+  	
+
+
+	
+		 	
+		
+		
+		'Public bath' increases house capacity by +1	
+		
+		 	
+
+
+	
+		 	
+		
+		
+		'Lair system' adds +2 to house capacity	
+		
+		 	
+
+
+        
+		 	
+		
+		
+		The spell expense level increases by +11% for every casted spell (usually +10%)	
+		
+		 	
+
+
+	
+		 	
+		
+		
+		-5% to bricklayers	
+		
+		 	
+
+
+	
+		 	
+		
+		
+		-5% to stonemasons	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		+10% to alchemists	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		Thief cost: 1500 gold pieces	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		War machines: 0 attack	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		Sappers' special ability : ExtraUnitsKilled = AmountofBombers/3 (max. 150%)	
+		
+		 	
+
+
+
+
+		
+		 	
+		
+		
+		
+When E1 to E2 training is turned off, the E0 to E1 training is boosted (5% + science)
+	
+		
+		 	
+
+
+
+
+		 	
+		
+		
+		Trained Elite 1 troops give an additional 0,5 of thievish defence (does not work via pacts) 	
+		
+		 	
+
+
+
+
+	
+		 	
+		
+		
+		They can select 3 spellbooks at the beginning of the game	
+		
+		 	
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+ 
+	
+	
+ 	
+ 
+ 
+	
+ 
+ 	
+
+
+
+    	Ostatnia aktualizacja: 2007-02-08 13:10:03
+
+					

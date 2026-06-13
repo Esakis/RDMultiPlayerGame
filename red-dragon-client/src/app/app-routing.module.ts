@@ -14,6 +14,9 @@ import { ReportsComponent } from './features/reports/reports.component';
 import { MessagesComponent } from './features/messages/messages.component';
 import { RankingComponent } from './features/ranking/ranking.component';
 import { ForumComponent } from './features/forum/forum.component';
+import { MagicComponent } from './features/magic/magic.component';
+import { ThievesComponent } from './features/thieves/thieves.component';
+import { GeneralsComponent } from './features/generals/generals.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -29,6 +32,9 @@ const routes: Routes = [
   { path: 'messages', component: MessagesComponent, canActivate: [AuthGuard] },
   { path: 'ranking', component: RankingComponent, canActivate: [AuthGuard] },
   { path: 'forum', component: ForumComponent, canActivate: [AuthGuard] },
+  { path: 'magic', component: MagicComponent, canActivate: [AuthGuard] },
+  { path: 'thieves', component: ThievesComponent, canActivate: [AuthGuard] },
+  { path: 'generals', component: GeneralsComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/dashboard' }
 ];
 

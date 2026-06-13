@@ -1,0 +1,676 @@
+
+
+Red Dragon - manuál
+
+
+ 
+
+
+
+  
+     	
+    	
+    	
+    	
+
+
+  
+    
+    
+     
+    
+    	
+     	
+    
+
+
+      
+
+
+
+   
+
+   
+      
+	  Některé vzorce jsou mezi hráči známy, proto je jich zde několik pro zájemce uvedeno. Což ale neznamená, že byste Rd měli hrát s kalkulačkou. Odchylka výkonnosti mezi hráči počítajícími každý krok a zkušenými hráči hrajícími intuitivně podle zkušeností nebývá větší než několik procent.
+
+
+
+
+
+Cena kouzel závisí na velikosti gubernátu podle vztahu:
+
+
+
+	cena = ckp * (1 + zem / 2000) * ( 1 - čarodějnictví/100)
+
+
+
+	ckp - původní cena kouzla (naleznete ji v záložce Magie)
+
+	zem - počet zemiček
+
+	čarodějnictví - level ve výzkumu magie
+
+
+Výjimku tvoří kouzlo Seslat draka, u kterého se tento vzorec ještě přenásobí vztahem: (D * D * 0,0001 + 0,2) * ((max(50, D)) / 100) na druhou, kde D je počet draků v gubernátu.
+
+
+
+(takto to vypadá celkově: cena = ckp * (1 + zem / 2000) * ( 1 - čarodějnictví/100) * (D * D * 0,0001 + 0,2) * ((max(50, D)) / 100) na druhou )
+
+
+
+
+
+
+Cena infrabudov:
+
+
+počet infrabodů za jednu budovu =int((149*zeme/15000+1) * (1 - 1.5*stavebnictví / 100))
+
+int - celá část výrazu v závorce
+
+zeme - velikost gubernátu v akrech
+
+stavebnictví - level výzkumu stavebnictví
+
+cena zlata za jednu budovu je cena v infrabodech * 200 (platí vždy a pro všechny rasy)
+
+V úvodním protektorátu je sleva na cenu infrabudov 50%.
+
+
+
+Náročnost infra bodů pro rozlohu nad 20.000:
+
+pro obry: int((181 + Pozemky/2000) * (1 - 1.5*stavebnictví / 100))
+
+pro lidi: int(1.5*(181 + Pozemky/1000) * (1 - 1.5*stavebnictví / 100))
+
+pro ostatní rasy: int((181 + Pozemky/1000) * (1 - 1.5*stavebnictví / 100))
+
+
+
+
+
+
+
+
+
+Na čem závisí přesně popularita:
+
+
+ Ve výsledném stavu bez jakýchkoliv vlivů by byla popularita dvojnásobek platů. Ovsem následující vlivy toto trochu mění.
+
+ V tomto pořadí se během dalšího tahu mění aktuální popularita:
+
+
+
+a) Za stojící spec.budovu se přičte k popularitě +1 bod každé kolo.
+
+b) Za kouzlo dobrá nálada se přičte  k popularitě +1 bod každé kolo.
+
+c) Za kouzlo špatna nálada se odečte 2 body od popularity každé kolo.
+
+d) Za případný nedostatek jídla se odečte 1 až 15 bodů každé kolo (podle míry nedostatku jídla).
+
+e) Poté se porovná upravená popularita proti dvojnásobku platů. 
+
+ Pokud je popularita menší, pak se k popularitě přičte 1 bod a desetina rozdílu mezi dvojnásobkem platů a popularitou.
+
+ Pokud je popularita větší, pak se odečte 1 bod a desetina rozdílu mezi dvojnásobkem platů a popularitou.
+
+f) Nakonec se odečte od popularity 15 bodů, pokud není dostatek peněz na platy.
+
+
+
+
+
+
+
+Pro celkovou produktivitu daného řemesla platí následující vztah (všechny hodnoty jsou v procentech 0 - 100):
+
+
+
+	produktivita = (100-pn*0.9)*(1+rb/100)*(1+pv/100)*(1+cechy/100)*(1+kouzlo/100)*(1-negat/100)*(1+se/100+oe/100+me/100)*(1+mapa/100)
+
+
+
+	pn - procento nováčků
+
+	rb - rasový bonus pro dané řemeslo v procentech
+
+	pv - procenta vynalezeno
+
+	cechy - procenta od cechu
+
+	kouzlo - procentuální účinek pracovitosti resp. magického fluida pro mágy a druidy
+
+  negat - procentuální účinek somnambulu resp. stupidity pro mágy a druidy
+
+	se - pokud stojí svatyně ekonomiky (u mágů svatyně magie) je 4 (sm - 8), s upgradem oborové specky 5 (sm - 10), jinak 0
+
+	oe - pokud stojí oltář ekonomiky (u mágů oltář magie) je 2 (om - 4), s upgradem oborové specky 2.5 (om - 5), jinak 0
+
+	me - pokud stojí monument ekonomiky (u mágů monument magie) je 2 (mm - 4), s upgradem oborové specky 2.5 (mm - 5), jinak 0
+
+	mapa - vliv bonusu z mapy gubernátu na danou profesi (jen u upgradu mapa gubernátu)
+
+
+
+
+
+
+Maximum obyvatel:
+
+
+
+	obyvatel = int(pd*(do+vo+ns+kn) + uz*(1+(pp/100)*(2+vd+rb)))
+
+
+do - základní kapacita domů : pro lidi 1, pro enty 2, pro vampíry 4, pro skřety 5, pro ostatní rasy 3
+
+pd - počet domů
+
+vo - 0.5 pokud je postavena vodárna, jinak 0
+
+ns - 1 pokud je postaven norový sytém (pro skřety 2, pro obry pouze 0.5). Pokud není postaven je nula
+
+kn - 1.5 pokud je postavena kanalizace (pro skřety pouze 0.5, pro obry pouze 1). Pokud není postavena je nula
+
+uz - velikost území
+
+vd - 0.5 pokud je postaven vodotok (pro lidi 2.5, pro skřety pouze 0.1). Pokud není postaven je nula
+
+pp - popularita 0-100
+
+rb - rasový bonus na jeden akr (-1 pro enty, -0.5 pro obry, +0.5 pro hobity, +0.9 pro skřety, +4 pro lidi), pro ostatní rasy je 0
+
+
+
+
+
+	
+Cena speciálních budov:
+
+
+
+	cena = pc*(1 + uz/5000) *(1- 1.5*architektura/100)
+
+
+
+	pc - původní cena
+
+	uz - velikost území
+
+	architektura - level výzkumu architektury
+
+V úvodním protektorátu je sleva na speciální budovy 60%. Tato sleva se nevztahuje na Palác změn.
+
+
+
+
+
+
+Cena území:
+
+
+
+cena=((z + x) na 3.5 - z na 3.5) / 600 000
+
+
+
+z .. aktuální země
+
+x .. počet kupovaných zemí
+
+V úvodním protektorátu je sleva na cenu pozemků 60%.
+
+
+
+
+
+
+Level generála (je to trochu složitější, ale platí následovné):
+
+
+
+Rozmezí expů generála na daném levelu:
+
+minimum = ((level - 1) na 4)*100 + 1
+
+maximum = (level na 4)*100
+
+takže generál je na úrovni level, má-li expy v intervalu minimum až maximum včetně
+
+
+
+a velmi přibližně lze říci, že level=int(ctvrtaodmocnina(ex/100))+1
+
+ex - počet zkušeností generála (expů)
+
+
+
+
+
+
+Procenta od cechů (zobrazená v menu Infrastrukturní budovy):
+
+
+
+procenta=int(100*(ce/(pr*0.08+ce+99)))
+
+
+
+int - celá část výrazu v závorce
+
+ce - počet cechů dané profese
+
+pr - počet lidí v dané profesi,
+
+
+
+přičemž však pro výpočet produktivity fungují i desetinné části procent.
+
+
+
+
+
+
+Procenta od univerzit (zobrazená v menu Infrastrukturní budovy):
+
+
+
+procenta=int(100*(un/(pr/3*0.08+un+99)))
+
+
+
+un - počet univerzit
+
+pr - celkový počet lidí ve všech profesích,
+
+
+
+přičemž však pro výpočet produktivity fungují i desetinné části procent.
+
+
+
+
+
+
+Základní efektivita obchodníků (bez cechů, kouzel, bonusů od obchodníků a za vynalezenost):
+
+
+
+zlataky na jednoho=500*z/(z+ob*10)
+
+
+
+z - rozloha včetně obchodních paktů (stav po přepočtu)
+
+ob - počet obchodníků
+
+
+
+
+
+
+Produkce manufaktur:
+
+
+
+p=(z/(z+m*25))*k*(1+2*inženýrství/100)
+
+
+
+p - produkce jedné manufaktury
+
+z - rozloha gubernátu
+
+m - počet manufaktur
+
+k - konstanta : ovocný sad 400, diamantový důl 4000, kamenolom a manové jezírko 40
+
+inženýrství - level výzkumu inženýrství
+
+
+
+
+
+
+Zaškolování (školy a výcvikové prostory):
+
+
+
+p=100/(6-500*s/(z+100*s+99)) + prof
+
+
+
+p - procento nováčků zaškolovaných za tah
+
+z - rozloha gubernátu
+
+s - počet škol nebo výcvikových prostorů
+
+prof - součet dosažených levelů u profesorů v gubernátu
+
+
+
+
+Obrana věží:
+
+
+
+o=x*(1+4*v/(v+400))
+
+
+
+o - obranná síla jedné věže
+
+v - celkový počet věží
+
+x - je u lidí 10, u ostatních 15
+
+
+
+
+Celková obranná síla (bez generálů - platí i pro příspěvek paktářů, tam se ale nepočítají věže, domobrana a legie, obranné budovy se počítají od obránce a ne od paktářů, kouzla se počítají paktářovy vlastní. Počet jednotek se přepočítává podle účinnosti paktu):
+
+
+
+o={ [ (10*h-9*nh)/10*(1+k) + (10*e1-9*en1)/10*(s1+k) + (10*e2-9*en2)/10*(s2+k) + p*(2+k+a)*d + v*(10+nbr)*(1+4*v/(v+400))+ khl*(10*h-9*nh)/(2*h) ] * (1+r/(50+r)) + r*100 } * (1+0,05*dz) * (1+0,07*dh) * (1+0,1*hr) * (1+vo/100) * (1-sl/100) * (1+sa/100+oa/100+ma/100) +le
+
+
+
+o - celková obranná síla
+
+v - celkový počet věží
+
+nbr - u lidí 0 ; u ostatnich 5
+
+k - pokud je postaven klášter dračích mnichů, pak je 1, jinak je 0
+
+h - počet hoplítů
+
+nh - počet nezaškolených hoplítů
+
+khl - pokud je počet hoplítů větší než kapacita věží (tedy h>3*v), pak je rovno podílu kapacity a počtu hoplítů (tedy khl = 3*v/h). V opačn&eacute;m případě je khl = 1
+
+e1 - počet elitních jednotek 1. stupně
+
+en1 - počet nezaškolených elitních jednotek 1. stupně
+
+e2 - počet elitních jednotek 2. stupně
+
+s1 - obranná síla jednotek 1. stupně bez kláštera
+
+en2 - počet nezaškolených elitních jednotek 2. stupně
+
+s2 - obranná síla jednotek 2. stupně bez kláštera
+
+p - počet lidí v profesích + počet zlodějů doma
+
+a - je u entů +1, u obra +0,5, jinak 0
+
+d - je 1, je li zapnutá domobrana, jinak 0
+
+r - počet draků
+
+dz - je 1, stojí-li dračí zeď, jinak 0
+
+dh - je 1, stojí-li dračí hradby, jinak 0
+
+hr - je 1, stojí-li hrad, jinak 0
+
+vo - procenta vojenského štítu
+
+sl - procenta slabosti
+
+sa - pokud stojí svatyně armády je 8 (s upgradem oborové specky 10) jinak 0
+
+oa - pokud stojí oltář armády je 4 (s upgradem oborové specky 5) jinak 0
+
+ma - pokud stojí monument armády je 4 (s upgradem oborové specky 5) jinak 0
+
+le - menší z čísel síly kouzla padlých legií nebo počtu zacvičených mágů
+
+
+
+
+
+
+
+Celková útočná síla (bez generálů, platí i pro příspěvek ve skupinovém útoku, tam se počítají stany od jednotlivých hráčů):
+
+
+
+u={ [ (10*h-9*nh)/10*(1+c) + (10*e1-9*en1)/10*(s1+c) + (10*e2-9*en2)/10*(s2+c) ] * (1+r/(50+r)) + r*100 + s*x } * (1+0,1*vs) * (1+sa/100+oa/100+ma/100)
+
+
+
+u - celková útočná síla
+
+c - pokud je postaveno cvičiště bersekrovství, pak je 1, jinak 0
+
+h - počet hoplítů
+
+nh - počet nezaškolených hoplítů
+
+s - počet válečných strojů
+
+x - síla strojů, základ 5, u lidí 3 (pokud jdou s elite1 tak je síla o 50% větší)
+
+e1 - počet elitních jednotek 1. stupně
+
+en1 - počet nezaškolených elitních jednotek 1. stupně
+
+e2 - počet elitních jednotek 2. stupně
+
+en1 - počet nezaškolených elitních jednotek 2. stupně
+
+s1 - útočná síla jednotek 1. stupně bez cvičiště
+
+s2 - útočná síla jednotek 2. stupně bez cvičiště
+
+r - počet draků
+
+vs - je 1, stojí-li velitelský stan, jinak 0
+
+sa - pokud stojí svatyně armády je 8 (s upgradem oborové specky 10) jinak 0
+
+oa - pokud stojí oltář armády je 4 (s upgradem oborové specky 5) jinak 0
+
+ma - pokud stojí monument armády je 4 (s upgradem oborové specky 5) jinak 0
+
+
+
+
+-->
+
+
+Žold elite 2:
+
+
+
+ž=p*(ú+o)/10
+
+
+p - plat
+
+ú - základní útočná síla E2 dané rasy, bez ohledu zda stojí speciální budova Cvičiště berserkrovství (např. obři 14, džini 6)
+
+o - základní obranná síla E2 dané rasy, bez ohledu zda stojí spec. budova Klášter dračích mnichů (např. hobiti 10, skřeti 0)
+
+ž - žold (elite 1 platy neberou, hopliti základově 0,2x plat , zloději platy neberou)
+
+
+
+
+
+
+
+
+Přispívání kouzel, budov a generálů magické a zlodějské obrany paktářů:
+
+
+
+- magické fluidum a stupidita se berou od paktáře
+
+- antimagický štít a magické hradby se berou od gubernátu, na který je útočeno
+
+- generálové se berou od gubernátu, na který je útočeno, a přispívají ke všem složkám obrany
+
+
+
+
+
+
+Výpočet přírůstku obyvatel:
+
+
+
+zakladni prirustek = volne misto*(lidé v profesích + nezaměstnaní + 0.75 * armáda )/ 3 / celkova kapacita 
+minimálně však 10% volné kapacity, poté se daný přírůstek násobí vlivem všech kouzel (*1.3 za plodnost, *1.1 za štěstí, *0.9 za smůlu, *0.5 za kastraci) a spec.budovou nevěstinec u dračího ocasu *1.25
+ 
+
+
+zakladni ubytek (v %) = (1.0 + prebytecna populace*0.3333333 / kapacitagubu)*100%
+
+(přebytečná populace je záporné číslo)
+
+
+Maximální úbytek je 33% aktuální populace za tah, úbytek se žádnýma kouzlama ani budovama neupravuje.
+
+
+
+
+
+
+Šance na úspěch zlodějské akce:
+
+
+
+Akce ve válce:
+
+pomer útok/obrana = % průchodnost (% odhalení)
+
+0,5 = 0% pruchod = 100% odhaleni
+
+1 = 50% pruchod = 50% odhaleni
+
+1,5 = 95% pruchod = 5% odhaleni
+
+2 = 100% pruchod = 0% odhaleni
+
+Mezi body to roste lineárně. K základní šanci na odhalení se navíc přičítají sekundárky špionáže útočníka a obránce.
+
+
+
+Šance na odhalení při mimovalečné akci (šance na průchodnost je stejná)
+
+útok / obrana = % odhalení
+
+0,5 = 100%
+
+1 = 75%
+
+1,5 = 50%
+
+2 = 25%
+
+2,5 = 0%
+
+Mezi body to roste lineráně. Vždy ale výsledně po úpravách za sekundárky platí minimálně 5% šance na odhalení bez ohledu na převahu útoku.
+
+
+
+
+
+
+
+
+
+Ztráty u zlodějských akcí:
+
+
+
+Průměrné základní ztráty (při podobné síle útoku i obrany) jsou okolo 10% zlodějů. 
+
+ S roustoucí převahou útoku oproti obraně ztráty utočníka klesají (až téměř na 0%) a ztráty obránce rostou (maxima okolo 20%).
+
+ S roustoucí převahou obrany oproti útoku ztráty utočníka rostou (až k hodnotám okolo 20%) a ztráty obránce klesají (až téměř na 0%).
+
+
+
+
+
+
+
+Ztráty u vojenských akcí:
+
+
+
+Průměrné základní ztráty (při podobné síle útoku i obrany) jsou okolo 15% armády. Tyto ztráty jsou ale upravovány efektem mnoha speciálních budov a také sekudárními vlastnostmi generálů (krvelačsnot a sodomie či léčitelství).
+
+ S roustoucí převahou útoku oproti obraně ztráty utočníka klesají (až téměř na 0%) a ztráty obránce rostou (maxima okolo 30%).
+
+ S roustoucí převahou obrany oproti útoku ztráty utočníka rostou (až k hodnotám okolo 30%) a ztráty obránce klesají (až téměř na 0%).
+
+
+
+ Ztráty civilního obyvatelstva jsou 25% tohoto stavu, pokud není zapnutá domobrana. Při zaplé domobraně 50% v případě úspěšné obrany, jinak plné ztráty jako armáda v případě neúspěšné obrany. Na ztráty civilního obyvatelstva mají opět vliv spec.budovy a sekundární vlastnost krvelačnost a sodomie.
+
+
+
+
+
+
+
+
+
+Pokles magie:
+
+
+ 
+bílá magie:
+
+nova = (sila * (0,45 + lvl/200)*(1+s*0,1) - zem/100)
+
+
+
+černá magie:
+
+nova = (sila *(0,6 - lvl/200) - zem/100)
+
+
+
+nova - nová síla kouzla v dalším tahu
+
+sila - aktuální síla kouzla (v případě, že vám nějaký generál s BM seslal kouzlo, tak ho musíte přičíst k této síle)
+
+lvl - nejvyšší level generála se sekundárkou Bílá magie (BM)
+
+zem - rozloha gubernátu
+
+s - je 1 pokud gub je rasa skřet a zároveň má postavenou speciální budovu Tajemství hmoty, jinak je 0
+
+
+
+      
+      
+      
+
+
+      	
+
+
+
+     
+      	
+     	
+
+
+
+Poslední aktualizace: 21.07.2015
+
+

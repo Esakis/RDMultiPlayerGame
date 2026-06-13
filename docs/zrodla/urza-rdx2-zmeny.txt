@@ -1,0 +1,399 @@
+
+
+
+
+  
+  RDX2
+  
+  
+
+
+
+  
+    
+       	
+       	
+       	
+
+
+    
+       	
+      
+  Rozdíly mezi RDX2 a RD2
+
+   -- sédě odstavce ještě nebyly implementovány --
+
+
+
+      
+    (připomínky směřujte k Urzovi)
+
+
+  
+            Snažil jsem se koncipovat celou hru tak, aby byla pokud možno co nejjednodušší pro hráče, kteří si chtějí jen tak klikat, ale zároveň, aby se mohli vyřádit ti, kteří se chtějí zlepšovat a objevovat nové věci. Proto si tedy můžete při pročtení změn všimnout, že pro "řadového klikače" se nemění vlastně nic podstatného (a celkově změn, které se dotknou "řadových klikačů", je minimum) a může zcela pohodlně pokračovat v klikání pouze s tím, co zná z RD2. Vojevůdci a imperátoři však mají možnost bádat nad novými strategiemi a herními možnostmi.
+
+               Chcete-li o čemkoliv mluvit a myslíte-li si, že máte čím přispět, jsem otevřen všem diskusím, ovšem s jedinou výjimkou. Nemá smysl diskutovat o názvech ras! Mnoho hodin jsem již strávil diskutováním s desítkami hráčů, abych zjistil, že na problematiku názvů ras má prakticky každý člověk jiný názor a proto nejde udělat ani žádný "kompromis", neboť každý z nás vychází z jiných fantasy knih (vyslechl jsem i zcela vážně míněné názory o tom, že skřeti by měli být světlá rasa a elfové temná). Při tvorbě ras jsem vycházel především ze svého světa Dračího Doupěte, legendy k MtG a trošku ze Zeměploch. Žádné změny v názvech ras se dělat nebudou, protože se na tom prostě nikdo není schopen dohodnout, každý si myslí něco jiného, tak mi prosím ohledně toho už nic nepište.
+
+               Když budete chtít diskutovat o čemkoliv jiném, než názvech (a párování) ras, napište mi logické argumenty. Argumenty typu "všichni si to myslí" a "každému je jasné" bohužel nepovažuji za dvakrát přesvědčivé. Argument pro to, že GV jsou ještě OK, ale UG jsou děs, už z podstaty nemůže být logický, protože UG lze převést na GV (a tento převod může udělat unášející i majitel generála). Stejně jako oblíbené "mám to spočítané" není argument. Když máte něco spočítané, prosím, pošlete mi místo ujištění raději výpočet. Rozhodně mi ale piště, moc lidí už mě přesvědčilo o tom, že se v něčem mýlím a já kvůli nim udělal změnu!! Všem takovým tímto děkuji a prosím, pomáhejte mi dál.
+
+               Pokud by v čemkoliv byla jakákoliv nejasnost, kontaktujte mě do gubernátu Urza ( na RDX2 ) nebo UrzaX2 ( na RD2 ) nebo na mail urza@rdx2.cz. Když hned do první zprávy napíšete souvisle vše, včetně detailů, ušetříte svůj i můj čas. Než napíšete, vřele doporučuji přečíst si celou tuto stránku do konce; pod každou změnou je v textu kurzívou uveden její důvod. Změny, které byly udělány na základě diskusí s hráči, jsou napsány zeleně (protože mě o něčem přesvědčujete stále a změny přibývají, zelená bude pomáhat těm, kteří už to jednou četli, ve snažší orientaci, kde došlo ke změně).
+
+
+
+
+  Změny pro klikače
+
+  Co se musí hráči nového naučit?
+
+  
+    
+      Odehrávat gubernáty nových ras. Rasy jsou duální, tedy vždy dvojice naprosto stejných, z nichž jedna je světlá, druhá temná. To, jestli budete hrát za světlou či temnou rasu, záleží na Vašem chování, nicméně si s tím nemusíte dělat hlavu, vše monitoruje a hlídá systém, nemusíte pro to dělat vůbec nic.
+
+      Novými rasami sleduji dvě věci. První je přehlednost - místo stávajících mnoha ras, které jsou si podobné jako vejce vejci, jsem vytvořil nových osm, které ale jsou od sebe navzájem výrazně odlišné. Druhá je zajímavost hry - ať má každá rasa něco svého, co žádná jiná nemá, ať je mezi jejich odehrávkami značný rozdíl.
+
+      Děkuji hráčům za odhalení nevyváženosti u entů. Na Vaše připomínky jsem dal entům 85% postih k síle strojů.
+
+
+
+
+    
+      Zvyknout si na trošku jiný rozjezd. Ten se ale bude od toho momentálního lišit jen trošku (vlastě jen v tom, že hráč odehraje více tahů bez obchodních paktů, jinak je rozjez naprosto stejně náročný). Nový start věku bude vypadat následujícím způsobem. První herní den věku bude v reálném čase delší, což znamená, že první dny reálného času nebude žádný přepočet, aby si všichni stihli najít své aliance a podobně. Tento den bude mít každý gubernát 1/111 tahů, které ovšem nepřechází do dalšího dne. Dalšího dne reálného času (tedy po prvním přepočtu) budou mít všechny gubernáty opět 1/111 tahů (bez ohledu na to, kolik před přepočtem odehráli, nicméně mohou být bonusovány časovkami). Z tohoto dne mohou do následujícího přejít nějaké tahy, ale maximálně tolik, aby měl gubernát trojtah (samozřejmě přesný počet tahů v trojtahu závisí na časovkách a rase). Následující den (tedy po dvou přepočtech) skončí úvodní protektorát a je možné válčit.
+
+      Když přijde nový hráč na začátek věku, jen se bude deset dní nudit. Proto je dobré, aby bylo možno začít válčit co nejdříve. Na druhou stranu však beru v potaz, že hodně hráčů momentálního RD2, se baví těmi rozjezdy. RDX2 jim tu možnost dá (místo toho, aby všichni měli už rozjeté guby do začátku), jen to bude trvat méně reálného času (i když tahů bude jako na mnoho normálních dnů). Stejným způsobem začne hru i nový gubernát, který přijde v průběhu věku.
+
+      Původně bylo v plánu rozjezdy vynechat, aby lidé mohli hrát hned a nezdržovalo se to těch 10 dnů, ale byl jsem hráči přesvědčen, že je rozjezdy baví a že je chtějí. Proto jsme je zavedli v této podobě.
+
+
+
+
+  
+  Co se pro hráče změní, aniž by to pro ně znamenalo nutnost učení se novým věcem?
+
+  
+    
+      Není omezen počet multigubernátů. Každý hráč jich může mít, kolik chce, v kolika různých aliancích si přeje. Jejich registrace bude však povinná a bude-li nalezen (i přes toto benevolentní pravidlo) jakýkoliv neregistrovaný multigubernát, budou všechny gubernáty dotyčného hráče bez milosti smazány. Registraci multigubernátu je nutno provést hned první den existence gubernátu!!
+
+      Beztak není možno ve větším měřítku multigubernáty dohledávat a na momentálním eRDéčku z toho mají hráči jen legraci, mnohdy je vidět, že má hráč gubernáty ve více než třech aliancích a ani to nijak nemaskuje, prostě je má všechny registrované a nikdo s tím nic nedělá. O existenci mnohých výjimek na různé redakce, čističe, změny v rd, diplomatické aliance, komunikační gubernáty ani nemluvě.
+
+
+
+
+    
+      Mění se pravidla pro mražení a abdikaci. Je možno si o tom přečíst i něco podrobnějšího.
+
+      Mražení není prostředek k tomu, aby s tím hráč strategizoval a taktizoval ve válečných konfliktech, ale možnost odložit svůj gubernát například před cestou na dovolenou a podobně. A abdikace není prostředek pro škození ostatním a následný útěk ze hry. Bohužel jsou tyto dvě funkce na RD2 využívány ve většině případů k tomu, k čemu ani určeny nebyly.
+
+
+
+
+    
+      Když gubernát vstoupí do hry, má automaticky zapnutý status nováčka. Tímto statutem získává a ztrácí některé herní možnosti. Především nemůže být nijak přepaden ani donucen k válce, pokud sám válčit nechce (může svádět jen souboje s ostatními nováčky a to ještě bez výhod, které poskytují souboje nenováčkům). Může vstupovat pouze do aliancí nováčků a zakládat též jen aliance pro nováčky. Tyto aliance (stejně jako gubernáty nováčků) nebudou zobrazovány ve statistikách (budou mít jen velmi ořezané vlastní statistiky, které budou složit jen k hledání soupeřů na válku). Aliance nováčků nemůže nijak zasáhnout do dění "skutečného" RD-světa. Nemůže s ostatními nenováčky ani svádět souboje. Nemohou samozřejmě končit věk, ani se účastnit žádných dalších akcí pro nenováčky. Mají své vlastní nováčkovské fórum, nemohou psát na imperátorské. Nováčkovský status lze pouze vypnout. Po jeho vypnutí bude gubernát vyloučen z aliance (protože musela být nováčkovská), jeho rozloha se zařízne na 25k (samozřejmě jen když je větší), všichni generálové se zaříznou na 5. úroveň (jen když byla předtím větší) a věda ve všech oborech zůstane maximálně na druhé úrovni (pokud byla předtím větší). Pokud by hráč zapomněl status vypnout a měl by o něco přijít, bude dostatečně (červeně) varován.
+
+      Je-li někdo nováček, může si hrát pod tímto statutem, aby ho nikdo nepřepadal a mohl bojovat s ostatními nováčky. Není však cílem, aby z tohoto programu vycházely do hry silné aliance a gubernáty a ani to, aby tam zkušení hráči na nováčky dělali ramena, takže je bude odrazovat to, že po vstupu do nenováčkovsého světa budou velmi slabí.
+
+
+
+
+    
+      Rychlý trh bude ještě rychlejší, řádově vteřiny, aby se dalo klikat prakticky stejně rychle, jako když má gubernát alchymisty.
+
+      Když si hráči rychlý trh zaplatí, ať z toho něco mají.
+
+      Protože byl až neuvěřitelný ohlas po okamžitém trhu (aby zboží vykupoval systém a nebylo nutno čekat na kupce), vyhověl jsem hráčům a zavedl trh na zcela novém principu. Největší nevýhodou okamžitého trhu podle většiny návrhů by pravděpodobně byl zánik jakékoli "ekonomické rovnováhy" (tedy toho, aby byla cena určena nabídkou a poptávkou). Trh RDX2 je reprezentován "pánem tržiště", což je algoritmus, který má neomezené množství všech surovin i zlata, zná historii hráčských nákupů i prodejů a každý přepočet nastavuje ceny surovin tak, aby co nejvíce vydělal; toho dosahuje tím, že určuje ceny podle toho, jaký byl v minulosti o suroviny zájem (samozřejmě blízká minulost je zohledněna více než daleká). Takto nastavené tržiště nemusí mít žádnou daň z nákupu ani z prodeje (lze na něm spekulovat, ale vždy jen jednou mezi dvěma přepočty), protože stejná nákupní i prodejní cena nelze zneužít. K tomu se váže i to, že speciální budova Průsečík obchodník cest už nadále nemodifikuje daň, ale řídí přístup k tržišti jako takovému, jak tomu bylo v minulosti (bez průsečíku není možno obchodovat vůbec).
+
+
+
+
+    
+      Na většině míst, kde se používá náhodná funkce (random), bylo změněno rozdělení. Konkrétně většinou tam, kde je na RD2 rozdělení náhodných veličin rovnoměrné, je na RDX2 použito rozdělení Simpsonovo či Gaussovo. Řečeno po lopatě - random už nebude taková svině, ale ani nebude tak hodnej. Budou častěji nastávat spíše průměrné případy než extrémní (ať už extrémně dobré nebo extrémně špatné).
+
+      Omezí se moc náhody a naopak se zvětší moc dobrých schopností hráčů. A krom toho se bude snáz matematicky dokazovat, že lidi, kteří tvrdí, že mají v náhodných jevech trvale smůlu, prostě kecaj :o))
+
+	
+  
+
+
+  Změny pro imperátory a vojevůdce
+
+  Co se musí vojevůdci a imperátoři nového naučit?
+
+  
+    
+      Nové paktování. Můžete si přečíst kompletní nové fungování paktů.
+
+      Šlo především o to, aby se nějakým způsobem konečně změnily zaběhnuté strategie. RDX2 dává možnost novým strategiím a taktikám, které si hráči mohou vymýšlet.
+
+      Tady jsem na náměty hráčů změnil jak procenta těch bonusů (+5% zloději, +70% mágové, +25% vojáci), tak i princip, že přesuny jednotek z měst na hranice nejsou platné okamžitě, ale až další den.
+
+
+
+
+    
+      Posílání dračích útoků a počítání s alianční armádou. Aliancní armáda dává alianci k dispozici značnou útočnou sílu, která se sice poměrně těžko buduje a velmí špatně udržuje, nicméně má velkou výhodu v tom, že zůstává (pokud si ji aliance dokáže udržet) velmi značná i poté, co je sama aliance ničena. Jedná se o armádu vznešených draků, kteří se do ní doplňují z jednotlivých gubernátů aliance. Počet draků, které lze do armády za alianci poslat, závisí pouze na alianční slávě (o slávě je psáno níže, sláva=reputace=pověst). Tato závislost je lineární (je to mimochodem jediná věc, která na slávě závisí lineárně). Draci v této armádě bojují - narozdíl od draků v gubernátech - nejen svými pařáty a tlamou, ale tou nejmocnější zbraní, kterou jsou jejich dechy (toto nemá nic společného s kouzlem Dračí Dech). Proto je jejich útok výrazně větší, než útok "běžného" draka. Draci jsou velmi silná stvoření, ale jejich síla velmi záleží na tom, jak moc se překonávají a jak moc silní být chtějí. Jak chce být drak silný, závisí na útoku nejlepšího útočníka aliance. Síla jednoho draka je rovna tisícině útoku gubernátu s největší útočnou silou v alianci (tento stav se počítá z chvíle, kdy byl drak do armády přidán a nemění se). Dračí armáda útočí vždy spolu (lze poslat jen jeden útok), nenechá se vést žádným generálem a nebonusují ji žádné budovy ani další vlivy. Útok dračí armády nebere žádné pozemky, ale když projde, draci pobijou rovnou polovinu všech lidí v profesích i vojáků (a tyto ztráty nejdou zmírnit léčitelstvím). Krom ztrát z prošlého útoku udělá armáda nepříteli ještě standartní ztráty, jako při každém vojenském útoku (a to samozřejmě i v útoku neprošlém). Na tyto ztráty se vztahuje léčitelství. I draci utrpí ztráty jako při normálním vojenském útoku (a počítá se sem i drakobijectví). Je jasné, že založení alianční armády není zadarmo (teď nemyslím kredity, ale že se do ní musejí dávat draci z gubernátů). Ještě dražší je však její údržba. Draci musí jíst a když nemají jídlo, odchází (odejde polovina nenajezených). Kolik liber masa drak denně sežere, závisí na jeho síle (tedy útoku). Za každé čtyři body útoku draka, sežere tento po přepočtu libru masa. Toto maso si draci opatřují sami ze zabitých nepřátel a mohou si ho i skladovat. Příslušníci většiny ras váží kolem 180 liber (kvůli herní logice váží nejméně příslušníci ras s největším zalidněním a naopak). Protože jsou vznešení draci velmi konzervativní a vítají jakékoliv změny jen velmi neradi (skoro jako hráči Red Dragonu), budou z armády (dost zásadně) mizet s odchody i příchody nových gubernátů do aliance. Alianční armádu nelze využít k obraně.
+
+      Důvodem je opět změna taktiky a také prorážení obrovských entích obran. Krmením draků v armádě chci dosáhnout toho, aby byli lidé nuceni něco dělat, bojovat, ne před každou válkou co nejdéle farmit.
+
+      Příklad: Sláva mi umožňuje mít alianční armádu o počtu 1500 draků (což už je mimochodem docela velká sláva). Můj největší útočník má útok 10M, což znamená, že když dám draka do armády, má sílu 10k. Přeleju tam celých 1500 draků (z gubernátů), takže celá armáda má sílu 15M. Pokud nemám na skladě ani libru masa, musím hned ten den zaútočit (jinak polovina mých draků odejde). Cílem útoku je 25k gubernát, ve kterém je 200k lidí. Jeden takový člověk váží 180 liber. Útok projde a 100k lidí si odnesou draci. Mají z nich 18M liber masa. V útoku mi umřelo 100 draků (klasické ztráty v útoku). Zbylo mi tedy 1400 draků, kteří mají útok 14M. Pokud je teď nikam nebudu posílat, těch 18M liber masa jim vydrží na pět dní (do kterých je ale počítán i ten přepočet, ve kterém to maso získali), takže vlastně na čtyři další. Když během toho času někdo mou alianci rozbije a můj největší útočník bude mít sílu jen 1M, moji draci budou mít stále sílu 14M (pokud jsem je mezi tím nikam neposlal umřít).
+
+
+
+
+    
+      Práce s tažením. Tažení dává gubernátu možnost poslat útok až na tři cíle (může i na dva, nebo na jeden - tažení na jeden gubernát se nijak neliší od klasického útoku). Všechny tyto cíle musí být v jedné alianci (tedy nelze posílat na bezalianční). Na žádný z nepřátelských gubernátů nelze v rámci jednoho tažení útočit vícekrát. Útoky v tažení se provedou tak, že Tvá armáda půjde ke svému cíli oklikou přes další nepřátelské gubernáty, kterým také zkusí vzít území. Protože všemi gubernáty, krom posledního, bude jen procházet, nebude mít čas hledat nejúčinnější místo k útoku, navíc musí postupovat určitým směrem a nepřítel toho může využít a nastražit past, ve které napadne Tvé jednotky například v průchodu příkrým údolím. To se projeví tak, že ve všech gubernátech krom posledního, bude mít Tvá armáda pouze poloviční sílu a dvojnásobné ztráty, než by měla při normálním útoku. Tví vojáci tedy pravděpodobně při tažení utrpí značné ztráty a vždy se bere aktuální síla armády proti aktuální obraně. Pokud tedy vyšleš své vojáky na tažení a zvolíš tři gubernáty protivníka, tak síla tvé armády při útoku na třetí gubernát je rovna počáteční síle mínus tvé ztráty, které jsi utrpěl v předchozích dvou útocích. Ale pozor, pokud tvé tažení neprojde přes obranu některého z cílů, tak bude neúspěšné a nebudeš mít žádné uzemní zisky (z žádného cíle)! Můžeš být tedy zastaven v každé ze tří napadených zemí. Výhodou tažení však je, že pokud uspěješ, odneseš si tolik území, jako kdybys zaútočil na všechny tři gubernáty postupně. Pokud se rozhodneš poslat tažení, nemůžou se k Tvému útoku ostatní gubernáty přidávat.
+
+      Tažení dává opět možnost změnit strategii, používat nové taktické možnosti. Pravděpodobně je v této podobě poměrně slabé a útoky na více cílů se nebudou vyplácet. Pokud se tažení nebudou v RDX2 používat, snížím například ztráty nebo zvýším sílu akcí na první cíle. Raději ale uvádím změnu slabou a špatně použitelnou a postupem času ji posílím, než abych dal do hry moc silný mechanismus.
+
+      Původně mělo být tažení silnější, nicméně bylo oslabeno na námitky některých hráčů, kteří se domnívali, že by to bylo moc silné a kazilo to souboje ("férovky").
+
+
+
+
+    
+      Výrazné posílení sekundárních vlastností generálů. Můžete si vše prostudovat podrobně, včetně malé změny v získávání zkušeností.
+
+      Tato změna dá další prostor pro nové stategie založené na nějaké sekundárce, kterou bude mít v dané alianci mnoho generálů.
+
+
+
+
+    
+      Nová zlodějská akce únos generála dává především imperátorům větší možnost diplomatických vyjednávání. Pravidla pro únos generála jsou prakticky stejná jako pro generálovraždu s tím rozdílem, že generál není zabit, ale zajat. Každá aliance bude mít své alianční vězení. Uneseného generála je možno buďto zabít, držet pod zámkem, nebo o něj vyjednávat s jeho majitelem. V žádném případě nelze uneseného generála použít ve svém gubernátu. Podmínky vyjednávání bude hlídat systém (za generály lze požadovat území). Pokud Vám někdo generála unese a Vy nemáte zájem o něj vyjednávat, můžete ho prostě propustit ze svých služeb a on zůstane navždy v nepřátelských kobkách.
+
+      Akce je tu pro zpestření hry a diplomatických jednání.
+
+
+
+
+    
+      Vojevůdci si budou muset zvyknout na bránění své aliance pomocí zlodějů i po dobu farmy. V přepadu půjdou posílat všechny akce, které jsou posílat kdykoli jindy. Na druhou stranu je farma gubernátu snažší (díky rasovým bonusům) a předpokládá se také kratší (díky slávě a dračí armádě se vyplatí hodně bojovat a málo farmit), takže by v tom neměl být takový problém.
+
+      Netvořím hru pro top-light, ale pro širokou veřejnost a nechci zavádět zcela zbytečná omezení. Ať si každý dělá, co chce. Kdo se dokáže bránit, bude silný, kdo se bránit nedokáže, bude slabý. Vzhledem k této a dalším změnám, kteří motivují alianci do bojů, by bylo možná vhodné se zamýšlet, jestli je skutečně nutno na farmu shazovat sílu. Není lepší spíš opravovat vojáky a zloděje s nějakou nahozenou silou, nesyslit u nich zásoby, které potřebují jen mágové? Nechávám na rozmyšlení každému z Vás. Když to začnete dělat všichni, nikdo z Vás nebude v nevýhodě.
+
+
+
+
+    
+      Hrát bez oborových budov a omezení paláce změn. Těmi oborovkami jsou myšleny vůbec oborovky jako takové, nejen placený upgrade. PZ je omezen v použití cenou. Neplatí se za upgrade jako takový, ale za každou změnu. Změna rasy (v kreditech) stojí 10*2^(2+Z), kde Z je počet změn pro daný věk. První změna tedy stojí 40kr, druhá 80kr, třetí 160kr, čtvrtá 320kr, pátá 640kr, šestá 1280kr, sedmá 2560kr, osmá 5120kr, .... Momentální cena změny každého gubernátu je veřejně viditelná.
+
+      Oborové budovy jen zbytečně snižují variabilitu gubernátu, paláce změn mi přijdou zcela nelogické. Navíc není moc hezké, když všichni začínají s jednou rasou, farmí s další a podobně. Na rasovém složení aliance bude teď o to více záležet.
+
+      Původně jsem chtěl PZ zrušit úplně, ale byl jsem hráči přesvědčen, že PZ chtějí. Nechci ale docílit toho, aby PZ sloužil k tomu, že si na každou farmu přehodí hráči rasu na džiny/lichy kvůli vědě (vedlo by to jen k tomu, že by byli méně připraveni na válku a mým cílem skutečně není zrušit "férovkáře", ale naučit je, že musí své aliance bránit). Proto jsem tímto způsobem PZ omezil, že ho normální lidé použíjí tak jednou až dvakrát, velcí nadšenci třikrát, blázni čtyřikrát a dál už do toho nikdo nepůjde.
+
+
+
+
+    
+      Útoky jdou zakládat i bez generálů.
+
+      Tato změna dává předpoklady pro další mechanismus, který chci zprovoznit v budoucnu. Generálové však mají silnější sekundárky.
+
+       Generálové se v útoku nemohou samovolně zranit (tedy zranit bez toho, aby bránil generál se sekundárkou poranění), jako tomu bylo dřív u profesorů a obchodníků.
+
+
+
+
+    
+      Při výpočtu celkové magické síly gubernátu se místo čísla "počet mágů" počítá menší z čísel "počet mágů" a "maximální aktuální kapacita gubernátu minus aktuální počet vedců". Zároveň se při boření domů nestávají z mágů nováčci.
+
+      Smyslem této změny je zrušení tzv. magických boostů, neboť mnoho hráčů za mnou přišlo s tímto požadavkem; a já nemohu nesouhlasit s tím, že boostování mágů možná vypovídá o schopnostech těch několika málo lidí, kteří boost spočítají, ale rozhodně ne řadových klikačů, kteří tupě aplikují návody. Zrušení odcvičování mágů při bourání domků pak samozřejmě postrádá smysl, pročež je zrušeno.
+
+
+
+
+  	
+  Co se pro imperátory a vojevůdce změní, aniž by to pro ně znamenalo nutnost učení se novým věcem?
+
+  
+    
+      Sláva, pověst, reputace, moc.... říkat tomu můžete, jak budete chtít. Jedná se asi o největší změnu. Sláva je rozdělena na světlou a temnou. Hodně světlí i hodně temní hráči jsou VELMI výrazně bonusováni (k síle zlodějů, mágů, vojáků i k farmě). Ti, kteří nejsou ani jedno, ani druhé, nejsou bonusováni vůbec (respektive méně, pokud jsou jen trošku světlí či trošku temní). V rámci slávy jsou též rozlišovány čtyři druhy konfliktů (místo momentálních dvou - přepadu a války). Jedná se o válku, přepad, obrannou válku a rytířský souboj. Válku lze vyhlásit denně od přepočtu do 20 hodin večer (lze ji i opětovat kdykoliv, nebo vyhlásit do T+2, jako je to doposud). Přepad lze vyhlásit kdykoliv, provede se však až o přepočtu. Obrannou válku lze vyhlásit jen tomu, kdo o přepočtu ublížil Vaší alianci (a zároveň jste Vy nikomu neubližovali celý předchozí den nějaký temným způsobem, což znamená přepadem či válkou) nebo Vašemu kamarádovi, který Vás prosí o pomoc (jak se dělá tohle, bude popsáno níže). Souboj lze vyhlásit jen tomu, kdo s tím souhlasí a chce s Vámi bojovat (vyhlásit souboj má mnoho výhod - systém ošetřuje pravidla souboje, generálové získávají o 50% více zkušeností a pokud na sebe aliance skutečně posílají akce, jejich vědci dostávají bonus k vynalézání zkušeností pro generály a výzkumu, čímž nemohou vynalézat více, ale mohou dohnat "ušlý zisk" oproti tomu, kdy je aliance ve farmě). Války a přepady dělají ti zlí, obranné války a souboje ti hodní. Když jste pořád zlí nebo pořád hodní, jste bonusováni. Když to střídáte, o bonus přicházíte. Samozřejmě také záleží na tom, komu ty akce provádíte. Jste-li temní, získáváte více slávy za přepady a války větších aliancí. Když přepadáte nebo válčíte s malýma, skoro nic z toho nemáte. Jste-li světlí, získáváte vždy světlou pověst za rytířské souboje (samozřejmě dostáváte tím větší reputaci, s čím větším soupeřem bojujete). Za obranné války získáváte světlou reputaci jen tehdy, nejste-li v moc velké přesile. Když je Vaše přesila kolem 25%, nezískáváte slávu žádnou a pak postupně, čím jste větší, tím získáváte více temné slávy (tedy se Vaše světlá reputace zmenšuje). Může se samozřejmě stát, že budete bojovat ve více aliancích (například v multiválce). Za tímto účelem existují takzvané "bojové skupiny". Každá aliance je defaultně v bojové skupině, které nese její jméno. Chce-li více aliancí bojovat spolu, zvolí si jednoho vůdce a přejdou do jeho skupiny. Toto jim přidá řadu výhod. V případě jejich útoku na nepřítele to pro ně bude na slávu výhodnější, než kdyby útočili společně z jiných skupin, navíc na sebe mohou v rámci skupiny sesílat bílou magii a využívat své imperátorské stany, paktovače (samozřejmě nejdou uzavírat pakty mezi aliancemi, ale lze paktovat cizí alianci, pokud k tomu dá svolení) a časem bude zavedeno i takzvané shromaždiště, které dá veliteli možnost hromadně posílat armády za ušetření velkého množství času. Navíc má celá skupina právo vyhlašovat obranné války všude tam, kam její velitel. Skupiny však důrazně nedoporučuji udržovat v mimoválečné době. Jste-li v MW, útočí stejně ty strany vzájemně na sebe a započítává se rozloha všech. Jste-li ale mimo MW a jen tak "ve farmě" si držíte skupinu pro nic za nic, jste krásný cíl pro nepřítele, neboť je napadení kohokoliv z Vás bráno jako napadení Vás všech (a tak se to případnému agresorovi vyplatí z hlediska slávy). Jinými slovy, pokud skupina někam útočí, vyplatí se jim to, protože jejich útoky získávají více slávy, než kdyby šli jako samostatné jednotky. Nevyplatí se ovšem, když nic nedělá, protože útoky na ně se vyplatí nepříteli. Vzorce a vztahy pro slávu a pověst jsou všechny tajné a nebudou zveřejněny. Jediné, co zveřejním, je, že sláva není absolutní, nýbrž relativní vzhledem k ostatním aliancím ve hře. To znamená, že čím více je "veřejnost" dobrá/zlá, tím těžší je být hodně dobrý/zlý. Vzhledem k tomu, že tato relativnost je zvlášť pro temné a zvlášť pro světlé, vede celý mechanismus mimo jiné k tomu, že se nemůže stát, že by bylo těžší/lehčí být hodně světlý/temný, protože se porovnáváte s ostatními. Sláva klesá s přibývajícími i ubývajícími členy aliance.
+
+      Sláva má následující efekty. První je, že bojuje proti takzvaným "svačkám". Budete-li útočit na menší aliance, nebudete získávat slávu, ale Vaše území poroste. Být na velké rozloze s malou slávou je to nejhorší, co se Vám může stát. Jste krásným cílem pro všechny. Konflikt s Vámi totiž znamená hodně slávy a zároveň i pozemky, protože Vás může snadno porazit i menší aliance s větší slávou. Když nemáte slávu, je tedy lepší nemít ani pozemky, protože máte alespoň šanci ji získat. Když budete mít moc velkou rozlohu a málo slávy, je naděje na získání další slávy mizivá (dokud o pozemky nepřijdete). Druhým efektem je, že LIGHT aliance se budou muset chovat skutečně jako LIGHT a ne svačit v obrovských přesilách. Dalším efektem je, že se vyplatí všem bojovat delší války. Dnes se hodně "férovek" vzdává celkem hned, protože se raději dají volné útoky. V RDX2 se vyplatí (díky reputaci) vést souboje dlouhé, i když třeba vyhlídky nejsou nejlepší. Obě strany s delším soubojem získávají pořád další a další slávu.
+
+
+
+
+    
+      Věk nebude ukončen stavbou PPSky. O jeho konec se povedou boje prakticky už od začátku a nikdo neví, jak dlouho takové boje potrvají, délka věku je otevřena. K vyhrání věku je třeba vybojovat několik úrovní různých předmětů (které budou hlídat aliance s umělou inteligencí). O tyto předměty mohou bojovat i hráčské aliance mezi sebou v multiválkách. Do posledního stupně však postupuje jen jedna aliance, která tam svede souboj se strážci astrálních sfér. Do tohoto boje nebude moci nikdo další zasahovat a tak bude úplný konec věku válka jeden na jednoho.
+
+      Momentální systém konce věku většině lidí nevyhovuje. A stejně jako vnímám jakožto neférové, že v průběhu věku mají v RD2 všechny výhody "férovkáři" a hra je více pro ně, beru jako nefér i to, že ukončení věku je pouze multiválka a "férovkáři" nemohou předvést svoje umění. Teď bude tedy vyhrávat aliance, která napřed vyhraje MW (nebo se jí vyhne) a poté ještě souboj jeden proti jednomu.
+
+
+
+
+    
+      Zrušení všech barvených omezení (žádné žluté, zelené a jiné války). Ze všech konfliktů jsou plné zisky pozemků. Z přepadů také.
+
+      Momentální systém omezení je velmi svazující. Žlutá válka stejně svačení moc nebrání, protože přepad aliance se 70% mocnosti se též většinou nemá jak bránit. Jen to omezuje hráče. Proto svačení omezuji pověstí. Myslím, že není cesta nastavit systém, ve kterém se v principu vyplatí útočit na menší (což RD2 je - člověku se reálně vyplatí svačit malé, není to žádné riziko) a pak zavádět mnoho složitých omezení, které tento princip nějak obrací. Raději vytvořím systém, který rovnou sám o sobě bonusuje aliance, které útočí na větší; pak nejsou žádná omezení nutná.
+
+
+
+
+    
+      Ruší se zákaz útočení moc velkých gubernátů na moc malé a naopak.
+
+      Význam tohoto omezení je naprosto nejasný. Historicky pochází ze vzorce, podle kterého byly zisky z útoků modifikovány rozlohou útočníků a obránců a tehdy dávalo smysl, protože z 5x menšího gubu už byly zisky nulové. Vzorec se časem změnil, omezení zůstalo a nyní dělá víc škody než užitku.
+
+
+
+
+    
+      Mění se pravidlo o maximálním růstu aliancí a gubernátů. Gubernát sice může vyrůst maximálně o 30% za přepočet, ale z kasy může získat dalších 30% a navíc, pokud všechny gubernáty dosáhnou svého maxima, hlína v kase se neztratí, ale přechází do dalšího dne (nicméně tento stav je vidět i zvenku).
+
+      Nechci nikomu brát hlínu, kterou si dobyje.
+
+
+
+
+    
+      Místo odevzdávání volných útoků lze rovnou předat hlínu z jedné aliance do druhé. Tyto transakce jsou samozřejmě veřejně viditelné. Každému gubernátu, z kterého touto cestou odejde byť jediný akr, klesne popularita na nulu.
+
+      S volnými útoky jsou i tak jen problémy a výsledek je naprosto stejný, jako když to lidé předávají rovnou. Není důvod, proč tohle nepovolit.
+
+      Lighťáci mě ukecali, ač tyhle volné útoky a vzdávání se fakt rád nemám :o)
+
+
+
+
+      Gubernát může kdykoliv od přepočtu do 20 hodin opustit alianci, založit jinou, uzavírat pakty, posílat akce, ať už vešel do nové aliance kdykoliv.
+
+      Vzhledem k tomu, že jsou stejně všude plné zisky a personální změny penalizují alianci na sláve i dračí armádě, nemusím vytvářet další umělá omezení o vstupech do aliance, ani počítat žádný PPS rating.
+
+
+
+
+    
+      Maximální zranění generála je nelimitované. Zranění se prostě sčítají a nemají žádný desetidenní limit. Mohou se nasčítat kamkoliv. Nicméně v každé fázi jde poranit generála jen jednou. To znamená, že ve zlodějské fázi lze ranit každého generála max na +4 dny. V magické fázi by to teoreticky šlo taky, ale neexistuje takové kouzlo. A konečně ve vojenské fázi to lze opět zopakovat a přidat zranění +4. Tato zranění se ovšem sčítají, tedy pokud je generál řekněme už na 4 dny zraněn, znovu projdou zloději, může být zraněn na další +4, takže bude celkem poraněn na 8 dní. Ve vojenské fázi může sice schytat zranění další, ale není možné během jedné fáze přidat generálovi zranění na víc než +4.
+
+      Další zcela zbytečné omezení. Když si někdo nechá poranit generály tolikrát za sebou, je to jeho problém.
+
+
+
+
+  	
+
+
+  Administrativní změny
+
+  
+    
+      Administrátoři a moderátoři hry budou placení a anonymní. Toto neplatí o tvůrcích (stejně nás už povětšinou znáte a navíc s Vámi vedeme diskuse, což se pohodlně nedá dělat anonymně). Administrátoři mají přísně zakázáno hru hrát. Nábor a vyhazování administrátorů i moderátorů fór je čistě interní záležitostí realizačního týmu, který se z ní zodpovídá pouze majitelům celého projektu a nikomu jinému (zejména pak hráčům) o tom nebudou podávány žádná informace. O tom, kdo byl-nebyl-je-není-bude-nebude administrátorem či moderátorem, neposkytuje realizační tým hráčům žádné informace (poskytne-li tyto informace někdo jiný, realizační tým je nepotvrdí ani nevyvrátí).
+
+      Za tímto opatřením stojí snaha o co největší objektivitu, nezaujatost, ale i schopnosti realizačního týmu.
+
+
+
+
+    
+      Budou zavedeny (za poplatek) simulátory klikání gubernátu, paktů a za větší poplatek i přepočtu.
+
+      Toto pomůže nováčkům při zkoumání zákonitostí hry. Též to bude dobré pro adaptaci starších hráčů do RDX2.
+
+
+
+
+
+      Fóra nebudou moderována tak striktně, ale hráči dostanou možnost moderovat fóra sami tím, že budou moci filtrovat zprávy od libovolných uživatelů a také podle témat. Tímto si hráči budou filtrovat hádky a příspěvky k tématu, které je ale nezajímají (typickým příkladem je hádka dvou lidí na 80 příspěvků). Tapetování, sprosťárny, nadávání i evidentní spam (takový ten cílený, kdy se probírá, jak se kdo opil na fórech, kde to zcela evidentně nemá co dělat) moderovány však budou (a to nejspíše na všech veřejných fórech). Celkově budou fóra trochu předělaná, ale jejich základní struktura zůstane stejná, neboť jsou s nimi skoro všichni spokojeni.
+
+      S čističi je obecná nespokojenost, velmi často mažou příspěvky dle jejich obsahu, nikoliv formy. Proto budou mít hráči svobodu projevu, avšak nikdo nebude nucen jejich zprávy číst (vyfiltruje si je). Co se týče tapet, vulgarit a podobně, na to budou dohlížet moderátoři fór, nicméně jen v těch nejkřiklavějších případech.
+
+
+
+ --!>
+    
+      Bude se velmi dbát na vyjadřování hráčů i na jména jejich gubernátů, aby byly v mezích slušnosti. Nadávky nebudou tolerovány, výhružky typu "rozbiju ti hubu v reálu" budou postihovány velmi tvrdě. Sprostá mluva (i v názvech gubů) bude také trestána o mnoho výrazněji než doposud (za slova typu idiot a blbeček se Vám nejspíš nic moc nestane, ale kdo hodlá používat ve své mluvě různé opravdu sprostá slova, riskuje až smazání gubernátu). Rasové, národnostní, náboženské a jiné nevraživosti vůči nějakým etnickým menšinám nedoporučujeme hráčům vůbec zkoušet.
+
+      Tuto změnu snad není třeba vysvětlovat a zdůvodňovat .
+
+
+
+
+    
+      Dojde k velmi zásadnímu rozšíření statistik (budou statistiky skoro na všechno).
+
+      Hráči moc rádi soutěží. A kdo ne, tomu rozhodně statistiky neublíží.
+
+
+
+
+    
+      Prodlouží se názvy aliancí a gubernátů (hypoteticky není problém s libovolně dlouhým jménem v systému, jsme však omezeni tím, že je nutno jména zobrazovat).
+
+      Aby se mohl každý - v mezích slušnosti - vyřádit.
+
+
+
+
+    
+      Bude možno vyhledávat aliance i gubernáty jen podle částí názvů.
+
+      Pro snažší orientaci.
+
+
+
+	
+    
+      Přibudou nováčkovské questy, které jim budou pomáhat pochopit rozjíždění gubernátu a začátky hry (questy typu "postav hospodu", "postav nevěstinec", "zvyš popularitu na 100", "sešli na sebe pracovitost", "nazbroj na poměr 1:100", "dobyj nepřítele jedním útokem", "zabij nepříteli generála", ....).
+
+      Pomohou nováčkům s rozjezdem. Nováčci budou vědět, na co se zeptat, když to neví. Pokud nováček neví, že existují specky, těžko se někoho zeptá, jak se staví hospoda. Pokud nováček bude muset zvýšit popularitu, je větší šance, že zjistí (krom toho jak se to dělá), k čemu slouží popularita. Když nováček zabije generála nepříteli, pochopí, že je to normální akce a lidi možná přestanou hysterčit.
+
+
+
+
+  
+
+
+  Změny do vzdálenější budoucnosti ....
+
+  
+    .... zatím neuvádím všechny, chci si nechat většinu pro sebe, abych Vás mohl stále překvapovat. Ale pár jich zveřejním, tak na chuť ....
+
+
+  
+    
+      Časem (nejspíš další věky) bude zavedeno shromaždiště, které bude sloužit k urychlení vedení MW třeba na desetinu. Též bude zpoplatněno (opravdu hodně draze).
+
+
+    
+      Do hry přibudou různé předměty a virtuální postavy, které budou aliancím přidávat roztodivné bonusy a půjde o ně bojovat.
+
+
+    
+      Krom konce věku budou ještě další boje pro určité skupiny lidí o různé další významné strategické body (k tomuto se nebudu zatím nijak víc rozepisovat).
+
+
+    
+      Na různé věky budou výrazné změny. Když bude "věk zlodějů", tak budou SKUTEČNĚ HODNĚ posíleni zloděje (a třeba přidány další akce), když bude například "věk trpaslíků", budou SKUTEČNĚ HODNĚ posíleni trpaslíci a tak dále. Každý věk se budou dělat poměrně zajímavé změny, které se zas po skončení věku zruší. Hráči nebudou hrát pořád dokola totéž, hra bude dynamická.
+
+
+    
+      Bude možnost plnit obrovské questy, o které budou bojovat aliance, které budou mít zájem (toto nemá nic společného s questy pro nováčky).
+
+
+    
+      Pokud bude problém s přílišným škozením pomocí UG a VG (nevidím, proč by to měl být problém, ale kdyby náhodou), bude zaveden generální štáb, ze kterého půjdou tahat nástupci mrtvých generálů, kteří budou mít něco jako cca poloviční level a stejnou primárku i sekundárku.
+
+
+    
+      Budou zavedeny takzvané "duely". To budou simulace válek nebo klikání gubernátů (kdo je lepší).
+
+
+  
+
+
+  
+            To by snad mělo být vše. Pokud někdo víte o nějaké další změně v RDX2, o které se mluvilo na fórech nebo v diskusích na blogu, prosím, napište mi to. Je klidně možné, že jsem na něco zapomněl.
+
+
+  	
+      	
+
+
+    
+       	
+       	
+       	
+
+
+  
+
+

@@ -1,0 +1,427 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    		 
+				
+					
+					
+ 		
+ 		 	
+
+
+				
+					
+			       Mages are able to memorize only a limited amount of techniques to transform manna into pure energy(also known as 'casting a spell'). Therefore, ages ago, the Masters of Magic have gathered all their knowledge in special scrolls called 'Spellbooks' dividing them according to the type of energy produced by the spell. Throughout centuries some of the gestures and words needed to cast spells were forgotten or stolen and lost forever, thus, the magic today is weaker than the one known by our ancestors. The races have different magical capabilities, so the number of Spellbooks owned by them differs. The table below shows how many Spellbooks each race can posses during the start of the game.
+
+
+					Number of spellbooks according to race
+	
+
+
+				
+					
+					
+				
+				
+					
+					Race	
+					
+					Number of Spellbooks	
+
+
+				
+					
+					genies 	
+					
+					5	
+
+
+				
+					
+					elves	
+					
+					4	
+
+
+				
+					
+					necromants 	
+					
+					4	
+
+
+				
+					
+					humans	
+					
+					3	
+
+
+				
+					
+					gnoms	
+					
+					3	
+
+
+				
+					
+					br-ougs	
+					
+					3	
+
+
+				
+					
+					dwarves 	
+					
+					1	
+
+
+				
+					
+					hobbits	
+					
+					1	
+
+
+				
+					
+					goblins	
+					
+					1	
+
+
+				
+					
+					giants	
+					
+					1	
+
+
+				
+				
+				
+					 	
+
+
+				
+					
+					       You decide which Spellbook(s) your Kingdom should have. Therefore, it is essential for you to study the effects of each spell carefully and make the right choice. Although, changing a previously selected Spellbook is possible, the costs of this action are tremendous - you can only cast the basic spells for the number of turns equal to your Kingdom`s age (thus, not more than 40 turns). After your citizens build the Special Building : Magical Palace, you gain access to an extra Spellbook (except Genies - they have all 5 at the beginning of the game) - you can chose it in the 'Magic' menu. The table below shows which spell is placed in which Spellbook.
+
+ 	
+
+
+				
+					
+
+			
+			
+				
+					
+						TSpell-board (divided by Spellbooks)
+
+
+					
+
+
+			
+			
+			 
+			
+			
+			
+				
+				Basic spells	
+				
+				1.Book of Power	
+				
+				2.Book of Earth	
+				
+				3.Book of Fire	
+				
+				4.Book of Wind	
+				
+				5.Book of Mystics	
+
+
+			
+				
+				Eagle's Eye	
+				
+				 Anti-magical Shield	
+				
+				 Fertility	
+				 
+				 Bad Mood	
+				
+				 Destroy Supplies	
+				 
+				 Sleepwalking	
+
+
+			
+				
+				Good Mood	
+				
+				 Military Shield	
+				
+				 Earthquake	
+				 
+				 Weakness	
+				 
+				 Hurricane	
+				
+				 Stupidity	
+
+
+			
+				
+				Dispel Magic	
+				
+				 Fortune	
+				 
+				Locusts	
+				
+				 Fiery Rainfall	
+				
+				 Burn Thieves	
+				 
+				 Magical Fluidum	
+
+
+			
+				
+				Diligence	
+				
+				 Magic Mirror	
+				 
+				Plague	
+				 
+				 Misfortune	
+				 
+				 Imps	
+				 
+				 Castration	
+
+
+			
+				
+				Mannamorphosis	
+
+
+			
+				
+				Fallen Legions	
+
+
+			
+				
+				Doom of Fallen Legions	
+
+
+			
+				
+				Summon Dragon	
+
+
+			
+				
+				Dragon Breath	
+
+
+			
+			
+			
+					 	
+
+
+				
+					
+			
+			       The full description of each spell can be found in the 'Magic' section of this manual. If your race has a limited number of Spellbooks we suggest choosing Spellbook number 1 (Power) and/or 5 (Mystics).
+
+	
+
+
+				
+
+
+
+
+			
+			
+			
+				
+				
+					
+					
+				
+				
+					
+					
+
+
+			
+			
+
+    	Ostatnia aktualizacja: 2007-02-24 20:11:35
+
+					

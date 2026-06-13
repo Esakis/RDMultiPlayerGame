@@ -1,0 +1,1024 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+
+
+
+
+
+
+Comparison of magical power of all races:
+
+	
+
+	
+		
+		
+		Nr	
+		
+		
+		Race	
+		
+		
+		Power(%)	
+
+
+	
+		
+		1	
+		
+		
+		Genies	
+		
+		100,00%	
+
+
+	
+		
+		2	
+		
+		
+		Br-Ougs	
+		
+		96,25%	
+
+
+	
+		
+		3	
+		
+		
+		Elves	
+		
+		94,28%	
+
+
+	
+		
+		4	
+		
+		
+		Nekromants	
+		
+		91,67%	
+
+
+	
+		
+		5	
+		
+		
+		Gnomes	
+		
+		90,54%	
+
+
+	
+		
+		6	
+		
+		
+		Humans	
+		
+		89,00%	
+
+
+	
+		
+		7	
+		
+		
+		Dwarves	
+		
+		70,83%	
+
+
+	
+		
+		8	
+		
+		
+		Goblins	
+		
+		66,67%	
+
+
+	
+		
+		9	
+		
+		
+		Giants	
+		
+		66,21%	
+
+
+	
+		
+		10	
+		
+		
+		Hobbits	
+		
+		66,02%	
+
+
+
+
+
+
+
+
+	
+
+	
+		
+		 	
+		
+		
+		Humans	
+		
+		
+		Gnomes	
+		
+		
+		Elfy	
+		
+		
+		Hobbits	
+		
+		
+		Dwarves	
+
+
+	
+		Optimum (power)	
+		3 224 736	
+		3 280 708	
+		3 416 144	
+		2 392 275	
+		2 566 604	
+
+
+	
+		
+		Power (%)	
+				
+		89,00%	
+		90,54%	
+		94,28%	
+		66,02%	
+		70,83%	
+		
+		
+		
+
+
+	
+		
+		Houses (%)	
+		
+		
+		50,07%	
+		
+		
+		54,85%	
+		
+		
+		52,18%	
+		
+		
+		48,57%	
+		
+		
+		51,15%	
+
+
+	
+		
+		Guilds (%)	
+		
+		
+		33,04%	
+		
+		
+		27,23%	
+		
+		
+		33,37%	
+		
+		
+		33,38%	
+		
+		
+		33,38%	
+
+
+	
+		
+		Universities (%)	
+		
+		
+		44,84%	
+		
+		
+		41,96%	
+		
+		
+		47,49%	
+		
+		
+		47,51%	
+		
+		
+		47,50%	
+
+
+	
+		
+		55% Houses*	
+		
+		
+		3 196 074	
+		
+		
+		3 280 700	
+		
+		
+		3 413 127	
+		
+		
+		2 382 736	
+		
+		
+		2 562 529	
+
+
+	
+		
+		difference from optimum 
+		(%)	
+		
+		
+		0,89%	
+		
+		
+		0,00%	
+		
+		
+		0,09%	
+		
+		
+		0,40%	
+		
+		
+		0,16%	
+
+
+	
+		
+		60% Houses**	
+		
+		
+		3 168 339	
+		
+		
+		3 271 542	
+		
+		
+		3 392 796	
+		
+		
+		2 361 934	
+		
+		
+		2 544 941	
+
+
+	
+		
+		difference from optimum
+		(%)	
+		
+		
+		1,75%	
+		
+		
+		0,28%	
+		
+		
+		0,68%	
+		
+		
+		1,27%	
+		
+		
+		0,84%	
+
+
+	
+		
+		65% Houses***	
+		
+		
+		3 124 720	
+		
+		
+		3 245 217	
+		
+		
+		3 353 007	
+		
+		
+		2 329 220	
+		
+		
+		2 513 233	
+
+
+	
+		
+		difference from optimum
+		(%)	
+		
+		
+		3,10%	
+		
+		
+		1,08%	
+		
+		
+		1,85%	
+		
+		
+		2,64%	
+		
+		
+		2,08%	
+
+
+	
+		
+		70% Houses****	
+		
+		
+		3 068 008	
+		
+		
+		3 201 881	
+		
+		
+		3 293 454	
+		
+		
+		2 284 437	
+		
+		
+		2 467 194	
+
+
+	
+		
+		difference from optimum
+		(%)	
+		
+		
+		4,86%	
+		
+		
+		2,40%	
+		
+		
+		3,59%	
+		
+		
+		4,51%	
+		
+		
+		3,87%	
+
+
+	
+		
+		75% Houses*****	
+		
+		
+		2 989 043	
+		
+		
+		3 141 748	
+		
+		
+		3 213 890	
+		
+		
+		2 227 463	
+		
+		
+		2 406 655	
+
+
+	
+		
+		difference from optimum
+		(%)	
+		
+		
+		7,31%	
+		
+		
+		4,24%	
+		
+		
+		5,92%	
+		
+		
+		6,89%	
+		
+		
+		6,23%	
+
+
+	
+		
+		80% Houses******	
+		
+		
+		2 896 726	
+		
+		
+		3 065 091	
+		
+		
+		3 114 148	
+		
+		
+		2 158 225	
+		
+		
+		2 331 505	
+
+
+
+
+
+
+
+	
+
+	
+		
+		
+		 	
+		
+		
+		Genies	
+		
+		
+		Goblins	
+		
+		
+		Nekromants	
+		
+		
+		Giants	
+		
+		
+		Br-Ougs	
+
+
+	
+		
+		Optimum (power)	
+		
+		
+		3 623 440	
+		
+		
+		2 415 627	
+		
+		
+		3 321 487	
+		
+		
+		2 399 048	
+		
+		
+		3 487 422	
+
+
+	
+		
+		Power (%)	
+		
+		
+		100,00%	
+		
+		
+		66,67%	
+		
+		
+		91,67%	
+		
+		
+		66,21%	
+		
+		
+		96,25%	
+
+
+	
+		
+		Houses (%)	
+		
+		
+		51,15%	
+		
+		
+		51,13%	
+		
+		
+		51,14%	
+		
+		
+		51,31%	
+		
+		
+		0,22%	
+
+
+	
+		
+		Guilds (%)	
+		
+		
+		33,37%	
+		
+		
+		33,39%	
+		
+		
+		33,38%	
+		
+		
+		37,94%	
+		
+		
+		43,18%	
+
+
+	
+		
+		Universities (%)	
+		
+		
+		47,50%	
+		
+		
+		47,51%	
+		
+		
+		47,51%	
+		
+		
+		51,51%	
+		
+		
+		56,06%	
+
+
+	
+		
+		55% Houses*	
+		
+		
+		3 617 689	
+		
+		
+		2 411 792	
+		
+		
+		3 316 215	
+		
+		
+		2 395 178	
+		
+		
+		3 485 166	
+
+
+	
+		
+		difference from optimum 
+		(%)	
+		
+		
+		0,16%	
+		
+		
+		0,16%	
+		
+		
+		0,16%	
+		
+		
+		0,16%	
+		
+		
+		0,06%	
+
+
+	
+		
+		60% Houses**	
+		
+		
+		3 592 858	
+		
+		
+		2 395 239	
+		
+		
+		3 293 453	
+		
+		
+		2 377 314	
+		
+		
+		3 477 796	
+
+
+	
+		
+		difference from optimum (%)
+		
+		
+		0,84%	
+		
+		
+		0,84%	
+		
+		
+		0,84%	
+		
+		
+		0,91%	
+		
+		
+		0,28%	
+
+
+	
+		
+		65% Houses***	
+		
+		
+		3 548 094	
+		
+		
+		2 365 396	
+		
+		
+		3 252 420	
+		
+		
+		2 344 403	
+		
+		
+		3 465 140	
+
+
+	
+		
+		difference from optimum
+		(%)	
+		
+		
+		2,08%	
+		
+		
+		2,08%	
+		
+		
+		2,08%	
+		
+		
+		2,28%	
+		
+		
+		0,64%	
+
+
+	
+		
+		70% Houses****	
+		
+		
+		3 483 097	
+		
+		
+		2 322 065	
+		
+		
+		3 192 839	
+		
+		
+		2 295 879	
+		
+		
+		3 447 027	
+
+
+	
+		
+		difference from optimum
+		(%)	
+		
+		
+		3,87%	
+		
+		
+		3,87%	
+		
+		
+		3,87%	
+		
+		
+		4,30%	
+		
+		
+		6,28%	
+
+
+	
+		
+		75% Houses*****	
+		
+		
+		3 397 630	
+		
+		
+		2 265 087	
+		
+		
+		3 114 494	
+		
+		
+		2 231 205	
+		
+		
+		3 268 320	
+
+
+	
+		
+		difference from optimum (%)
+		
+		
+		6,23%	
+		
+		
+		6,23%	
+		
+		
+		6,23%	
+		
+		
+		7,00%	
+		
+		
+		11,57%	
+
+
+	
+		
+		80% Houses******	
+		
+		
+		3 291 537	
+		
+		
+		2 194 358	
+		
+		
+		3 017 242	
+		
+		
+		2 148 885	
+		
+		
+		3 083 885	
+
+
+
+
+
+
+
+Oznaczenia:
+
+
+* - for Br-Ougs 5% houses
+
+
+** - for Br-Ougs 10% houses
+
+
+*** - for Br-Ougs 15% houses
+
+	
+	**** - for Br-Ougs 20% houses
+
+	
+	***** - for Br-Ougs 45% houses
+
+	
+	****** - for Br-Ougs 60% houses
+
+
+Principles:
+
+a) all Kingdoms have 100 000 Acres
+
+b) 
+no Generals Scientists in Governs
+
+c) all race bonuses and Special Buildings are calculated
+
+d) 
+Science Points production is 2,1*land_size (citizens employed to produce those Science Points are not calculated)
+
+e) all values are rounded up to two numbers after coma.
+
+
+
+ 
+ 
+	
+ 
+	
+		
+
+
+
+    	Ostatnia aktualizacja: 2006-09-28 18:17:43
+
+					

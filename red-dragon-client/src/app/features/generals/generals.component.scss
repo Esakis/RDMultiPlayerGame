@@ -1,0 +1,47 @@
+.game-panel {
+  padding: 16px;
+  color: #e8d5b0;
+
+  .panel-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #d9542b;
+
+    .title-icon { height: 42px; }
+  }
+}
+
+.rd-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  font-size: 13px;
+
+  th, td {
+    border: 1px solid #5a3a1a;
+    padding: 5px 8px;
+    text-align: left;
+  }
+
+  th { background: rgba(90, 40, 20, 0.5); color: #c9a86a; }
+  tr:nth-child(even) { background: rgba(0, 0, 0, 0.15); }
+
+  .g-name { font-weight: bold; }
+  .num { text-align: right; }
+
+  .btn-dismiss {
+    background: linear-gradient(#5a1208, #3a0c04);
+    color: #f0e0c0;
+    border: 1px solid #8a5a3a;
+    padding: 3px 10px;
+    cursor: pointer;
+
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:not(:disabled):hover { border-color: #d9542b; }
+  }
+}
+
+.info-msg { color: #8ed98e; margin: 8px 0; }
+.error-msg { color: #ff7b6b; margin: 8px 0; }
+.hint { font-style: italic; color: #a08a60; }

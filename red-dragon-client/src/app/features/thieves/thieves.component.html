@@ -1,0 +1,46 @@
+<div class="game-panel">
+  <h2 class="panel-title">
+    <img src="assets/img/role/zlodziej.png" alt="Złodziej" class="title-icon">
+    Złodzieje
+  </h2>
+
+  <div class="info-msg" *ngIf="message">{{ message }}</div>
+  <div class="error-msg" *ngIf="error">{{ error }}</div>
+  <div class="loading" *ngIf="loading">Wczytywanie akcji...</div>
+
+  <p class="hint">
+    Akcje złodziejskie wykonują się podczas przeliczenia (5:00). Szansa powodzenia
+    zależy od stosunku Twoich złodziei do złodziei broniących cel.
+  </p>
+
+  <table class="rd-table">
+    <thead>
+      <tr><th></th><th>Akcja</th><th>Opis</th><th>Min. złodziei</th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of actions" [class.selected]="a === selectedAction" (click)="select(a)">
+        <td><input type="radio" name="action" [checked]="a === selectedAction"></td>
+        <td class="action-name">{{ a.displayName }}</td>
+        <td>{{ a.description }}</td>
+        <td class="num">{{ a.thievesRequired }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="send-form">
+    <label>
+      Cel:
+      <select [(ngModel)]="targetId">
+        <option [ngValue]="undefined">— wybierz księstwo —</option>
+        <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }} ({{ k.land }} akrów)</option>
+      </select>
+    </label>
+    <label>
+      Liczba złodziei:
+      <input type="number" [(ngModel)]="thieves" min="1">
+    </label>
+    <button class="btn-send" (click)="send()" [disabled]="!selectedAction || !targetId">
+      Wyślij złodziei
+    </button>
+  </div>
+</div>

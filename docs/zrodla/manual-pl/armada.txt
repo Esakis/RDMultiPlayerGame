@@ -1,0 +1,613 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+ 
+		
+			
+			
+ 
+
+
+			 	
+
+
+		
+			
+			
+ 
+      Army is the most important mobile unit in Red Dragon. It allows you to conquer new territories. The Army menu gives you an insight into your army : number of troops at home, their stats, possibility of training new troops are shown here.
+
+ 	
+  
+ 			
+
+
+		
+			 
+			
+ Army's status
+
+
+ 
+ 	
+
+
+			 	
+
+
+		
+			
+			
+ 
+      At the top of the screen you can check your present funds, the amount of weapons and the number of unemployed citizens in your govern. Below is the list of your military units. Next to each, you have it's name, attack () and defence (). You can increase the defence and attack stats by building Special Buildings (Bersekers' Camp, Dragon Monks monastery). Underneath the unit's picture is shown. Under it, you can check the cost of training one unit. The amount of each unit shows only how many units are present in your Govern. Units sent to attack are not shown here. In brackets you can see the percentage of novice troops. Each turn 1/6 of novice troops become trained. If you have built any training areas or you have generals Professors present in your Kingdom this ratio is higher.	
+
+
+		
+			
+			
+ 
+
+      Underneath each unit is a textbox where you type in the number of units you wish to disband or train. Below (given in brackets) is the maximum number of units you can train with present funds. If you type in a greater number than this, only the maximum number of units are trained. If you train multiple unit types, the lowest level units will be trained first.
+ 	
+  
+ 			
+
+
+		
+			
+
+
+			
+			
+ Military unit
+
+
+ 
+ 	
+
+
+			 	
+
+
+		
+			
+			
+ 
+      At the bottom of the screen there are 3 checkboxes:
+
+- train hoplites to Elite 1 - if you have Special Buildings Barracks and Altair of Initiation built, every turn, 18% of hoplites are trained to Elite 1 units. However, if you do not wish to train them to E1 units, by unchecking this checkbox you turn this option off.
+
+- train Elite 1 units to Elite 2 units - if you have Special Building Military Academy built 5% of E1 troops become Elite 2 units each turn. However, if you do not wish to train E1 units to E2 units, by unchecking this checkbox you turn this option off.
+
+- Call Militia - if you have the Special Building Militia built, your citizens protect themselves from enemy attacks. However, you must keep in mind that some of them will die. Dragons, Special Buildings and spells influence Militia power. Militia does not work through pacts.
+
+
+      Using the 'Recruit' and 'Dismiss' buttons you confirm the typed number of troops to be trained of disbanded from your army. If you disband any soldiers the novice units leave your army first. You get no weapons or money back. When you hire new troops they become novice units, with 10% of the strength of fully trained units. Each turn, the percentage, determined by training grounds and Generals Professors, of novice troops are trained. Not all units can be created by hiring them in this menu. You can not train Dragons nor War Machines.
+ 	
+  
+ 			
+
+
+		
+			
+			
+  
+ 
+ 
+  	
+
+
+		
+			
+ 
+ 
+ 
+ 
+      Every race has two unique military units. The rest is shared by all the races.
+
+
+
+
+
+ Units shared by all races:
+
+
+
+
+
+
+ 
+Hoplites : the weakest unit in the game. They have only one point in attack and defence. They are, however, essential to war machines upkeep. If you leave your hoplites at home and have the right number of defensive towers, their defence stat increases. Up to 3 hoplites can hide in one defensive tower. While in towers, hoplites have an extra +5 defence. You do not have to send hoplites to defensive towers - if they are at home they do it automatically. Defensive Towers decrease war machines` devastations and increases your Kingdoms defence. Each Tower destroyes 3 war machines and blockes 12 (Br-Ougs Towers are less efficient by -33% - they destroy 2 war machines and block 8). If you have Special Buildings Barracks and Altair of Initiation built, every turn, 18% of hoplites are trained to Elite 1 units. However, if you do not wish to train them to E1 units, by unchecking the checkbox 'Train hoplites' you turn this option off. If you hire hoplites and let them train to higher level units you can save a lot of resources. Every hoplite eats 1 unit of food and you have to pay him only a fifth of the wage for a normal worker. They only minimally increase your Controlled Land.
+
+
+
+
+
+
+ 
+ War machines - (usually called 'mechs') are used only to attack. An attack with war machines can be lead to destroy enemy's infrastructure and Special Buildings or to gain land. To have a maximal effect of destroying 20% of enemy`s infrastructure and destroying 5 Special Buildings, you need to send the amount of war machines equal to 2.5*enemy`s_land_size. To produce war machines you need to build War machines' workshops. One workshop produces one war machine every turn. This production raises when you develop Science Wooden Machines` Construction. War machines that are not taken care of properly decay. One hoplite can take care of 3 'mechs' and one E1 unit of 1 'mech'.
+
+
+ 
+
+
+ 
+ 
+ 
+ 
+
+
+ 
+
+War machines work in two ways :
+
+
+
+ 
+ 1) sent with hoplites they destroy enemy's infrastructure. The power of attack, in this case, is equal:
+
+
+ 
+ - Br-ougs 3, 
+
+
+ 
+ - Giants  7, 
+
+
+
+ 
+ - Rest 5.
+
+ 2) sent with E1 units they only conquer land. In this case their attack power is:
+
+
+ 
+ - Br-ougs 8, 
+
+
+
+ 
+ - Genies 8, 
+
+
+ 
+ - Giants 10, 
+
+
+ 
+ - Rest 9
+
+
+
+
+
+ 
+ 
+ 
+
+Red Dragon - is the most powerful unit in this world. You cannot train Dragons. They live in a parallel universe. To get a Dragon you must build Special Building Portal which lures them to your kingdom. The more Dragons live in your kingdom, the smaller the chance of luring a new one. This chance is also influenced by Spellbooks. By building the Special Building Dragon Trap you gain the possibility to cast Dragons. This spell catches a Dragon and brings it to your kingdom. What is more, this SB allows you to have more than 50 Dragons in your kingdom. If you have more, and the SB Dragon Trap is missing, they will slowly escape from your Kingdom (but only untill the 6th turn). Dragons are not only very powerful but they also raise the strength of your army:
+
+
+
+
+ x=a*d/(d+50)
+
+ x - influence of your dragons
+
+a - strength of your army without dragons
+
+d - number of dragons
+
+
+
+
+      In example, your army's attack without dragons is 150 000 and you have 65 dragons, then your total attack is equal =150000 + 150000*65/(65+50) = 150000 + 78260 = 226260. You do not have to remember the equation above because the server does it for you. You can check it in the Details menu. Dragons present at home raise the defence of your Kingdom and Dragons sent to attack increase the attack's power. Dragons only influence your armies and not other Governies'. Dragons are calculated in your maximal population and they eat food. They take no wages.
+
+
+
+
+ 
+ 
+ Thieves  - are not military units capable of conquering new lands. They take care of business in other ways - read more here: Thieves. They are hired and trained just like the rest. They take no wages, but eat as others citizens. Hobbits` are special - their training cost is just 1200 gols pieces (normally 2000) and they are 60% more efficient in attacking than other races` thieves.
+
+
+Caution! - the maximal training ratio for thieves is 80%!
+
+
+ 
+
+
+
+ Elite units
+
+
+
+
+
+ 
+       Each race has its two unique military units. There are two levels of these units. The second level units are more powerful but more expensive. If you build the Special Building 'Military Academy', each turn 5% of Elite 1 units become Elite 2 units. Units trained this way need no more training. You can compare units' strength and cost in this table:
+
+
+ 	
+ 	
+
+
+		
+			
+ 
+ 
+
+
+			
+ Przegląd jednostek elitarnych
+
+
+ 
+ 
+			Race	
+			Unit	
+			Attack	
+			Defend	
+			Training cost	
+			Number of weapons
+
+
+ 
+			Humans	
+			Knight	
+			3	
+			3	
+			600	
+			15
+
+ 
+			Paladin	
+			9	
+			8	
+			1600	
+			130
+
+ 
+			Elves	
+			Archer	
+			4	
+			4	
+			700	
+			20
+
+
+ 
+			Forest wraith	
+			9	
+			11	
+			1900	
+			180
+
+ 
+			Hobbits	
+			Mudwalker	
+			2	
+			4	
+			600	
+			15
+
+ 
+			Earthdog	
+			5	
+			9	
+			1400	
+			120
+
+
+ 
+			Dwarves	
+			Heavy knight 	
+			4	
+			4	
+			800	
+			25
+
+ 
+			Berserker	
+			9	
+			9	
+			1600	
+			140
+
+ 
+			Genies	
+			Bo'ttleBeer	
+			2	
+			4	
+			600	
+			15
+
+
+ 
+			Djinn'Beam	
+			6	
+			8	
+			1400	
+			120
+
+ 
+			Goblins	
+			Vrrc rider	
+			4	
+			3	
+			700	
+			15
+
+ 
+			Skurut hai	
+			11	
+			6	
+			1700	
+			120
+
+
+ 
+			Nekromants	
+			Skeleton	
+			4	
+			0	
+			300	
+			0
+
+ 
+			Ghoul	
+			10	
+			6	
+			1600	
+			60
+
+ 
+			Br-Ougs	
+			Kro-Draag	
+			2	
+			2	
+			400	
+			5
+
+
+ 
+			Ter-Aark	
+			5	
+			6	
+			1200	
+			90
+
+ 
+			
+			Giants	
+			Golem	
+			5	
+			5	
+			1000	
+			30	
+
+
+		
+			
+			Ogre	
+			14	
+			11	
+			2500	
+			200	
+
+
+ 
+			
+			Gnomes	
+			The Watch	
+			1	
+			5	
+			600	
+			20
+
+ 
+			Sapper	
+			8	
+			7	
+			1500	
+			115
+
+
+  
+ 	
+  
+ 			
+
+
+		
+			
+ 
+
+      Each military unit eats as many units of food as every civilian. However, there is one exception - necromant Elite units eat no food. Furthermore, every killed Dragon, Hoplite and Ghoul is turned into a Skeleton. If you have the Special Building Armourers workshop built you will gain 5 weapons for each killed soldier if your attack or defence is successful (you also gain 5 weapons for each civilian killed, if the 'Militia' is turned on). Army wages are calculated according to the equation :
+
+
+Wage for one unit
+
+(unit's attack + unit's defence)/10 * wage
+
+
+
+Keep in mind that Elite 1 units take no wages&#8230;
+
+
+	
+
+
+
+
+		 	
+  
+ 
+			
+ 
+
+
+
+
+    	Ostatnia aktualizacja: 2007-02-22 19:03:30
+
+					

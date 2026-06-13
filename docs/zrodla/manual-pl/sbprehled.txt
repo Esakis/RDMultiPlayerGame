@@ -1,0 +1,608 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+
+ 
+ 
+ Special buildings are divided into groups by their base price. Base price is calculated for land-size of 100 acres.
+
+
+
+
+
+
+
+ Buildings at base price of 500
+
+
+ 
+ 	
+ Magical Lens
+
+ 
+ A complicated structure that allows magical powers to be focused on a particular area, makes your spells 20% more powerful. This effect won't be shown in mages' strength, but will be added to each spell as it is cast. Also spells reflected thanks to the Spell Magical Mirror are boosted by the Magical Lens.
+
+
+
+ 	
+ Town Hall
+
+ 
+		The Town Hall is a centre for all administrative functions of a govern(kingdom). This building allows collecting taxes - 10 gold coins from every citizen per turn. The tax is, however, not collected from thieves and troops.
+
+
+
+ 	
+ Red Dragon inn
+
+ 
+
+ A typical tavern where people can dance, drink and forget about their sorrows. This building increases the popularity of the governor by one point each turn. This allows you to keep the popularity at 100 while having lower wages.
+
+
+ 	
+ Commando
+
+ 
+ Thanks to the well-organized quick-response forces the civilian losses during enemy attacks are reduced by 20%.
+
+
+ 	
+ Manna workshop
+
+
+ 
+ A special workshop where manna can be transformed into gold. To do this select the Mannamorphosis spell, and if successful, you will get 200 gold pieces for each manna unit on stock. Also increases Spells` power by +20% (only when casted on yourself).
+
+
+ 
+ 
+
+
+ 
+ Buildings at base price of 5000
+
+
+ 
+ 	
+
+ 
+ 
+ General's headquarters	
+ 
+
+
+ 
+ 
+ 
+
+ It is well known that a sick leader cannot lead an army. This comfortably furnished tent will give the generals' health the best protection, allowing the offensive power of the army to be 20% greater (your attacks are 20% stronger). This bonus doesn't add to war machines statistics.
+ 	
+ 
+
+
+
+
+ 	
+ Gold mine
+
+ 
+ After building this structure every turn there is a 10% chance that your miners will find gold (the amount of gold found is 80% to 120% of your turn gold production - alchemists, Town Hall and manufactures - gold mines).
+
+
+
+ 	
+ Haunted Forest
+
+ 
+ A curse is placed on all the forests on the borders of your govern. The curse will attract the most terrible creatures of the world. 5% of the invading army will run at the sight of those creatures, so it'll be easier to defend your govern.
+
+
+ 	
+ Armorers workshop
+
+ 
+
+ If your attack is successful or if you manage to fend off an enemy attack for every fallen soldier you will gain 5 weapons. Also, if your Kingdom is in war status, 40k-50k weapons will be gained each Recount.
+
+
+
+ 	
+ Dragon Wall
+
+ 
+ High and strong walls are placed in the most strategic points of your govern, adding +5% to your military defense.
+
+
+ 	
+ The Creator's Sanctuary
+
+
+ 
+ Allows your generals to visit the underground Labyrinth and take resources twice a day (instead of only once) and also search for a new General or try to change their secondary ability twice.
+
+
+ 
+
+ 
+
+
+ 
+ Buildings at base price of 20000
+
+
+ 
+
+ 	
+ The Altair of Initiation
+
+ 
+	Allows new soldiers to magically gain more experience and skill. Every turn 8% of your hoplites will become Elite 1 troops.
+
+
+ 	
+ Thieves' Guild
+
+ 
+
+ The Thieves Guild gives it's members an official status of 'craftsmen'. It also supports and coordinates the activities of it's members, thus increasing their affectivity by +25%(Hobbits : +60%).
+
+Giants cannot hire thieves, so this Building is called the Warriors` Guild and gives +1 to attack and +2 to defense for Elite 2 units.
+
+
+ 	
+ Hospital
+
+ 
+ An early medical care for your wounded soldiers lowers military defensive losses by 25%.
+
+
+
+ 	
+ General's residence
+
+
+ 
+An relaxing time spend in this wonderful villa will make your generals fresh and full of energy, thus allowing them to gain +25% more experience.
+
+
+ 	
+ Dragon Barrier
+
+ 
+ A sophisticated defensive system that enhances the Dragon walls, giving you another +7% extra in defense. 
+
+
+ 	
+
+ Water Tower
+
+ 
+	The kingdoms water storage facility. It gives +0,5 to houses capacity (+1 for Gnoms).		
+
+
+ 
+ 
+ 
+
+
+ 
+ Buildings at base price of 50000
+
+
+
+ 
+ 	
+ Basements
+
+ 
+ An important urbanistic invention. It increases the capacity of each house by +1 (+2 for Gnomes, +0,5 for Elves and Giants). Every govern should build it. If you lose it, try to rebuild it immediately, as its absence means a huge loss of power and potential.
+
+
+ 	
+ Dragon Tail brothel
+
+
+ 
+ Using widely known methods, these facility assures you a +25% faster growth of population. It doesn't, however, affect the total capacity of your govern. 
+
+
+ 	
+ Castle
+
+ 
+ This epic structure allows many defending troops to trouble the enemy while being well protected. Your troops have an +10% bonus in defense and suffer 10% less casualties.
+
+
+ 	
+ Magical walls
+
+ 
+ A special magical barrier that helps the defending mages to repel enemy spells, increasing the magical defense by +25%.
+
+
+
+	
+ Militia
+
+ 
+ All over your govern, military camps are built, teaching the civilians how to help defend their land. Civilians fight with the base power of 2 (3 for Goblins, 2.5 for Giants and 1.5 for Br-Ougs) and suffer 15-25% casualties. All bonuses from buildings and dragons affect the fighting civilians. When you complete this special building, you can toggle the militia on or off in the Army menu. It is a very important structure.
+
+
+
+
+
+ 	
+ Market
+
+ 
+ A network of markets that allow the govern to participate in the global trade. It gives you access to the Buy/Sell menus (in the 'Politics' menu). Trading will allow you to profit from your racial bonuses. At war, it will be the most important structure. After you lose this structure you don't lose the possibility to trade, but the market-tax is 100% and only 50% of your resources manage to make it to the market.
+
+
+ 	
+ Embassy
+
+ 
+
+ Building an Embassy enhances your diplomatic capabilities, allowing you to sign one more pact.
+
+
+ 	
+ Medic
+
+ 
+
+ This mobile medical facility lowers the losses of your armies during attack by 50%.
+
+
+
+
+
+ 
+ 
+
+
+ 
+ Buildings at base price of 85000 
+
+
+ 
+ 
+		
+ 
+ 		
+		
+		
+		Military academy	
+
+
+		
+			
+			A huge military camp with enormous facilities where your troops undergo training. Each turn 5% (6% for Giants, 4.5% for Goblins) of the Elite 1 troops will become Elite 2, without any extra costs. You can toggle the Elite 1 to Elite 2 training on or off in the Army menu. 	
+
+
+		
+			
+ 
+ 			
+			
+			Palace	
+
+
+		
+			
+			This structure adds +1 to your Elite 2 units attack and shortens the time needed for wounded Generals to recover.				
+
+
+		
+			
+ 
+ 			
+			
+			
+			Freight harbour	
+
+
+		
+			
+			
+The sea route was always an alternate route to land trade. Though more expensive, sea trading is faster and gains importance when the land routes are blocked during warfare. Each turn the Port gives your Kingdom 400k-600k gold pieces, during warfare this amount is doubled.
+ 	
+
+
+ 	
+		
+ 
+		Barracks
+
+ 
+ A military training facility that picks the most talented hoplites and trains them. Each turn 10% of hoplites will become Elite 1. You can turn the Hoplites to Elite 1 training on or off in the Army menu.
+
+
+
+ 	
+ Defensive Fortresses System
+
+ 
+ A system of small fortresses gives your Generals a good control over the govern defense, allowing only 8% (instead of 10%) of your land to be conquered by a successful enemy attack.
+
+
+ 	
+ Western Tower of Time
+
+ 
+ This strange magical building twists the time space continuum, giving you an extra turn each day. Goblins gain two turns instead of one.
+
+
+
+ 	
+ Aqueduct
+
+
+ 
+ This building increases your max population by +0,5 citizen per Acre(an important building - especially for Br-Ougs as it increases their population by +2.5 citizens per Acre).
+
+
+ 
+
+ 
+
+
+ 
+ Buildings at base price of 110000
+
+
+ 
+
+ 	
+ Seweres
+
+ 
+ Cities equipped with an underground sewers system can provide living space for more citizens. Building this structure will increase the capacity of every house by +1.5 (+1 for Ginats and +0.5 for Elves). One of the most important buildings.
+
+
+ 	
+ Eastern Tower of Time
+
+ 
+
+ This magical structure adds one turn per day.
+
+
+ 	
+ Dragon Trap
+
+ 
+ A mystical structures, where all the most powerful mages summon Dragons to help your armies. What's more, this structures work as Dragon Lairs when there aren't enough natural ones in your Kingdom. When you lose this special building you can not summon Dragons or have more than 50.
+
+
+ 	
+ The Portal
+
+
+ 
+ This portal connects you to the parallel world where the Red Dragons, the strongest and most noble creatures, live. The more magic books your mages know, the more fluid they emit, the stronger the Spell Fortune is, the higher the probability of attracting a Dragon. Yet, the more Dragons you have, the less probable it is to lure another one. The mere presence of these mystical creatures makes your armies fight better.
+
+
+ 	
+ Magical Palace
+
+ 
+ The place where all your mightiest mages live. There they can study spellbooks in peace and quite, becoming even more powerful. Thanks to this structure you cast the most destructive spell - The Dragon Breath and you gain an extra Spellbook(that can be selected in the Magic menu). For Genies also the expense level of spells increases only by 9% if this structure is present (normally by 10%).
+
+
+
+
+
+ 
+
+ 
+
+
+ 
+ Buildings at base price of 200000
+
+
+ 
+ 	
+ KDragon Monks Monastery
+
+ 
+
+ The Monastery is the finest example of Red Dragon architecture, combining beauty and functionality. All your troops must undergo training in the Monastery, therefore gaining +1 to their defensive skills. This extra point is shown in the Army menu.
+
+
+ 	
+ Bersekers' Camp
+
+ 
+ During the hard training, your military units will learn how to turn themselves into killing machines. Their 'Berserker Fury' will cause them to fight with +1 to attack. This figure will not be included in any statistics, though.
+
+
+ 
+
+ 
+
+
+ 
+ The Last Judgement Palace
+
+
+ 
+ 	
+ Pałac Sądu Ostatecznego
+
+ 
+
+ Armageddon. The world as we know it will collapse into Eternal Chaos. Only the mightiest can build this Palace and become Immortal. Just to begin building this structure, your Alliance must have more than 750000 acres. Its base price is 10 000 000. All Alliances that are attempting to build it are shown in the Central, in the Daily Report. You will have to master the game to just stand a chance of building the Palace with the rest of the world trying to stop you. When the Palace is finished, one Red Dragon Age ends and a new one starts. A new World emerges from the Oblivion. All governs are reset to 100 Acres.
+
+
+
+ 
+ 
+
+
+ 	
+
+
+
+    	Ostatnia aktualizacja: 2007-02-18 19:13:56
+
+					

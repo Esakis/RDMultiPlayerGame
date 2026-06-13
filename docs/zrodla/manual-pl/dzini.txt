@@ -1,0 +1,363 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+	
+		
+		
+
+ 	
+
+
+	
+		
+		
+
+
+
+		
+       It is thought, that Genies are born Mages. They have an uncanny ability of handling manna from their earliest days. Therefore, every Genie goes through a strict and hard magical training. They seem to tolerate other races, if not threatened by them.
+
+
+ 
+		       Genies are the only race that can reach all three levels of Magical Initiation. 'The Subjected' are the ones that have graduated from the magical schools of 'The Free'. They never create magical spells; they are only able to use them. 'The Free' are the headmasters of magical schools. Most of them can create new spells of limited powers and of only one style. The most powerful mages are called 'The Masters'. There are only few left. They leave in marvelous castles filled with magical traps, taking only few chosen and highly talented as their apprentices. They are said to be able to extend their age, change their shape, fly or even travel in time. They are able to create new, completely original spells absolutely incomprehensible to other beings. It's sure that the Masters are powerful but nobody knows just how much...
+
+ 	
+ 		
+
+
+	
+		
+		
+
+       Genies are magically the strongest race. Playing as them you should specialize in magic. Defending and attacking for genies is merely a waste of their potential. Genies gain land in allies or by buying it for their own funds. Defense, on the other hand, is highly dependable on their  military pacts and spells (especially on the spell Fallen Legions). When not fighting, Genies gather as much money as possible. At war, that funds are used to buy manna on the market and to cast spells.	
+
+
+	
+		
+		
+
+
+	
+
+
+	
+		
+		 	
+		
+
+ 	Bro'Var	
+		
+		
+
+ 	Djinn'Beam	
+		 	
+
+
+	
+		 	
+		
+
+ 	
+
+ 		
+		
+
+ 	
+
+ 		
+		 	
+
+
+	
+		 	
+		
+		
+
+ 	
+
+ 	24	
+		
+		
+
+ 	
+
+ 	68	
+		 	
+
+
+	
+		
+		 
+		
+
+ 	 	
+
+
+	
+		
+		 	
+		
+		
+
+ 	+30% to Druids	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+
+ 	+20% to Mages	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+
+ 	+5% to Alchemists
+ 
+
+
+			
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+
+ 	-30% to Armorers	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		War machines : 5 attack	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+
+ 	After Special Building : Magical Palace is build the spell expense level rises only by 9% per spell (other races : by 10% per spell)	
+		
+		 	
+
+
+	
+		 	
+		
+		
+
+ 	+10% to spell efficiency	
+		 	
+
+
+	
+		 	
+		
+		
+
+ 	They can select 5 Spellbooks at the start of the game	
+		 	
+
+
+	
+  
+
+
+
+
+ 
+ 
+ 
+ 
+			
+			
+ 	
+ 
+			
+
+
+ 
+ 
+
+    	Ostatnia aktualizacja: 2007-02-06 17:08:56
+
+					

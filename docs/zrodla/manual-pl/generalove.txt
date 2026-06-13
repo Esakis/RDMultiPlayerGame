@@ -1,0 +1,485 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+				
+					
+					
+ 	
+
+
+				
+					
+
+      In this menu you can find a list of your Generals. You can have up to 7 Generals (Giants can have 8).	
+
+
+				
+					 
+					
+ Screen Generals
+
+ 
+ 	
+
+
+					 	
+
+
+				
+					
+					
+					      Information about each General starts with his name that you have chosen yourself, when hiring him. Next is the icon with your General's image, name of his class and his secondary ability. You can also see here how many levels did your General advance during this Recount and how many experience points does he need to advance to the next level. Generals' classes and secondary abilities are described further in this chapter. Beneath this information, General's level and experienced points are shown. Experience points (referred to as 'expo') are gained in specified ways, according to General's class. In consequence, we distinguish economical generals : Professors, Merchants, Scientists, which (in opposite to others) do not gain expo during wars. The secondary ability of a General does not influence the amount of expo gained. You can find the exact equation for Generals' level in 'Equations'. The higher the level is, the better the General performs in his specialization. 	
+
+
+				
+					
+			
+
+      The main role of Generals is leading attacks. Every attack has to be lead by one General, and his abilities influence the attack's power and the attacked Govern. The best General to lead an attack are Commanders, but also other Generals can lead an attack, but will not increase the attack's power, like the Commander does, and only their secondary ability affects the attacked Govern (if the attack was successful). In example, a Professor - Dragon Slayer will not increase the attack's power; however, if the attack is successful, more Dragons are killed.
+
+					
+
+
+      All unsent Generals take part in defending your Kingdom. Your Generals influence the input of pacts in your defence (however, this input is not influenced by Generals from the Govern with which the pact is signed). Keep in mind, that not all Generals' secondary abilities are calculated, but only of those Generals with the highest level. It is a good idea to have exact one General with a secondary ability i.e. : Dragon Slaying, Healing, General Killing, Counterattack. If you are successful in defence, the opposing army looses extra Dragons (Dragon Slaying), your losses are lower (Healing), there is a chance of killing a General (General Killing) and enemy's army suffers extra losses (Counterattack).
+
+
+
+
+      Under each General's picture is a checkbox. By checking it you can either change a General's name or get rid of him. The textbox at the bottom is used to change Generals' names. Getting rid of a General, means you lose him forever. However, it is very convenient if you want to hire a new General and have no place for him. Generals sent in attacks do not have this checkbox - the sign 'outside' appears instead of it.
+
+
+					
+
+
+
+      If you do not have a maximum number of Generals, they automatically come to your Kingdom. If you have none, a new General surely comes in the next turn. The more Generals you have, the lower the chance of gaining a new one.
+
+
+
+      You can also search for Generals in the Labyrinth. You can also change their secondary abilities here and gain Experience points. More info 
+	 Labyrinth .
+
+		 
+			
+
+
+      Generals' primary ability - there are eight Generals' classes, which define his use in your Kingdom and how he gains Exp Points.
+
+
+
+ 
+			 	
+
+
+				
+					 
+					
+ 
+
+
+
+					 	
+
+
+				
+					
+
+ The main General's abilities are their class. These define the way they get new expo and how they influence your Kingdom. There are 7 classes.
+
+
+ 	
+ 
+						
+
+
+				
+					
+
+ 
+ 
+		Commander
+
+  
+		General specialized in leading attacks and conquering enemy territories. All generals can lead an attack, but only a Commander increases attack's power by a % equal to his level. A good trained Commander allows you to save a lot of units sent to attacks or to send more attacks. Commander's secondary abilities defines what other losses does the target suffer. It is a good idea to have many Commanders in your Alliance, so they could lead the most powerful attacks. The amount of expo gained is determined by the number of soldiers on each side and the ratio between attack's and defence's power. Expo is gained only in successful attacks. The larger the fighting armies are and the smaller the ratio of their power is, the more expo does your Commander gain. Fallen Legions are also calculated. Commanders gain expo faster than other generals, but also die most often.
+
+		 Possible secondary abilities : General Assassination, Dragon Slaying, Sabotage, Blood thirst and sodomy, Healing, Stealing, Black Magic, Skeleton King.	
+
+
+ 
+		Defender
+
+  
+		Defenders increase your defence by the % equal to their level. They increase the whole defence of your Kingdom - they influence towers, military shield, Special Buildings, Fallen Legions. The also increase the defence provided by pacts. However, a General Defender can only influence your defence when at home. And only the one with the highest level is calculated (so it is a good idea to have exactly one Defender). He gains expo if the defence has been successful. The amount of expo gained is determined by the number of units taking part and the ratio of attack's and defence's power. Training a Defender is always hard, because it bases on your enemy's unsuccessful attacks.
+
+
+		 Possible secondary abilities : General Assassination, Dragon Slaying, Healing, Light magic, Counterattack.
+
+ 
+		Mage
+
+  
+		Mages influence your magical attack and defence (if they are at home, of course). If you have more than one mage, their levels are summed. The influence of mages is calculated according to this equation : influence=100*lvl/(50+lvl), where 'lvl' is the sum of your mages' levels. Expo is divided equally. Mages also influence magical defence given by pacts. This defence defines how many spells will be successfully casted on your Kingdom. Mages do not increase spells real power, only the chance of successfully casting it on an opponent. Usually 2 to 5 mages are on a Govern, based on its strategy. Expo is gained on the basis of defended spells and those successfully casted - their number and the ratio between defence and attack, and spells cost in manna. However, if the casted spell does not break enemy's defence your Mages lose some expo, which is gained by the opposing Mages. You gain no expo by casting spells on Governs in your Alliance and by casting Eagle's Eye. Mages on Kingdoms often casting spells train fast, on Kingdoms only defended magically far slower.
+
+		 Possible secondary abilities : General Assassination, Dragon Slaying, Healing, Light magic, Counterattack, Camouflage and Espionage, Trainer, Fire Magic, Earth Magic, Strength Magic, Wind Magic, Mystic Magic.	
+
+
+ 
+		Thief
+
+
+  
+		They help to defend from thievish attacks on your Kingdom and support thievish attacks sent from your Kingdom. Each General Thief at home increases thievish defence and attack power. They also increase the defence from thievish pacts. Their influences is calculated according to the equation : influence=100*lvl/(lvl+50). Usually Kingdoms have 1 General Thief to increase their thievish defence. However, typical thievish Governs have few. They gain expo by successful thievish attacks or defences, if they are at home, of course. If you have more than one general, the gained Experienced Points in an action are divided equally. The amount of expo gained from an action depends from the number of thieves taking part (the more thieves the more expo) and the difference between defence and attack (the smaller the difference the more expo). Thievish action 'Steal Supplies' gives no expo. Generals Thieves train fast on Governs attacking by thieves, on others rather slow.
+
+		 Possible secondary abilities : General Assassination, Dragon Slaying, Healing, Light magic, Counterattack, Camouflage and Espionage, Trainer.	
+
+
+ 
+			Merchant
+
+  
+		They increase your merchants productivity by a % equal =1,5*lvl/(lvl+50). 'Lvl' is the sum of all Generals Merchants in your Kingdom. These Generals are essential on Kingdoms playing with mercantile pacts during wars. They gain a number of Experience Points equal to your Govern's land size and the sum of half the land sizes of Kingdoms you have a mercantile pact signed with. The expo is given between the 14th and 15th turn, the 28th and 29th turn and 42nd and 43rd turn. From all the economical Generals, Merchants train the fastest. Merchants always gain the same amount of expo, in depended from their number in a Kingdom.
+
+		 Possible secondary abilities : General Assassination, Dragon Slaying, Healing, Light magic, Counterattack, Explorer, Manufacturer.
+
+
+ 
+		Scientist
+
+
+ 
+ 	
+  
+		Increases the influence of universities, adding his influences to theirs, according to the equation : influence=100*lvl/(lvl*2+50). Scientists help significantly in rebuilding your Govern and earning money, as well as increases mages' power. You should always have at least one Scientist in your kingdom. He gains expo just like General Merchant, between turns 14 and 15, 28 and 29 and 42 and 43, but only in an amount equal to your doubled land size. Scientists always gain the same amount of expo, in depended from their number in a Kingdom. They gain the lower levels fast, then their training speed decreases.
+
+		 Possible secondary abilities : General Assassination, Dragon Slaying, Healing, Light magic, Counterattack, Explorer, Manufacturer
+
+
+ 
+		Professor
+
+  
+		increases the ratio of training employees and soldiers. Each Professor trains the % of novice equal to his level. In example, a Professor on the 12th level trains an additional 12% novice each turn. The influence of these Generals is summed. The Professor is most needed on Governs frequently training their citizens to new crafts. He gains expo just like General Scientist, between turns 14 and 15, 28 and 29 and 42 and 43, but only in an amount equal to your doubled land size. Professors always gain the same amount of expo, in depended from their number in a Kingdom. They gain the lower levels fast, then their training speed decreases.
+
+		 Possible secondary abilities : General Assassination, Dragon Slaying, Healing, Light magic, Counterattack, Explorer, Manufacturer.
+
+ 
+
+ 
+						
+
+
+				
+					 
+					
+
+
+
+					 	
+
+
+				
+					
+		
+ General's Assassination
+
+ (GA) Works only during a successful attack or defence. Of course, if the General leading the attack has this ability (in depended from his main ability) or for the General with the highest level in defence (and only for him, secondary abilities do not sum their influence). It gives a chance to assassinate enemy's General equal to the Generals GA level.
+
+
+					
+
+
+ 
+			
+ Dragon Slaying
+ (DS) Just like with GA, a General DS kills a % of Dragons on the battlefield equal to his level. It is calculated for the General's (who is leading the attack) level or the highest General's level for Generals in defence. In attack, this ability affects Dragons defending the target from military pacts. What is more, (only in attack!) the minimal number of killed Dragons is equal to his level (a General DS on the 25th level kills 25% dragons, but not less than 25).
+
+
+ 
+			
+ Black Magic
+ (BM) The General checks all the negative spells on the attacked Kingdom. If one is missing, he casts it with a power equal to attacking_govern_land_size * level * 3. If a spell is present, he increases its power by 10*level percent. Further attacks are summed, not multiplied.
+
+
+
+
+
+ 
+ Sabotage
+
+ (Sab) In case the attack has been successful, this General has a chance equal Levelx2 % of destroying a Special Building and destroys Levelx2 % more infrastructure buildings (for Level 20 he has a 40% chance of destroying a Special Building and destroys 14% infra buildings, instead of 10%). This ability does not influence defence.
+
+
+
+
+ Skeleton King
+ (Skel) When a Necromancers` General dies, he is revived as a Skeleton King, maintaining his Level and Expo. A Skeletn King is a Commander with a secondary ability allowing him to revive also all enemy`s dead soldiers to Skeletons of his own army! Furthermore, they cannot die (because they`re already dead...). However, they cannot enter the Labyrinth. They gain Expo as any other Commander.
+
+
+
+					 
+ Blood Thirst and Sodomy
+ (BT&S) In case the attack has been successful, this General kills more citizens and soldiers by a percentage equal to (1+2*level). Does not work in defence.
+
+
+					
+
+
+ 
+
+ 
+ Healing
+ (H) This General reduces the losses in battle by a % equal to his level (on level 10 the losses are 90%). This ability cumulates with Dwarves' durability (on level 10 : 0.9*0.5=0.45 - dwarves' loses are 45%). Works in attack, if the leading General has this ability. In defence only the General Healer with the highest level is calculated for your army and armies given from pacts.
+
+
+					
+
+
+  Light Magic 
+		 (LM) This general can cast a positive spell on your Kingdom each turn. The spell is random. The chance of casting a spell is depended from the General's level, so is its power. If you have more than one, than each General LM has an individual chance of casting a positive spell. What is more, he makes negative spells disappear faster and positive spells last longer. It is calculated according to these equations :
+ for positive spells - newpower=power*(0,45+lvl/200)-land/100 and for negative - newpower=power*(0,6-lvl/200)-land/100. Only the General with the highest level influences spells. If the General LM is a Mage, he also reduces the cost of spells : Diligence, Good Mood, Dispell, Fallen Legions, Death of Fallen Legions, Eagle's Eye by a % equal to his level.
+
+
+
+
+
+
+ 
+ 
+ Stealing
+ (S) This General (during a successful attack) destroys a % of the target's supplies equal to his doubled level. Does not work in defence.
+
+
+					
+
+
+  
+ 
+					
+ 
+
+
+
+Camouflage and Espionage (C&E) In a successful attack led by this General there is a chance of detecting a random pact on the target - equal to the doubled General's level. For each pact this chance is calculated individually - so if you are lucky, you might discover all 6 pacts. Mage C&E increases the chance of detecting which Govern casted a spell on your kingdom. Thief C&E increases the chance of detecting which Govern sent an action on your Kingdom or to camouflage your thievish actions.
+
+
+					
+
+
+ 
+		
+		Counterattack
+ (C) During an unsuccessful defence increases the losses of the aggressor by a % equal to his level. During a successful defence increases these losses by a % equal to the doubled level. During an unsuccessful thievish defence increases the losses of the aggressor by a % equal to his level. During a successful thievish defence increases these losses by a % equal to the tripled level. Only the highest level is calculated.
+
+
+
+
+					
+
+
+	  
+ Trainer (T) This ability fastens novice training by a % equal to level/3. Thief Trainer helps to train thieves, and Mage Trainer to train mages. Only the highest level is calculated.
+
+
+					
+
+
+ 
+ Explorer (Expl) When he enters the labyrinth his level is added to the present Fortune`s influence. This ability increases the chance of finding anything in the Labyrinth and increases the amount of goods found. Also decreases the chance of any 'unpleasent' events.
+
+
+
+
+					
+
+
+ 
+
+ Manufacturer (Mfk) This ability increases the productivity of manufactures and war machines' workshops. Only the highest level is calculated. This bonus is equal : 100*level/(50+level).
+
+
+ 
+					
+
+
+		
+ Spellbooks
+
+ These are : Strength magic, Earth magic, Fire magic, Wind magic, Mystic magic. There is a possibility in training a Mage in one of the types of Spellbooks. This means, that each Mage can have a secondary ability in magic from one of the Spellbooks. The cost of spells from this Spellbook is reduced by a % equal to level/3. Only the highest level is calculated.
+
+
+	  	
+
+
+				
+
+
+				 				
+ 
+ 
+				
+ 
+
+
+ 
+
+    	Ostatnia aktualizacja: 2007-02-23 17:09:48
+
+					

@@ -1,0 +1,414 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+	
+		
+		  	
+
+
+	
+		
+		
+
+       There are three kinds of goblins - wood goblins, six finger goblins and war goblins. Goblins are a militant race. They're primitive creatures, living mostly in caves or abandoned mines. War goblins serve other goblins. They're extremely strong and sturdily built.
+They're basically slaves of the two remaining clans, which are constantly battling each other, amassing big armies of the war goblins. Rumors say, that both wood goblins and six finger goblins aren't able to fight by themselves any more.	
+
+
+	
+		
+
+
+
+
+
+	      Goblins hate elves. They detest them and never miss an opportunity to fight them. War goblins are bred like cattle in war camps and trained for combat. Every day, they're poisoned with a strange substance that makes their own will very weak. Nonetheless, there have been few rebellions in the past, but all ended in the same way - a massacre of the rebels. However some say, that a new one is rising...
+
+Goblins spend most of their time in their caves and are lousy workers. But their advantage over other races lies in their calendar. Their year has two more months, so you have two more turns per day compared to other races. Playing as a Goblin there is only one choice - attack, attack and attack!!
+	
+
+
+	
+		
+		
+ 
+
+ 	
+ 	
+
+
+	
+		 	
+		
+
+
+ 	Vrrc rider	
+		
+
+
+ 	Skurut Hai	
+		 	
+
+
+	
+		 	
+		
+
+
+ 		
+		
+
+
+ 		
+		 	
+
+
+	
+		 	
+		
+
+
+ 43	
+		
+
+
+ 116	
+		 	
+
+
+	
+		
+		
+ 
+
+ 	
+ 	
+
+
+	
+		
+		 	
+		
+		
+
+ 	-30% to Farmers 
+ 	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		
+ 	-5% to Bricklayers
+ 	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		
+ 	-10% to Merchants	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		
+ 	-20% to Druids 
+ 	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		
+ 	-20% to Mages	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		
+ 	Goblins have two extra turns per day	
+		
+		 	
+
+
+	
+		 	
+		
+		
+		
+ 	Goblins have a -2 limit of count-limited spells (Earthquake, Dragon Breath, Fiery rainfall max. 3x, Hurricane max. 5x)	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		
+ 	They can set up to 50% of land gained in attacks to be transferred to their allies	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		
+ 	War machines : 5 attack	
+		
+		 	
+
+
+	
+		 	
+		
+		Military Academy trains only 4.5% of E1 troops to E2 troops (normally 5%). The Western Tower of Time adds two turns (normally only one)
+ 		
+		 	
+
+
+	
+		 	
+		
+		They do not lose any War Machines from destructive spells and from enemy attacks	
+		 	
+
+
+
+		 	
+		
+		They gain only 80% of Science Points per turn compared to other races	
+		 	
+
+
+	
+		 	
+		
+		They can select 1 Spellbooks at the start of the game	
+		
+		 	
+
+
+
+		 	
+		
+		They are completely resistant to Spell 'Burn Thieves' 
+			
+		
+		 	
+
+
+
+		 	
+		
+		Thieves have a base military defence of 3 (4 with SB 'Dragon Monks' Monastery built)
+			
+		
+		 	
+
+
+
+
+ 
+
+
+
+
+ 
+ 
+ 
+ 
+			
+			
+ 	
+ 
+			
+
+
+    	Ostatnia aktualizacja: 2007-02-06 17:12:51
+
+					

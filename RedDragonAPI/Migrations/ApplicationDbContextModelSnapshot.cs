@@ -1451,7 +1451,7 @@ namespace RedDragonAPI.Migrations
                             Id = 1,
                             IsActive = true,
                             Name = "Era Przebudzenia",
-                            StartedAt = new DateTime(2026, 2, 26, 15, 26, 52, 626, DateTimeKind.Utc).AddTicks(3307),
+                            StartedAt = new DateTime(2026, 6, 12, 20, 24, 13, 343, DateTimeKind.Utc).AddTicks(2100),
                             Theme = "Pierwsza era nowego świata Red Dragon"
                         });
                 });
@@ -1502,6 +1502,54 @@ namespace RedDragonAPI.Migrations
                     b.HasIndex("ParentPostId");
 
                     b.ToTable("ForumPosts");
+                });
+
+            modelBuilder.Entity("RedDragonAPI.Models.Entities.General", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ArrivedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("Experience")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsImprisoned")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOutside")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("KingdomId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PrimaryTrait")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("SecondaryTrait")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("WoundedUntil")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KingdomId");
+
+                    b.ToTable("Generals");
                 });
 
             modelBuilder.Entity("RedDragonAPI.Models.Entities.Kingdom", b =>
@@ -1692,6 +1740,45 @@ namespace RedDragonAPI.Migrations
                     b.ToTable("MilitaryUnits");
                 });
 
+            modelBuilder.Entity("RedDragonAPI.Models.Entities.Pact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("ConfirmedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PactType")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("ProposerKingdomId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("TargetKingdomId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProposerKingdomId");
+
+                    b.HasIndex("TargetKingdomId");
+
+                    b.ToTable("Pacts");
+                });
+
             modelBuilder.Entity("RedDragonAPI.Models.Entities.Pantheon", b =>
                 {
                     b.Property<int>("Id")
@@ -1805,6 +1892,673 @@ namespace RedDragonAPI.Migrations
                     b.ToTable("QueuedActions");
                 });
 
+            modelBuilder.Entity("RedDragonAPI.Models.Entities.RaceDefinition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("AqueductAcreBonus")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("AttackRating")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("BonusAlchemists")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("BonusArmorers")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("BonusDruids")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("BonusFarmers")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("BonusMages")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("BonusMasons")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("BonusMerchants")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("BonusScientists")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("BonusStonemasons")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("BurrowsHouseBonus")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("DefenseRating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("E1Attack")
+                        .HasColumnType("int");
+
+                    b.Property<int>("E1Defense")
+                        .HasColumnType("int");
+
+                    b.Property<int>("E2Attack")
+                        .HasColumnType("int");
+
+                    b.Property<int>("E2Defense")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EaseRating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EconomyRating")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("FoodPerPop")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("GeneralsLimit")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("HouseCapacityBase")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("LimitedSpellsPerRecalc")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MachineAttack")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MagicBooks")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MagicRating")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("MilitaryLossModifier")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("NameCz")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("PopGrowthModifier")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("PopPerAcreBase")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("ResearchModifier")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("SewersHouseBonus")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("SpecialTraits")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ThiefCostModifier")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("ThiefPowerModifier")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int>("ThievesRating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TurnsPerDay")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("WaterworksHouseBonus")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RaceDefinitions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AqueductAcreBonus = 1m,
+                            AttackRating = 65,
+                            BonusAlchemists = 0.10m,
+                            BonusArmorers = 0m,
+                            BonusDruids = 0m,
+                            BonusFarmers = 0m,
+                            BonusMages = 0m,
+                            BonusMasons = 0m,
+                            BonusMerchants = 0.20m,
+                            BonusScientists = 0m,
+                            BonusStonemasons = 0m,
+                            BurrowsHouseBonus = 1m,
+                            DefenseRating = 60,
+                            Description = "Dzięki wysokiej liczebności naszej populacji potrafimy uczynić wszystko, co ci przyjdzie do głowy! Umiemy świetnie czarować, jesteśmy dobrymi złodziejami, nie rozczarujemy Cię również w armii. Jesteśmy wszechstronną rasą.",
+                            E1Attack = 3,
+                            E1Defense = 3,
+                            E2Attack = 7,
+                            E2Defense = 7,
+                            EaseRating = 90,
+                            EconomyRating = 65,
+                            FoodPerPop = 1m,
+                            GeneralsLimit = 8,
+                            HouseCapacityBase = 5m,
+                            LimitedSpellsPerRecalc = 5,
+                            MachineAttack = 5,
+                            MagicBooks = 3,
+                            MagicRating = 85,
+                            MilitaryLossModifier = 0m,
+                            Name = "Człowiek",
+                            NameCz = "Člověk",
+                            PopGrowthModifier = 0m,
+                            PopPerAcreBase = 3m,
+                            ResearchModifier = 0.10m,
+                            SewersHouseBonus = 1.5m,
+                            SpecialTraits = "Generałowie zdobywają doświadczenie o 20% szybciej; budynki infrastrukturalne o 10% tańsze (złoto i budulec); mechanika Nauka stosowana (szkoła złodziejska/magiczna/wojskowa).",
+                            ThiefCostModifier = 0m,
+                            ThiefPowerModifier = -0.05m,
+                            ThievesRating = 90,
+                            TurnsPerDay = 15,
+                            WaterworksHouseBonus = 0.5m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AqueductAcreBonus = 0.5m,
+                            AttackRating = 60,
+                            BonusAlchemists = 0m,
+                            BonusArmorers = 0.20m,
+                            BonusDruids = 0.20m,
+                            BonusFarmers = 0m,
+                            BonusMages = 0.30m,
+                            BonusMasons = -0.10m,
+                            BonusMerchants = 0m,
+                            BonusScientists = 0m,
+                            BonusStonemasons = -0.10m,
+                            BurrowsHouseBonus = 1m,
+                            DefenseRating = 70,
+                            Description = "Najchętniej spędzamy czas w lasach, których potrafimy bardzo skutecznie bronić, a w razie potrzeby przeprowadzić z nich również kontratak. Potrafimy wpływać na świat dzięki wielu zaklęciom.",
+                            E1Attack = 4,
+                            E1Defense = 6,
+                            E2Attack = 8,
+                            E2Defense = 11,
+                            EaseRating = 60,
+                            EconomyRating = 80,
+                            FoodPerPop = 1m,
+                            GeneralsLimit = 6,
+                            HouseCapacityBase = 3m,
+                            LimitedSpellsPerRecalc = 5,
+                            MachineAttack = 5,
+                            MagicBooks = 4,
+                            MagicRating = 90,
+                            MilitaryLossModifier = 0m,
+                            Name = "Elf",
+                            NameCz = "Elf",
+                            PopGrowthModifier = 0m,
+                            PopPerAcreBase = 3m,
+                            ResearchModifier = 0m,
+                            SewersHouseBonus = 1.5m,
+                            SpecialTraits = "Straszny lasek odstrasza 10% armii inwazyjnej; Pałac magiczny: wzrost kosztu zaklęć tylko 9%; biała magia o 25% tańsza; 1,5× łupy z labiryntu; E1/E2 mają siłę magiczną 0,5/1,0; mechanika Komando łuczników (+20% obrony sojusznika, -20% własnej).",
+                            ThiefCostModifier = 0m,
+                            ThiefPowerModifier = 0m,
+                            ThievesRating = 75,
+                            TurnsPerDay = 15,
+                            WaterworksHouseBonus = 0.5m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AqueductAcreBonus = 0.5m,
+                            AttackRating = 80,
+                            BonusAlchemists = 0m,
+                            BonusArmorers = 0.30m,
+                            BonusDruids = -0.30m,
+                            BonusFarmers = 0m,
+                            BonusMages = -0.20m,
+                            BonusMasons = 0.20m,
+                            BonusMerchants = 0m,
+                            BonusScientists = 0m,
+                            BonusStonemasons = 0.20m,
+                            BurrowsHouseBonus = 1m,
+                            DefenseRating = 50,
+                            Description = "Nasze rześkie jednostki nadają się jak do obrony, tak do ataku. Nie znamy się na magii, ale twarde życie w górach zahartowało naszą armię. Obróbka kamienia zapewnia nam dobrobyt i sławę najlepszych budowniczych.",
+                            E1Attack = 5,
+                            E1Defense = 6,
+                            E2Attack = 10,
+                            E2Defense = 11,
+                            EaseRating = 100,
+                            EconomyRating = 85,
+                            FoodPerPop = 1m,
+                            GeneralsLimit = 6,
+                            HouseCapacityBase = 3m,
+                            LimitedSpellsPerRecalc = 4,
+                            MachineAttack = 5,
+                            MagicBooks = 1,
+                            MagicRating = 60,
+                            MilitaryLossModifier = -0.25m,
+                            Name = "Krasnolud",
+                            NameCz = "Trpaslík",
+                            PopGrowthModifier = 0m,
+                            PopPerAcreBase = 3m,
+                            ResearchModifier = 0m,
+                            SewersHouseBonus = 1.5m,
+                            SpecialTraits = "O 25% niższe straty wojskowe; zabijają o 20% więcej smoków; budynki specjalne o 10% tańsze; przechodzi o jedno limitowane zaklęcie mniej; pakty złodziejskie -10% skuteczności; mechanika Dodatkowe uzbrojenie (do +2 atak/obrona elit za broń).",
+                            ThiefCostModifier = 0m,
+                            ThiefPowerModifier = -0.15m,
+                            ThievesRating = 65,
+                            TurnsPerDay = 15,
+                            WaterworksHouseBonus = 0.5m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AqueductAcreBonus = 0.5m,
+                            AttackRating = 40,
+                            BonusAlchemists = 0m,
+                            BonusArmorers = 0m,
+                            BonusDruids = 0m,
+                            BonusFarmers = 0.30m,
+                            BonusMages = -0.20m,
+                            BonusMasons = 0m,
+                            BonusMerchants = 0.10m,
+                            BonusScientists = 0m,
+                            BonusStonemasons = 0m,
+                            BurrowsHouseBonus = 1m,
+                            DefenseRating = 50,
+                            Description = "Szukasz zręcznego złodzieja? Nie ma lepszych rabusiów od tych naszych. Nikt nie dorównuje ich zdolnościom. Agresorów potrafimy zaskoczyć upartą obroną.",
+                            E1Attack = 2,
+                            E1Defense = 4,
+                            E2Attack = 4,
+                            E2Defense = 10,
+                            EaseRating = 80,
+                            EconomyRating = 70,
+                            FoodPerPop = 1m,
+                            GeneralsLimit = 6,
+                            HouseCapacityBase = 3m,
+                            LimitedSpellsPerRecalc = 5,
+                            MachineAttack = 5,
+                            MagicBooks = 1,
+                            MagicRating = 60,
+                            MilitaryLossModifier = 0m,
+                            Name = "Hobbit",
+                            NameCz = "Hobit",
+                            PopGrowthModifier = 0m,
+                            PopPerAcreBase = 3.5m,
+                            ResearchModifier = 0m,
+                            SewersHouseBonus = 1.5m,
+                            SpecialTraits = "Złodzieje o 25% tańsi i silniejsi; Zniszczenie zapasów działa na nich w 50%; obniżki popularności (rewolta, Smoczy Oddech, ataki) o połowę słabsze; odporni na Zły humor; mniejsze straty ziemi (pierwszy atak 9% zamiast 11%); mechanika Hodokvas.",
+                            ThiefCostModifier = -0.25m,
+                            ThiefPowerModifier = 0.25m,
+                            ThievesRating = 100,
+                            TurnsPerDay = 15,
+                            WaterworksHouseBonus = 0.5m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AqueductAcreBonus = 0.5m,
+                            AttackRating = 90,
+                            BonusAlchemists = 0m,
+                            BonusArmorers = 0m,
+                            BonusDruids = 0.20m,
+                            BonusFarmers = -0.25m,
+                            BonusMages = 0.30m,
+                            BonusMasons = 0m,
+                            BonusMerchants = 0m,
+                            BonusScientists = 0m,
+                            BonusStonemasons = 0m,
+                            BurrowsHouseBonus = 1m,
+                            DefenseRating = 90,
+                            Description = "Wojna, śmierć i cierpienie! Obrona nie należy do naszych silnych stron, ale zatrzymanie hord żywych trupów jest praktycznie niemożliwe. Znamy również wiele mocnych zaklęć. Naszą specjalnością jest zasypywanie wrogów klęskami żywiołowymi.",
+                            E1Attack = 2,
+                            E1Defense = 1,
+                            E2Attack = 6,
+                            E2Defense = 3,
+                            EaseRating = 90,
+                            EconomyRating = 65,
+                            FoodPerPop = 1m,
+                            GeneralsLimit = 6,
+                            HouseCapacityBase = 3m,
+                            LimitedSpellsPerRecalc = 5,
+                            MachineAttack = 4,
+                            MagicBooks = 4,
+                            MagicRating = 90,
+                            MilitaryLossModifier = 0m,
+                            Name = "Nekromant",
+                            NameCz = "Nekromant",
+                            PopGrowthModifier = 0m,
+                            PopPerAcreBase = 3m,
+                            ResearchModifier = 0m,
+                            SewersHouseBonus = 1.5m,
+                            SpecialTraits = "Armia nie je i nie pobiera żołdu, nie umiera w czasie głodu; odporny na Zarazę, Kastrację i Płodność; Zaraza/Szarańcza/Kastracja/Zły humor o połowę tańsze; mechanika Nekromancja (armia wyczarowywana przez magów z ciał, Cmentarze, zaklęcie Ofiarowanie).",
+                            ThiefCostModifier = 0m,
+                            ThiefPowerModifier = -0.50m,
+                            ThievesRating = 70,
+                            TurnsPerDay = 15,
+                            WaterworksHouseBonus = 0.5m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AqueductAcreBonus = 1.5m,
+                            AttackRating = 35,
+                            BonusAlchemists = 0m,
+                            BonusArmorers = 0m,
+                            BonusDruids = 0.10m,
+                            BonusFarmers = -0.30m,
+                            BonusMages = 0.40m,
+                            BonusMasons = -0.10m,
+                            BonusMerchants = 0m,
+                            BonusScientists = 0m,
+                            BonusStonemasons = -0.10m,
+                            BurrowsHouseBonus = 1m,
+                            DefenseRating = 90,
+                            Description = "Jesteśmy najlepszymi magami, o jakich możesz śnić. Całe nasze życie poświęciliśmy magii. Nikt inny nam w niej nie dorównuje — jedynym prawdziwym wyzwaniem jest dla nas walczyć z innymi dżinami.",
+                            E1Attack = 2,
+                            E1Defense = 2,
+                            E2Attack = 4,
+                            E2Defense = 6,
+                            EaseRating = 50,
+                            EconomyRating = 45,
+                            FoodPerPop = 1m,
+                            GeneralsLimit = 6,
+                            HouseCapacityBase = 2m,
+                            LimitedSpellsPerRecalc = 5,
+                            MachineAttack = 5,
+                            MagicBooks = 5,
+                            MagicRating = 100,
+                            MilitaryLossModifier = 0m,
+                            Name = "Dżin",
+                            NameCz = "Džin",
+                            PopGrowthModifier = 0m,
+                            PopPerAcreBase = 2m,
+                            ResearchModifier = 0.20m,
+                            SewersHouseBonus = 2m,
+                            SpecialTraits = "Mana nie znika po turze (każdy dżin przechowa 1 manę); Pałac magiczny: wzrost kosztu zaklęć 6%, pakty magiczne +5% skuteczności; Padłe legiony 3× skuteczniejsze; zaklęcia Metamagii (Wzmocniona/Przyspieszona magia).",
+                            ThiefCostModifier = 0m,
+                            ThiefPowerModifier = -0.15m,
+                            ThievesRating = 65,
+                            TurnsPerDay = 15,
+                            WaterworksHouseBonus = 1m
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AqueductAcreBonus = 0.5m,
+                            AttackRating = 95,
+                            BonusAlchemists = -0.30m,
+                            BonusArmorers = -0.20m,
+                            BonusDruids = -0.50m,
+                            BonusFarmers = -0.30m,
+                            BonusMages = -0.50m,
+                            BonusMasons = -0.20m,
+                            BonusMerchants = 0m,
+                            BonusScientists = -0.30m,
+                            BonusStonemasons = -0.20m,
+                            BurrowsHouseBonus = 0.5m,
+                            DefenseRating = 50,
+                            Description = "Jesteśmy rasą agresywną! Mamy silne jednostki ataku i złodziei, nad obroną się zbytecznie nie zastanawiamy. Jesteśmy najlepsi w budowaniu bardzo skutecznych narzędzi wojennych.",
+                            E1Attack = 2,
+                            E1Defense = 0,
+                            E2Attack = 6,
+                            E2Defense = 3,
+                            EaseRating = 80,
+                            EconomyRating = 50,
+                            FoodPerPop = 1m,
+                            GeneralsLimit = 6,
+                            HouseCapacityBase = 3m,
+                            LimitedSpellsPerRecalc = 3,
+                            MachineAttack = 5,
+                            MagicBooks = 1,
+                            MagicRating = 65,
+                            MilitaryLossModifier = 0m,
+                            Name = "Goblin",
+                            NameCz = "Skřet",
+                            PopGrowthModifier = 0.25m,
+                            PopPerAcreBase = 7m,
+                            ResearchModifier = -0.20m,
+                            SewersHouseBonus = 1m,
+                            SpecialTraits = "+2 tury dziennie (17), Wieża Czasu daje +2 tury; wieże obronne mieszczą 10 hoplitów (obrona 6) i 10 machin (obrona 100); każda jednostka utrzyma 2 machiny; mechanika Goblińska inżynieria (machiny z E1 +50% siły, z E2 obniżają obronę celu).",
+                            ThiefCostModifier = 0m,
+                            ThiefPowerModifier = -0.20m,
+                            ThievesRating = 80,
+                            TurnsPerDay = 17,
+                            WaterworksHouseBonus = 0.5m
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AqueductAcreBonus = 0.5m,
+                            AttackRating = 50,
+                            BonusAlchemists = 0m,
+                            BonusArmorers = 0m,
+                            BonusDruids = 0m,
+                            BonusFarmers = 0.50m,
+                            BonusMages = 0m,
+                            BonusMasons = 0m,
+                            BonusMerchants = 0m,
+                            BonusScientists = 0.20m,
+                            BonusStonemasons = 0m,
+                            BurrowsHouseBonus = 1m,
+                            DefenseRating = 100,
+                            Description = "Nasza prastara rasa przerzedziła się w ciągu wieków, ale dysponuje najsilniejszymi jednostkami obrony. Nie ma rasy, która by nam dorównywała w obronie naszych i zaprzyjaźnionych księstw.",
+                            E1Attack = 2,
+                            E1Defense = 7,
+                            E2Attack = 5,
+                            E2Defense = 19,
+                            EaseRating = 50,
+                            EconomyRating = 100,
+                            FoodPerPop = 1m,
+                            GeneralsLimit = 6,
+                            HouseCapacityBase = 2m,
+                            LimitedSpellsPerRecalc = 6,
+                            MachineAttack = 5,
+                            MagicBooks = 2,
+                            MagicRating = 60,
+                            MilitaryLossModifier = -0.50m,
+                            Name = "Ent",
+                            NameCz = "Ent",
+                            PopGrowthModifier = 0m,
+                            PopPerAcreBase = 2m,
+                            ResearchModifier = 0m,
+                            SewersHouseBonus = 1.5m,
+                            SpecialTraits = "O 50% niższe straty wojskowe; -2 tury dziennie (13); limitowane zaklęcia przechodzą 3× za przeliczenie; Ognisty deszcz i Smoczy Oddech zadają im 2× straty; sady owocowe mieszczą 100 E2; mechanika Gniew Enta (+100% ataku i burzenia po stratach).",
+                            ThiefCostModifier = 0m,
+                            ThiefPowerModifier = -0.25m,
+                            ThievesRating = 50,
+                            TurnsPerDay = 13,
+                            WaterworksHouseBonus = 0.5m
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AqueductAcreBonus = 0.5m,
+                            AttackRating = 90,
+                            BonusAlchemists = 0.20m,
+                            BonusArmorers = 0m,
+                            BonusDruids = 0m,
+                            BonusFarmers = 0m,
+                            BonusMages = 0.20m,
+                            BonusMasons = 0m,
+                            BonusMerchants = 0m,
+                            BonusScientists = 0m,
+                            BonusStonemasons = 0m,
+                            BurrowsHouseBonus = 1m,
+                            DefenseRating = 80,
+                            Description = "Jednostki wojskowe są naszą najsilniejszą stroną. Jak tylko posmakują krwi wrogów, zmieniają się w żądne krwi bestie nie do zatrzymania. Także nasi złodzieje są uważani za jednych z najlepszych w tej profesji.",
+                            E1Attack = 4,
+                            E1Defense = 2,
+                            E2Attack = 10,
+                            E2Defense = 5,
+                            EaseRating = 60,
+                            EconomyRating = 40,
+                            FoodPerPop = 1m,
+                            GeneralsLimit = 8,
+                            HouseCapacityBase = 3m,
+                            LimitedSpellsPerRecalc = 5,
+                            MachineAttack = 5,
+                            MagicBooks = 3,
+                            MagicRating = 85,
+                            MilitaryLossModifier = 0m,
+                            Name = "Wampir",
+                            NameCz = "Vampýr",
+                            PopGrowthModifier = 0m,
+                            PopPerAcreBase = 3m,
+                            ResearchModifier = 0m,
+                            SewersHouseBonus = 1.5m,
+                            SpecialTraits = "Armia nie je (nie umiera w głodzie); odporny na Zarazę; Głupota/Somnambulizm/Ospałość o połowę tańsze; 25% upitych żołnierzy wroga umiera; mechanika Krwawa magia (punkty krwi za zabitych wrogów odblokowują eliksiry: złodziei +5%/lvl, ataku +7%/lvl, magów +3%/lvl, strat +12,5%/lvl).",
+                            ThiefCostModifier = 0m,
+                            ThiefPowerModifier = 0.10m,
+                            ThievesRating = 90,
+                            TurnsPerDay = 15,
+                            WaterworksHouseBonus = 0.5m
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AqueductAcreBonus = 0.5m,
+                            AttackRating = 100,
+                            BonusAlchemists = 0m,
+                            BonusArmorers = 0m,
+                            BonusDruids = 0m,
+                            BonusFarmers = 0m,
+                            BonusMages = -0.15m,
+                            BonusMasons = 0.30m,
+                            BonusMerchants = 0m,
+                            BonusScientists = -0.15m,
+                            BonusStonemasons = 0.30m,
+                            BurrowsHouseBonus = 0.5m,
+                            DefenseRating = 70,
+                            Description = "Jedynym, co nas interesuje, jest walka! Nie jest nas, co prawda, wielu, ale nasze jednostki są najsilniejsze ze wszystkich. Wybierz nas, a zmiażdżymy każdego, kto stanie na naszej drodze!",
+                            E1Attack = 6,
+                            E1Defense = 6,
+                            E2Attack = 16,
+                            E2Defense = 10,
+                            EaseRating = 70,
+                            EconomyRating = 60,
+                            FoodPerPop = 2m,
+                            GeneralsLimit = 6,
+                            HouseCapacityBase = 3m,
+                            LimitedSpellsPerRecalc = 5,
+                            MachineAttack = 6,
+                            MagicBooks = 1,
+                            MagicRating = 55,
+                            MilitaryLossModifier = 0m,
+                            Name = "Olbrzym",
+                            NameCz = "Obr",
+                            PopGrowthModifier = 0m,
+                            PopPerAcreBase = 2.5m,
+                            ResearchModifier = 0m,
+                            SewersHouseBonus = 1m,
+                            SpecialTraits = "Jedzenie 2/mieszkańca (PL: 1,5); limitowane zaklęcia działają na nich do 4× za przeliczenie; +25% burzenia machin; E1 burzy 0,1, E2 burzy 0,5 (nie blokują wież); odporny na Zarazę (PL); nie może mieć złodziei — Gildia Wojowników zamiast Gildii Złodziei (+1 atak/+2 obrona E2); 8 generałów (PL); mechanika Szamanizm (totemy: Grabieży / Smokobójstwa / Niszczycielstwa).",
+                            ThiefCostModifier = 0m,
+                            ThiefPowerModifier = -0.25m,
+                            ThievesRating = 55,
+                            TurnsPerDay = 15,
+                            WaterworksHouseBonus = 0.5m
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AqueductAcreBonus = 0.5m,
+                            AttackRating = 55,
+                            BonusAlchemists = 0.10m,
+                            BonusArmorers = 0m,
+                            BonusDruids = 0m,
+                            BonusFarmers = 0m,
+                            BonusMages = 0m,
+                            BonusMasons = -0.05m,
+                            BonusMerchants = 0m,
+                            BonusScientists = 0m,
+                            BonusStonemasons = -0.05m,
+                            BurrowsHouseBonus = 2m,
+                            DefenseRating = 60,
+                            Description = "Gnomy słyną z alchemii — zamiast krwi w żyłach płynie im złoto. Ich saperzy potrafią wysadzić w powietrze całe oddziały, za to machin wojennych nie używają wcale. Po wybudowaniu Łaźni i Systemu nor ich domki robią się zadziwiająco pojemne.",
+                            E1Attack = 1,
+                            E1Defense = 5,
+                            E2Attack = 8,
+                            E2Defense = 7,
+                            EaseRating = 70,
+                            EconomyRating = 75,
+                            FoodPerPop = 1m,
+                            GeneralsLimit = 6,
+                            HouseCapacityBase = 3m,
+                            LimitedSpellsPerRecalc = 5,
+                            MachineAttack = 0,
+                            MagicBooks = 3,
+                            MagicRating = 70,
+                            MilitaryLossModifier = 0m,
+                            Name = "Gnom",
+                            NameCz = "Tryton (trytoni.php)",
+                            PopGrowthModifier = 0m,
+                            PopPerAcreBase = 3m,
+                            ResearchModifier = 0m,
+                            SewersHouseBonus = 1.5m,
+                            SpecialTraits = "Nie używa machin wojennych (odporny na Chochliki); złodziej kosztuje 1500 złota; drożenie zaklęć +11% (zamiast 10%); Łaźnia +1 do domu, System nor +2; wyszkolone E1 dają dodatkowo 0,5 obrony złodziejskiej; saperzy: dodatkowi zabici = liczba saperów/3 (max 150%).",
+                            ThiefCostModifier = 0m,
+                            ThiefPowerModifier = 0m,
+                            ThievesRating = 75,
+                            TurnsPerDay = 15,
+                            WaterworksHouseBonus = 1m
+                        },
+                        new
+                        {
+                            Id = 12,
+                            AqueductAcreBonus = 2.5m,
+                            AttackRating = 80,
+                            BonusAlchemists = -0.25m,
+                            BonusArmorers = -0.20m,
+                            BonusDruids = -0.20m,
+                            BonusFarmers = -0.20m,
+                            BonusMages = -0.30m,
+                            BonusMasons = -0.25m,
+                            BonusMerchants = 0m,
+                            BonusScientists = 0m,
+                            BonusStonemasons = -0.20m,
+                            BurrowsHouseBonus = 1m,
+                            DefenseRating = 60,
+                            Description = "Prastara rasa o ogromnej płodności — na jednym akrze gnieździ się ich więcej niż przedstawicieli jakiejkolwiek innej rasy. Ich machiny wojenne sieją postrach (8 ataku), ale budowle stawiają niechętnie i drogo.",
+                            E1Attack = 2,
+                            E1Defense = 2,
+                            E2Attack = 5,
+                            E2Defense = 6,
+                            EaseRating = 50,
+                            EconomyRating = 45,
+                            FoodPerPop = 2m,
+                            GeneralsLimit = 6,
+                            HouseCapacityBase = 1m,
+                            LimitedSpellsPerRecalc = 5,
+                            MachineAttack = 8,
+                            MagicBooks = 3,
+                            MagicRating = 60,
+                            MilitaryLossModifier = 0m,
+                            Name = "Br-Oug",
+                            NameCz = "Br-Oug",
+                            PopGrowthModifier = 0m,
+                            PopPerAcreBase = 7m,
+                            ResearchModifier = 0m,
+                            SewersHouseBonus = 1.5m,
+                            SpecialTraits = "+4 mieszkańców/akr (dom mieści tylko 1); Akwedukt daje +2,5/akr; je 2 jedzenia/mieszkańca; budynki o 50% droższe, ale podwójny limit infrapunktów; machiny 8 ataku (z E1: 6), z hoplitami burzą o 40% słabiej; wieże obronne słabsze o 33% (blokują 10 machin, niszczą 2); Zdjęcie zaklęcia o 50% droższe; domobrana broni z siłą 1,5.",
+                            ThiefCostModifier = 0m,
+                            ThiefPowerModifier = -0.20m,
+                            ThievesRating = 55,
+                            TurnsPerDay = 15,
+                            WaterworksHouseBonus = 0.5m
+                        });
+                });
+
             modelBuilder.Entity("RedDragonAPI.Models.Entities.Research", b =>
                 {
                     b.Property<int>("Id")
@@ -1868,11 +2622,21 @@ namespace RedDragonAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("IsLimited")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ManaCost")
                         .HasColumnType("int");
 
                     b.Property<int>("PowerLevel")
                         .HasColumnType("int");
+
+                    b.Property<int>("RequiredBooks")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RequiredRace")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("SpellType")
                         .IsRequired()
@@ -1894,86 +2658,528 @@ namespace RedDragonAPI.Migrations
                         new
                         {
                             Id = 1,
-                            Category = "White",
-                            Description = "Leczy rany żołnierzy po walce",
-                            DisplayName = "Światło Uzdrowienia",
-                            EffectType = "Buff",
-                            ManaCost = 100,
-                            PowerLevel = 5,
-                            SpellType = "HealingLight",
-                            TargetType = "Self"
+                            Category = "Pozostałe",
+                            Description = "Pokazuje podstawowe informacje o wrogim księstwie (E2, E1, hoplici, złodzieje, magowie, machiny). Rzucone minimalną siłą służy jako sonda obrony magicznej.",
+                            DisplayName = "Sokole Oko",
+                            EffectType = "EagleEye",
+                            IsLimited = false,
+                            ManaCost = 20,
+                            PowerLevel = 1,
+                            RequiredBooks = 0,
+                            SpellType = "SokoleOko",
+                            TargetType = "Enemy"
                         },
                         new
                         {
                             Id = 2,
-                            Category = "White",
-                            Description = "+15% obrony na 5 tur",
-                            DisplayName = "Aura Ochronna",
-                            EffectType = "Buff",
-                            ManaCost = 200,
-                            PowerLevel = 10,
-                            SpellType = "ProtectiveAura",
+                            Category = "Biała",
+                            Description = "+1 popularności co turę (jak Zajazd u Czerwonego Smoka)",
+                            DisplayName = "Dobry humor",
+                            EffectType = "PopularityBuff",
+                            IsLimited = false,
+                            ManaCost = 125,
+                            PowerLevel = 1,
+                            RequiredBooks = 0,
+                            SpellType = "DobryHumor",
                             TargetType = "Self"
                         },
                         new
                         {
                             Id = 3,
-                            Category = "White",
-                            Description = "+25% produkcji na 3 tury",
-                            DisplayName = "Błogosławieństwo Produkcji",
-                            EffectType = "Buff",
-                            ManaCost = 150,
-                            PowerLevel = 8,
-                            SpellType = "ProductionBlessing",
+                            Category = "Pozostałe",
+                            Description = "Osłabia wybrane zaklęcie o podwojoną siłę Twoich magów (min. 20% siły zaklęcia). Tylko na własne księstwo. Br-Oug: o 50% droższe.",
+                            DisplayName = "Zdjęcie zaklęcia",
+                            EffectType = "Dispel",
+                            IsLimited = false,
+                            ManaCost = 125,
+                            PowerLevel = 1,
+                            RequiredBooks = 0,
+                            SpellType = "ZdjecieZaklecia",
                             TargetType = "Self"
                         },
                         new
                         {
                             Id = 4,
-                            Category = "Destructive",
-                            Description = "Zadaje obrażenia armii wroga",
-                            DisplayName = "Kula Ognia",
-                            EffectType = "Damage",
-                            ManaCost = 300,
-                            PowerLevel = 15,
-                            SpellType = "Fireball",
-                            TargetType = "Enemy"
+                            Category = "Biała",
+                            Description = "Zwiększa wydajność niemagicznych profesji do +49%",
+                            DisplayName = "Pracowitość",
+                            EffectType = "ProductionBuff",
+                            IsLimited = false,
+                            ManaCost = 340,
+                            PowerLevel = 2,
+                            RequiredBooks = 0,
+                            SpellType = "Pracowitosc",
+                            TargetType = "Self"
                         },
                         new
                         {
                             Id = 5,
-                            Category = "Destructive",
-                            Description = "Niszczy budynki wroga",
+                            Category = "Pozostałe",
+                            Description = "Zamienia manę w złoto — 200 sztuk złota za 1 manę",
+                            DisplayName = "Mannamorfoza",
+                            EffectType = "Mannamorphosis",
+                            IsLimited = false,
+                            ManaCost = 85,
+                            PowerLevel = 1,
+                            RequiredBooks = 0,
+                            SpellType = "Mannamorfoza",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Category = "Tarcze",
+                            Description = "Zwiększa obronę magiczną do +24% (nie działa przez pakty)",
+                            DisplayName = "Tarcza antymagiczna",
+                            EffectType = "AntimagicShield",
+                            IsLimited = false,
+                            ManaCost = 210,
+                            PowerLevel = 2,
+                            RequiredBooks = 1,
+                            SpellType = "TarczaAntymagiczna",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Category = "Tarcze",
+                            Description = "Zwiększa obronę wojskową do +24% (tylko obrona własnych jednostek)",
+                            DisplayName = "Tarcza wojenna",
+                            EffectType = "WarShield",
+                            IsLimited = false,
+                            ManaCost = 380,
+                            PowerLevel = 2,
+                            RequiredBooks = 1,
+                            SpellType = "TarczaWojenna",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Category = "Biała",
+                            Description = "+10% przyrostu; zwiększa szansę na smoka, złoto z kopalni, przyjście generała, odbicie zaklęć i fart w labiryncie (max 49%)",
+                            DisplayName = "Szczęście",
+                            EffectType = "LuckBuff",
+                            IsLimited = false,
+                            ManaCost = 210,
+                            PowerLevel = 2,
+                            RequiredBooks = 1,
+                            SpellType = "Szczescie",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Category = "Tarcze",
+                            Description = "Do 24% szansy na odbicie nieudanych zaklęć wroga (+20% siły odbicia z Soczewką magiczną)",
+                            DisplayName = "Zwierciadło magiczne",
+                            EffectType = "MagicShield",
+                            IsLimited = false,
+                            ManaCost = 680,
+                            PowerLevel = 3,
+                            RequiredBooks = 1,
+                            SpellType = "ZwierciadloMagiczne",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Category = "Tarcze",
+                            Description = "Duchy poległych bronią księstwa: obrona = min(siła zaklęcia, liczba magów). Zdejmowane tylko Klątwą Padłych Legionów.",
+                            DisplayName = "Padłe legiony",
+                            EffectType = "LegionShield",
+                            IsLimited = false,
+                            ManaCost = 425,
+                            PowerLevel = 3,
+                            RequiredBooks = 1,
+                            SpellType = "PadleLegiony",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Category = "Biała",
+                            Description = "Przyrost ludności +30%",
+                            DisplayName = "Płodność",
+                            EffectType = "GrowthBuff",
+                            IsLimited = false,
+                            ManaCost = 210,
+                            PowerLevel = 2,
+                            RequiredBooks = 2,
+                            SpellType = "Plodnosc",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Category = "Niszcząca",
+                            Description = "Burzy 1–2% budynków infrastruktury, 50%·x szansy na budynek specjalny. Limit 5 na cel (Krasnolud 4, Goblin 3).",
                             DisplayName = "Trzęsienie Ziemi",
-                            EffectType = "Damage",
-                            ManaCost = 500,
-                            PowerLevel = 20,
-                            SpellType = "Earthquake",
+                            EffectType = "BuildingDamage",
+                            IsLimited = true,
+                            ManaCost = 190,
+                            PowerLevel = 3,
+                            RequiredBooks = 2,
+                            SpellType = "TrzesienieZiemi",
                             TargetType = "Enemy"
                         },
                         new
                         {
-                            Id = 6,
-                            Category = "Black",
-                            Description = "Zmniejsza populację wroga",
+                            Id = 22,
+                            Category = "Czarna",
+                            Description = "Ludność potrzebuje do +300% więcej jedzenia, niszczy 9% zapasów (armie Nekromanty nie jedzą)",
+                            DisplayName = "Szarańcza",
+                            EffectType = "FoodDamage",
+                            IsLimited = false,
+                            ManaCost = 125,
+                            PowerLevel = 2,
+                            RequiredBooks = 2,
+                            SpellType = "Szarancza",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Category = "Czarna",
+                            Description = "Co turę umiera do 3% ludności (Olbrzym odporny)",
                             DisplayName = "Zaraza",
-                            EffectType = "Debuff",
-                            ManaCost = 400,
-                            PowerLevel = 18,
-                            SpellType = "Plague",
+                            EffectType = "PopulationDamage",
+                            IsLimited = false,
+                            ManaCost = 275,
+                            PowerLevel = 3,
+                            RequiredBooks = 2,
+                            SpellType = "Zaraza",
                             TargetType = "Enemy"
                         },
                         new
                         {
-                            Id = 7,
-                            Category = "Black",
-                            Description = "-20% produkcji wroga na 5 tur",
-                            DisplayName = "Klątwa",
-                            EffectType = "Debuff",
-                            ManaCost = 250,
-                            PowerLevel = 12,
-                            SpellType = "Curse",
+                            Id = 24,
+                            Category = "Pozostałe",
+                            Description = "Odsyła duchy poległych do grobów — osłabia Padłe legiony o siłę tego zaklęcia",
+                            DisplayName = "Klątwa Padłych Legionów",
+                            EffectType = "DoomLegions",
+                            IsLimited = false,
+                            ManaCost = 100,
+                            PowerLevel = 2,
+                            RequiredBooks = 2,
+                            SpellType = "KlatwaPadlychLegionow",
                             TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Category = "Czarna",
+                            Description = "−1 popularności wroga co turę (Hobbit odporny)",
+                            DisplayName = "Zły humor",
+                            EffectType = "PopularityDebuff",
+                            IsLimited = false,
+                            ManaCost = 65,
+                            PowerLevel = 1,
+                            RequiredBooks = 3,
+                            SpellType = "ZlyHumor",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Category = "Czarna",
+                            Description = "Obniża obronę wojskową wroga do −24% (tylko obronę własnych jednostek celu)",
+                            DisplayName = "Słabość",
+                            EffectType = "DefenseDebuff",
+                            IsLimited = false,
+                            ManaCost = 85,
+                            PowerLevel = 2,
+                            RequiredBooks = 3,
+                            SpellType = "Slabosc",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Category = "Niszcząca",
+                            Description = "Zabija 2–4% mieszkańców (armia + profesje). Limit 5 na cel (Krasnolud 4, Goblin 3).",
+                            DisplayName = "Ognisty Deszcz",
+                            EffectType = "ArmyDamage",
+                            IsLimited = true,
+                            ManaCost = 340,
+                            PowerLevel = 3,
+                            RequiredBooks = 3,
+                            SpellType = "OgnistyDeszcz",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            Category = "Czarna",
+                            Description = "−10% przyrostu ludności i mniej szczęścia w zdarzeniach losowych",
+                            DisplayName = "Pech",
+                            EffectType = "GrowthDebuff",
+                            IsLimited = false,
+                            ManaCost = 65,
+                            PowerLevel = 1,
+                            RequiredBooks = 3,
+                            SpellType = "Pech",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 34,
+                            Category = "Przywołania",
+                            Description = "Wabi Czerwonego Smoka do armii; koszt zależy od liczby smoków: ×(D²·0,0001+0,2)·(max(50,D)/100)²",
+                            DisplayName = "Przywołanie Smoka",
+                            EffectType = "SummonDragon",
+                            IsLimited = false,
+                            ManaCost = 500,
+                            PowerLevel = 4,
+                            RequiredBooks = 3,
+                            SpellType = "PrzywolanieSmoka",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 40,
+                            Category = "Czarna",
+                            Description = "Niszczy 20% zasobów wroga (Elf rzuca 10% słabiej, Dżin 10% silniej)",
+                            DisplayName = "Zniszczenie zapasów",
+                            EffectType = "SupplyDamage",
+                            IsLimited = false,
+                            ManaCost = 125,
+                            PowerLevel = 2,
+                            RequiredBooks = 4,
+                            SpellType = "ZniszczenieZapasow",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 41,
+                            Category = "Niszcząca",
+                            Description = "Zabija 4% ludzi w profesjach (nie rusza armii i złodziei). Limit 7 na cel (Krasnolud 6, Goblin 5).",
+                            DisplayName = "Huragan",
+                            EffectType = "WorkerDamage",
+                            IsLimited = true,
+                            ManaCost = 255,
+                            PowerLevel = 3,
+                            RequiredBooks = 4,
+                            SpellType = "Huragan",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 42,
+                            Category = "Niszcząca",
+                            Description = "Spala 5–10% złodziei wroga. Limit 7 na cel (Krasnolud 6; Goblin całkowicie odporny).",
+                            DisplayName = "Spopielenie złodziei",
+                            EffectType = "ThiefDamage",
+                            IsLimited = true,
+                            ManaCost = 210,
+                            PowerLevel = 3,
+                            RequiredBooks = 4,
+                            SpellType = "SpopielenieZlodziei",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 43,
+                            Category = "Czarna",
+                            Description = "Co turę niszczą część machin wojennych (Gnom odporny — nie używa machin)",
+                            DisplayName = "Chochliki",
+                            EffectType = "MachineDamage",
+                            IsLimited = false,
+                            ManaCost = 125,
+                            PowerLevel = 2,
+                            RequiredBooks = 4,
+                            SpellType = "Chochliki",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 44,
+                            Category = "Niszcząca",
+                            Description = "Najpotężniejsze zaklęcie: burzy 1–2% budynków, zabija 3–5% armii i 5–10% ludności, 50% szansy na budynek specjalny. Wymaga Pałacu Magicznego. Limit 5 (Krasnolud 4, Goblin 3).",
+                            DisplayName = "Smoczy Oddech",
+                            EffectType = "DragonBreath",
+                            IsLimited = true,
+                            ManaCost = 1500,
+                            PowerLevel = 5,
+                            RequiredBooks = 4,
+                            SpellType = "SmoczyOddech",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 50,
+                            Category = "Czarna",
+                            Description = "Obniża wydajność niemagicznych profesji wroga do −50%",
+                            DisplayName = "Somnambulizm",
+                            EffectType = "ProductionDebuff",
+                            IsLimited = false,
+                            ManaCost = 105,
+                            PowerLevel = 2,
+                            RequiredBooks = 5,
+                            SpellType = "Somnambulizm",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 51,
+                            Category = "Czarna",
+                            Description = "Obniża wydajność magów i druidów o 25% oraz obronę magiczną celu i jego paktów",
+                            DisplayName = "Głupota",
+                            EffectType = "StupidityDebuff",
+                            IsLimited = false,
+                            ManaCost = 85,
+                            PowerLevel = 2,
+                            RequiredBooks = 5,
+                            SpellType = "Glupota",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 52,
+                            Category = "Biała",
+                            Description = "Zwiększa wydajność magicznych profesji do +49%",
+                            DisplayName = "Fluid magiczny",
+                            EffectType = "MagicBuff",
+                            IsLimited = false,
+                            ManaCost = 210,
+                            PowerLevel = 2,
+                            RequiredBooks = 5,
+                            SpellType = "FluidMagiczny",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 53,
+                            Category = "Czarna",
+                            Description = "Przyrost ludności wroga −50% (Nekromant odporny)",
+                            DisplayName = "Kastracja",
+                            EffectType = "GrowthDebuff",
+                            IsLimited = false,
+                            ManaCost = 85,
+                            PowerLevel = 2,
+                            RequiredBooks = 5,
+                            SpellType = "Kastracja",
+                            TargetType = "Enemy"
+                        },
+                        new
+                        {
+                            Id = 60,
+                            Category = "Rasowe",
+                            Description = "Metamagia Dżina: zaklęcia +10% siły, +25% ceny",
+                            DisplayName = "Wzmocniona magia",
+                            EffectType = "Metamagic",
+                            IsLimited = false,
+                            ManaCost = 210,
+                            PowerLevel = 2,
+                            RequiredBooks = 0,
+                            RequiredRace = "Dżin",
+                            SpellType = "WzmocnionaMagia",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 61,
+                            Category = "Rasowe",
+                            Description = "Metamagia Dżina: zaklęcia −10% ceny, −25% siły",
+                            DisplayName = "Przyspieszona magia",
+                            EffectType = "Metamagic",
+                            IsLimited = false,
+                            ManaCost = 210,
+                            PowerLevel = 2,
+                            RequiredBooks = 0,
+                            RequiredRace = "Dżin",
+                            SpellType = "PrzyspieszonaMagia",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 62,
+                            Category = "Rasowe",
+                            Description = "Szamanizm Olbrzyma: ładuje wybrany totem (koszt totemu: obszar×20)",
+                            DisplayName = "Wezwanie totemu",
+                            EffectType = "TotemCharge",
+                            IsLimited = false,
+                            ManaCost = 380,
+                            PowerLevel = 2,
+                            RequiredBooks = 0,
+                            RequiredRace = "Olbrzym",
+                            SpellType = "WezwanieTotemu",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 63,
+                            Category = "Rasowe",
+                            Description = "Nekromancja: −10% populacji/turę, polegli stają się ciałami",
+                            DisplayName = "Ofiarowanie",
+                            EffectType = "Sacrifice",
+                            IsLimited = false,
+                            ManaCost = 210,
+                            PowerLevel = 2,
+                            RequiredBooks = 0,
+                            RequiredRace = "Nekromant",
+                            SpellType = "Ofiarowanie",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 64,
+                            Category = "Rasowe",
+                            Description = "Nekromancja: wskrzesza E2 (10% wolnych magów, 1 ciało/jednostkę)",
+                            DisplayName = "Przywołaj elitę 2. stopnia",
+                            EffectType = "SummonE2",
+                            IsLimited = false,
+                            ManaCost = 1000,
+                            PowerLevel = 3,
+                            RequiredBooks = 0,
+                            RequiredRace = "Nekromant",
+                            SpellType = "PrzywolajE2",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 65,
+                            Category = "Rasowe",
+                            Description = "Nekromancja: wskrzesza E1 (26% wolnych magów, 1/6 ciała)",
+                            DisplayName = "Przywołaj elitę 1. stopnia",
+                            EffectType = "SummonE1",
+                            IsLimited = false,
+                            ManaCost = 1000,
+                            PowerLevel = 3,
+                            RequiredBooks = 0,
+                            RequiredRace = "Nekromant",
+                            SpellType = "PrzywolajE1",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 66,
+                            Category = "Rasowe",
+                            Description = "Nekromancja: wskrzesza hoplitów (50% wolnych magów, 1/6 ciała)",
+                            DisplayName = "Przywołaj hoplitów",
+                            EffectType = "SummonHoplites",
+                            IsLimited = false,
+                            ManaCost = 1000,
+                            PowerLevel = 3,
+                            RequiredBooks = 0,
+                            RequiredRace = "Nekromant",
+                            SpellType = "PrzywolajHoplitow",
+                            TargetType = "Self"
+                        },
+                        new
+                        {
+                            Id = 67,
+                            Category = "Rasowe",
+                            Description = "Nekromancja: wskrzesza złodziei (50% wolnych magów, 1/2 ciała)",
+                            DisplayName = "Przywołaj złodziei",
+                            EffectType = "SummonThieves",
+                            IsLimited = false,
+                            ManaCost = 1000,
+                            PowerLevel = 3,
+                            RequiredBooks = 0,
+                            RequiredRace = "Nekromant",
+                            SpellType = "PrzywolajZlodziei",
+                            TargetType = "Self"
                         });
                 });
 
@@ -2687,52 +3893,102 @@ namespace RedDragonAPI.Migrations
                         new
                         {
                             Id = 1,
-                            ActionType = "StealGold",
-                            Description = "Kradnie złoto z wrogiego skarbca",
-                            DisplayName = "Kradzież Złota",
-                            EffectType = "StealGold",
-                            SuccessBaseRate = 0.60m,
-                            ThievesRequired = 50
+                            ActionType = "ObserwacjaKsiestwa",
+                            Description = "Wywiad: stan wojsk, zasobów i budynków wroga (bez expów dla generała)",
+                            DisplayName = "Obserwacja księstwa",
+                            EffectType = "Spy",
+                            SuccessBaseRate = 1.00m,
+                            ThievesRequired = 20
                         },
                         new
                         {
                             Id = 2,
-                            ActionType = "StealResources",
-                            Description = "Kradnie surowce wroga",
-                            DisplayName = "Kradzież Surowców",
-                            EffectType = "StealResources",
-                            SuccessBaseRate = 0.50m,
-                            ThievesRequired = 75
+                            ActionType = "KradziezZapasow",
+                            Description = "Kradnie złoto i surowce wroga (bez expów dla generała)",
+                            DisplayName = "Kradzież zapasów",
+                            EffectType = "StealSupplies",
+                            SuccessBaseRate = 0.90m,
+                            ThievesRequired = 50
                         },
                         new
                         {
                             Id = 3,
-                            ActionType = "Sabotage",
-                            Description = "Niszczy budynki wroga",
-                            DisplayName = "Sabotaż",
-                            EffectType = "Sabotage",
-                            SuccessBaseRate = 0.40m,
-                            ThievesRequired = 100
+                            ActionType = "PodzeganieDoRewolty",
+                            Description = "Obniża popularność wroga (Hobbit: efekt połowiczny)",
+                            DisplayName = "Podżeganie do rewolty",
+                            EffectType = "Revolt",
+                            SuccessBaseRate = 0.80m,
+                            ThievesRequired = 60
                         },
                         new
                         {
                             Id = 4,
-                            ActionType = "Spy",
-                            Description = "Zbiera informacje o wrogu",
-                            DisplayName = "Szpiegostwo",
-                            EffectType = "Spy",
+                            ActionType = "BurzenieBudynkow",
+                            Description = "Niszczy infrastrukturę wroga",
+                            DisplayName = "Burzenie budynków",
+                            EffectType = "DemolishBuildings",
                             SuccessBaseRate = 0.70m,
-                            ThievesRequired = 30
+                            ThievesRequired = 100
                         },
                         new
                         {
                             Id = 5,
-                            ActionType = "Assassination",
-                            Description = "Zabija magów lub naukowców wroga",
-                            DisplayName = "Zamach",
-                            EffectType = "Sabotage",
+                            ActionType = "WojnaGangow",
+                            Description = "Zabija złodziei wroga",
+                            DisplayName = "Wojna gangów",
+                            EffectType = "ThiefWar",
+                            SuccessBaseRate = 0.80m,
+                            ThievesRequired = 80
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ActionType = "WymordowanieMagow",
+                            Description = "Zabija magów wroga",
+                            DisplayName = "Wymordowanie magów",
+                            EffectType = "KillMages",
+                            SuccessBaseRate = 0.60m,
+                            ThievesRequired = 120
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ActionType = "ZabijanieLudnosci",
+                            Description = "Morduje cywilów wroga",
+                            DisplayName = "Zabijanie ludności",
+                            EffectType = "KillPeople",
+                            SuccessBaseRate = 0.70m,
+                            ThievesRequired = 100
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ActionType = "UpijanieArmii",
+                            Description = "Upija żołnierzy wroga — nie bronią w następnym przeliczeniu (Wampir: 25% upitych umiera)",
+                            DisplayName = "Upijanie armii",
+                            EffectType = "DrunkArmy",
+                            SuccessBaseRate = 0.70m,
+                            ThievesRequired = 90
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ActionType = "ZabojstwoGenerala",
+                            Description = "Próba zamachu na generała wroga",
+                            DisplayName = "Zabójstwo generała",
+                            EffectType = "KillGeneral",
                             SuccessBaseRate = 0.30m,
-                            ThievesRequired = 150
+                            ThievesRequired = 200
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ActionType = "PorwanieGenerala",
+                            Description = "Próba porwania generała wroga (można negocjować okup)",
+                            DisplayName = "Porwanie generała",
+                            EffectType = "KidnapGeneral",
+                            SuccessBaseRate = 0.25m,
+                            ThievesRequired = 200
                         });
                 });
 
@@ -2802,179 +4058,1139 @@ namespace RedDragonAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            AttackPower = 10,
-                            CostFood = 10,
-                            CostGold = 50,
-                            CostWeapons = 1,
-                            DefensePower = 12,
-                            Description = "Podstawowe jednostki piechoty",
-                            DisplayName = "Piechota",
-                            Race = "Ludzie",
-                            RequiredBuilding = "KonstrukcjaMachin",
-                            TrainingTime = 1,
-                            UnitType = "Ludzie_Piechota",
-                            Upkeep = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AttackPower = 15,
-                            CostFood = 10,
-                            CostGold = 80,
-                            CostWeapons = 2,
-                            DefensePower = 6,
-                            Description = "Jednostki dystansowe",
-                            DisplayName = "Łucznik",
-                            Race = "Ludzie",
-                            RequiredBuilding = "KonstrukcjaMachin",
-                            TrainingTime = 1,
-                            UnitType = "Ludzie_Lucznik",
-                            Upkeep = 3
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AttackPower = 25,
-                            CostFood = 20,
+                            Id = 11,
+                            AttackPower = 1,
+                            CostFood = 0,
                             CostGold = 200,
-                            CostWeapons = 3,
-                            DefensePower = 20,
-                            Description = "Szybkie i silne jednostki konne",
-                            DisplayName = "Kawaleria",
-                            Race = "Ludzie",
-                            RequiredBuilding = "KonstrukcjaMachin",
-                            TrainingTime = 2,
-                            UnitType = "Ludzie_Kawaleria",
-                            Upkeep = 5
+                            CostWeapons = 2,
+                            DefensePower = 1,
+                            Description = "Podstawowy żołnierz",
+                            DisplayName = "Hoplita",
+                            Race = "Człowiek",
+                            RequiredBuilding = "",
+                            TrainingTime = 1,
+                            UnitType = "Czlowiek_Hoplita",
+                            Upkeep = 0
                         },
                         new
                         {
-                            Id = 4,
-                            AttackPower = 40,
-                            CostFood = 30,
-                            CostGold = 500,
-                            CostWeapons = 5,
-                            DefensePower = 35,
-                            Description = "Elitarne jednostki wojskowe",
+                            Id = 12,
+                            AttackPower = 3,
+                            CostFood = 0,
+                            CostGold = 400,
+                            CostWeapons = 4,
+                            DefensePower = 3,
+                            Description = "Elita 1. stopnia",
                             DisplayName = "Rycerz",
-                            Race = "Ludzie",
-                            RequiredBuilding = "AkademiaWojskowa",
-                            TrainingTime = 3,
-                            UnitType = "Ludzie_Rycerz",
-                            Upkeep = 10
+                            Race = "Człowiek",
+                            RequiredBuilding = "OltarzInicjacji",
+                            TrainingTime = 1,
+                            UnitType = "Czlowiek_Rycerz",
+                            Upkeep = 0
                         },
                         new
                         {
-                            Id = 5,
-                            AttackPower = 60,
+                            Id = 13,
+                            AttackPower = 7,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 80,
+                            DefensePower = 7,
+                            Description = "Elita 2. stopnia",
+                            DisplayName = "Paladyn",
+                            Race = "Człowiek",
+                            RequiredBuilding = "KoszarySpecjalne",
+                            TrainingTime = 1,
+                            UnitType = "Czlowiek_Paladyn",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 14,
+                            AttackPower = 5,
+                            CostFood = 0,
+                            CostGold = 800,
+                            CostWeapons = 50,
+                            DefensePower = 0,
+                            Description = "Burzy budynki wroga",
+                            DisplayName = "Machina wojenna",
+                            Race = "Człowiek",
+                            RequiredBuilding = "KonstrukcjaMachin",
+                            TrainingTime = 1,
+                            UnitType = "Czlowiek_Machina",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 15,
+                            AttackPower = 0,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 0,
+                            DefensePower = 0,
+                            Description = "Armia podziemia",
+                            DisplayName = "Złodziej",
+                            Race = "Człowiek",
+                            RequiredBuilding = "GildiaZlodziei",
+                            TrainingTime = 1,
+                            UnitType = "Czlowiek_Zlodziej",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 16,
+                            AttackPower = 100,
+                            CostFood = 0,
+                            CostGold = 0,
+                            CostWeapons = 0,
+                            DefensePower = 100,
+                            Description = "Potężna bestia — wzmacnia armię",
+                            DisplayName = "Smok",
+                            Race = "Człowiek",
+                            RequiredBuilding = "Smokodrap",
+                            TrainingTime = 1,
+                            UnitType = "Czlowiek_Smok",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 21,
+                            AttackPower = 1,
+                            CostFood = 0,
+                            CostGold = 200,
+                            CostWeapons = 2,
+                            DefensePower = 1,
+                            Description = "Podstawowy żołnierz",
+                            DisplayName = "Hoplita",
+                            Race = "Elf",
+                            RequiredBuilding = "",
+                            TrainingTime = 1,
+                            UnitType = "Elf_Hoplita",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 22,
+                            AttackPower = 4,
+                            CostFood = 0,
+                            CostGold = 700,
+                            CostWeapons = 20,
+                            DefensePower = 6,
+                            Description = "Elita 1. stopnia",
+                            DisplayName = "Łucznik",
+                            Race = "Elf",
+                            RequiredBuilding = "OltarzInicjacji",
+                            TrainingTime = 1,
+                            UnitType = "Elf_Lucznik",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 23,
+                            AttackPower = 8,
+                            CostFood = 0,
+                            CostGold = 1900,
+                            CostWeapons = 200,
+                            DefensePower = 11,
+                            Description = "Elita 2. stopnia",
+                            DisplayName = "Leśna Zjawa",
+                            Race = "Elf",
+                            RequiredBuilding = "KoszarySpecjalne",
+                            TrainingTime = 1,
+                            UnitType = "Elf_LesnaZjawa",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 24,
+                            AttackPower = 5,
+                            CostFood = 0,
+                            CostGold = 800,
+                            CostWeapons = 50,
+                            DefensePower = 0,
+                            Description = "Burzy budynki wroga",
+                            DisplayName = "Machina wojenna",
+                            Race = "Elf",
+                            RequiredBuilding = "KonstrukcjaMachin",
+                            TrainingTime = 1,
+                            UnitType = "Elf_Machina",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 25,
+                            AttackPower = 0,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 0,
+                            DefensePower = 0,
+                            Description = "Armia podziemia",
+                            DisplayName = "Złodziej",
+                            Race = "Elf",
+                            RequiredBuilding = "GildiaZlodziei",
+                            TrainingTime = 1,
+                            UnitType = "Elf_Zlodziej",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 26,
+                            AttackPower = 100,
+                            CostFood = 0,
+                            CostGold = 0,
+                            CostWeapons = 0,
+                            DefensePower = 100,
+                            Description = "Potężna bestia — wzmacnia armię",
+                            DisplayName = "Smok",
+                            Race = "Elf",
+                            RequiredBuilding = "Smokodrap",
+                            TrainingTime = 1,
+                            UnitType = "Elf_Smok",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 31,
+                            AttackPower = 1,
+                            CostFood = 0,
+                            CostGold = 200,
+                            CostWeapons = 2,
+                            DefensePower = 1,
+                            Description = "Podstawowy żołnierz",
+                            DisplayName = "Hoplita",
+                            Race = "Krasnolud",
+                            RequiredBuilding = "",
+                            TrainingTime = 1,
+                            UnitType = "Krasnolud_Hoplita",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 32,
+                            AttackPower = 5,
                             CostFood = 0,
                             CostGold = 1000,
-                            CostWeapons = 10,
-                            DefensePower = 5,
-                            Description = "Potężna machina oblężnicza",
+                            CostWeapons = 15,
+                            DefensePower = 6,
+                            Description = "Elita 1. stopnia",
+                            DisplayName = "Ciężkozbrojny",
+                            Race = "Krasnolud",
+                            RequiredBuilding = "OltarzInicjacji",
+                            TrainingTime = 1,
+                            UnitType = "Krasnolud_Ciezkozbrojny",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 33,
+                            AttackPower = 10,
+                            CostFood = 0,
+                            CostGold = 1800,
+                            CostWeapons = 120,
+                            DefensePower = 11,
+                            Description = "Elita 2. stopnia",
+                            DisplayName = "Berserker",
+                            Race = "Krasnolud",
+                            RequiredBuilding = "KoszarySpecjalne",
+                            TrainingTime = 1,
+                            UnitType = "Krasnolud_Berserker",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 34,
+                            AttackPower = 5,
+                            CostFood = 0,
+                            CostGold = 800,
+                            CostWeapons = 50,
+                            DefensePower = 0,
+                            Description = "Burzy budynki wroga",
                             DisplayName = "Machina wojenna",
-                            Race = "Ludzie",
-                            RequiredBuilding = "KonstrukcjaMachin",
-                            TrainingTime = 5,
-                            UnitType = "Ludzie_Machina",
-                            Upkeep = 15
-                        },
-                        new
-                        {
-                            Id = 6,
-                            AttackPower = 12,
-                            CostFood = 10,
-                            CostGold = 60,
-                            CostWeapons = 1,
-                            DefensePower = 15,
-                            Description = "Silna piechota krasnoludów",
-                            DisplayName = "Wojownik krasnoludzki",
-                            Race = "Krasnoludy",
+                            Race = "Krasnolud",
                             RequiredBuilding = "KonstrukcjaMachin",
                             TrainingTime = 1,
-                            UnitType = "Krasnoludy_Piechota",
-                            Upkeep = 2
+                            UnitType = "Krasnolud_Machina",
+                            Upkeep = 0
                         },
                         new
                         {
-                            Id = 7,
-                            AttackPower = 18,
-                            CostFood = 10,
-                            CostGold = 90,
+                            Id = 35,
+                            AttackPower = 0,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 0,
+                            DefensePower = 0,
+                            Description = "Armia podziemia",
+                            DisplayName = "Złodziej",
+                            Race = "Krasnolud",
+                            RequiredBuilding = "GildiaZlodziei",
+                            TrainingTime = 1,
+                            UnitType = "Krasnolud_Zlodziej",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 36,
+                            AttackPower = 100,
+                            CostFood = 0,
+                            CostGold = 0,
+                            CostWeapons = 0,
+                            DefensePower = 100,
+                            Description = "Potężna bestia — wzmacnia armię",
+                            DisplayName = "Smok",
+                            Race = "Krasnolud",
+                            RequiredBuilding = "Smokodrap",
+                            TrainingTime = 1,
+                            UnitType = "Krasnolud_Smok",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 41,
+                            AttackPower = 1,
+                            CostFood = 0,
+                            CostGold = 200,
                             CostWeapons = 2,
-                            DefensePower = 8,
-                            Description = "Ciężka broń dystansowa",
-                            DisplayName = "Kusznik krasnoludzki",
-                            Race = "Krasnoludy",
-                            RequiredBuilding = "KonstrukcjaMachin",
+                            DefensePower = 1,
+                            Description = "Podstawowy żołnierz",
+                            DisplayName = "Hoplita",
+                            Race = "Hobbit",
+                            RequiredBuilding = "",
                             TrainingTime = 1,
-                            UnitType = "Krasnoludy_Lucznik",
-                            Upkeep = 3
+                            UnitType = "Hobbit_Hoplita",
+                            Upkeep = 0
                         },
                         new
                         {
-                            Id = 8,
-                            AttackPower = 11,
-                            CostFood = 8,
-                            CostGold = 55,
-                            CostWeapons = 1,
+                            Id = 42,
+                            AttackPower = 2,
+                            CostFood = 0,
+                            CostGold = 500,
+                            CostWeapons = 20,
+                            DefensePower = 4,
+                            Description = "Elita 1. stopnia",
+                            DisplayName = "Błotostęp",
+                            Race = "Hobbit",
+                            RequiredBuilding = "OltarzInicjacji",
+                            TrainingTime = 1,
+                            UnitType = "Hobbit_Blotostep",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 43,
+                            AttackPower = 4,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 120,
                             DefensePower = 10,
-                            Description = "Zwinny wojownik elfów",
-                            DisplayName = "Strażnik elfów",
-                            Race = "Elfy",
-                            RequiredBuilding = "KonstrukcjaMachin",
+                            Description = "Elita 2. stopnia",
+                            DisplayName = "Nornik",
+                            Race = "Hobbit",
+                            RequiredBuilding = "KoszarySpecjalne",
                             TrainingTime = 1,
-                            UnitType = "Elfy_Piechota",
-                            Upkeep = 2
+                            UnitType = "Hobbit_Nornik",
+                            Upkeep = 0
                         },
                         new
                         {
-                            Id = 9,
-                            AttackPower = 20,
-                            CostFood = 8,
-                            CostGold = 75,
-                            CostWeapons = 1,
-                            DefensePower = 5,
-                            Description = "Mistrzowscy łucznicy",
-                            DisplayName = "Łucznik elfów",
-                            Race = "Elfy",
+                            Id = 44,
+                            AttackPower = 5,
+                            CostFood = 0,
+                            CostGold = 800,
+                            CostWeapons = 50,
+                            DefensePower = 0,
+                            Description = "Burzy budynki wroga",
+                            DisplayName = "Machina wojenna",
+                            Race = "Hobbit",
                             RequiredBuilding = "KonstrukcjaMachin",
                             TrainingTime = 1,
-                            UnitType = "Elfy_Lucznik",
-                            Upkeep = 3
+                            UnitType = "Hobbit_Machina",
+                            Upkeep = 0
                         },
                         new
                         {
-                            Id = 10,
-                            AttackPower = 15,
-                            CostFood = 12,
-                            CostGold = 40,
-                            CostWeapons = 1,
-                            DefensePower = 8,
-                            Description = "Dziki wojownik orków",
-                            DisplayName = "Berserker orków",
-                            Race = "Orkowie",
-                            RequiredBuilding = "KonstrukcjaMachin",
+                            Id = 45,
+                            AttackPower = 0,
+                            CostFood = 0,
+                            CostGold = 900,
+                            CostWeapons = 0,
+                            DefensePower = 0,
+                            Description = "Armia podziemia — duma Hobbitów",
+                            DisplayName = "Złodziej",
+                            Race = "Hobbit",
+                            RequiredBuilding = "GildiaZlodziei",
                             TrainingTime = 1,
-                            UnitType = "Orkowie_Piechota",
-                            Upkeep = 3
+                            UnitType = "Hobbit_Zlodziej",
+                            Upkeep = 0
                         },
                         new
                         {
-                            Id = 11,
+                            Id = 46,
+                            AttackPower = 100,
+                            CostFood = 0,
+                            CostGold = 0,
+                            CostWeapons = 0,
+                            DefensePower = 100,
+                            Description = "Potężna bestia — wzmacnia armię",
+                            DisplayName = "Smok",
+                            Race = "Hobbit",
+                            RequiredBuilding = "Smokodrap",
+                            TrainingTime = 1,
+                            UnitType = "Hobbit_Smok",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 51,
+                            AttackPower = 1,
+                            CostFood = 0,
+                            CostGold = 200,
+                            CostWeapons = 2,
+                            DefensePower = 1,
+                            Description = "Podstawowy żołnierz (nie je, bez żołdu)",
+                            DisplayName = "Hoplita",
+                            Race = "Nekromant",
+                            RequiredBuilding = "",
+                            TrainingTime = 1,
+                            UnitType = "Nekromant_Hoplita",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 52,
+                            AttackPower = 2,
+                            CostFood = 0,
+                            CostGold = 700,
+                            CostWeapons = 20,
+                            DefensePower = 1,
+                            Description = "Elita 1. stopnia",
+                            DisplayName = "Szkielet",
+                            Race = "Nekromant",
+                            RequiredBuilding = "OltarzInicjacji",
+                            TrainingTime = 1,
+                            UnitType = "Nekromant_Szkielet",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 53,
                             AttackPower = 6,
-                            CostFood = 5,
-                            CostGold = 25,
-                            CostWeapons = 1,
-                            DefensePower = 5,
-                            Description = "Tania i szybka jednostka",
-                            DisplayName = "Gobliński łobuz",
-                            Race = "Gobliny",
+                            CostFood = 0,
+                            CostGold = 1900,
+                            CostWeapons = 200,
+                            DefensePower = 3,
+                            Description = "Elita 2. stopnia",
+                            DisplayName = "Ghul",
+                            Race = "Nekromant",
+                            RequiredBuilding = "KoszarySpecjalne",
+                            TrainingTime = 1,
+                            UnitType = "Nekromant_Ghul",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 54,
+                            AttackPower = 4,
+                            CostFood = 0,
+                            CostGold = 800,
+                            CostWeapons = 50,
+                            DefensePower = 0,
+                            Description = "Burzy budynki wroga",
+                            DisplayName = "Machina wojenna",
+                            Race = "Nekromant",
                             RequiredBuilding = "KonstrukcjaMachin",
                             TrainingTime = 1,
-                            UnitType = "Gobliny_Piechota",
-                            Upkeep = 1
+                            UnitType = "Nekromant_Machina",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 55,
+                            AttackPower = 0,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 0,
+                            DefensePower = 0,
+                            Description = "Armia podziemia",
+                            DisplayName = "Złodziej",
+                            Race = "Nekromant",
+                            RequiredBuilding = "GildiaZlodziei",
+                            TrainingTime = 1,
+                            UnitType = "Nekromant_Zlodziej",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 56,
+                            AttackPower = 100,
+                            CostFood = 0,
+                            CostGold = 0,
+                            CostWeapons = 0,
+                            DefensePower = 100,
+                            Description = "Potężna bestia — wzmacnia armię",
+                            DisplayName = "Smok",
+                            Race = "Nekromant",
+                            RequiredBuilding = "Smokodrap",
+                            TrainingTime = 1,
+                            UnitType = "Nekromant_Smok",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 61,
+                            AttackPower = 1,
+                            CostFood = 0,
+                            CostGold = 200,
+                            CostWeapons = 2,
+                            DefensePower = 1,
+                            Description = "Podstawowy żołnierz",
+                            DisplayName = "Hoplita",
+                            Race = "Dżin",
+                            RequiredBuilding = "",
+                            TrainingTime = 1,
+                            UnitType = "Dzin_Hoplita",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 62,
+                            AttackPower = 2,
+                            CostFood = 0,
+                            CostGold = 600,
+                            CostWeapons = 20,
+                            DefensePower = 2,
+                            Description = "Elita 1. stopnia",
+                            DisplayName = "Al'Ahvar",
+                            Race = "Dżin",
+                            RequiredBuilding = "OltarzInicjacji",
+                            TrainingTime = 1,
+                            UnitType = "Dzin_AlAhvar",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 63,
+                            AttackPower = 4,
+                            CostFood = 0,
+                            CostGold = 1400,
+                            CostWeapons = 120,
+                            DefensePower = 6,
+                            Description = "Elita 2. stopnia",
+                            DisplayName = "Dżin'Beam",
+                            Race = "Dżin",
+                            RequiredBuilding = "KoszarySpecjalne",
+                            TrainingTime = 1,
+                            UnitType = "Dzin_DzinBeam",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 64,
+                            AttackPower = 5,
+                            CostFood = 0,
+                            CostGold = 800,
+                            CostWeapons = 50,
+                            DefensePower = 0,
+                            Description = "Burzy budynki wroga",
+                            DisplayName = "Machina wojenna",
+                            Race = "Dżin",
+                            RequiredBuilding = "KonstrukcjaMachin",
+                            TrainingTime = 1,
+                            UnitType = "Dzin_Machina",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 65,
+                            AttackPower = 0,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 0,
+                            DefensePower = 0,
+                            Description = "Armia podziemia",
+                            DisplayName = "Złodziej",
+                            Race = "Dżin",
+                            RequiredBuilding = "GildiaZlodziei",
+                            TrainingTime = 1,
+                            UnitType = "Dzin_Zlodziej",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 66,
+                            AttackPower = 100,
+                            CostFood = 0,
+                            CostGold = 0,
+                            CostWeapons = 0,
+                            DefensePower = 100,
+                            Description = "Potężna bestia — wzmacnia armię",
+                            DisplayName = "Smok",
+                            Race = "Dżin",
+                            RequiredBuilding = "Smokodrap",
+                            TrainingTime = 1,
+                            UnitType = "Dzin_Smok",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 71,
+                            AttackPower = 1,
+                            CostFood = 0,
+                            CostGold = 200,
+                            CostWeapons = 2,
+                            DefensePower = 1,
+                            Description = "Podstawowy żołnierz",
+                            DisplayName = "Hoplita",
+                            Race = "Goblin",
+                            RequiredBuilding = "",
+                            TrainingTime = 1,
+                            UnitType = "Goblin_Hoplita",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 72,
+                            AttackPower = 2,
+                            CostFood = 0,
+                            CostGold = 700,
+                            CostWeapons = 20,
+                            DefensePower = 0,
+                            Description = "Elita 1. stopnia",
+                            DisplayName = "Wilczy Jeździec",
+                            Race = "Goblin",
+                            RequiredBuilding = "OltarzInicjacji",
+                            TrainingTime = 1,
+                            UnitType = "Goblin_WilczyJezdziec",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 73,
+                            AttackPower = 6,
+                            CostFood = 0,
+                            CostGold = 2000,
+                            CostWeapons = 200,
+                            DefensePower = 3,
+                            Description = "Elita 2. stopnia",
+                            DisplayName = "Skurut Hai",
+                            Race = "Goblin",
+                            RequiredBuilding = "KoszarySpecjalne",
+                            TrainingTime = 1,
+                            UnitType = "Goblin_SkurutHai",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 74,
+                            AttackPower = 5,
+                            CostFood = 0,
+                            CostGold = 800,
+                            CostWeapons = 50,
+                            DefensePower = 0,
+                            Description = "Burzy budynki; Gobliny używają jej też w obronie",
+                            DisplayName = "Machina wojenna",
+                            Race = "Goblin",
+                            RequiredBuilding = "KonstrukcjaMachin",
+                            TrainingTime = 1,
+                            UnitType = "Goblin_Machina",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 75,
+                            AttackPower = 0,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 0,
+                            DefensePower = 0,
+                            Description = "Armia podziemia",
+                            DisplayName = "Złodziej",
+                            Race = "Goblin",
+                            RequiredBuilding = "GildiaZlodziei",
+                            TrainingTime = 1,
+                            UnitType = "Goblin_Zlodziej",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 76,
+                            AttackPower = 100,
+                            CostFood = 0,
+                            CostGold = 0,
+                            CostWeapons = 0,
+                            DefensePower = 100,
+                            Description = "Potężna bestia — wzmacnia armię",
+                            DisplayName = "Smok",
+                            Race = "Goblin",
+                            RequiredBuilding = "Smokodrap",
+                            TrainingTime = 1,
+                            UnitType = "Goblin_Smok",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 81,
+                            AttackPower = 1,
+                            CostFood = 0,
+                            CostGold = 200,
+                            CostWeapons = 2,
+                            DefensePower = 1,
+                            Description = "Podstawowy żołnierz",
+                            DisplayName = "Hoplita",
+                            Race = "Ent",
+                            RequiredBuilding = "",
+                            TrainingTime = 1,
+                            UnitType = "Ent_Hoplita",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 82,
+                            AttackPower = 2,
+                            CostFood = 0,
+                            CostGold = 900,
+                            CostWeapons = 20,
+                            DefensePower = 7,
+                            Description = "Elita 1. stopnia",
+                            DisplayName = "Konar",
+                            Race = "Ent",
+                            RequiredBuilding = "OltarzInicjacji",
+                            TrainingTime = 1,
+                            UnitType = "Ent_Konar",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 83,
+                            AttackPower = 5,
+                            CostFood = 0,
+                            CostGold = 2400,
+                            CostWeapons = 200,
+                            DefensePower = 19,
+                            Description = "Elita 2. stopnia — najtwardszy obrońca w grze",
+                            DisplayName = "Drzewiec",
+                            Race = "Ent",
+                            RequiredBuilding = "KoszarySpecjalne",
+                            TrainingTime = 1,
+                            UnitType = "Ent_Drzewiec",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 84,
+                            AttackPower = 5,
+                            CostFood = 0,
+                            CostGold = 800,
+                            CostWeapons = 50,
+                            DefensePower = 0,
+                            Description = "Burzy budynki wroga",
+                            DisplayName = "Machina wojenna",
+                            Race = "Ent",
+                            RequiredBuilding = "KonstrukcjaMachin",
+                            TrainingTime = 1,
+                            UnitType = "Ent_Machina",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 85,
+                            AttackPower = 0,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 0,
+                            DefensePower = 0,
+                            Description = "Armia podziemia",
+                            DisplayName = "Złodziej",
+                            Race = "Ent",
+                            RequiredBuilding = "GildiaZlodziei",
+                            TrainingTime = 1,
+                            UnitType = "Ent_Zlodziej",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 86,
+                            AttackPower = 100,
+                            CostFood = 0,
+                            CostGold = 0,
+                            CostWeapons = 0,
+                            DefensePower = 100,
+                            Description = "Potężna bestia — wzmacnia armię",
+                            DisplayName = "Smok",
+                            Race = "Ent",
+                            RequiredBuilding = "Smokodrap",
+                            TrainingTime = 1,
+                            UnitType = "Ent_Smok",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 91,
+                            AttackPower = 1,
+                            CostFood = 0,
+                            CostGold = 200,
+                            CostWeapons = 2,
+                            DefensePower = 1,
+                            Description = "Podstawowy żołnierz (nie je)",
+                            DisplayName = "Hoplita",
+                            Race = "Wampir",
+                            RequiredBuilding = "",
+                            TrainingTime = 1,
+                            UnitType = "Wampir_Hoplita",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 92,
+                            AttackPower = 4,
+                            CostFood = 0,
+                            CostGold = 700,
+                            CostWeapons = 20,
+                            DefensePower = 2,
+                            Description = "Elita 1. stopnia",
+                            DisplayName = "Upiór",
+                            Race = "Wampir",
+                            RequiredBuilding = "OltarzInicjacji",
+                            TrainingTime = 1,
+                            UnitType = "Wampir_Upior",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 93,
+                            AttackPower = 10,
+                            CostFood = 0,
+                            CostGold = 1800,
+                            CostWeapons = 160,
+                            DefensePower = 5,
+                            Description = "Elita 2. stopnia",
+                            DisplayName = "Nosferatu",
+                            Race = "Wampir",
+                            RequiredBuilding = "KoszarySpecjalne",
+                            TrainingTime = 1,
+                            UnitType = "Wampir_Nosferatu",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 94,
+                            AttackPower = 5,
+                            CostFood = 0,
+                            CostGold = 800,
+                            CostWeapons = 50,
+                            DefensePower = 0,
+                            Description = "Burzy budynki wroga",
+                            DisplayName = "Machina wojenna",
+                            Race = "Wampir",
+                            RequiredBuilding = "KonstrukcjaMachin",
+                            TrainingTime = 1,
+                            UnitType = "Wampir_Machina",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 95,
+                            AttackPower = 0,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 0,
+                            DefensePower = 0,
+                            Description = "Armia podziemia",
+                            DisplayName = "Złodziej",
+                            Race = "Wampir",
+                            RequiredBuilding = "GildiaZlodziei",
+                            TrainingTime = 1,
+                            UnitType = "Wampir_Zlodziej",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 96,
+                            AttackPower = 100,
+                            CostFood = 0,
+                            CostGold = 0,
+                            CostWeapons = 0,
+                            DefensePower = 100,
+                            Description = "Potężna bestia — wzmacnia armię",
+                            DisplayName = "Smok",
+                            Race = "Wampir",
+                            RequiredBuilding = "Smokodrap",
+                            TrainingTime = 1,
+                            UnitType = "Wampir_Smok",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 101,
+                            AttackPower = 1,
+                            CostFood = 0,
+                            CostGold = 200,
+                            CostWeapons = 2,
+                            DefensePower = 1,
+                            Description = "Podstawowy żołnierz",
+                            DisplayName = "Hoplita",
+                            Race = "Olbrzym",
+                            RequiredBuilding = "",
+                            TrainingTime = 1,
+                            UnitType = "Olbrzym_Hoplita",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 102,
+                            AttackPower = 6,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 40,
+                            DefensePower = 6,
+                            Description = "Elita 1. stopnia (burzy 0,1 budynku)",
+                            DisplayName = "Głazomiot",
+                            Race = "Olbrzym",
+                            RequiredBuilding = "OltarzInicjacji",
+                            TrainingTime = 1,
+                            UnitType = "Olbrzym_Glazomiot",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 103,
+                            AttackPower = 16,
+                            CostFood = 0,
+                            CostGold = 3200,
+                            CostWeapons = 320,
+                            DefensePower = 10,
+                            Description = "Elita 2. stopnia — najsilniejszy atak w grze (burzy 0,5 budynku)",
+                            DisplayName = "Niszczyciel",
+                            Race = "Olbrzym",
+                            RequiredBuilding = "KoszarySpecjalne",
+                            TrainingTime = 1,
+                            UnitType = "Olbrzym_Niszczyciel",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 104,
+                            AttackPower = 6,
+                            CostFood = 0,
+                            CostGold = 800,
+                            CostWeapons = 50,
+                            DefensePower = 0,
+                            Description = "Burzy budynki wroga (+25% u Olbrzymów)",
+                            DisplayName = "Machina wojenna",
+                            Race = "Olbrzym",
+                            RequiredBuilding = "KonstrukcjaMachin",
+                            TrainingTime = 1,
+                            UnitType = "Olbrzym_Machina",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 105,
+                            AttackPower = 0,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 0,
+                            DefensePower = 0,
+                            Description = "Armia podziemia",
+                            DisplayName = "Złodziej",
+                            Race = "Olbrzym",
+                            RequiredBuilding = "GildiaZlodziei",
+                            TrainingTime = 1,
+                            UnitType = "Olbrzym_Zlodziej",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 106,
+                            AttackPower = 100,
+                            CostFood = 0,
+                            CostGold = 0,
+                            CostWeapons = 0,
+                            DefensePower = 100,
+                            Description = "Potężna bestia — wzmacnia armię",
+                            DisplayName = "Smok",
+                            Race = "Olbrzym",
+                            RequiredBuilding = "Smokodrap",
+                            TrainingTime = 1,
+                            UnitType = "Olbrzym_Smok",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 111,
+                            AttackPower = 1,
+                            CostFood = 0,
+                            CostGold = 200,
+                            CostWeapons = 2,
+                            DefensePower = 1,
+                            Description = "Podstawowy żołnierz",
+                            DisplayName = "Hoplita",
+                            Race = "Gnom",
+                            RequiredBuilding = "",
+                            TrainingTime = 1,
+                            UnitType = "Gnom_Hoplita",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 112,
+                            AttackPower = 1,
+                            CostFood = 0,
+                            CostGold = 600,
+                            CostWeapons = 20,
+                            DefensePower = 5,
+                            Description = "Elita 1. stopnia (+0,5 obrony złodziejskiej)",
+                            DisplayName = "Nocny Strażnik",
+                            Race = "Gnom",
+                            RequiredBuilding = "OltarzInicjacji",
+                            TrainingTime = 1,
+                            UnitType = "Gnom_NocnyStraznik",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 113,
+                            AttackPower = 8,
+                            CostFood = 0,
+                            CostGold = 1600,
+                            CostWeapons = 140,
+                            DefensePower = 7,
+                            Description = "Elita 2. stopnia — wysadza wrogów (dodatkowi zabici = saperzy/3)",
+                            DisplayName = "Saper",
+                            Race = "Gnom",
+                            RequiredBuilding = "KoszarySpecjalne",
+                            TrainingTime = 1,
+                            UnitType = "Gnom_Saper",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 115,
+                            AttackPower = 0,
+                            CostFood = 0,
+                            CostGold = 1500,
+                            CostWeapons = 0,
+                            DefensePower = 0,
+                            Description = "Armia podziemia (Gnom: 1500 złota)",
+                            DisplayName = "Złodziej",
+                            Race = "Gnom",
+                            RequiredBuilding = "GildiaZlodziei",
+                            TrainingTime = 1,
+                            UnitType = "Gnom_Zlodziej",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 116,
+                            AttackPower = 100,
+                            CostFood = 0,
+                            CostGold = 0,
+                            CostWeapons = 0,
+                            DefensePower = 100,
+                            Description = "Potężna bestia — wzmacnia armię",
+                            DisplayName = "Smok",
+                            Race = "Gnom",
+                            RequiredBuilding = "Smokodrap",
+                            TrainingTime = 1,
+                            UnitType = "Gnom_Smok",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 121,
+                            AttackPower = 1,
+                            CostFood = 0,
+                            CostGold = 200,
+                            CostWeapons = 2,
+                            DefensePower = 1,
+                            Description = "Podstawowy żołnierz",
+                            DisplayName = "Hoplita",
+                            Race = "Br-Oug",
+                            RequiredBuilding = "",
+                            TrainingTime = 1,
+                            UnitType = "BrOug_Hoplita",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 122,
+                            AttackPower = 2,
+                            CostFood = 0,
+                            CostGold = 500,
+                            CostWeapons = 20,
+                            DefensePower = 2,
+                            Description = "Elita 1. stopnia",
+                            DisplayName = "Kro-Draag",
+                            Race = "Br-Oug",
+                            RequiredBuilding = "OltarzInicjacji",
+                            TrainingTime = 1,
+                            UnitType = "BrOug_KroDraag",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 123,
+                            AttackPower = 5,
+                            CostFood = 0,
+                            CostGold = 1300,
+                            CostWeapons = 110,
+                            DefensePower = 6,
+                            Description = "Elita 2. stopnia",
+                            DisplayName = "Ter-Aark",
+                            Race = "Br-Oug",
+                            RequiredBuilding = "KoszarySpecjalne",
+                            TrainingTime = 1,
+                            UnitType = "BrOug_TerAark",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 124,
+                            AttackPower = 8,
+                            CostFood = 0,
+                            CostGold = 800,
+                            CostWeapons = 50,
+                            DefensePower = 0,
+                            Description = "Najsilniejsze machiny w grze (8 ataku; z E1: 6)",
+                            DisplayName = "Machina wojenna",
+                            Race = "Br-Oug",
+                            RequiredBuilding = "KonstrukcjaMachin",
+                            TrainingTime = 1,
+                            UnitType = "BrOug_Machina",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 125,
+                            AttackPower = 0,
+                            CostFood = 0,
+                            CostGold = 1200,
+                            CostWeapons = 0,
+                            DefensePower = 0,
+                            Description = "Armia podziemia",
+                            DisplayName = "Złodziej",
+                            Race = "Br-Oug",
+                            RequiredBuilding = "GildiaZlodziei",
+                            TrainingTime = 1,
+                            UnitType = "BrOug_Zlodziej",
+                            Upkeep = 0
+                        },
+                        new
+                        {
+                            Id = 126,
+                            AttackPower = 100,
+                            CostFood = 0,
+                            CostGold = 0,
+                            CostWeapons = 0,
+                            DefensePower = 100,
+                            Description = "Potężna bestia — wzmacnia armię",
+                            DisplayName = "Smok",
+                            Race = "Br-Oug",
+                            RequiredBuilding = "Smokodrap",
+                            TrainingTime = 1,
+                            UnitType = "BrOug_Smok",
+                            Upkeep = 0
                         });
                 });
 
@@ -3130,6 +5346,17 @@ namespace RedDragonAPI.Migrations
                     b.Navigation("ParentPost");
                 });
 
+            modelBuilder.Entity("RedDragonAPI.Models.Entities.General", b =>
+                {
+                    b.HasOne("RedDragonAPI.Models.Entities.Kingdom", "Kingdom")
+                        .WithMany()
+                        .HasForeignKey("KingdomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Kingdom");
+                });
+
             modelBuilder.Entity("RedDragonAPI.Models.Entities.Kingdom", b =>
                 {
                     b.HasOne("RedDragonAPI.Models.Entities.Coalition", "Coalition")
@@ -3193,6 +5420,25 @@ namespace RedDragonAPI.Migrations
                     b.Navigation("Definition");
 
                     b.Navigation("Kingdom");
+                });
+
+            modelBuilder.Entity("RedDragonAPI.Models.Entities.Pact", b =>
+                {
+                    b.HasOne("RedDragonAPI.Models.Entities.Kingdom", "ProposerKingdom")
+                        .WithMany()
+                        .HasForeignKey("ProposerKingdomId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RedDragonAPI.Models.Entities.Kingdom", "TargetKingdom")
+                        .WithMany()
+                        .HasForeignKey("TargetKingdomId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ProposerKingdom");
+
+                    b.Navigation("TargetKingdom");
                 });
 
             modelBuilder.Entity("RedDragonAPI.Models.Entities.Pantheon", b =>

@@ -28,4 +28,14 @@ public class SpellDefinition
 
     [MaxLength(50)]
     public string? TargetType { get; set; }
+
+    // Zaklęcie limitowane (niszczące) — standardowo max 2 przechodzą na cel za przeliczenie
+    public bool IsLimited { get; set; } = false;
+
+    // Zaklęcie rasowe (np. Metamagia — Dżin); null = dostępne wg ksiąg magii
+    [MaxLength(50)]
+    public string? RequiredRace { get; set; }
+
+    // Minimalna liczba ksiąg magii potrzebna do rzucenia (0-5)
+    public int RequiredBooks { get; set; } = 1;
 }

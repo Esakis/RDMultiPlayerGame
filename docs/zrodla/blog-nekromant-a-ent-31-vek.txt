@@ -1,0 +1,84 @@
+Vážení hráči,
+v posledním díle seriálu o rasách rozebereme nekromanta s entem a zmíníme podrobnosti o mezivěku. Vše pak probereme osobně na chystaném oficiálním RD srazu. Bližší informace přineseme na fóru Srazy.
+Mezivěk
+V sobotu započne technická odstávka a během neděle spustíme mezivěk. První přepočet proběhne v pondělí a mezivěk potrvá dva týdny. Budeme pokračovat již se založenými gubernáty a aliancemi, pouze je přenastavíme na nové hodnoty. Všem gubernátům nastavíme rozlohu 50 000 pozemků, všechny postavené speciální budovy, plné zásoby zlata a infrabodů, 50% domků a zbytek rozlohy nezastavěný, 130 draků, vědu ve všech profesích, plnou populaci, popularitu na 100 a vymažeme efekty kouzel. Během mezivěku budou zdarma následující upgrady: Přehledový palác, Palác změn, Imperátorský stan a Analyzátor novinek. Dočasně během mezivěku bude povolené mít multigubernáty ve více než třech herních aliancích a nepůjde získávat achievementy. Mezivěk můžete jinak využít ke standardní hře - válkám, přepadům nebo farmě. Jeho hlavní zaměření spočívá v dolazení nových ras, zkoušejte je a své poznatky hlašte na fóru Změny. To bude během mezivěku opět o něco přísněji moderované. Tématem budou nové rasy a jejich funkčnost z hlediska technického (hlášení bugů) a z hlediska herního. Zajímá nás váš osobní názor na jejich vyváženost i informační hlášení situace, jaká se ve vašem gubernátu právě odehrává. Další informace budeme sdělovat opět na Změnách prostřednictvím pevně ukotveného prvotního příspěvku.
+Nekromant
+Nekromanti jsou velmi ofenzivní magicko - vojenskou rasou. Vojenské jednotky nejsou velmi inteligentní ani závratně silné, ale je jich mnoho a nevyžadují za svou krvavou práci žádné jídlo ani peníze. Nekromanti jsou živeni válkou. Magicky se zaměřují na oslabování nepřátel a zasypávání jejich zemí pohromami. Unikátní mechanika nekromantů spočívá ve zcela originálním způsobu zbrojení pomocí kouzel a udržování jednotek mágy.
+Základ na domek: 3. 
+Vodárna: +0,5
+Norový systém: +1
+Kanalizace: +1,5
+Celkem na domek: 6
+Základ na akr: 3
+Vodotok: +0,5
+Celkem na akr: 3,5
+ Hoplíti: 1/1
+E1: 2/1
+E2: 6/3
+Válečný stroj: 4/0
+1) +20% druidové
+ 2) +30% mágové
+ 3) -25% farmáři
+ 4) -50% k síle zlodějů
+ 5) 3 magické knihy
+ 6) Vojenské jednotky nekromantů neberou žold a nejedí jídlo.
+ 7) Vojenské jednotky nekromantů při hladomoru neumírají.
+ 8) Imunní na Mor, Kastraci a Plodnost.
+ 9) Kouzla Mor, Kobylky, Kastrace a Špatná nálada jsou pro ně o polovinu levnější
+10) Získává unikátní herní mechaniku 
+Nekromancie
+: Armádu vyvolávají mágové z těl a taktéž ji udržují. Každý mág zvládne udržet dvě jednotky. Vojenské jednotky (ani zloději) se nepočítají do zalidnění. Vojenské jednotky se nepřelévají. Definujeme číslo volní mágové. Volní mágové = počet plně zaučených mágů - 0.5*(E1 + E2 + hoplíti + zloději). K průrazné síle kouzel a k magické obraně přispívají pouze volní mágové. Mágové držící armádu nemají žádnou průraznou sílu, nepřispívají k magické obraně, ale drží si magickou sílu.
+Kouzlo 
+Sešli E2
+: Sešle E2 v počtu 10% volných mágů. Každé E2 zkonzumuje 1 tělo. Cena 1000.
+Kouzlo 
+Sešli E1
+: Sešle E1 v počtu 26% volných mágů. Každé E1 zkonzumuje šestinu těla. Cena 1000.
+Kouzlo 
+Sešli hoplíty
+: Sešle hoplíty v počtu 50% volných mágů. Každý hoplíta zkonzumuje šestinu těla. Cena 1000.
+Kouzlo 
+Sešli zloděje
+: Sešle zloděje odpovídající 50% volných mágů. Každý zloděj zkonzumuje polovinu těla. Cena 1000.
+Všechny vyvolané jednotky jsou automaticky plně zaškolené.
+Sesílání E1 a E2 je ovlivňováno budovami a výzkumem výcviku. To znamená, že základ představují speciální budovy, u E2 elitní akademie (10%) a u E1 hoplítí akademie (18%) a oltář zasvěcení (8%). Tyto základy jsou pak navýšeny výzkumem výcviku. Sesílání E2 o 0,08% za každý level. Sesílání E1 o 0,3% za každý level. Sesílání zlodějů zlevňuje výzkum Verbování. Výzkum čarodějnictví na sesílání jednotek nemá vliv. Přichází o infrastrukturní budovu Výcvikové prostory, místo ní získává infrastrukturní budovu Hřbitov, která pojme 100 těl. Každý tah se rozpadne polovina těl nad kapacitu hřbitovů. 
+Získává unikátní kouzlo 
+Obětování
+ (pozitivní kouzlo, u nějž stačí přítomnost, může seslat pouze sám na sebe): Každý tah -10% k populaci a -30% k přírůstku obyvatel. Padlá populace se mění na těla a zaznamenává se ve změně těl v centrále při odkliku tahu. Základ ceny kouzla 210. Podléhá slevě z čarodějnictví. Těla se též získávají z padlých nepřátel. V útoku nekromant získá počet těl = ztráty nepřítele * síla nekromanta/síla útoku. V obraně svého gubernátu nekromant získá plné ztráty nepřítele. Propouštění E2 vrátí jedno tělo do hřbitova. Propouštění ostatních jednotek nevrací nic. Při neúspěšném seslání kouzla sesílání armády nedojde k vyvolání armády ani k odečtu těl. Těla nemohou být přímo zničena. Přichází se o ně jen při nedostatečné kapacitě hřbitovů a nepřímo po vyvolání a ztrátě jednotek.
+Pokud je počet volných mágů záporné číslo, pak se kliknutím tahu rozpadne armáda v počtu mínus polovina volných mágů. Rozpadnutí se rozloží rovnoměrně mezi armádu podle jejich % rozmístění. Z rozpadnutých E2 se vrací tělo jako při propouštění.
+Ent
+Enti jsou nejlepší obrannou rasu v RedDragonu. Vynikají v bránění sebe i spřátelených gubernátů. Obě jejich elitní jednotky disponují velikou silou. Je náročné jim ublížit, ale každou ztrátu enti citelně pocítí a jen těžce ji nahradí. Jde o silnou specializovanou rasu dominující vysokým číslem obrana, ale úměrně k tomu půjde o náročnou rasu na odehrávku. Získávají unikátní mechaniku, díky které v závislosti na utrpěném poškození získají možnost si odpočinout v útoku.
+Základ na domek: 2
+Vodárna: +0,5
+Norový systém: +1
+Kanalizace: +1,5
+Celkem na domek: 5
+Základ na akr: 2
+Vodotok: +0,5
+Celkem na akr: 2,5
+Hoplíti: 1/1
+E1: 2/7
+E2: 5/19
+Válečný stroj: 5/0
+1) +50% farmáři
+ 2) +20% vědci
+ 3) 2 magické knihy
+ 4) -25% k útoku zlodějů
+ 5) Ve vojenském útoku i obraně mají o 50% nižší ztráty oproti ostatním rasám
+ 6) Enti mají k dispozici o dva tahy na den méně (tedy 13 tahů za den a 15 tahů se speciálními budovami Věž času a Palác času).
+ 7) Limitovaná kouzla na ně prochází 3x za přepočet. Ohnivý déšť a Dračí dech způsobují dvojnásobné ztráty armádě.
+ 8) Třičtvrtinové základní přelévání z E1 do E2 (7,5% za Elitní akademii) a poloviční příspěvek z výzkumu
+ 9) Manufaktury ovocné sady mají schopnost pojmout jednotky E2 v počtu 100 na jeden sad. Každá pojmutá E2 jednotka přinese gubernátu tolik jídla za tah, kolik odpovídá desetině výkonu ovocných sadů
+ 10) Unikátní mechanika: 
+Entí vztek
+. Každé poškození a každá způsobená ztráta enty rozčiluje a přiděluje jim body zuřivosti. Po překročení hranice získávají +100% k útoku a +100% k bořícímu účinku strojů. Hranice bodů zuřivosti je dána rozlohou *100, každý ztracený obyvatel (profese, zloděj, voják) přispěje 10 body a každá zbořená infrastrukturní a speciální budova polovinou svojí ceny v infrastrukturních bodech. Budova musí být zbořena nepřátelskou akcí (zlodějskou, magickou i vojenskou). Stejně tak obyvatelé (ať už profese, zloději nebo armáda) musí zahynout nepřátelskou akcí při přepočtu. Hodnota zuřivosti je vynulována při přepočtu, kterému předchází aktivovaný entí vztek nebo při přepočtu, před kterým se ent nacházel v neválečném stavu (k nulování dochází před ziskem zuřivosti v rámci přepočtu).
+Přepočet:
+1. Pokud má gub hněv nebo pokud je v neválečném stavu, klesá vztek na 0
+ 2. Proběhne normálně přepočet
+ 3. Zmizí hněv (ať se děje co se děje)
+ 4. Připočtou se nové body vzteku
+ 5. Pokud má gub dostatek vzteku, objeví se hněv
+ Měřidlo vzteku se objevuje v centrále na poslední řádce v podobném stylu jako infrastrukturní body – číselná hodnota a v závorce procentuální.
+Když ent skončí po přepočtu rozhněvaný, ale dostane pozemky z kasy, klesne mu hladina vzteku.
+Děkujeme za všechny reakce, poctivě si je procházíme a těšíme se na společné dolazování ras během mezivěku,
+RD-Team

@@ -1,0 +1,84 @@
+Vážení hráči,
+aktuální článek o rasách se zaměří na dva klasické útočníky, skřeta s obrem.
+Skřet
+Skřeti jsou nenechavou dobyvačnou a zlodějskou rasou. Svou válečnou mašinérii podporují především rozličnými druhy strojů a jako jediní je dokázali přizpůsobit i k obraně. Jejich ekonomika je průměrná, jsou sice líní, ale vše dohání počtem.
+Základ na domek: 3 
+ Vodárna: +0,5 
+ Norový systém: +0,5 
+ Kanalizace: +1 
+ Celkem na domek: 5
+Základ na akr: 7 
+ Vodotok: +0,5 
+ Celkem na akr: 7,5
+Hoplíti: 1/1 
+ E1: 2/0 
+ E2: 6/3 
+ Válečný stroj: 5/0
+1) -20% kameníci, zedníci, zbrojaři 
+ 2) -30% alchymisti, farmáři a vědci 
+ 3) -50% mágové a druidi 
+ 4) -20% k síle zlodějů 
+ 5) 0 magických knih 
+ 6) +25% přírůstek obyvatel 
+ 7) Skřeti mají o 2 tahy denně více (tedy 17 místo 15). A zároveň dostávají za speciální budovu 
+Věž času
+ místo jednoho dva tahy navíc. Po dostavění obou 
+časových budov
+ mohou mít tedy k použití maximálně 58 tahů (místo 49). 
+ 8) Mají maximum výzkumu (i ekonomických zkušeností) za tah o 20% menší než ostatní rasy.
+ 9) 
+Obranné
+ v
+ěže
+ pojmou až 10 hoplítů a 10 strojů. Hoplít ve věži má obranu 6, stroj ve věži 100. 
+ 10) Všechny jednotky skřetů – hoplíti, E1, E2 i zloději udrží dva stroje 
+ 11) Získávají unikátní herní mechaniku 
+Skřetí inženýrství
+: Stroje mohou táhnout hoplíti, E1 i E2. S hoplíty mají bořící účinek, s E1 o 50% vyšší sílu, s E2 snižují o 20% součtu své síly po průchodu obranu postiženého gubernátu pro následující útoky. Například se stroje s E2 budou v prošlém útoku podílet silou 5M (po ztrátách, bez bonusů generála vojevůdce a draků), sníží tak obranu gubernátu o 1M. Toto snížení obrany se týká jen postiženého gubernátu a neprojevuje se v paktech. Stroje v žádném použití ani podobě nebudou bonusované draky. Prioritu strojů lze nastavovat jen mezi hoplíty a E1. Po nastavení priority se naplní nejprve druhá nezvolená jednotka a teprve přebytek strojů bude distribuován k E2.
+Obr
+Obr je jedna z nejsilnějších vojenských ras RedDragonu, dominuje hlavně vysokým útokem. Díky své síle a velikosti disponuje také velkým nadáním k ničení a žádná budova si před ním nemůže být jista. Ekonomika obrů ale není velmi vyvinutá a je třeba si dávat pozor na utrpěné poškození. Šamani obrů často žehnají svým jednotkám při složitých totemových rituálech a ještě posilují jejich už tak výborné bojové schopnosti.
+Základ na domek: 3. 
+ Vodárna: +0,5
+ Norový systém: +0,5. 
+ Kanalizace: +1
+Celkem na domek: 5
+Základ na akr: 2,5. 
+ Vodotok: +0,5
+Celkem na akr: 3
+Hoplíti: 1/1
+E1: 6/6 
+ E2: 16/10 
+ Válečný stroj: 6/0
+1) +30% kameníci 
+ 2) +30% zedníci 
+ 3) -15% mágové 
+ 4) -15% vědci 
+ 5) -25% útok zlodějů 
+ 6) 0 magických kniha 
+ 7) 
+Limitovaná kouzla
+ na ně mají efekt jen 4x za přepočet
+ 8) Spotřeba jídla 2 na obyvatele za tah
+ 9) +1% k přelévání z e1 do e2 (základ 11%)
+ 10) +25% k bořícímu účinku strojů
+ 11) Každá jednotka E1 disponuje silou 0,1 bořícího účinku, neblokují ho věže
+ 12) Každá jednotka E2 disponuje silou 0,5 bořícího účinku, neblokují ho věže
+ 13) Získávají unikátní herní mechaniku: 
+Šamanismus
+. Jejich mágové mohou vzývat totemy a odemykat tak bonusy pro armádu. Získávají unikátní pozitivní kouzlo 
+Vzývání totemu
+ o základní ceně 380. Toto kouzlo mohou sesílat pouze sami na sebe a nabíjí jím zvolený totem.
+V záložce Magie získávají tři totemy, podobná prezentace jako u magických knih, také se objeví v horní části a hráč si jeden z nich zvolí a potvrdí. Pod totemem se pak objeví teploměr, který bude znázorňovat, do jaké míry je nabitý. Nabíjí se kouzlem 
+Vzývání totemu
+, síla, s jakou bylo kouzlo sesláno, se přičte ke zvolenému totemu. Bude to probíhat vlastně skoro jako stavění speciální budovy, jen s pomocí mágů. Cena *postavení* totemu je rozloha * 20. Maximální možný příspěvek k vzývání za tah je 1/4 ceny totemu, k úspěšnému získání bonusu musí tedy totem být vzýván minimálně 4 tahy. Pokud bude mít už částečně nabitý jeden totem a rozhodne se pro jiný, začíná znovu od nuly. Pokud nabije totem, ale přepne na jiný, začíná opět od nuly a ztrácí efekt předchozího totemu. Zisk a ztráta pozemků ve vojenské fázi nemá na fungování totemů žádný vliv. Přepínání mezi totemy není omezeno, ale vždy je možné mít aktivní maximálně jeden totem. Totemy jsou:
+1) 
+Totem loupeživosti
+: Každá obří E2 cíli ukradne zásoby v hodnotě až 300 zlata a zničí zásoby v hodnotě až 1200 zlata, každá obří E1 cíli ukradne zásoby v hodnotě až 150 zlata a zničí zásoby v hodnotě až 600 zlata. Zásoby surovin se přepočítávají na peníze cenami 300/100/100/10. Cíl musí samozřejmě zásobami disponovat - musí být co ukrást a zničit. Po ukončení útoku jednotky přinesou zlato do gubernátu. Počítají se pouze jednotky, které přežily útok a mohou se tak loupení účastnit.
+2) 
+Totem drakobijectví
+: Obr získává v útoku bonus k drakobijectví. Pobije navíc ke standardním ztrátám 25% draků, minimálně ale 15 draků. Bonus funguje poměrně podle síly, jakou se obr v útoku podílí. Pokud se bude podílet jen 50% síly, pobije 12,5% draků a minimálně 7,5 draků.
+3) 
+Totem ničivosti
+: Veškeré obří jednotky s bořícím účinkem, hoplíti se stroji, E1 i E2 boří nejprve věže. Nejprve se zkalkuluje celkový bořící efekt (odečtou se hoplíti se stroji zablokovaní věžemi), kterým se obr v útoku podílí. Převede se na počet infrabudov a než se bořící efekt standardně rozdělí poměrně mezi všechny infrabudovy, boří nejprve věže. Teprve pokud zboří všechny věže a bude ještě zbývat bořící účinek, pustí se klasicky do ostatních infrabudov. Pokud bude věží víc než dostupného bořícího účinku, zboří se maximum možných věží a ostatní infrabudovy zůstanou ušetřeny. Počítají se všechny jednotky, které jsou vyslány do útoku, nikoli až po ztrátách.
+Už zítra nás čeká předposlední dvojice. Děkujeme za všechny reakce a stejně jako vy se nemůžeme dočkat mezivěku, jehož pravidla zveřejníme v pátek,
+RD-Team

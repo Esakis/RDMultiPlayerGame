@@ -4,9 +4,22 @@ using RedDragonAPI.Models.Entities;
 
 namespace RedDragonAPI.Services;
 
+/// <summary>
+/// Przetwarzanie tury wg wzorów oryginalnego Red Dragon
+/// (manual gry, strona „vzorce" — szczegóły: docs/MECHANIKA.md).
+/// </summary>
 public class ResourceService : IResourceService
 {
     private readonly ApplicationDbContext _context;
+
+    // Bazowa produkcja na pracownika za turę (wartości przybliżone — oryginalne
+    // bazy nie są udokumentowane; relacje między profesjami zachowane).
+    private const long AlchemistGoldBase = 10;
+    private const long FarmerFoodBase = 5;
+    private const long DruidManaBase = 1;
+    private const long StonemasonStoneBase = 5;
+    private const long ArmorerWeaponsBase = 3;
+    private const decimal MasonStonePerBudulec = 2m;
 
     public ResourceService(ApplicationDbContext context)
     {
@@ -15,7 +28,6 @@ public class ResourceService : IResourceService
 
     public async Task GenerateResourcesForKingdomAsync(Kingdom kingdom)
     {
-        // Załaduj relacje jeśli nie załadowane
         if (kingdom.Buildings == null || !kingdom.Buildings.Any())
         {
             await _context.Entry(kingdom)
@@ -32,94 +44,176 @@ public class ResourceService : IResourceService
                 .LoadAsync();
         }
 
-        // === Red Dragon Turn Processing ===
-        // Edukacja bonus from Naukowcy (max 15%)
-        decimal educationBonus = 1m + (kingdom.Education / 100m);
+        var race = await _context.RaceDefinitions
+            .AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Name == kingdom.Race)
+            ?? new RaceDefinition { Name = kingdom.Race };
 
-        // Produkcja z zawodów
+        bool Has(string buildingType) => kingdom.Buildings
+            .Any(b => b.BuildingType == buildingType && b.Quantity > 0 && !b.IsUnderConstruction);
+
+        // === 1. Produkcja profesji ===
+        // produktywność = (100 − pn·0,9)/100 · (1+rb) · (1+pv) · (1+cech) · ...
+        // pn — % nowicjuszy (nowicjusz pracuje na 10%), rb — bonus rasowy,
+        // pv — wynalezienie (tu: Education z naukowców).
+        decimal inventedBonus = 1m + (kingdom.Education / 100m);
+
+        decimal Productivity(Profession prof, decimal raceBonus)
+        {
+            decimal novicePct = prof.WorkerCount > 0
+                ? (decimal)prof.NoviceCount / prof.WorkerCount * 100m
+                : 0m;
+            decimal baseEff = (100m - novicePct * 0.9m) / 100m;
+            return baseEff * (1m + raceBonus) * inventedBonus;
+        }
+
+        long merchantGold = 0;
         foreach (var prof in kingdom.Professions)
         {
-            // Effective workers = total - novices*0.9 (novices produce at 10%)
-            int effectiveWorkers = prof.WorkerCount - (int)(prof.NoviceCount * 0.9m);
             long production = 0;
 
             switch (prof.ProfessionType)
             {
                 case "Alchemicy":
-                    production = (long)(effectiveWorkers * 10L * educationBonus);
+                    production = (long)(prof.WorkerCount * AlchemistGoldBase * Productivity(prof, race.BonusAlchemists));
                     kingdom.Gold += production;
                     break;
                 case "Chłopi":
-                    production = (long)(effectiveWorkers * 5L * educationBonus);
+                    production = (long)(prof.WorkerCount * FarmerFoodBase * Productivity(prof, race.BonusFarmers));
                     kingdom.Food += production;
                     break;
                 case "Druidzi":
-                    production = (long)(effectiveWorkers * 1L * educationBonus);
+                    production = (long)(prof.WorkerCount * DruidManaBase * Productivity(prof, race.BonusDruids));
                     kingdom.Mana += production;
                     break;
                 case "Kamieniarze":
-                    production = (long)(effectiveWorkers * 5L * educationBonus);
+                    production = (long)(prof.WorkerCount * StonemasonStoneBase * Productivity(prof, race.BonusStonemasons));
                     kingdom.Stone += production;
                     break;
                 case "Murarze":
-                    // Murarze need kamienie to produce budulec
-                    long stoneNeeded = effectiveWorkers * 2L;
+                    // Murarze przerabiają kamień na budulec (infrapunkty)
+                    long stoneNeeded = (long)(prof.WorkerCount * MasonStonePerBudulec);
                     long stoneUsed = Math.Min(stoneNeeded, kingdom.Stone);
-                    production = (long)(stoneUsed / 2m * educationBonus);
+                    production = (long)(stoneUsed / MasonStonePerBudulec * Productivity(prof, race.BonusMasons));
                     kingdom.Stone -= stoneUsed;
                     kingdom.Budulec += production;
                     break;
                 case "Płatnerze":
-                    production = (long)(effectiveWorkers * 3L * educationBonus);
+                    production = (long)(prof.WorkerCount * ArmorerWeaponsBase * Productivity(prof, race.BonusArmorers));
                     kingdom.Weapons += production;
                     break;
                 case "Kupcy":
-                    production = (long)(effectiveWorkers * 1000L * educationBonus);
-                    kingdom.Gold += production;
+                    // Oryginalny wzór: złoto na kupca = 500·z/(z + ob·10),
+                    // z — obszar własny + obszar partnerów paktów handlowych
+                    if (prof.WorkerCount > 0)
+                    {
+                        long tradeLand = kingdom.Land + await _context.Pacts
+                            .Where(p => p.PactType == "Handlowy" && p.Status == "Active"
+                                        && (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id))
+                            .Select(p => p.ProposerKingdomId == kingdom.Id
+                                ? p.TargetKingdom.Land
+                                : p.ProposerKingdom.Land)
+                            .SumAsync(l => (long)l);
+                        decimal goldPerMerchant = 500m * tradeLand / (tradeLand + prof.WorkerCount * 10m);
+                        production = (long)(prof.WorkerCount * goldPerMerchant * Productivity(prof, race.BonusMerchants));
+                        merchantGold = production;
+                        kingdom.Gold += production;
+                    }
+                    break;
+                case "Naukowcy":
+                    // Naukowcy podnoszą „wynalezienie" (Education, max 15%);
+                    // maks. przyrost badań za turę: obszar·1,1 (modyfikator rasowy)
+                    if (prof.WorkerCount > 0)
+                    {
+                        decimal researchPoints = prof.WorkerCount * Productivity(prof, race.BonusScientists)
+                                                 * (1m + race.ResearchModifier);
+                        decimal maxPerTurn = kingdom.Land * 1.1m * (1m + race.ResearchModifier);
+                        production = (long)Math.Min(researchPoints, maxPerTurn);
+                        kingdom.Education = Math.Min(15m, kingdom.Education + production / 10000m);
+                    }
+                    break;
+                case "Magowie":
+                    // Magowie nie produkują surowców — ich liczba to siła magiczna księstwa
+                    production = prof.WorkerCount;
                     break;
             }
 
             prof.ProductionPerTurn = production;
         }
 
-        // Produkcja z manufaktur (buildings that auto-produce)
-        foreach (var building in kingdom.Buildings.Where(b => !b.IsUnderConstruction && b.Quantity > 0))
+        // === 2. Produkcja manufaktur ===
+        // p = (z/(z + m·25)) · k — k: sad owocowy 400 (jedzenie), kamieniołom 40 (kamień),
+        // kopalnia diamentów 4000 (złoto), manowe jeziorko 40 (mana).
+        var manufactory = kingdom.Buildings.FirstOrDefault(b => b.BuildingType == "Manufaktura" && b.Quantity > 0 && !b.IsUnderConstruction);
+        if (manufactory != null)
         {
-            if (building.Definition != null && building.Definition.ProductionBonus > 0)
-            {
-                // Manufaktury add production bonus
-            }
+            decimal m = manufactory.Quantity;
+            decimal perManufactory = kingdom.Land / (kingdom.Land + m * 25m) * 400m;
+            kingdom.Food += (long)(perManufactory * m);
         }
 
-        // Pensje (wages) - all workers * wages
-        int totalWorkers = kingdom.Professions.Where(p => p.ProfessionType != "Bezrobotni").Sum(p => p.WorkerCount);
+        // === 3. Pensje i żołd ===
+        int totalWorkers = kingdom.Professions
+            .Where(p => p.ProfessionType != "Bezrobotni")
+            .Sum(p => p.WorkerCount);
         long wagesCost = (long)totalWorkers * kingdom.Wages;
         kingdom.Gold -= wagesCost;
 
-        // Żołd (army pay) = soldiers * wages * 2
         var militaryUnits = await _context.MilitaryUnits
-            .Where(m => m.KingdomId == kingdom.Id)
-            .Include(m => m.Definition)
+            .Where(mu => mu.KingdomId == kingdom.Id)
+            .Include(mu => mu.Definition)
             .ToListAsync();
 
-        int totalSoldiers = militaryUnits.Sum(m => m.Quantity);
-        long armyPay = (long)totalSoldiers * kingdom.Wages * 2;
-        kingdom.Gold -= armyPay;
+        bool armyIsFree = kingdom.Race is "Nekromant"; // armia Nekromanty bez żołdu
+        if (!armyIsFree)
+        {
+            long armyPay = 0;
+            foreach (var unit in militaryUnits)
+            {
+                if (unit.Definition == null || unit.Quantity <= 0) continue;
+                string type = unit.UnitType;
+                if (type.EndsWith("_Hoplita"))
+                {
+                    // hoplita: żołd 0,2 × płaca
+                    armyPay += (long)(unit.Quantity * kingdom.Wages * 0.2m);
+                }
+                else if (type.EndsWith("_Paladyn") || IsEliteTwo(unit))
+                {
+                    // E2: żołd = płaca · (atak + obrona) / 10
+                    armyPay += (long)(unit.Quantity * kingdom.Wages *
+                        (unit.Definition.AttackPower + unit.Definition.DefensePower) / 10m);
+                }
+                // E1, złodzieje, machiny i smoki nie pobierają żołdu
+            }
+            kingdom.Gold -= armyPay;
+        }
 
-        // Jedzenie - 1 per person + 1 per soldier
-        long foodNeeded = kingdom.Population + totalSoldiers;
+        // === 4. Jedzenie ===
+        // ludność je wg rasy (Olbrzym 2); armia je 1 (Nekromant i Wampir — armia nie je)
+        bool armyEats = kingdom.Race is not ("Nekromant" or "Wampir");
+        int totalSoldiers = militaryUnits
+            .Where(u => !u.UnitType.EndsWith("_Smok"))
+            .Sum(u => u.Quantity);
+        long foodNeeded = (long)(kingdom.Population * race.FoodPerPop)
+                          + (armyEats ? totalSoldiers : 0);
         kingdom.Food -= foodNeeded;
 
         if (kingdom.Food < 0)
         {
             kingdom.Food = 0;
-            // Głód - ludzie uciekają, popularność spada
+            // Głód: popularność −1…−15 (wg skali niedoboru), ludzie umierają/uciekają
             kingdom.Popularity = Math.Max(0, kingdom.Popularity - 10);
-            int fleeing = (int)(kingdom.Population * 0.05);
-            kingdom.Population = Math.Max(100, kingdom.Population - fleeing);
+            int starving = (int)(kingdom.Population * 0.05);
+            kingdom.Population = Math.Max(100, kingdom.Population - starving);
+            // armia umiera w głodzie (chyba że rasa zwolniona)
+            if (armyEats)
+            {
+                foreach (var unit in militaryUnits.Where(u => !u.UnitType.EndsWith("_Smok") && u.Quantity > 0))
+                    unit.Quantity = Math.Max(0, unit.Quantity - (int)(unit.Quantity * 0.05));
+            }
         }
 
-        // Budulec split: special building first, then storage
+        // === 5. Budulec: najpierw budynek specjalny w budowie, reszta do magazynu ===
         if (!string.IsNullOrEmpty(kingdom.CurrentSpecialBuilding) && kingdom.Budulec > 0)
         {
             int needed = kingdom.SpecialBuildingCost - kingdom.SpecialBuildingProgress;
@@ -129,7 +223,6 @@ public class ResourceService : IResourceService
 
             if (kingdom.SpecialBuildingProgress >= kingdom.SpecialBuildingCost)
             {
-                // Complete the special building
                 var building = kingdom.Buildings.FirstOrDefault(b => b.BuildingType == kingdom.CurrentSpecialBuilding);
                 if (building != null)
                 {
@@ -142,69 +235,119 @@ public class ResourceService : IResourceService
             }
         }
 
-        // Move remaining budulec to storage (limit: 7500 + land/4)
         long budulecLimit = 7500 + kingdom.Land / 4;
         kingdom.BudulecStored = Math.Min(kingdom.BudulecStored + kingdom.Budulec, budulecLimit);
         kingdom.Budulec = 0;
 
-        // Popularność from wages
-        int idealWage = 50; // 42 with Zajazd u Czerwonego Smoka
-        bool hasZajazd = kingdom.Buildings.Any(b => b.BuildingType == "ZajazdCzerwonego" && b.Quantity > 0);
-        if (hasZajazd) idealWage = 42;
+        // === 6. Popularność (oryginalny algorytm: cel = 2 × płace) ===
+        int popularity = kingdom.Popularity;
 
-        if (kingdom.Wages >= idealWage)
-            kingdom.Popularity = Math.Min(100, kingdom.Popularity + 1);
-        else
-            kingdom.Popularity = Math.Max(0, kingdom.Popularity - 1);
+        // a) +1 za każdy stojący budynek specjalny
+        int specialsStanding = kingdom.Buildings
+            .Count(b => b.Definition != null && b.Definition.IsSpecial && b.Quantity > 0 && !b.IsUnderConstruction);
+        popularity += Math.Min(specialsStanding, 5); // ograniczenie, by nie eksplodowało
 
-        // No gold = popularity drops fast
+        // e) zbliżanie do dwukrotności płac: ±(1 + |2·płace − pop|/10)
+        int target = Math.Min(100, kingdom.Wages * 2);
+        if (popularity < target)
+            popularity += 1 + (target - popularity) / 10;
+        else if (popularity > target)
+            popularity -= 1 + (popularity - target) / 10;
+
+        // f) −15, jeśli brakło złota na pensje
         if (kingdom.Gold < 0)
         {
-            kingdom.Popularity = Math.Max(0, kingdom.Popularity - 5);
+            popularity -= 15;
             kingdom.Gold = 0;
         }
 
-        // Population migration based on popularity
-        if (kingdom.Popularity >= 80)
-        {
-            int immigrants = (int)(kingdom.Population * 0.02);
-            kingdom.Population += immigrants;
-        }
-        else if (kingdom.Popularity < 50)
-        {
-            int emigrants = (int)(kingdom.Population * 0.03);
-            kingdom.Population = Math.Max(100, kingdom.Population - emigrants);
-        }
+        kingdom.Popularity = Math.Clamp(popularity, 0, 100);
 
-        // Population cap from houses
-        int populationCap = 1000;
+        // === 7. Maksimum ludności (oryginalny wzór) ===
+        // max = domy·(do+vo+ns+kn) + ziemia·(1 + (pp/100)·(2+vd+rb))
+        // Mapowanie budynków „wodnych": Łaźnia miejska→Wodociągi(+0,5 dom),
+        // System jaskiń→System nor(+1 dom), Kanalizacja→Kanalizacja(+1,5 dom),
+        // Akwedukt→Wodotok(+0,5 akr).
         var houses = kingdom.Buildings.FirstOrDefault(b => b.BuildingType == "Domy");
-        if (houses != null && houses.Definition != null)
-        {
-            populationCap += houses.Quantity * houses.Definition.PopulationCapacity;
-        }
-        if (kingdom.Population > populationCap)
-            kingdom.Population = populationCap;
+        decimal houseCap = race.HouseCapacityBase
+            + (Has("LazniaMiejska") ? race.WaterworksHouseBonus : 0m)
+            + (Has("SystemJaskin") ? race.BurrowsHouseBonus : 0m)
+            + (Has("Kanalizacja") ? race.SewersHouseBonus : 0m);
+        decimal acreBonus = race.PopPerAcreBase - 3m; // rb względem standardu 3/akr
+        decimal vd = Has("Akwedukt") ? race.AqueductAcreBonus : 0m;
+        decimal popPct = kingdom.Popularity / 100m;
 
-        // Novice training (5% of novices become skilled per turn)
+        long populationCap = (long)((houses?.Quantity ?? 0) * houseCap
+            + kingdom.Land * (1m + popPct * (2m + vd + acreBonus)));
+        populationCap = Math.Max(100, populationCap);
+
+        // === 8. Przyrost / ubytek ludności ===
+        if (kingdom.Population > populationCap)
+        {
+            // ubytek = (1 + nadwyżka·0,333/pojemność), max 33% na turę
+            long surplus = kingdom.Population - populationCap;
+            decimal lossPct = Math.Min(0.33m, 0.01m + surplus * 0.3333m / populationCap);
+            kingdom.Population -= (int)(kingdom.Population * lossPct);
+        }
+        else
+        {
+            long freeSpace = populationCap - kingdom.Population;
+            if (freeSpace > 0)
+            {
+                // przyrost = wolne·(profesje + bezrobotni + 0,75·armia)/3/pojemność, min 10% wolnego
+                decimal growth = freeSpace
+                    * (totalWorkers + GetUnemployed(kingdom) + 0.75m * totalSoldiers)
+                    / 3m / populationCap;
+                growth = Math.Max(growth, freeSpace * 0.10m);
+                growth *= (1m + race.PopGrowthModifier);
+                kingdom.Population += (int)growth;
+                if (kingdom.Population > populationCap)
+                    kingdom.Population = (int)populationCap;
+            }
+        }
+
+        // === 9. Szkolenie nowicjuszy ===
+        // p% = 100/(6 − 500·s/(z + 100·s + 99)) — s: liczba szkół
+        var schools = kingdom.Buildings.FirstOrDefault(b => b.BuildingType == "Szkoly" && !b.IsUnderConstruction);
+        decimal s = schools?.Quantity ?? 0;
+        decimal trainedPct = 100m / (6m - 500m * s / (kingdom.Land + 100m * s + 99m)) / 100m;
         foreach (var prof in kingdom.Professions.Where(p => p.NoviceCount > 0))
         {
-            int trained = Math.Max(1, (int)(prof.NoviceCount * 0.05));
+            int trained = Math.Max(1, (int)(prof.NoviceCount * trainedPct));
             prof.NoviceCount = Math.Max(0, prof.NoviceCount - trained);
             prof.NovicePercent = prof.WorkerCount > 0
                 ? (decimal)prof.NoviceCount / prof.WorkerCount * 100
                 : 0;
         }
 
-        // Mana sold at turn end (except Elves)
-        if (kingdom.Race != "Elfy")
+        // === 10. Mana po turze ===
+        // Mana znika po turze; wyjątek — Dżin przechowuje 1 manę na mieszkańca
+        if (kingdom.Race == "Dżin")
         {
-            long manaValue = kingdom.Mana * 5;
-            kingdom.Gold += manaValue;
+            kingdom.Mana = Math.Min(kingdom.Mana, kingdom.Population);
+        }
+        else
+        {
             kingdom.Mana = 0;
         }
 
         kingdom.TurnNumber++;
+    }
+
+    private static bool IsEliteTwo(MilitaryUnit unit)
+    {
+        // E2 rozpoznawane po typach jednostek elity 2. stopnia
+        return unit.UnitType.EndsWith("_Paladyn") || unit.UnitType.EndsWith("_LesnaZjawa")
+            || unit.UnitType.EndsWith("_Berserker") || unit.UnitType.EndsWith("_Nornik")
+            || unit.UnitType.EndsWith("_Ghul") || unit.UnitType.EndsWith("_DzinBeam")
+            || unit.UnitType.EndsWith("_SkurutHai") || unit.UnitType.EndsWith("_Drzewiec")
+            || unit.UnitType.EndsWith("_Nosferatu") || unit.UnitType.EndsWith("_Niszczyciel");
+    }
+
+    private static int GetUnemployed(Kingdom kingdom)
+    {
+        return kingdom.Professions
+            .FirstOrDefault(p => p.ProfessionType == "Bezrobotni")?.WorkerCount ?? 0;
     }
 
     public async Task GenerateResourcesForAllAsync()

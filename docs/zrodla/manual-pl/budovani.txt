@@ -1,0 +1,388 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+ 
+		
+			
+
+
+			
+				
+
+
+		
+			
+
+ 
+
+ 
+      The first problem to cope with in Red Dragon is managing your Kingdom. Red Dragon is a complex game with plenty to offer. Do have a look at the chapters devoted to gameplay.
+
+
+
+
+
+      If you have never played a strategic game like RD, it will take some time until you manage to play your turns right. Novice players often ask 'why is there 15/15, 29/29, 43/43 shown on the top of the screen and why can't I make the next turn?'. That is because you only have 15 turn each day (after building Special Buildings: Eastern and Western Towers of Time you have 17 turns, Goblins - 20). In consequence, you cannot have more than 49 turn (Goblins - 58). You have to wait for the server to add new turns - this happens during the Recount at 5:00 a.m. of the Polish time zone (GMT +1:00).
+
+
+
+      In the beginning, this amount of turns seems little. However, as your Kingdom and Alliance grows and develops, even with these turns you will have plenty to do. So do not be impatient. Red Dragon is a long game, in which long-term plans and strategies are more important than fast clicking.
+
+
+      For the first 10 days you are under a protection period (the only possibility to leave the protectorate earlier is to buy Luxury : Fast Start). Consequently, you cannot be attacked by other kingdoms, but you also cannot attack anyone. You also cannot shorten this period. However, if this rule did not exist, you would probably be an easy target for older Kingdoms. So do not train any troops during this period - an army is simply not needed now. Land is the most important thing. The bigger the Kingdom is, the more citizens it has. Kingdoms with a fair amount of acres, even after a devastating war, can easily rebuild themselves in a matter of days.
+
+
+
+
+
+
+      Your army, after the protection period, is your only defence against attacks. Look at the Statistics. Your Govern's power should be like the one of Governs of the same land size. Others won't attack your Kingdom, if they have easier targets around.
+      	
+
+
+		
+			
+
+
+
+
+			
+				
+
+
+		
+			
+
+ 
+
+ 
+      Land size is one of the basic criteria, based on which Governs are graded. The more land you have, the better it is for your Kingdom. Land size determines your maximal population and the number of economical buildings. One land size unit is called an Acre. You can get new acres in two ways:
+
+
+	- by purchasing it,
+
+	- by conquering it.
+
+
+
+
+	
+      The Chapter focused on Warfare tells you how to gain new lands in battle. To buy acres you have to go to the Buildings - Land menu. The cost of acres increases with your land size. The larger the Govern, the more expensive acres become. In the beginning it's better to buy land. However, after reaching a certain land size threshold, it's better to conquer new lands. Whether you buy acres or gain them in battle, always try to build as many infrastructure buildings as possible on them. Buildings' costs also increase with your land size. In consequence, it's better to build infra buildings on free acres and then buy new ones, especially in the beginning of the game, when your Govern is small and acres cheap. Do not hesitate to build economical buildings, as they are an essential part of your Govern's development.
+      	
+
+
+		
+			
+
+
+
+
+			
+				
+
+
+		
+			
+
+ 
+
+ 
+      The basics of your Kingdom are its inhabitants. And by that we mean the summed number of citizens in the army, in professions and the unemployed. The maximal population of your kingdom is determined by several factors. The first, and most important, is your land size. By default, one acre can be occupied by 1-3 citizens - depended from your popularity. The next vital factor is your race. Giants have the least citizens per acre, while Humans and Hobbits more than others and Br-Ougs the most. If you have Special Building Aqueduct built, the number of citizens able to live on one acre increases by +0,5. The next factor, increasing your maximal population, is the number of houses. By default, only 3 citizens can live in a house. However, after building 3 Special Buildings - Water Tower, Basements, Sewer - this number increases to 6. Special Building Basements increases you houses' capacity by +1(Elves by +0.5, Gnomes +2) , Water Tower by +0.5 (Gnomes +1) and Sewers by +1.5 (Elves +0.5, Giants +1).
+
+
+      The amount of people coming to your Kingdom every turn is determined by the result of the subtraction between the maximal population and the present population and the amount of citizens working and unemployed. If your citizens are recruited in the army, less people will want to come to your Govern. The growth of your population can, however, be speeded up by Spells 'Fortune' and 'Fertility' and by Special Building 'Dragon Tail brothel'. Yet, Spells like 'Castration' and 'Bad Luck' work in the opposite direction. The strength of these spells is irrelevant - they just have to be present. Keep in mind that you cannot have more citizens than can live in your Govern.
+
+
+
+      If the present population exceeds the limit, people start to run away to other Kingdoms. This situation may occur, if you loose popularity or a population Special Building has been destroyed. If the Spell 'Plague' is casted on your Govern, many citizens start to die. Plague affects all citizens - troops, craftsman and the unemployed. Plague is a spell strongly slowing your development. Try to erase it as soon as possible.
+
+
+      If you wish to reach (or maintain) your maximal population, maintain your popularity at 100, build as much houses as possible, build Special Buildings 'Basements', 'Sewers', 'Water Tower', 'Aqueduct', 'Dragon Tail brothel' and cast Spells 'Fertility' and 'Fortune'. Keep in mind that 'Dragon Tail brothel', 'Fortune' and 'Fertility' do not increase your maximum population, but they allow to reach it quicker.
+			
+				
+
+
+		
+			
+
+
+
+
+			
+				
+
+
+		
+			
+			
+
+ 
+      Your citizens' mood increases (or decreases) your maximum population. The higher your popularity is, the more people want to come to your Kingdom. The maximum popularity is 100. It is most depended from your wages. It can be also modified with Spells - 'Good Mood' and 'Bad Mood'. The Special Building 'Red Dragon Inn' helps to maintain your popularity. Popularity, with every turn, increases to reach the doubled wages' value. If you have built Special Building or have casted 'Good Mood', you may lower your wages to 46 and still have a maximum popularity at 100. If you have both, you may lower the wages to 42 and also have 100 points of popularity.
+
+
+      A weak defence of your Govern also affects your popularity. Each successful attack on your kingdom lowers it by 10 points. Thieves, which break your defence and are able to carry out the action 'Revolts' also decrease your popularity. You popularity may even drop to 0 points.
+
+
+
+      If you do not have enough food and gold for your citizens, your popularity also drops. Try not to let this situation occur. Always set your economy so that there is food and gold for everyone.
+      	
+
+
+		
+			
+
+
+
+
+			
+				
+
+
+		
+			
+			
+
+ 
+      For all professions to be most efficient, you need Scientists. The maximal Science value is the sum of the universities' influence, the General Scientist's influence and 100. If you have less and the number is not increasing, you need to employ more Scientists. The favourite strategy of experienced players is to give 100% of Scholars to Scientists in the beginning of the game, so that their productivity reaches maximum, and then redirecting the Scholars to other professions. Scientists produce Science Points. These points are used to increase the Science input in professions. However, when the Science in professions reaches its maximum, the additional Science Points are used to develop Science in the Buildings menu. The optimal infuence of Universities is 40-60%.
+
+
+      Use the other professions according to race's bonuses. Try to build as soon as possible Special Building Market and then do away with all the professions without any bonuses - with buildings and Scholars. Resources produced according to race's bonuses sell on the market and buy the other ones, if needed. However, the resources that is most profitable for the moment is fixed by the prices on the market. If the resource's price drops, you may want to use the Resource Profits Table, to determine which resource to produce. There is a 15% tax on the market, so there are 2 tables:
+      	
+
+
+		
+			
+ Price of resources:
+
+ 				
+
+
+		
+			
+price of resources to buy 
+price of resources to sell 
+
+				
+				       The prices on the left (white colour) indicate the price, below which to buy resources. The prices on the right (grey colour) indicate the price, above which to sell resources. If the price is between the two values, you should produce the resource just for your kingdom (produce just as much as you need to click a turn). The table has been calculated with an assumption that Diligance/Magical Fluid influences your employees by +47%.
+
+
+
+      If you employ citizens in a profession, make sure you have built Guilds for them. The optimal influence of Guilds is between 20% and 40%. Also cast spells 'Magical Fluid' and 'Diligence' (Fluid increases the productivity of Mages and Druids, while Diligance of others). Both increase the productivity of professions by up to +49%.
+
+
+      Try to have the highest productivity possible. Merchants should have a productivity of about 1200, others more than 500. For professions with race bonuses the productivity should be even higher.
+
+
+      To build infrastructure buildings you need gold, free land and infrastructure points. If you wish to build Special Buildings (and you should want to), you need to direct some or all bricklayers to produce infra points for SB. In the beginning you have only 1000 infra points. It should be just enough for the first turns, but soon you'll need plenty more. The first major task is to decide what % of infra points' production to assign to Special Buildings and what % to Economical Buildings. The % of infra points assigned to economical buildings set to the amount of infra points you use each turn. It's better to build SB rather than stock up infra points. Yet, you should not let most of your land to be free (no economical buildings built on it). Keep in mind that bricklayer use stone to make infra points. The production of stone should be equal to the production of infra points. However, after building SB Market, you can redirect stonemasons to other professions and buy the stone from the Market (if the price is right).
+
+
+			
+
+
+			
+				
+
+
+
+
+				 	
+
+
+			
+				
+
+ 
+
+- watch your food and gold supplies. Lack of at least one means a drop in your popularity.
+
+- do not attack much stronger Alliances or those with strong Allies.
+
+- do not attack far smaller Kingdoms - your land profits will be minimal.
+
+- do not play unfair; you can make a lot of enemies this way.
+
+- do not be a 'farmer' - do not create more than one free Govern or your accounts shall be terminated.
+
+- do not swear on the forum.
+
+- do not put advertisement links or links to erotic sites on the forum - your Kingdom and/or account(s) may be deleted.
+
+- do not insult the administrators for errors in the game. They cannot control every electron.
+
+- before you ask anything, do read the manual and FAQ. We tried to answer most questions there.
+
+- do not stay at home during the RedDragonParty.
+	
+
+
+		
+
+
+		
+
+
+ 	
+
+
+
+    	Ostatnia aktualizacja: 2007-02-07 17:13:59
+
+					

@@ -1,0 +1,213 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+		
+			
+			
+ 
+  	
+
+
+		
+			
+			
+ 
+      Land can be gained in two ways : by conquering it or by buying it. The 'Land' menu is used to buy new acres for gold. Land size is the main indicator of players' skill. The more land you have the more powerful your army is.
+
+	
+
+
+		
+			
+			
+ 
+ Buying land manually
+
+ 
+ 
+ 			
+
+
+		
+			
+			
+ 
+
+       You have two options to buy land : buy a certain number of acres or buy acres for a certain amount of gold. Below is the info concerning your present land size, your financial status, the cost of one acre and the number of acres you can buy for all your gold. The cost of one acre rises with your land size. The more land you have the more expensive new acres become. The exact equation can be found in the 'Equations' chapter of this manual. If you buy more than one acre the cost is calculated dynamically - as if you bought one by one. There is no difference in buying 10x 1 acre and 1x 10 acres. If you order to buy more land than you can, only the number of acres that you can afford will be bought. Buying new lands is efficient only till a certain land size - at about 25000 acres and more it is better to fight for it.
+
+	
+
+
+		
+		
+
+
+ 
+			
+ 
+
+
+
+
+
+    	Ostatnia aktualizacja: 2007-02-19 16:05:45
+
+					

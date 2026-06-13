@@ -1,0 +1,343 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+	
+		
+		
+
+
+ 	
+
+
+	
+		
+		
+	       On the main Central screen you can find:	
+
+
+	
+		
+		
+		 
+		Information table
+		
+		
+		 	
+
+
+	
+		
+		1. On the top and bottom your Kingdom's name, 
+		2. Next to your Kingdom's name is your Alliance's name (between *)
+		3. 1/29 is the number of turns you have - in this situation you are in turn 1 out of 29, so you have 28 turns left. 
+		
+
+
+	
+		
+		4. Below your Kingdom's name is the number of players online indicator, ID of your Govern and ID of your Alliance. 	
+
+
+	
+		
+		5. Between the online indicator and your ID are 3 lines of text:
+		- new mail - how many new messages were sent to you since your last visit
+		- new posts on Alliance's Chat forum - number of new posts on this forum
+		- new posts on Alliance's forum - number of new posts there.	
+
+
+	
+		
+		 
+		
+		Your Governs status
+
+ 	
+
+
+	
+		
+		This table consists of 4 columns: 	
+
+
+	
+		
+		1.In the first column from the left there is (from the top):
+	 - number of citizens (with the % of maximum population possible)
+
+	 - popularity
+
+- land size (in acres)
+
+- Controlled Land
+
+- gold (with the % of maximum possible wealth)
+
+- food
+
+- stones
+
+- inf. points (with the % of maximum possible infra points)
+
+- weapons
+
+- manna
+
+- military power.
+
+ 	
+
+
+	
+		
+		 2.In the second column from the left are the amounts of each wealth, mentioned in the first column, listed.	
+
+
+	
+		
+		3. Here are the changes to each wealth shown. The changes are written in 3 colours: green - the amount increased, red - the amount decreased, yellow the amount remained at the same level during the turn.	
+
+
+	
+		
+		
+		4. This column shows which special building and how much of it have you built. If the picture is the same as on the screen it means you are not building any special buildings.  We choose which special building to build in the Buildings/Special Buildings menu. Below the picture of the special building the % of it built is shown. You can work on only one special building at a time. If you want to develop your Science you must select the branch you want to develop in the Buildings/Science menu. 	
+
+
+	
+		
+
+
+		
+		Casted spells
+
+
+		 	
+
+
+	
+		
+	
+	      This is a list of active spells casted on your Kingdom. Only long-term spells are listed here(more info on what long-term spells are is in 'Magic' chapter of this manual). Next to each spell's name the power of the spells is shown. This power weakens with every turn. Next to spells that rise or decrease an aspect of the game the % of its influence is shown on the aspect it affects. The higher the spell's power is the stronger it affects your Govern. Negative spells are shown in red.	
+
+
+	
+		
+
+
+		
+		A general wants to join your army:
+
+
+		 	
+
+
+	
+		
+	
+	      This window appears only when a general wants to join your Kingdom. More info about Generals can be found in the chapter 'Generals' of this manual. If you do not accept this general he awaits your decision until a new general comes to your Kingdom.	
+
+
+	
+		
+
+
+		
+		Govern's news:
+
+
+
+
+		 	
+
+
+	
+		
+		
+		      News appear during the first logging to your Kingdom after the Recount. You will find info about military, magical and thievish attacks that are connected with your Govern. If you want to return to them you can do it in the News menu, where you can also view news from the last three Recounts.
+
+
+      After you click a turn the news will disappear and actual info about the turn will appear in their place. Info about automatically casted spells, bought food and manna, lured Dragons and gold found in your Gold Mines is shown here. Warnings concerning lack of food, stone, manna, gold and fizzled spells are shown in red (more info in the 'Automatization' chapter of this manual).
+
+Here you will also find info about Science Points you have produced and magic casted by your Generals. That is why it is so important to check this news after each turn (they disappear after you have left the Central menu).
+
+
+      	
+
+
+	
+
+	
+	
+
+
+
+ 
+		
+ 
+			
+
+
+ 
+
+    	Ostatnia aktualizacja: 2007-02-08 17:10:11
+
+					

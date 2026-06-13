@@ -1,0 +1,54 @@
+<div class="game-panel">
+  <h2 class="panel-title">
+    <img src="assets/img/role/mag.png" alt="Mag" class="title-icon">
+    Magia
+  </h2>
+
+  <div class="info-msg" *ngIf="message">{{ message }}</div>
+  <div class="error-msg" *ngIf="error">{{ error }}</div>
+  <div class="loading" *ngIf="loading">Wczytywanie zaklęć...</div>
+
+  <ng-container *ngFor="let cat of categories">
+    <div class="spell-category" *ngIf="spellsInCategory(cat).length > 0">
+      <h3>Magia: {{ cat }}</h3>
+      <table class="rd-table">
+        <thead>
+          <tr>
+            <th>Zaklęcie</th>
+            <th>Opis</th>
+            <th>Koszt many</th>
+            <th>Cel</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of spellsInCategory(cat)">
+            <td class="spell-name">
+              {{ s.displayName }}
+              <span class="limited-tag" *ngIf="s.isLimited" title="Zaklęcie limitowane — max 2 na cel za przeliczenie">⚡</span>
+            </td>
+            <td class="spell-desc">{{ s.description }}</td>
+            <td class="spell-cost">{{ s.currentCost }}</td>
+            <td>
+              <ng-container *ngIf="s.targetType === 'Enemy'; else selfTarget">
+                <select [(ngModel)]="targetId[s.spellType]">
+                  <option [ngValue]="undefined">— wybierz cel —</option>
+                  <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }} ({{ k.land }} akrów)</option>
+                </select>
+              </ng-container>
+              <ng-template #selfTarget>własne księstwo</ng-template>
+            </td>
+            <td>
+              <button class="btn-cast" (click)="cast(s)" [disabled]="!s.canCast"
+                      [title]="s.cannotCastReason || ''">Rzuć</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+
+  <p class="hint" *ngIf="!loading && spells.length === 0">
+    Twoja rasa nie włada magią (0 ksiąg magii).
+  </p>
+</div>

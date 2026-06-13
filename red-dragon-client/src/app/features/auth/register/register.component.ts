@@ -2,6 +2,14 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
+export interface RaceInfo {
+  name: string;
+  books: number;
+  stats: number[]; // [łatwość, magia, złodzieje, obrona, ekonomia, atak]
+  desc: string;
+  img: string;
+}
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -13,20 +21,45 @@ export class RegisterComponent {
   password = '';
   passwordConfirm = '';
   kingdomName = '';
-  race = 'Ludzie';
+  race = 'Człowiek';
   acceptRules = false;
   error = '';
   loading = false;
 
-  races = [
-    'Ludzie', 'Krasnoludy', 'Elfy', 'Hobbity', 'Gnomy',
-    'Orkowie', 'Gobliny', 'Trolle', 'Ogry', 'Barbarzyńcy',
-    'Mroczne Elfy', 'Nieumarli', 'Jaszczuroludzie', 'Demony', 'Smoki'
+  // 10 ras oryginalnego Red Dragon — opisy i charakterystyki (0-100) z oficjalnej
+  // strony reddragon.cz/pl: [łatwość, magia, złodzieje, obrona, ekonomia, atak]
+  races: RaceInfo[] = [
+    { name: 'Człowiek', img: 'assets/img/rasy/czlowiek.png', books: 2, stats: [90, 85, 90, 60, 65, 65],
+      desc: 'Wszechstronna rasa o licznej populacji — dobrzy magowie, złodzieje i żołnierze.' },
+    { name: 'Elf', img: 'assets/img/rasy/elf.png', books: 3, stats: [60, 90, 75, 70, 80, 60],
+      desc: 'Mieszkańcy lasów — silna magia (zwłaszcza biała) i skuteczna obrona.' },
+    { name: 'Krasnolud', img: 'assets/img/rasy/krasnolud.png', books: 1, stats: [100, 60, 65, 50, 85, 80],
+      desc: 'Twardzi górale — najlepsi budowniczowie, mniejsze straty w walce.' },
+    { name: 'Hobbit', img: 'assets/img/rasy/hobbit.png', books: 1, stats: [80, 60, 100, 50, 70, 40],
+      desc: 'Najlepsi złodzieje w grze, zaskakująco uparta obrona i dobra farma.' },
+    { name: 'Nekromant', img: 'assets/img/rasy/nekromant.png', books: 3, stats: [90, 90, 70, 90, 65, 90],
+      desc: 'Hordy nieumarłych nie jedzą i nie biorą żołdu; klęski żywiołowe to ich specjalność.' },
+    { name: 'Dżin', img: 'assets/img/rasy/dzin.png', books: 5, stats: [50, 100, 65, 90, 45, 35],
+      desc: 'Najlepsi magowie — nikt im nie dorównuje; jako jedyni przechowują manę.' },
+    { name: 'Goblin', img: 'assets/img/rasy/goblin.png', books: 0, stats: [80, 65, 80, 50, 50, 95],
+      desc: 'Agresorzy z machinami wojennymi; +2 tury dziennie, brak magii.' },
+    { name: 'Ent', img: 'assets/img/rasy/ent.png', books: 2, stats: [50, 60, 50, 100, 100, 50],
+      desc: 'Najlepsza obrona w grze i znakomita farma; -2 tury dziennie.' },
+    { name: 'Wampir', img: 'assets/img/rasy/wampir.png', books: 3, stats: [60, 85, 90, 80, 40, 90],
+      desc: 'Uniwersał zasilany krwią wrogów — silny atak, magia i złodzieje.' },
+    { name: 'Olbrzym', img: 'assets/img/rasy/olbrzym.png', books: 1, stats: [70, 55, 55, 70, 60, 100],
+      desc: 'Najsilniejszy atak w grze i burzenie budynków; je za dwóch, nie może mieć złodziei.' },
+    { name: 'Gnom', img: 'assets/img/rasy/hobbit.png', books: 3, stats: [70, 70, 75, 60, 75, 55],
+      desc: 'Mistrzowie alchemii z polskiego serwera RD — saperzy wysadzają wrogów, ale machin nie używają wcale.' },
+    { name: 'Br-Oug', img: 'assets/img/rasy/goblin.png', books: 3, stats: [50, 60, 55, 60, 45, 80],
+      desc: 'Płodna rasa z polskiego serwera RD — +4 mieszkańców na akr i najpotężniejsze machiny (8 ataku), ale drogie budowanie.' }
   ];
 
-  magicRaces = [
-    'Elfy', 'Gnomy', 'Mroczne Elfy', 'Nieumarli', 'Demony', 'Smoki'
-  ];
+  statLabels = ['Łatwość', 'Magia', 'Złodzieje', 'Obrona', 'Ekonomia', 'Atak'];
+
+  get selectedRace(): RaceInfo {
+    return this.races.find(r => r.name === this.race) ?? this.races[0];
+  }
 
   constructor(private auth: AuthService, private router: Router) {}
 

@@ -17,7 +17,7 @@ public class RegisterDto
     public string KingdomName { get; set; } = string.Empty;
 
     [Required, MaxLength(50)]
-    public string Race { get; set; } = "Ludzie";
+    public string Race { get; set; } = "Człowiek";
 }
 
 public class LoginDto

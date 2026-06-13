@@ -1,0 +1,446 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+	
+		
+		
+
+ 	
+
+
+	
+		
+		
+
+			All the wars on the surface have awakened the Giants who for previous Ages have been sleeping down in their lairs. And now they want to get rid of those pesky little creatures (that are always getting under their feet) and return to their sleep. Giants are enormous and mighty. Their military units are the strongest in the game. Only their low numbers prevent them from ruling the world. However, due to their size, Giants cannot hire thieves (it's not easy to steal something from your 'target' when you're 5 times bigger...). They are also the best smiths and armourers. Their weapons were more valuable than gold or manit. Perhaps their awakening will mean a strong supply of quality weapons, but who knows... Trading with Giants is not easy.
+	
+
+
+	
+		
+		 
+		
+
+			 	
+
+
+	
+		 	
+		
+
+
+
+			Golem	
+		
+
+
+
+			Ogr	
+		 	
+
+
+	
+		 	
+		
+
+
+
+				
+		
+
+
+
+				
+		 	
+
+
+	
+		 	
+		
+
+
+
+ 5 
+ 5	
+		
+
+
+
+ 14 
+ 11	
+		 	
+
+
+	
+		
+		
+ 
+
+
+			
+ 	
+
+
+	
+		
+		 	
+		
+		
+
+
+			+40% to Armourers	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+
+
+			+10% to Stonemasons	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+
+
+			+15% to Bricklayers 	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+
+
+			-10% to Mages	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+
+
+			-0,5 maximum population per Acre	
+		
+		 	
+
+
+	
+
+		
+		 	
+		
+		
+
+
+			'Sewers' increases house capacity by 1, 
+'Basements' adds only 0,5 to house capacity	
+		
+		 	
+
+
+
+		
+		 	
+		
+		
+
+
+			Training from E1 to E2 faster by 1% 	
+		
+		 	
+
+
+
+ 
+
+
+
+
+		 	
+		
+		
+
+
+			Militia defence is 2,5 per citizen	
+		
+		 	
+
+
+	
+		 	
+		
+		
+		
+ 	War machines : 7 attack	
+		
+		 	
+
+
+	
+		 	
+		
+		
+
+
+			Resistant to Plague	
+		
+		 	
+
+
+
+		 	
+		
+		
+
+
+			Instead of Thieves' Guild they build Warriors' Guild that adds +1 to E2 attack and +2 to E2 defense	
+		
+		 	
+
+
+
+		 	
+		
+		
+
+
+			Cannot hire thieves	
+		
+		 	
+
+
+
+		 	
+		
+		
+
+
+			They can have 8 Generals	
+		
+		 	
+
+
+
+
+	
+		 	
+		
+		
+
+
+			War machines have a greater destruction effect when sent with hoplites by +40%. So to have a mixmum effect of 20% Infrastructure and 5 Special Buildings destroyed you need to send 2.5*targets_land_size/1.4 machines 	
+		
+		 	
+
+
+	
+		
+		 	
+		
+		
+		1 Giant consumes 1,5 units of food per turn  	
+		
+		 	
+
+
+	
+		 	
+		
+		They can select 1 Spellbooks at the start of the game	
+		
+		 	
+
+
+
+
+
+
+
+ 
+
+ 
+ 
+ 
+			
+ 	
+ 
+			
+
+    	Ostatnia aktualizacja: 2007-02-06 17:22:54
+
+					

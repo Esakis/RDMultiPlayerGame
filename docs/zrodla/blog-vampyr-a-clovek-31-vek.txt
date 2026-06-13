@@ -1,0 +1,63 @@
+Vážení hráči,
+v předposledním díle našeho seriálu o rasách se zaměříme na dva univerzály, vampýra a člověka.
+Vampýr
+Univerzální rasa zaměřená na sílu, za kterou musí platit krví, a to doslova. Může si každý den (pokud má dost krve) vybrat v čem vynikne, ale zastání dvou rolí během jednoho dne by u něj mělo být spíše výjimečné. Bez krve je stále schopný a využitelný, ale krevní doping ho vyjma obrany přiblíží na dosah rasám, které dominují svým oborům. Vyžaduje aktivní vedení, neboť bez krve nebude plně realizovat svůj potenciál.
+Základ na domek: 3.
+Vodárna: +0,5
+Norový systém: +1
+Kanalizace: +1,5
+Celkem na domek: 6
+Základ na akr: 3.
+Vodotok: +0,5
+Celkem na akr: 3,5
+Hoplíti: 1/1
+ E1: 4/2
+ E2: 10/5
+ Válečný stroj: 5/0
+1) +20% alchymisté
+ 2) +20% mágové
+ 3) 3 magické knihy
+ 4) +10% ke zlodějům
+ 5) 25% vojáků, které vampýři opijí akcí Opíjení armády zemře
+ 6) Jsou imunní na mor
+ 7) Jimi seslaná kouzla stupidita, somnambul a ospalost jsou o polovinu levnější
+ 8) Vojenské jednotky vampýrů nejedí jídlo a neumírají při hladomoru.
+ 9) Vampýři mají 8 generálů
+ 10) Získávají unikátní herní mechaniku: Krvavá magie. Vampýr shromažďuje krev a za ni si odemyká bonusy.
+Každý nepřítel (profese, zloděj, armáda) padlý vampýrovou akcí, přinese vampýrovi X/10/8/2 body krve podle toho, o jaký typ akce jde. 2 body krve za každého nepřítele přinesou ztráty způsobené magickými akcemi (Dračí dech. Uragán, Zpopelnění zlodějů, Ohnivý déšť). 8 bodů krve přinesou ztráty způsobené zlodějskými akcemi (Válka gangů, Vyvraždění mágů, Zabíjení lidí, Opíjení armády). 10 bodů krve přinesou ztráty nepřátel, pokud se vampýr úspěšně ubrání. V úspěšném útoku přinesou X bodů krve, přičemž X = 10 x podíl E2 + 6 x podíl E1 a hoplítů (tzn. full E2 útok má 10 za padlého, žádné E2 má 6 za padlého). Do krve z útoku přispívají mrtvoly v poměru = vampýrova síla / síla celého útoku. Z obrany gubernátu přejdou do krve všechny ztráty. Krev získává jen z mrtvých nepřátel, nezískává krev z nekromantů a vampýrů.
+Vampýr může nashromáždit nejvýše 50x území krve. Za krev lze odemykat bonusy, všechny končí s následujícím přepočtem.
+ Bonusy se kupují v záložce Armáda a mají 4 úrovně. Objeví se v horní části, stejně jako u trpaslíka a stejně jako u něj se budou odemykat kliknutím na ikonku. Všechny bonusy mají 4 úrovně a odemykají se postupně. Bonusy ale nelze kombinovat mezi sebou. Lze tedy odemknout například posilnění mágů (max. 4x), ale už první odemčená úroveň deaktivuje všechny ostatní bonusy. Odemknutí druhé úrovně je podmíněno odemknutím první úrovně. Odemknutí třetí úrovně je podmíněno odemknutím druhé úrovně. Odemknutí čtvrté úrovně je podmíněno odemknutím třetí úrovně.
+ První úroveň stojí 5x rozloha krve. Druhá úroveň stojí 5x rozloha krve. Třetí úroveň stojí 10x rozloha krve. Čtvrtá úroveň stojí 10x rozloha krve.
+ Bonusy se jmenují a jejich efekty jsou:
+ Lektvar Posilnění zlodějů: každý level +5% (celkem 20%) síle zlodějů.
+Lektvar Útočnosti: každý level +7% (celkem 28%) vojenskému útoku.
+Lektvar Soustředění : každý level +3% (celkem 12%) síle mágů.
+Lektvar Krvežíznivosti: +12,5% (celkem +50%) ke způsobeným ztrátám vojenskými akcemi. Podobná funkčnost jako současná krvelačnost, přepočítává se efekt podle příspěvku vampýra do síly útoku.
+Člověk
+Univerzální rasa zaměřená na kvantitu. Nevyniká nutně silou, ale schopností zastat během jednoho přepočtu dvě role. Lidé jsou rychlá a dravá rasa, většina bonusů směřuje ke zlevňování a zrychlování různých aspektů gubernátu. Disponují vysoce výkonnou ekonomikou. S pomocí vědců navíc mohou dále specializovat svůj gubernát a ulehčovat si kteroukoli ze tří rolí.
+Základ na domek: 5
+Vodárna: +0,5
+Norový systém: +1
+Kanalizace: +1,5
+Celkem na domek: 8
+Základ na akr: 3
+Vodotok: +1
+Celkem na akr: 4
+Hoplíti: 1/1
+E1: 3/3
+E2: 7/7
+Válečný stroj: 5/0
+1) +10% alchymisté
+ 2) +20% obchodníci
+ 3) Maximální výzkum +10% za tah
+ 4) 2 magické knihy
+ 5) -5% síla zlodějů
+ 6) Lidé mají 8 generálů
+ 7) Generálové získávají zkušenosti o 20% rychleji
+ 8) Mají o 10% levnější infrastrukturní budovy (zlato i infra)
+ 9) Získávají unikátní herní mechaniku: Aplikovaná věda. Obsahuje tři unikátní výzkumy, které člověk může každý přepočet vyzkoumat a získat tak s nimi spojené bonusy. Do tohoto výzkumu přispívají vědci. V záložce Výzkum v hlavičce Specializace gubernátu přibyde Aplikovaná věda. Po rozkliknutí se objeví menu a v něm si může hráč vybrat jeden ze tří bonusů. Po vybrání se změní na Aplikovaná věda: Název zkoumaného oboru a poskytovaný bonus. Pod sebou bude mít menu klasický teploměr, aby mohl hráč vidět, kolik má již vyzkoumáno. Výzkum oboru stojí 10*rozloha vědeckých bodů. Po výběru se změní priorita přiřazování výnosu vědců. Nejprve si vezmou své klasicky profese, zbývající body se převedou na Aplikovanou vědu, za tah lze přispět maximálně rozloha * 1,1 body (stejně jako u výzkumu vědeckých bodů). Pokud i poté zůstane nějaká produkce vědců, přiřadí se podle priority do vědeckých bodů nebo zkušeností. Člověk může zvolené zaměření opustit a vyzkoumat si nové, ale přijde tím o bonusy toho předchozího. O přepočtu se obor deaktivuje a jeho vynalezenost padá na 50%. Další den tedy člověk může pokračovat ve zvoleném oboru a mít ho levnější, nebo si zvolit jiný a začít od nuly. Obory jsou:
+ Zlodějská škola: -30% cena zlodějů, o 50% rychlejší zaškolování
+Magická škola: +1 magická kniha, náročnost kouzel roste pouze o 9%
+Vojenská škola: +2% k přelévání z E1 do E2, +50% k produkci strojů.
+Univerzální rasy se s vámi tímto loučí a zítra nás čeká poslední díl seriálu s hlavními protagonisty entem a nekromantem. Zároveň prozradíme detaily o spuštění a fungování mezivěku,
+RD-Team

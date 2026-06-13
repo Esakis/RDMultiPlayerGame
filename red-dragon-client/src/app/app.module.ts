@@ -25,6 +25,9 @@ import { ReportsComponent } from './features/reports/reports.component';
 import { MessagesComponent } from './features/messages/messages.component';
 import { RankingComponent } from './features/ranking/ranking.component';
 import { ForumComponent } from './features/forum/forum.component';
+import { MagicComponent } from './features/magic/magic.component';
+import { ThievesComponent } from './features/thieves/thieves.component';
+import { GeneralsComponent } from './features/generals/generals.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +46,10 @@ import { ForumComponent } from './features/forum/forum.component';
     ReportsComponent,
     MessagesComponent,
     RankingComponent,
-    ForumComponent
+    ForumComponent,
+    MagicComponent,
+    ThievesComponent,
+    GeneralsComponent
   ],
   imports: [
     BrowserModule,

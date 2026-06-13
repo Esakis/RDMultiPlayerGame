@@ -1,0 +1,231 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+ 
+
+ 
+ 
+      In this menu you can see detailed info about all your Alliance's members.
+
+
+ 
+
+
+ 
+
+      If you type in a name of an existing Kingdom and click the 'Search for Kingdoms' button (the shield) you will see details of this Kingdom. If it plays in an Alliance, you will also see details regarding the Alliance's other members. The Kingdom you have been searching for is highlighted. If it does not play in any Alliance, you will only see details of this Govern. The button 'Search for Alliances' (the flags) shows you details of an Alliance. If you typed in names of non-existing Alliances or Kingdoms, details of your Alliance are shown. Consequently, you have to make sure you typed in the full Govern's or Alliance's name, without any mistakes or extra spaces.
+
+
+
+      The button on the right (one, white flag) shows you the Alliance's diplomacy. It shows you the same info as searching for an Alliance in the 'Wars' menu. In your Alliance's details there is an extra button - used to see your Alliance status from the Recount (a moon with stars). This is the status that players from outside your Alliance see.
+
+
+
+
+
+
+ 
+
+
+
+
+	  This is the Alliance's members list. In every line there is info about one Govern :
+
+
+	- icon of a trumpet - clicking on it brings up the Mail menu with the Govern's name as the receiver,
+
+	- icon of a shield - shows details of the Govern. Besides all the info in the 'Alliance' menu, it shows in which Alliances has the Kingdom played before.
+
+	- Kingdom's name - blue letters mean that the Govern is frozen, white that the owner is logged in. Info about the Commanders is shown in green and about the Emperor in red.
+
+
+	- land - you see your Alliance's present land size, as for other Alliance, the land size from the Recount. You can see your Alliance's land size from the Recount by clicking the 'Status from Recount' button,
+
+	- power - you see the present power of your Alliance's members, and the Recount power of other Governs,
+
+	- age - shows how many days is the kingdom in game,
+
+	- race - the kingdom's race,
+
+	- free pacts  - you can see it only when viewing your Alliance details. Shows how many more pacts can a Govern sign,
+
+	- giving land (%)  - shows how many % of gained land in battle does the Kingdom give to the Alliance's vault. Seen only when viewing your Alliance's details,
+
+
+	- last action - the exact date and time of the last action performed on the Kingdom.
+
+
+	
+      The Kingdoms are listed according to their land size. However, you can change this by clicking on other categories. In case of listing by land size or power, the numbers decide which Govern is higher. In case of listing by age, the older the Kingdom is, the higher it is listed. If two Governs have the same age, the time of creating the Govern counts. In case of listing by Race, Governs of the same Race are listed according to their land size. There is also a possibility of listing the Governs by the number of free pacts.
+
+
+
+ 
+  
+
+
+ 	
+
+
+
+    	Ostatnia aktualizacja: 2006-09-28 17:58:59
+
+					

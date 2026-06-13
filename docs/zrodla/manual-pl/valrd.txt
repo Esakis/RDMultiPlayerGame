@@ -1,0 +1,295 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+
+ 
+ 
+      In the world of Red Dragon the more land you have, the more powerful your Alliance is. Yet, the number of free acres is always insufficient and thier price increases. In consequence, the ability to win battles and wars is essential for your Alliance's development.
+
+
+      Each Kingdom (and therefore each Alliance), at some point, reaches a threshold, after which only economical development is simply unprofitable. In such cases, wars are the only practical way of gaining new territories. The Emperor and the Commanders develop a strategy for the war, and other members try to follow it. Each race is good at something and can therefore, commit to the victory. Genies are great mages, so they usually are responsible for offensive and defensive magic. Goblins and Dwarves are great warriors and usually are the main military force of the Alliance. Hobbits are great thieves and usually are responsible for invigilation and espionage. Each Kingdom, playing its role correctly, becomes a vital part of the Alliance. The ability to make each Govern play its role and the military genius of the Commanders determines which Alliance ends the war with more land (and is, of course, the winner of the war).
+
+
+      In the world of Red Dragon it is regarded as fair play to declare a war and agree on certain rules for the war with the opposite Emperor or Commanders. However, many players do not follow these unwritten rules, and attack other Alliance without any negotiations and warnings.
+
+
+The war is fought in three professions : thievish, magical and military actions. When two armies fight, soldiers on both sides and civilians of the attacked Kingdom die. The only power, that the attacking armies cannot kill, are the Fallen Legions - souls of dead warriors summoned and controlled by the defending Govern's mages. However, they can be sent back to their graves by magic or by routing the Govern's mages, which cannot control their souls any more.
+
+
+
+Further attack has a greater chance of success, because the defending armies get weaker with every attack. Each successful attack (that breaks through the Govern's defence) gives the attacking Govern some land. Also, the attacker looses some land, if he is successfully attacked. If the defence is successful, the Govern remains with the number of acres it had before the attack. The difference between the attacking and defending forces do not affect the number of acres gained.
+
+
+
+      The number of acres gained in attack is defined by several factors. By default it is 10% of the land size of the attacked Govern. Of course, if the attack is successful. However, if the attacked Kingdom has Special Building Defensive Fortresses System built, you gain only 8% of the attacked Kingdom's land size. The next factor, decreasing your land profits, is the number of successful attacks on the Govern during the Recount. The first two attacks do normal damage and bring normal land profits. With every further attack, the losses of the attacked Govern (land size, army, infrastructure, population) and the number of acres gained decrease by 20%. Consequently, the seventh and further successful attacks do no damage and you gain no acres from them. Yet, the losses of the attacking army do not decrease with each attack. The number of attacks is the summed number of attacks on a Govern. If you attack a Govern and it is the seventh attack on this Govern (but it's your first on this Govern) you gain no land. This also relates to situation when more than one Alliance is attacking this Kingdom.
+
+
+      
+      The last factor, affecting your land profits form attacks and your land losses, is the war status. If the war I fully active (red colour) your land profits as well as land losses are normal. Yet, there are other factors defining the war status.
+The least efficient way to start a war is to attack the enemy without declaring war/ambush. In the first Recount your land profits will be at a level of only 1%. The damage done to the opponent will be at a level of only 3%. Of course, during the next Recount, your profits/losses will be at the normal level.
+
+      If the attacked Alliance's land size is equal or greater than 80% of your land size, the war is automatically fully active and does not need to be re-declared by your enemy. Also an ambush brings normal profits/losses. However, if you declare a war on an Alliance smaller than 80% of your Alliance's land size, it becomes fully active in the second Recount. The losses of the enemy will be at a level of 10%, however, your profits only at 3%. Yet, if the attacked also declares a war on you, the war becomes full active immediately.
+
+      You cannot declare a war on a single Govern, but you can attack it. The gained land is added to your Kingdom after calculating all the attacks. In consequence, you do not lose any of the conquered land, when someone attacks you the same day.
+
+
+
+Attention: Governs without an Alliance can be attacked by Kingdoms in an Alliance and without one, but they cannot attack Governs in an Alliance (military, magical and thievish attacks are forbidden, except thievish action 'Steal Supplies') and magically other Governs without an Alliance.
+
+
+
+
+
+
+	
+ 
+
+ 
+ 
+      As said in the beginning of this manual, Red Dragon is a turn-based strategy. Every day, at 5:00 a.m. according to the Polish Time Zone (GMT +1) the Recount begins and lasts for several minutes - this is when the server calculates all actions performed by the players and adds new turns to your Govern(s).
+
+
+
+	The order of tasks performed:
+
+
+
+
+	- adding turns and deleting inactive Governs, defrosting freezed Kingdoms,
+
+
+	- calculating thievish attacks,
+
+	- positive and defensive magic,
+
+	- magia destryktuwna i antyekonomiczna
+
+	- offensive and destructive magic,
+
+	- - military attacks.
+
+
+
+      The order of thievish, magical and military attacks is determined by their wave. The player, when attacking other Governs has the possibility to choose the right wave of the performed action. In example, a player sends attacks in the 10th wave, then in the 6th, then in the 37th, and lastly in the 2nd - the attacks are computed according to their wave, not to the time they have been sent. In this case, the first attack calculated is the attack sent in the 2nd wave, although it has been sent last! Giving each attack an established wave number is essential in coordinating attacks sent from several Governs. Attacks sent in the same wave are calculated in the order defined by the time, they have been sent out. In such cases, smaller attacks can be calculated before the larger ones that were to weaken the Govern's defence.
+
+
+      In depended from the wave's number, the order of calculating thievish, magical and military actions stays the same. Thieves will always be calculated before magic (even if they are sent in higher waves than magic spells) and magic always before military attacks. This order is not incidental. It allows thieves to weaken the magical and military defence of enemy Governs. Therefore, magical spells have a greater chance of successfully breaking this defence and weakening the military defence even more. Consequently, your armies have a much smaller defence to cope with, when attacking a Govern. And now the most important thing : actions' order is determined by the wave's number only within the same type of actions (thievish or magical or military). In example, setting the thievish attacks' waves to 5, 6 and 12, the magical spells' waves to 3, 4 and 8 and the military attack's waves to 0, 1 and 5, you DO NOT risk them being calculated in this order : military attacks in 0 and 1 waves, magical spells in waves 3 and 4, military and thievish attacks in wave 5, thieves in wave 6, magic in wave 8 and thieves in wave 12.
+
+
+
+
+      The only unit in the game that can attack and defend in the same Recount are Mages. They can cast destructive spells on enemy Kingdoms and, in the same time, cast defensive spells on your Govern or other Alliance's members. And they, of course, also protect your Govern from enemy magic. Military units and thieves can be in an attack or at home (defend) - they can never do these two actions at once. If you wish to attack and defend, you have to split your army into two parts, and send on part to attacks and leave the rest home to defend. The gained land is added to your Kingdom after calculating all the attacks. In consequence, you do not lose any of the conquered land, when someone attacks you the same day - in other words : your land losses are calculated according to your land size from the beginning of the Recount.
+
+
+
+      The army, as Generals and thieves, sent in attacks, returns after the Recount. Units sent to attack cannot help defend your Govern.
+
+
+
+
+
+	  The strictest rules, when talking about success and failure, are used in calculating attacks. An advantage of 15% means sure victory. If the advantage of the defending or attacking side is lower, the ratio between the two side's strengths is taken into account. And not always the stronger army wins. When talking about thievish attacks, the ratio between the attack and defence also defines the chance of success. If you send less than 90% of the defence's power, your attacks are surely to by unsuccessful. Keep in mind, that races' bonuses and Generals do increase Governs' defence. Magical attacks, when defence's and attack's strength are equal, have only a 30% chance of success. Each spell, that is three times stronger than the defence, always breaks the defence. The chance of success drops to 0% when the defence is two times higher than the attack. Between these three points, the chance of success increases linearly.
+
+
+
+      The other two types of attacks (thievish and military) have a 50% chance of success when the defence and attack are equal. If you want to attack a Govern several times, make sure the strongest attacks are sent in the lowest possible waves. They will weaken the defence, so that the weaker attacks also have a good chance of success. The same goes for thievish attacks. Also use certain spells, weakening magical defence of Kingdoms (Stupidity, Hurricane, Dragon's Breath, Fierily Rainfall, Earthquake), before you cast other spells. Use these spells (Dragon's Breath, Fierily Rainfall) to also decrease Kingdoms' defence. Keep in mind, that anti-economical spells sum up - use this to your advantage.
+
+
+
+
+ 	
+
+
+	
+ 
+
+ 
+ 
+The Umbrella is a system of protection for new players that start their adventure in the World of Red Dragon. The Umbrella is automatically set in newly formed Alliances. An Alliance, under the Umbrella system, cannot be attacked in ambushes. However, it cannot also use this type of declaring wars. An Alliance is erased from the Umbrella system :
+
+
+1) if it is in the top20 Alliances and the protectorate period is over,
+
+
+2) if the Alliance is in RD for several Ages now,
+
+3) if the Alliance has many Multi-Governs and any VIP-Governs,
+
+
+4) if the Alliance is taking unfair advantages of the system.
+
+
+
+
+
+
+
+
+  
+
+
+ 	
+
+
+
+    	Ostatnia aktualizacja: 2006-09-28 18:13:48
+
+					

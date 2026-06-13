@@ -1,0 +1,62 @@
+.game-panel {
+  padding: 16px;
+  color: #e8d5b0;
+
+  .panel-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #d9542b;
+
+    .title-icon { height: 42px; }
+  }
+}
+
+.spell-category h3 {
+  color: #c9a86a;
+  border-bottom: 1px solid #5a3a1a;
+  padding-bottom: 4px;
+}
+
+.rd-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  font-size: 13px;
+
+  th, td {
+    border: 1px solid #5a3a1a;
+    padding: 5px 8px;
+    text-align: left;
+  }
+
+  th { background: rgba(90, 40, 20, 0.5); color: #c9a86a; }
+  tr:nth-child(even) { background: rgba(0, 0, 0, 0.15); }
+
+  .spell-name { font-weight: bold; }
+  .spell-cost { text-align: right; color: #7ec0ee; }
+  .limited-tag { color: #d9542b; margin-left: 4px; }
+
+  select {
+    background: #2a1208;
+    color: #e8d5b0;
+    border: 1px solid #5a3a1a;
+    padding: 2px 4px;
+    max-width: 180px;
+  }
+
+  .btn-cast {
+    background: linear-gradient(#8a2b1a, #5a1208);
+    color: #f0e0c0;
+    border: 1px solid #c9a86a;
+    padding: 3px 12px;
+    cursor: pointer;
+
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:not(:disabled):hover { background: linear-gradient(#a83b22, #6a180a); }
+  }
+}
+
+.info-msg { color: #8ed98e; margin: 8px 0; }
+.error-msg { color: #ff7b6b; margin: 8px 0; }
+.hint { font-style: italic; color: #a08a60; }

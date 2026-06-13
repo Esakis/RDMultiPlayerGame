@@ -1,0 +1,555 @@
+
+
+Red Dragon - manuál
+
+ 
+
+
+
+  
+  
+     
+	
+    	
+    	
+    	
+
+
+  
+    
+    
+    
+    	
+     
+	
+    
+
+
+      
+
+
+      
+      
+          Války se rozohnily mezi všemi rasami světa Red Dragonu. Války se vedou nejen obrovskými armádami dobývajícími území, ale důležitá je i zlodějská a magická aktivita vašeho gubernátu.
+
+	    Pokud jste zkušení hráči, na této stránce naleznete přehled ras uspořádaný do tabulek. Pokud se registrujete poprvé, přečtěte si více o jednotlivých rasách. 
+
+      Přehled ras podle jejich nadání pro utčitou činnost
+      
+        pořadí	magie	útok	obrana
+
+        1.	džini	skřeti	elfové
+
+        2.	elfové	nekromanti	hobiti
+
+        3.	nekromanti	trpaslíci	obři
+
+        
+      Tato tabulka je pouze o předpokladech daných ras pro určitý typ boje.
+
+      -->
+      
+      Rasové bonusy:
+      
+        rasa
+	knih
+	farmáři
+	kameníci
+	zedníci
+	obch.
+	alch.
+	zbrojaři
+	druidi
+	mágové
+	vědci
+	obyv.
+
+
+        lidé / stíny
+	4
+	-20%
+	-20%
+	-20%
+	-0%
+	-20%
+	-20%
+	-20%
+	-30%
+	-20%
+	+4
+
+
+        Vodotok zvyšuje zalidněnost o +2 lidi na akr, Vodárna přidává navíc +1 clověka na akr. Základní kapacita domu je 1. Pokud stojí Magický palác, roste náročnost kouzel jen o 8%. Spotřeba jídla je 2x větší. Infrabudovy jsou 1,25x dražší (ale limit infrabodů je dvojnásobný). Klášter dračích mnichů a Cvičiště bersekrovství jsou o 50% levnější. Jejich zloději jsou o 16% slabší. Stroje mají postih 25% k boření a 40% k síle. Věže blokují jen 24 strojů, z nichž zničí pouze 4.
+
+
+
+hobiti / šotkové
+	1
+	+40%
+	-20%
+	+0%
+	+15%
+	+25%
+	-10%
+	-25%
+	-30%
+	+0%
+	+1
+
+
+        Zloději stojí jen 900 zlaťáků a jsou o 30% výkonnější. 
+
+
+
+		  džini / lichové
+	5
+	+0%
+	+0%
+	+0%
+	+5%
+	+15%
+	-50%
+	+50%
+	+25%
+	+0%
+	+0
+
+
+		Náročnost kouzlení roste jen o 8% a pokud stojí Magický palác, tak dokonce pouhých 6%. Padlé legie jsou čtyřikrát účinnější. Dokáží vyrobit o 20% více vědy (pro výzkum i generály).
+
+
+                
+	trpaslíci / minotauři
+	1
+	+0%
+	+50%
+	+50%
+	+0%
+	+0%
+	+0%
+	-15%
+	-25%
+	+0%
+	+0
+
+
+		V obraně a útoku umírá jen polovina armády i draků. Prochází na ně o jedno limitované kouzlo méně. DD a ZT působí pouze 75% škod na ifrabudovách a mají jen 40% šance na pád specky. Vlastní stroje, stejně jako stroje útočící na ně, mají plnou sílu, ale jen 75% bořící efekt. Vojevůdce se sabotáží jim boří jen tři čtvrtiny obvyklého počtu infrabudov a šance na pád specky je poloviční. Mají o 30% slabší zloděje.
+
+
+
+		golemové / krollové
+	0
+	-50%
+	+50%
+	+50%
+	+10%
+	+40%
+	+100%
+	-30%
+	+0%
+	+0%
+	-1,25
+
+
+        Vodotok přidává jen +0,25 obyvatele na akr. Základní kapacita domů je 2. Kanalizace přidá +1 obyvatele do domu, Norový systém pouze +0,5. Základ domobrany je +2 (tedy 4). Mají poloviční imunitu na Mor, Somnambul a Ospalost. Spotřeba jídla je 1,5x větší. Přecvičování z e1 do e2 je o +1% rychlejší (tedy 6%). Bonus na zloděje 100%, ale jsou vždy odhaleni. Jejich stroje mají o 75% větší bořící účinek i sílu.
+
+
+
+		kentauři / skřeti
+	1
+	-40%
+	+0%
+	+0%
+	+0%
+	+0%
+	+0%
+	-30%
+	-25%
+	+0%
+	+0
+
+
+		Mají každý den o dva tahy více a budova Věž času přidává místo jednoho tahu dva další. Prochází na ně o dvě limitovaná kouzla méně. Pokud uspějí v útoku, zvyšuje se jejich popularita o 13 bodů a cíli se o 11 bodů sníží. Mají postih na výzkum 16%.
+
+
+
+		enti / kerberové
+	2
+	+10%
+	+10%
+	+10%
+	+10%
+	+10%
+	+10%
+	+20%
+	+0%
+	+10%
+	-1
+
+
+		Základ domobrany +2 (tedy 4). Jsou imunní na kouzla Slabost a ZT. Kouzla Magické zrcadlo, Padlé legie, Vojenský štít a Antimagický štít je stojí o čtvrtinu méně many a kouzla Pracovitost, Magické fluidum, Plodnost, Štěstí a Dobrá nálada stojí dokonce jen polovinu. Dobrá nálada seslaná na vlastní gubernát nestojí vůbec žádnou manu. Jejich stroje mají 85% postih k síle.
+
+
+		elfové / nekromanti
+	4
+	-20%
+	-10%
+	-5%
+	+0%
+	+0%
+	+20%
+	+30%
+	+15%
+	+10%
+	+0
+
+
+         Pokud stojí Magický palác roste náročnost kouzel jen o 8%. DD a OD působí jejich armádám jen poloviční ztráty. Mají poloviční imunitu na kouzla Mor a Kobylky, čtvrtinovou na Somnambul a Ospalost. Kouzlo Zničit zásoby je stojí jen polovinu many. Strašidelný lesík vystraší 10% armády.
+
+   
+        
+	  
+	  
+	  Knih
+ určuje, kolik mágové této rasy zvládnou používat magických knih. Více o magických knihách zde.
+
+	  Procenta u jednotlivých profesí
+
+
+
+
+
+ určují, o kolik je stejný počet řemeslníků v oboru výkonnější (resp. méně výkonný).
+
+	  Obyv.
+ říká, o kolik může mít maximálně rasa více obyvatel na jeden akr oproti standardu (třem).
+
+
+
+    Podrobný popis profesí naleznete zde. Pro tuto chvíli postačí krátký seznam profesí, který Ti pomůže pochopit výhody a nevýhody jednotlivých ras.
+
+
+
+	  Přehled profesí
+
+      
+        profese
+	popis
+
+
+        farmáři
+	Mají na starosti zásobování vaší země potravinami. Nedostatek potravin má za následek hladovění a obyvatelé umírají. Proto je dobré mít hojnost potravin.
+
+
+        kameníci
+	Těží kamení, ze kterého se stavějí všechny budovy. Pokud nemáte kamení, nemají zedníci co na práci a zahálí.
+
+
+        zedníci
+	Staví všechny budovy. Mít dostatek přístřeší pro své obyvatele, postaveny dílny, cechy a speciální budovy (které zlepšují fungování vaší země) je nutnost, bez které se nebudete moci rozvíjet.
+
+
+        obchodníci
+	Díky čilému obchodu budete mít dostatek zlata pro rozvoj své země. Úspěšnost obchodníků je však omezena rozlohou vaší země. Pokud mají velkou konkurenci, jejich zisky klesají.
+
+
+        alchymisté
+	Vyrábějí zlato, ale narozdíl od obchodníků si nekonkurují - můžeš jich mít libovolné množství. Bez zlata nejsou budovy, není armáda, nekoupíte pozemky. Zlato je potřeba.
+
+
+        zbrojaři
+	Vyrábějí zbraně. Jen pokud máte dostatek zbraní, můžete vytvořit silnou armádu.
+
+
+        druidi
+	Vytvářejí manu. To je základní surovina pro sesílání kouzel. Bez many mágové nesešlou žádná kouzla. Čím více druidů, tím více můžete kouzlit.
+
+
+        mágové
+	Sesílají kouzla a to jak negativní na nepřátele, tak pozitivní na svou zem či spřátelené gubernáty. Čím více máte mágů, tím silnější kouzlo můžete seslat.
+
+
+        vědci
+	Zvyšují výkonnost všech profesí a produkují vědecké body, které lze potom rozdělit ve výzkumu do různých specializací či na výzkum zlepšování některých generálů.
+
+
+
+
+Přehled elitních jednotek:
+
+      
+        rasa
+	jednotka
+	útok
+	obrana
+	cena za výcvik
+	počet zbraní
+
+
+        lidé
+	Rytíř
+	2
+	2
+	400
+	4
+
+
+        Paladin
+	6
+	6
+	1200
+	80
+
+
+        elfové
+	Lučištník
+	3
+	4
+	700
+	20
+
+
+        Lesní přízrak
+	10
+	9
+	1900
+	200
+
+
+        hobiti
+	Blátošlap
+	1
+	4
+	500
+	20
+
+
+        Norník
+	4
+	8
+	1200
+	120
+
+
+        trpaslíci
+	Těžkooděnec
+	5
+	5
+	1000
+	15
+
+
+        Berserkr
+	9
+	9
+	1800
+	120
+
+
+        džini
+	Al'Ahváč
+	2
+	4
+	600
+	20
+
+
+        Džin'Beam
+	6
+	8
+	1400
+	120
+
+
+        kentauři
+	Anktae
+	6
+	1
+	700
+	20
+
+
+        MayaMaya
+	16
+	4
+	2000
+	200
+
+
+        enti
+	Klátivec
+	1
+	8
+	900
+	20
+
+
+        Stromovous
+	2
+	22
+	2400
+	200
+
+
+        golemové
+	Lamželezo
+	6
+	6
+	1200
+	40
+
+
+        Drovar
+	16
+	16
+	3200
+	320
+
+
+  		  stíny
+	Padlý hrdina
+	2
+	2
+	400
+	4
+
+
+        Muazgar
+	6
+	6
+	1200
+	80
+
+
+        nekromanti
+	Kostlivec
+	3
+	4
+	700
+	20
+
+
+        Ghúl
+	10
+	9
+	1900
+	200
+
+
+        šotkové
+	Skřítek
+	1
+	4
+	500
+	20
+
+
+        Škodič
+	4
+	8
+	1200
+	120
+
+
+        minotauři
+	Bor'chom
+	5
+	5
+	1000
+	15
+
+
+        Kor-aer
+	9
+	9
+	1800
+	120
+
+
+        lichové
+	Znovuoživený
+	2
+	4
+	600
+	20
+
+
+        Zaklínač smrti
+	6
+	8
+	1400
+	120
+
+
+        skřeti
+	Vrrččí Jezdec
+	6
+	1
+	700
+	20
+
+
+        Skurut Hai
+	16
+	4
+	2000
+	200
+
+
+        kerberové
+	Ere'aet
+	1
+	8
+	900
+	20
+
+
+        Trojhlavý strážce
+	2
+	22
+	2400
+	200
+
+
+        krollové
+	Zlomkrk
+	6
+	6
+	1200
+	40
+
+
+        Drtihlav
+	16
+	16
+	3200
+	320
+
+
+      
+
+       
+      Bonusy k útokům:
+
+    Jednotlivé rasy mají v rámci vojenských útoků bonusy, které se přičítají jako sekundární vlastnosti generála vedoucího útok (více viz sekce Založit útok):
+  lidé / stíny - bonus 40 levelů Magie času
+  elfové / nekromanti - bonus 40 levelů Léčitelství
+  hobiti / šotkové - bonus 50 levelů Rabování (nicméně získané zásoby přibudou útočníkovi)
+  trpaslíci / minotauři - bonus 30 levelů Drakobijectví
+  džini / lichové - bonus 30 levelů Černá magie
+  kentauři / skřeti - bonus 30 levelů Zajetí generála
+  enti / kerberové - bonus 40 levelů Sabotáž
+  golemové / krollové - bonus 35 levelů Krvelačnost a sodomie
+
+	
+            
+      Zpět na změny
+     
+      	
+     
+	
+
+
+
+
+

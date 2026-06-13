@@ -1,0 +1,288 @@
+Homepage - Red Dragon
+          Due to slow response of application count 23.8./24.8. was cancelled. Next counts will proceed as usual.        
+ -->
+            Używamy plików cookie. Poprzez korzystanie ze strony RedDragon wyrażasz zgodę na ich używanie.
+OK
+Display mobile navigation
+                            Nowy wiek rozpoczął się 
+, a dziś mamy 
+ dzień wieku
+ Łącznie założono 
+ księstw, 
+  księstw jest online.                        
+Home
+Blog
+HELP
+Logowanie
+Zarejestrować
+cs
+en
+pl
+Red Dragon
+                    Strategiczna gra turowa online ze środowiska fantasy
+Logowanie
+Zarejestrować
+Więcej o grze
+        Każdego dnia coś się dzieje. Ważne jest, że w grze nie chodzi o dokupowanie sobie czegokolwiek. Podstawą nie jest grafika, ale gra daje możliwość uczestnictwa we wspaniałych bitwach. – TomDux {Gracz}    
+O grze
+Postaw na swoim, wszystko jedno – dzięki własnej mocy, czy sile sojuszników.
+Zbuduj najlepiej ocenianą koalicję.
+Znajdź swoją rolę w koalicji.
+Żadnego „pay to win“ - wszystko zależy od Twoich zdolności.
+Zarejestrować
+        Nawet, jeśli dołączysz do gry później, masz szansę zostać jednym z TOP graczy i nie musisz na na to wydawać realnych pieniędzy. – Carl Johnson {Gracz}    
+Rasy
+                    Dyplomacja                
+Role
+Rasy
+Jesteśmy najlepszymi magami, o jakich możesz śnić. Całe nasze życie poświęciliśmy magii. Nikt inny nam w niej nie dorównuje – jedynym prawdziwym wyzwaniem jest dla nas walczyć z innymi dżinami.
+"
+                        data-title="Dżin"
+                        data-characteristics="50;100;65;90;45;35"
+                        data-label="">
+                Dżin                
+Nasza prastara rasa przerzedziła się w ciągu wieków, ale dysponuje najsilniejszymi jednostkami obrony. Nie ma rasy, która by nam dorównywała w obronie naszych i zaprzyjaźnionych księstw.
+"
+                        data-title="Ent"
+                        data-characteristics="50;60;50;100;100;50"
+                        data-label="">
+                Ent                
+Nejchętniej spędzamy czas w lasach, których potrafimy bardzo skutecznie bronić, a w razie potrzeby przeprowadzić z nich również kontratak. Potrafimy wpływać na świat dzięki wielu zaklęciom.
+"
+                        data-title="Elf"
+                        data-characteristics="60;90;75;70;80;60"
+                        data-label="">
+                Elf                
+Jedynym, co nas interesuje, jest walka! Nie jest nas, co prawda, wielu, ale nasze jednostki są najsilniejsze ze wszystkich. Wybierz nas, a zmiażdżymy każdego, kto stanie na naszej drodze!
+"
+                        data-title="Olbrzym"
+                        data-characteristics="70;55;55;70;60;100"
+                        data-label="">
+                Olbrzym                
+Szukasz zręcznego złodzieja? Nie ma lepszych rabusiów od tych naszych. Nikt nie dorównuje ich zdolnościom. Agresorów potrafimy zaskoczyć upartą obroną.
+"
+                        data-title="Hobbit"
+                        data-characteristics="80;60;100;50;70;40"
+                        data-label="">
+                Hobbit                
+Dzięki wysokiej liczebności naszej populacji potrafimy uczynić wszystko, co ci przyjdzie do głowy! Umiemy świetnie czarować, jesteśmy dobrymi złodziejami, nie rozczarujemy Cię również w armii. Jesteśmy wszechstronną rasą, która zna po trosze ze wszystkiego, co nam potrzeba.
+"
+                        data-title="Człowiek"
+                        data-characteristics="90;85;90;60;65;65"
+                        data-label="">
+                Człowiek                
+Jednostki wojskowe są naszą najsilniejszą stroną. Jak tylko posmakują krwi wrogów, zmieniają się w żądne krwi bestie nie do zatrzymania, a cały nasz naród – w najsilniejszego napastnika. Także nasi złodzieje nie próżnują i są uważani za jednych z najlepszych w tej profesji.
+"
+                        data-title="Wampir"
+                        data-characteristics="60;85;90;80;40;90"
+                        data-label="">
+                Wampir                
+Nasze rześkie jednostki nadają się jak do obrony, tak do ataku. Nie znamy się na magii, ale twarde życie w górach zahartowało naszą armię. Obróbka kamienia zapewnia nam dobrobyt i sławę najlepszych budowniczych.
+"
+                        data-title="Krasnolud"
+                        data-characteristics="100;60;65;50;85;80"
+                        data-label="">
+                Krasnolud                
+Wojna, śmierć i cierpienie! Obrona nie należy do naszych silnych stron, ale zatrzymanie hord żywych trupów jest praktycznie niemożliwe. Znamy również wiele mocnych zaklęć. Naszą specjalnością jest zasypywanie wrogów klęskami żywiołowymi.
+"
+                        data-title="Nekromant"
+                        data-characteristics="90;90;70;90;65;90"
+                        data-label="">
+                Nekromant                
+Jesteśmy rasą agresywną! Mamy silne jednostki ataku i złodziei, nad obroną się zbytecznie nie zastanawiamy. Jesteśmy najlepsi w budowaniu bardzo skutecznych narzędzi wojennych.
+"
+                        data-title="Goblin"
+                        data-characteristics="80;65;80;50;50;95"
+                        data-label="">
+                Goblin                
+Dżin
+Jesteśmy najlepszymi magami, o jakich możesz śnić. Całe nasze życie poświęciliśmy magii. Nikt inny nam w niej nie dorównuje – jedynym prawdziwym wyzwaniem jest dla nas walczyć z innymi dżinami.
+Zarejestrować
+Zarejestrować
+Jesteśmy najlepszymi magami, o jakich możesz śnić. Całe nasze życie poświęciliśmy magii. Nikt inny nam w niej nie dorównuje – jedynym prawdziwym wyzwaniem jest dla nas walczyć z innymi dżinami.
+"
+                   data-title="Dżin"
+                   data-characteristics="50;100;65;90;45;35"
+                   data-label="">
+                    Dżin
+Nasza prastara rasa przerzedziła się w ciągu wieków, ale dysponuje najsilniejszymi jednostkami obrony. Nie ma rasy, która by nam dorównywała w obronie naszych i zaprzyjaźnionych księstw.
+"
+                   data-title="Ent"
+                   data-characteristics="50;60;50;100;100;50"
+                   data-label="">
+                    Ent
+Nejchętniej spędzamy czas w lasach, których potrafimy bardzo skutecznie bronić, a w razie potrzeby przeprowadzić z nich również kontratak. Potrafimy wpływać na świat dzięki wielu zaklęciom.
+"
+                   data-title="Elf"
+                   data-characteristics="60;90;75;70;80;60"
+                   data-label="">
+                    Elf
+Jedynym, co nas interesuje, jest walka! Nie jest nas, co prawda, wielu, ale nasze jednostki są najsilniejsze ze wszystkich. Wybierz nas, a zmiażdżymy każdego, kto stanie na naszej drodze!
+"
+                   data-title="Olbrzym"
+                   data-characteristics="70;55;55;70;60;100"
+                   data-label="">
+                    Olbrzym
+Szukasz zręcznego złodzieja? Nie ma lepszych rabusiów od tych naszych. Nikt nie dorównuje ich zdolnościom. Agresorów potrafimy zaskoczyć upartą obroną.
+"
+                   data-title="Hobbit"
+                   data-characteristics="80;60;100;50;70;40"
+                   data-label="">
+                    Hobbit
+Dzięki wysokiej liczebności naszej populacji potrafimy uczynić wszystko, co ci przyjdzie do głowy! Umiemy świetnie czarować, jesteśmy dobrymi złodziejami, nie rozczarujemy Cię również w armii. Jesteśmy wszechstronną rasą, która zna po trosze ze wszystkiego, co nam potrzeba.
+"
+                   data-title="Człowiek"
+                   data-characteristics="90;85;90;60;65;65"
+                   data-label="">
+                    Człowiek
+Jednostki wojskowe są naszą najsilniejszą stroną. Jak tylko posmakują krwi wrogów, zmieniają się w żądne krwi bestie nie do zatrzymania, a cały nasz naród – w najsilniejszego napastnika. Także nasi złodzieje nie próżnują i są uważani za jednych z najlepszych w tej profesji.
+"
+                   data-title="Wampir"
+                   data-characteristics="60;85;90;80;40;90"
+                   data-label="">
+                    Wampir
+Nasze rześkie jednostki nadają się jak do obrony, tak do ataku. Nie znamy się na magii, ale twarde życie w górach zahartowało naszą armię. Obróbka kamienia zapewnia nam dobrobyt i sławę najlepszych budowniczych.
+"
+                   data-title="Krasnolud"
+                   data-characteristics="100;60;65;50;85;80"
+                   data-label="">
+                    Krasnolud
+Wojna, śmierć i cierpienie! Obrona nie należy do naszych silnych stron, ale zatrzymanie hord żywych trupów jest praktycznie niemożliwe. Znamy również wiele mocnych zaklęć. Naszą specjalnością jest zasypywanie wrogów klęskami żywiołowymi.
+"
+                   data-title="Nekromant"
+                   data-characteristics="90;90;70;90;65;90"
+                   data-label="">
+                    Nekromant
+Jesteśmy rasą agresywną! Mamy silne jednostki ataku i złodziei, nad obroną się zbytecznie nie zastanawiamy. Jesteśmy najlepsi w budowaniu bardzo skutecznych narzędzi wojennych.
+"
+                   data-title="Goblin"
+                   data-characteristics="80;65;80;50;50;95"
+                   data-label="">
+                    Goblin
+Dyplomacja
+Rozgrywaj skomplikowane intrygi dyplomatyczne.
+    Komunikacja z innymi graczami jest bardzo ważna. Zamknięte sojusze zniechęcają graczy żądnych łupów, a jak tylko wybuchnie apokalipsa, będzie się liczyć każda pomocna ręka. Dobre wzajemne stosunki mogą się również przydać do uzyskania tajnych informacji oraz przy planowaniu działań.
+Zarejestrować
+Role
+Odkryj wszystkie tajemnice magii
+Poznaj prastare moce rządzące światem RedDragon. Twoim najważniejszym zadaniem będzie zasypywanie rywali niszczycielską magią i przemienianie ich terytorii w zgliszcza. Tych, którzy przeżyją, dobijesz falami klęsk żywiołowych. Kolejnym zadaniem jest obrona zaprzyjaźnionych księstw przed podobnym atakiem ze strony wrogich magów.
+'
+                            data-title="Mag"
+                        >Mag                    
+Zdobywaj i pleń wrogie terytoria
+Niszcz rywala i zajmuj jego terytoria. Burz budynki, likwiduj opór i przywłaszczaj sobie nowe tereny. Silniejszy wygrywa.
+'
+                            data-title="Napastnik"
+                        >Napastnik                    
+Ochraniaj swoich przyjaciół przed inwazją obcych wojsk
+Broń zaprzyjaźnionych księstw przed wrogimi atakami. Z całą pewnością odwdzięczą Ci się inną formą pomocy. Koalicja, która nie umożliwi inwazji na swoje terytorium, nie może przegrać żadnej wojny.
+'
+                            data-title="Obrońca"
+                        >Obrońca                    
+Stań się panem złodziejskiego półświatka
+Wzniecaj rebelie, burz infrastrukturę, kradnij zapasy, morduj magów i ludność cywilną, upijaj żołnierzy i zdobywaj cenne informacje o rywalu.
+'
+                            data-title="Złodziej"
+                        >Złodziej                    
+Mag
+Odkryj wszystkie tajemnice magii
+Poznaj prastare moce rządzące światem RedDragon. Twoim najważniejszym zadaniem będzie zasypywanie rywali niszczycielską magią i przemienianie ich terytorii w zgliszcza. Tych, którzy przeżyją, dobijesz falami klęsk żywiołowych. Kolejnym zadaniem jest obrona zaprzyjaźnionych księstw przed podobnym atakiem ze strony wrogich magów.
+Zarejestrować
+Odkryj wszystkie tajemnice magii
+Poznaj prastare moce rządzące światem RedDragon. Twoim najważniejszym zadaniem będzie zasypywanie rywali niszczycielską magią i przemienianie ich terytorii w zgliszcza. Tych, którzy przeżyją, dobijesz falami klęsk żywiołowych. Kolejnym zadaniem jest obrona zaprzyjaźnionych księstw przed podobnym atakiem ze strony wrogich magów.
+'
+                            data-title="Mag">
+                            Mag
+Zdobywaj i pleń wrogie terytoria
+Niszcz rywala i zajmuj jego terytoria. Burz budynki, likwiduj opór i przywłaszczaj sobie nowe tereny. Silniejszy wygrywa.
+'
+                            data-title="Napastnik">
+                            Napastnik
+Ochraniaj swoich przyjaciół przed inwazją obcych wojsk
+Broń zaprzyjaźnionych księstw przed wrogimi atakami. Z całą pewnością odwdzięczą Ci się inną formą pomocy. Koalicja, która nie umożliwi inwazji na swoje terytorium, nie może przegrać żadnej wojny.
+'
+                            data-title="Obrońca">
+                            Obrońca
+Stań się panem złodziejskiego półświatka
+Wzniecaj rebelie, burz infrastrukturę, kradnij zapasy, morduj magów i ludność cywilną, upijaj żołnierzy i zdobywaj cenne informacje o rywalu.
+'
+                            data-title="Złodziej">
+                            Złodziej
+Udoskonalenia
+Czas
+Społeczność
+Udoskonalenia
+Ułatw sobie grę dzięki wielu dostępnym udoskonaleniom.
+    Grać możesz zupełnie zadarmo. Kredyty nie zapewnią Ci zwycięstwa - kupić możesz jedynie narzędzia, które uczynią Twoją grę przyjemniejszą. Dodatkowe narzędzia oferują tylko drobne bonusy, nie da się kupić silniejszych jednostek albo nowych tur.
+Zarejestrować
+Czas
+Dostosuj swoje ruchy do swojego planu dnia, nie odwrotnie.
+    Dzięki łatwej turowej strukturze gry nie trzeba nad nią spędzać całego dnia. Tury przybywają raz dziennie, masz więc wielką swobodę ruchu. Możesz spokojnie pracować albo uczyć się – gra na Ciebie poczeka.
+Zarejestrować
+Społeczność
+Dołącz do społeczności.
+    RedDragon był zawsze wyjątkowy dzięki wspaniałej społeczności. Regularnie organizujemy oficjalne zloty i spotkania sportowe. Gra posiada także własny blog z szeroką paletą tekstów. Poznaj graczy z szerszej okolicy.
+Zarejestrować
+Kontakt
+                    Świat RedDragon czeka tylko na Ciebie. 
+Zarejestruj się, wybierz swoją rolę oraz rasę, za którą będziesz walczyć, i wyjdź się na przeciw przygodzie!                
+Zarejestrować
+Facebook
+Twitter
+Wikipedia
+ -->
+ -->
+Tweet
+&copy; 2026 Red Dragon
+            &#114;&#101;dd&#114;&#97;go&#110;&#64;r&#101;&#100;d&#114;&#97;g&#111;&#110;.&#99;&#122;        
+            Ogólne warunki
+Logowanie
+&times;
+                Poprzez zalogowanie wyrażam zgodę z                
+Ogólnymi warunkami i Regulaminem
+ -->
+Registrace je v současnosti uzavřena. Připravujeme pro vás novou hru - 
+více info
+Zapomniałem hasła
+Rejestracja nowego konta
+ -->
+Zapomniałem hasła
+&times;
+Jeżeli zapomniałeś swojego hasła, nie martw się. Podaj zarejestrowany u nas adres e-mail, a my prześlemy Ci instrukcję, jak ustawić nowe hasło.
+Zamknąć
+Znam hasło, chcę się zalogować
+My account
+&times;
+Logout
+ -->
+Upozornění
+&times;
+Odhlásit
+Herní účet
+WIKI
+YOUTUBE
+Dołącz do RedDragon
+&times;
+Albo przy pomocy e-mailu
+           -->
+Registrace je v současnosti uzavřena. Připravujeme pro vás novou hru - 
+více info
+Mam już konto, chcę się zalogować
+Zapomniałem hasła
+ -->
+Wstęp
+O grze
+Rasy
+Dyplomacja
+Role
+Udoskonalenia
+Czas
+Społeczność
+Kontakt
+Blog
+HELP
+Logowanie
+Zarejestrować
+cs
+en
+pl

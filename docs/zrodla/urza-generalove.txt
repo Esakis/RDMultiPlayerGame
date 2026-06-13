@@ -1,0 +1,196 @@
+
+
+Red Dragon - manuál
+
+
+ 
+
+  
+     	
+    	
+    
+    	
+
+
+  
+    
+    
+
+    
+    	
+     	
+    
+
+
+      
+
+
+    
+      
+          V obrazovce Generálové nalezneš seznam svých generálů. Můžeš také jednotlivé generály propustit ze svých služeb. Celkem můžeš mít šest generálů, po dostavění speciální budovy Palác až osm generálů (pokud Ti tato budova spadne, generálové Ti zůstanou, ale nebudeš moci případně nabírat sedmého či osmého generála, dokud budovu nedostavíš). Čím více se počet Tvých generálů přiblíží počtu, který můžeš mít, tím je šance na příchod dalšího menší. Pokud postavíš speciální budovu Velitelská akademie, šance na příchod generála se dvakrát zvýší. Dosažení plného počtu generálů není samozřejmostí.
+ 
+          Pozice pro každého generála začíná jeho jménem, které si sám volíš při jeho příchodu. Následují ikonka s obrázkem generála - podle jeho primární vlastnosti, název primární schopnosti generála a název sekundární schopnosti generála. Dále je zde informační okénko, které má dva možné stavy. Pokud je generál doma (to znamená, že nebyl poslán do čela armády), je zde zaškrtávací políčko Propustit. Pokud toto políčko generála označíš a stiskneš tlačítko Propusť generály, generála nenávratně ztratíš. Jen málokdy je to výhodné (pro generála na levelu vyšším než 5 je třeba pro propuštění zadat PIN do gubernátu). Pokud generál právě velí útoku, je zde zobrazeno Venku. Když se nepříteli povedlo Tvého generála zajmout a drží ho ve svém vězení (a Ty ses ho nezřekl, on ho nezabil), zobrazuje se zde Vězněn.
+
+          Pod těmito údaji je vypsán level generála a jeho zkušenosti. Čím více má generál zkušeností, tím dosáhne větší level. Přesná závislost levelu na zkušenostech je v příloze manuálu. Čím větší má generál level, tím má vyšší uplatnění ve své specializaci, a to jak primární tak sekundární. Generál získává zkušenosti (ve slengu RD hráčů expy) podle své primární vlastnosti. Sekundární vlastnost nemá na zisk zkušeností žádný vliv. Pod výpisem zkušeností je zobrazen počet zkušeností potřebných pro dosažení dalšího levelu.
+
+          Pokud generála nepošleš do útoku, pomáhá doma při obraně, a to podle jeho vlastností. Na pomoc, kterou Ti poskytne jiný gubernát formou posil, se nevztahují bonusy generálů odkud ty posily přišly , jen Tvých generálů.
+
+
+
+	       
+          Primárních vlastností generálů (tedy těch, na základě kterých generálové získávají zkušenosti) je celkem šest:
+
+
+      
+      Vojevůdce
+
+                   Generál specializovaný na dobývaní cizích území gubernátů. Zkušenosti dostává pouze z vyhraných útoků či tažení, kterých se sám zúčastnil. Počet případných získaných zkušeností závisí na součtu sil, které se střetly, na poměru těchto sil a na pozemcích, které útok dobyl. Čím vyšší je celkový součet síly armád, které se střetly, a čím menší je poměr sil vítěze k silám poraženého a čím více pozemků je ukořistěno, tím dostane vítězný generál více zkušeností. Do zkušeností vojevůdce se uvažuje i síla padlých legií, kterými musel projít. Vojevůdce zvyšuje sílu útoku, kterému velí, a to o tolik procent, jakou má úroveň.
+
+      Obránce
+
+        Obránce pomáhá při obraně gubernátu. Zkušenosti získává z úspěšné obrany, které se účastní. Obrany se účastní tím, že je doma v době útoku. Pokud se obrany zúčastnilo více generálů obránců, bere se pouze přínos toho obránce, který má nejvyšší úroveň. Zkušenosti se dělí rovným dílem mezi všechny obránce. Obranu zvyšuje o tolik procent, na jaké je úrovni. Zvyšuje kompletní obranyschopnost, včetně věží, štítů a vlivu speciálních budov a padlých legií. Přispívá i jednotkám, které pomáhají bránit v rámci posil. Počet případných získaných zkušeností závisí na součtu sil, které se střetly a na poměru těchto sil. Podobně jako u vojevůdce.
+
+      Mág
+
+        Mág podporuje magický útok i obranu. Obranu zvyšuje včetně příspěvků od paktářů. Ale pouze v případě, že ten den, kdy probíhá útok či obrana, je doma a nikoliv v útoku. Zkušenosti získává za prošlé kouzlo na nepřítele i za ubránění se kouzlu seslanému na Tvůj gubernát. Naopak, pokud se sesláním kouzla neuspěješ, či nezabráníš nepřátelskémým mágům v seslání kouzla na Tvůj gubernát, část zkušeností ztrácí. Tu zkušenost, kterou ztratí, může získat nepřátelský generál. Zisk zkušeností mága nezávisí pouze na poměru sil a součtu sil účastnících se magického souboje, ale také na ceně sesílaného kouzla a jeho efektu na nepřátelský gubernát. Zkušenosti nezískáváš při kouzlení na členy své aliance. Magii může podporovat více mágů najednou, v tom případě se sčítají bonusy od všech těchto mágů. Zkušenosti si dělí rovným dílem. Procentuální bonus generálů mágů je dán vztahem bonus = lvl/(lvl+50) * 100%. Každý mág doma zvyšuje obranou sílu magie. Při útoku nezvyšují skutečnou sílu seslaného kouzla, pouze zvýší šanci, že kouzlo projde, a to jako kdyby jej zesílil o tolik procent, kolik dělá bonus generálů mágů.
+
+      Zloděj
+
+        Zloděj podporuje zlodějské útoky i obranu. Zkušenosti získává ze zlodějských akcí, které sám koordinuje. Tedy pokud je o přepočtu, kdy útoky a obrany probíhají, doma. Každý generál zloděj, který je doma, zvyšuje sílu zlodějských útoků a obrany o lvl/(lvl+50) * 100%. V případě více generálů zlodějů se zkušenosti dělí rovným dílem. Zisk zkušeností závisí na počtu zlodějů, kteří se střetli, na poměru sil a na efektu prováděné akce na nepřátelský gubernát. Zisk zkušeností je tím vyšší, čím více zlodějů se střetlo, a čím byl jejich počet na obou stranách vyrovnanější a čím větší škody způsobili. Obranu zvyšuje i zlodějům, které pomáhají bránit gubernát v rámci posil. Zkušenosti nezískávají při zlodějských akcích Sledování gubernátu a Krádež zásob.
+
+      Obchodník
+
+        Obchodník zvyšuje produktivitu obchodníků o 1,5 * lvl/(lvl+50) * 100%. V určitých tazích dostane tolik zkušeností, jakou má aktuální rozlohu Tvůj gubernát plus polovina součtu území jeho obchodních paktářů. Zkušenosti se přičtou vždy odehráním 14., 28. a 42. tahu. Tedy změnou tahu z 14/X na 15/X, 28/X na 29/X a 42/X na 43/X. Další zkušenosti lze pro něj vynalézat pomocí výzkumu.
+
+      Profesor
+
+        Profesor zvyšuje rychlost zaškolování profesí a armády. Každý profesor zaškolí navíc tolik procent za tah, kolik je jeho level. Například generál profesor na levelu 12 zaškolí každý tah navíc 12% nováčků. Bonusy od těchto generálů se sčítají. Zkušenosti získává ve stejných tazích jako obchodník, ovšem získá pouze tolik zkušeností, kolik je dvojnásobek aktuální rozlohy gubernátu. Další zkušenosti lze pro něj vynalézat pomocí výzkumu.
+
+      
+
+
+       
+      Zkratka "lvl" znamená součet úrovní všech generálů dané primární vlastnosti.
+
+
+      
+      
+
+
+        
+ 
+ 
+ 	Únos generála
+      
+          Pokud generál se sekundární vlastností Únos generála uspěje v útoku, kterému velí, je šance na to, že zajme jednoho z nepřátelských generálů. Šance procentuálně odpovídá dvojnásobku levelu generála. Pokud se nepřátelského generála povede v útoku (POUZE V ÚTOKU) unést, získá generál, který ho unesl, zkušenosti navíc, které odpovídají úrovni unášejícího generála vynásobené zkušenostmi uneseného generála vydělenými stem. Při úspěšné obraně pak může být zajat generál vedoucí útok. Pokud se na obraně podílí víc generálů se sekundární vlastností Únos generála, počítá se jen ten nejlepší. Nesčítají se. Při úspěšné obraně je pak šance na zajetí útočícího generála rovna levelu generála. Sekundární vlastnost Únos generála je účinná s libovolnou primární vlastností generála, a to jak v útoku tak v obraně.
+
+
+
+	Generálovražednictví
+      
+          Pokud generál se sekundární vlastností Generálovražednictví uspěje v útoku, kterému velí, je šance na to že zabije jednoho z nepřátelských generálů, kteří jsou doma. Šance procentuálně odpovídá dvojnásobku levelu generála. Pokud se nepřátelského generála povede v útoku (POUZE V ÚTOKU) zabít, získá generál, který ho zavraždil, zkušenosti navíc, které odpovídají úrovni vraha vynásobené zkušenostmi zavražděného vydělenými stem. Při úspěšné obraně pak může být zabit generál vedoucí útok. Pokud se na obraně podílí víc generálů se sekundární vlastností Generálovražednictví, počítá se jen ten nejlepší. Nesčítají se. Při úspěšné obraně je pak šance na zabití útočícího generála rovna levelu generála. Sekundární vlastnost Generálovražednictví je účinná s libovolnou primární vlastností generála, a to jak v útoku tak v obraně.
+
+
+     
+      Poranění generála
+      
+          Pokud generál se sekundární vlastností Poranění generála uspěje v útoku, kterému velí, je šance na to, že zraní jednoho z nepřátelských generálů, kteří jsou doma, na 3 dni. Šance procentuálně odpovídá dvojnásobku levelu generála. Pokud se nepřátelského generála povede v útoku (POUZE V ÚTOKU) zranit, získá generál, který to udělal, zkušenosti navíc, které odpovídají úrovni útočícího generála vynásobené zkušenostmi zraněného vydělenými stem. Při úspěšné obraně pak může být zraněn generál vedoucí útok. Pokud se na obraně podílí víc generálů se sekundární vlastností Poranění generála, počítá se jen ten nejlepší. Nesčítají se. Při úspěšné obraně je pak šance na zranění útočícího generála rovna levelu generála. Sekundární vlastnost Poranění generála je účinná s libovolnou primární vlastností generála, a to jak v útoku tak v obraně.
+
+
+
+	Magie času
+      
+          Tento generál má v úspěšném útoku šanci 2*lvl%, že cíl ztratí jeden tah pro příští den. Pokud o tah přijde, je šance, že ztratí další. Tato šance se rovná polovině té šance předchozí. Pokud je ztracen i další tah, situace se opakuje a pak ještě jednou. Jinými slovy by se dalo říct, že generál má v úspěšném útoku šanci, že vezme až čtyři tahy, přičemž na uzmutí prvního má šanci rovnou dvojnásobku svého levelu a v případě úspěchu, se test na ztrátu tahu zopakuje s poloviční pravděpodobností a toto se děje tak dlouho, dokud generál v ničení tahu neuspěje, nebo dokud nevezme čtyři. Generál na 30. úrovni má tedy 40% šanci, že nevezme žádný tah, 30% šanci, že vezme jeden tah, 15% šanci, že vezme tahy dva, 7,5% šanci, že vezme tři a 7,5% šanci, že vezme čtyři. Generál na 50. úrovni bere na 50% jeden tah, na 25% tahy dva, na 12,5% tři a na 12,5% čtyři (nemůže se stát, že by tah nevzal). Tyto šance už jsou přepočítány i s tím, jestli ta předchozí vyšla/nevyšla. Za každé dva tahy, které generál vezme nepříteli, přidá jeden tah gubernátu, ze kterého pochází. Krom kradení tahů, se při úspěšném útoku testuje pád časovek. Každá stojící má lvl/4% šanci na pád.
+
+
+
+            
+      Černá magie
+      
+          Tento generál má v úspěšném útoku šanci 2*lvl%, že sešle na cíl kouzlo Dračí dech (toto kouzlo se sešle jako součást vojenského útoku bez ohledu na počet prošlých Dračích dechů daný přepočet). Krom toho má 1,5*lvl% šanci na odkouzlení každého kouzla Bílé magie z cíle (mezi Bílou magii se počítá Pracovitost, Magické fluidum, Plodnost, Štěstí a Dobrá nálada a odstranění každého z kouzel se testuje zvlášť) a lvl% šanci na odkouzlení všech Štítů z cíle (mezi štíty se počítá Magické zrcadlo, Padlé legie, Vojenský štít a Antimagický štít a test probíhá na odkouzlení všech naráz). Poslední vlastností tohoto generála je, že testuje trvalá kouzla černé magie na cíli. Pokud je některé z nich slabší než 2*lvl*rozloha cíle (nebo kouzlo na gubernátu vůbec není), nakouzlí ho tak, aby mělo přesně sílu 2*lvl*rozloha cíle. Tato vlastnost nemá vliv v obraně.
+
+      
+      
+      Drakobijectví
+      
+          Tento generál zavraždí v (úspěšném) útoku i (úspěšné) obraně lvl% draků. V případě více drakobijců v obraně se bere jen ten nejlepší (s nejvyšším levelem). Nesčítají se. Při prošlém útoku ještě otestuje pevnost nepřátelského Portálu a Drakodrapu. Obě budovy mají lvl/4% šanci na pád. Dále zboří lvl Dračích Doupat (tato vlastnost je obvzláště vražedná, pokud je na jeden gubernát vysláno více generálů s drakobijectvím) a navíc má ještě 0,1*lvl% šanci, že zboří všechna Dračí Doupata. Poté, co generál poboří budovy a zabije draky, ověří se počet draků-bezdomovců u cíle a lvl% z nich se přidá do útočníkovy armády.
+
+      Sabotáž
+      
+          Při prošlém útoku zboří o lvl% víc infrastrukturních budov než normálně a ještě navíc lvl/2% domů (procenta se berou z POČTU domů, nikoliv z rozlohy gubernátu). Je rovněž šance 2*lvl% na zboření speciální budovy. Procenta zbořených infrastrukturních budov navíc se počítají z normálního množství zbořených budov útokem, ne z celkového počtu infrastrukturních budov nepřítele. Sabotér rovněž (velmi výrazně) zvyšuje počet ukořistěných infrastrukturních budov. Tato vlastnost nemá vliv v obraně.
+
+      Krvelačnost a sodomie
+      
+          Při prošlém útoku způsobí o 2*lvl% více ztrát populace a armády než normálně. Z celkových ztrát pak lvl% nezabije, ale odvleče do otroctví. Tito otroci se objeví v gubrnátu útočníka jako nezaměstnaní. Krom toho zkusí zbořit Nemocnici u Tří křízů a Štáb brigády rychlého nasazení. Na každou z těch budov má lvl/4% šanci, že uspěje. Navíc zboří lvl% obranných věží (procenta se berou z celkového počtu postavených věží). Tato vlastnost nemá vliv v obraně.
+
+      Rabování
+      
+          Při prošlém útoku zničí cíli 2*lvl% zásob (procenta jsou brána z maxima zásob) a lvl/2% infrabodů (procenta jsou brána z momentálního počtu infrabodů). Polovinu z takto "zničených" infrabodů přenese do vlastního gubernátu. Tato vlastnost nemá vliv v obraně.
+
+      Léčitelství
+      
+          Léčitel zachrání lvl% téměř mrtvých bojovníků v boji před smrtí. Tato vlastnost se uplatní při (neúspěšné) vojenské obraně i při (neúspěšném) vojenském útoku (a vztahuje se i na účastníky útoku či paktáře cíle). Při úspěšném útoku má efekt dvojnásobný a při úspěšné obraně dokonce čtyřnásobný. Z generálů, kteří mají tuto vlastnost a účastní se obrany, se počítá jen ten nejlepší.
+
+      Bílá magie
+      
+          Tento generál může na Tvůj gubernát každý odehraný tah seslat pozitivní kouzla. Výběr kouzel je náhodný. Pravděpodobnost seslání je závislá na úrovni generála (a příjemně velká). Síla kouzla také závisí na úrovní generála (a je opravdu VELMI značná). Pokud je těchto generálů doma více, má každý svou pravděpodobnost seslání kouzel (a může jich seslat i více). Dále tato sekundární vlastnost zpomaluje klesání síly pozitivní magie a urychluje klesání síly negativní magie. Zde se ovšem počítá pouze nejlepší generál s touto vlastností. 
+
+
+      Maskování a špionáž
+      
+          Tento generál, pokud je doma, zvyšuje šanci na odhalení útočníka o tolik procent, na jakém je levelu (zvyšuje šanci absolutně o lvl%). Generálové se sčítají. Generál mág s touto vlastností ovlivňuje odhalení magie, zloděj zlodějské útoky. Pokud jsi útočícím gubernátem Ty, generál naopak snižuje šanci, že budeš odhalen. Při vojenském útoku s tímto generálem je 2*lvl% šance na zjištění kompletního stavu gubernátu obránce a dále lvl/2% šance na zjištění kompletního stavu každého gubernátu (šance se ověřuje pro každý gubernát zvlášť), s kterým má cíl pakt (může zjistit tedy i ostatní pakty gubernátů, se kterými je cíl paktován, ale přes ty už nic dalšího nezjistí). Kompletním stavem jsou myšleni všichni generálové (včetně jmen, levelů a primárních i sekundárních vlastností), všechny pakty, procenta zlodějů, mágů a vojáků, kteří brání města (samozřejmě platná pro následující přepočet), tahy, procenta zásob a infrabodů, počet padlých i stojících infrabudov (včetně počtů od každého druhu), jména a počet padlých speciálních budov, počty všech jednotek i lidí v profesích, nepřidělené i přidělené (včetně toho, kam jsou přidělené) vědecké body a počet nových zpráv na fórech i v poště (to jen pro správnou gangsterskou atmosféru :o) ).
+
+
+      
+
+
+          Veškeré efekty sekundárních vlastností generálů - s výjimkou léčitelství - se uplatní v útoku jen pokud úspěšně prorazí obranu cíle, v obraně pak jen při úspěšné obraně (léčitelství je opět výjimkou)!
+
+    Generálové mohou přijít o 
+      život několika způsoby.
+      Buď padne v boji, zejména při nějaké velmi nevydařené válečné akci, může být zákeřně zavražděn zloději, může umřít v labyrintu nebo ve vězení v případě, že ho odmítneš vykoupit (nebo Ti ho nepřítel odmítne vydat).
+
+
+
+
+      Povolené kombinace primárních a sekundárních vlastností
+      
+        vojevůdce	
+        Únos generála, Generálovražednictví, Poranění generála, Drakobijectví, Léčitelství, Sabotáž, Krvelačnost a sodomie, Rabování, Maskování a špionáž, Černá magie, Magie času 
+        obránce	
+        Únos generála, Generálovražednictví, Poranění generála, Drakobijectví, Léčitelství, Bílá magie
+
+
+        mág	
+        Únos generála, Generálovražednictví, Poranění generála, Drakobijectví, Léčitelství, Bílá magie, Maskování a špionáž
+
+
+        zloděj	
+        Únos generála, Generálovražednictví, Poranění generála, Drakobijectví, Léčitelství, Bílá magie, Maskování a špionáž
+
+
+        obchodník	
+        Únos generála, Generálovražednictví, Poranění generála, Drakobijectví, Léčitelství, Bílá magie 
+
+
+        profesor	
+        Únos generála, Generálovražednictví, Poranění generála, Drakobijectví, Léčitelství, Bílá magie
+
+
+      	
+ 
+      
+      
+
+
+Zpět na změny
+
+
+     
+      	
+     	
+
+
+
+
+

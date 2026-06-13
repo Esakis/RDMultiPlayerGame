@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RedDragonAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b822a4f9722a5fd3b0db5d6d34df7fbc28d395fe")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+74ec39cbcd0c12311af2fa6b627c30757f1d0ed9")]
 [assembly: System.Reflection.AssemblyProductAttribute("RedDragonAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RedDragonAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

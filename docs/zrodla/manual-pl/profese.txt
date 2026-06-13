@@ -1,0 +1,475 @@
+
+
+Red Dragon - instrukcja
+
+    Search
+
+
+ 
+Introduction
+  
+About Red Dragon...
+  
+Kingdom Registration
+    
+Registration Screen
+  
+
+Payments
+
+
+  
+RD Dictionary
+
+
+
+Races
+    
+Humans
+    
+Gnomes
+    
+Elves
+    
+Hobbits
+    
+
+Dwarves
+    
+Genies
+    
+Goblins
+    
+Necromants
+    
+Br-Ougs
+    
+Giants
+
+  
+Game Rules
+  
+Administrating your Kingdom
+    
+
+Game Screen
+    
+Central
+     
+Main Screen
+      
+Details
+      
+News
+      
+Forum
+      
+Mail
+      
+Labyrinth
+      
+Chat
+    
+
+Buildings
+      
+Economy Buildings
+      
+Special Buildings
+        
+Special Buildings Overview
+      
+Land
+      
+Science
+    
+Professions
+    
+Army
+    
+War
+      
+
+Establish attack
+      
+Join an attack
+      
+Generals
+      
+Alliance
+    
+Magic
+      
+Spellbooks
+    
+Thieves
+    
+Politics
+      
+Politics
+      
+
+Wars
+      
+Election
+      
+Alliance
+      
+Buy
+      
+Sell
+    
+Emperor
+      
+Alliance
+    
+Statistics
+    
+Find
+    
+
+Options
+      
+Automatization
+      
+Settings
+      
+Tools
+  
+RD Politics
+  
+Warfare
+  
+Equations
+
+ 
+
+
+Magical Power
+
+Thievish Power
+
+Your Kingdoms
+
+LJP
+
+Administrators
+
+
+ 
+
+    
+	
+		
+		
+ 
+
+
+	
+
+
+	
+		
+ 
+
+      Employment is one of the bases of your Kingdom. This menu allows you to employ your citizens in crafts. In each profession you can hire only the amount of people limited by workshops. At the beginning you can hire 500 craftsmen. If you want to employ more you have to build workshops - one workshops supplies space for 100 workers. There are 9 professions.
+	
+
+
+	
+		
+ 
+
+      Next to each profession you can find:
+
+- the professions' icons,
+
+- professions' names,
+
+- number of craftsman.
+
+	
+
+
+	
+		
+
+ 
+
+      At the top, the number of craftsman you can hire is shown (according to the amount of built workshops). Below is the present number of craftsman hired. You can change this number in the professions menu. If you type in a number of craftsmen greater than the maximum, the craftsmen without space to work become unemployed after the turn. The buttons ' - ' and ' + ' are used to change the present amount of craftsmen.
+	
+
+
+	
+		
+ 
+
+   -   Productivity(%) - defines the effectiveness of one craftsman. Productivity is defined by the number of untrained workers, Science percentage, amount of Guilds, spells. Diligence influences ale non-magical crafts, whilst Magical Fluid influences only mages and druids. Sleepwalking is the opposite of Diligence and Stupidity of Magical Fluid.
+
+
+- Scholars(%)  - allows you to define the percentage of Science Points used to develop a profession. The buttons ' - ' and ' + ' are used to change this percentage.
+
+
+-Science - Indicates the influence of Science on a profession. The higher Science is the great the production.
+
+
+-Production - shows the amount of goods that will be produced when you click Next Turn. Next to druids', farmers' and stonemasons' production, the production of manufactures is given (after ' + '). Bricklayers' production is given in brackets - it is divided according to the percentage given in the Buildings menu for producing Infra points and building Special Buildings. Mages' production I also given in brackets - they do not produce any goods, this number is their current power. Productivity of druids defines not the amount of manna they can produce but the amount they can keep. Every turn the third of the difference between possessed manna and druid's production is produced (except Elves). The exact equation for productivity can be found in the 'Equations'.
+
+
+-Novice percentage - defines the percentage of untrained workers in a profession. With every turn a certain amount of novice workers become trained. If you add some unemployed citizens to a profession they become novice workers - so this percentage increases.
+
+
+
+ 		
+
+
+	
+		
+
+ 
+
+Professions menu
+
+ 
+
+
+		 	
+
+
+	
+		
+
+ 
+      This menu has no buttons but only 3 boxes - one to type in the number of craftsmen and two information boxes. They make it easier to manage your citizens.
+
+	
+
+
+	
+		
+
+ 
+	change by - type in a number - it defines by how much will the number of craftsmen or Scholars change when clicking on ' - ' or ' + '.
+
+	Unemployed - number of people that you can employ. You can also hire them as soldiers. Do not forget to train some unemployed citizens for soldiers each turn if you wish to make your army stronger.
+
+
+	Summary - here you will know how many scholars you are currently using. You should always use 100% of scholars available (there should always be 100%).	
+
+
+	
+	
+		
+
+ 
+
+      On the bottom of the screen is the textbox defining your present wages and the 'Do' button. If you make a change in any box in this menu you must confirm it by clicking the 'Do' button. The 'Wages:' textbox defines the amount of gold that one worker will get per turn. The higher the wages the more you have to pay your craftsmen. On the other hand, your popularity increases. This box defines also army wages. The minimum pay is 0 gold and maximum is 50 gold. To keep your citizens happy, to have a popularity of 100 that is, you must pay each worker 50 gold per turn. However, if the spell Good Mood is casted or the special building Red Dragon Inn is built you can lower wages to 46 without loosing any popularity. If both are active (GM casted and Red Dragon Inn built) you can lower wages to 42 gold. Thieves take no money as wages. The army takes wages according to the equation :
+
+
+
+
+
+ 
+army wages (1unit)= (unit's attack+ unit's defence)/10*wage
+
+	
+
+
+	
+		
+
+ Wages
+
+ 
+
+
+
+		 	
+
+
+	
+		
+		
+ 
+  	
+
+
+	
+		
+ 
+
+
+
+
+ 
+	
+
+
+		
+ Farmers provide your citizens in food. One farmer with productivity of 100% produces 10 units of food per turn. Every citizen and military unit eats at least one unit of food per turn. However, there is one exception - necromants armies do not eat at all. When your citizens starve, they leave your Govern. Lack of food affects your popularity heavily. You can stock up food and trade it on the market.
+
+
+
+	
+
+
+	
+		
+
+
+
+ 
+
+
+		
+  Stonemasons  produce stones, which are used by bricklayers. They can also be stocked or traded. A stonemason with productivity of 100% produces 1 stone per turn.
+
+
+
+	
+
+
+	
+		
+
+
+ 
+	 
+
+
+		
+ Bricklayers build Economical buildings and Special buildings. You can direct a certain amount to each type of buildings in the Buildings menu. Bricklayers need stone (only elves do not need it).  From one stone they produce 1 infrastructure point (brick) or 1 point for Special Buildings. You can stock up Infrastructure points but not Special Buildings Points. You cannot trade them nor steal them nor destroy them by magic.
+
+
+
+
+			
+
+
+	
+		
+
+
+ 
+	 
+
+
+		
+Merchants produce gold, so needed in your Govern. You use it to pay wages, buy land, train army, build infrastructure, buy resources. A merchant with productivity of 100% produces 100 gold. Merchants' productivity is limited by your land size. The more merchants you have the greater the rivalry between them is and the lower their productivity. By signing mercantile pacts you give them new territories to work on and therefore raise their productivity. The pacts` infuence is determined by the pactee`s land size, not by the number of merchants in his/her Kingdom. It is said that experienced players allow one merchant to work on 10 acres.
+
+	
+
+
+	
+		
+
+
+ 
+
+
+		
+
+
+
+ Alchemists, just as merchants, produce gold. They produce it in their workshops, so their productivity is in depended from your land size. If you do not have enough gold for wages, your citizens leave your Govern. Gold is also used to buy resources from the market. One alchemist with productivity of 100% produces 100 gold per turn. Lack of money for wages means a decrease in your popularity. The number and productivity of your alchemists also influence the amount of gold that you can find in the Gold Mine.
+
+
+
+	
+
+
+	
+		
+
+
+ 
+
+
+		
+ Armourers produce weapons which are needed to train troops. You can stock up weapons as well as trade them on the market. An armourer with productivity of 100% produces one weapon per turn.
+
+
+
+	
+
+
+	
+		
+
+
+ 
+
+
+		
+ Druids are one of the magical professions in your Govern. They produce manna which is used to cast spells. One druid with productivity of 100% can hold 1 manna. However, their production is not equal their number. Druids slowly complete the amount of manna they can hold. Every turn, only a third of the difference between possessed manna and druids' production of manna is given to you. You can not stock up manna - you can possess only the amount that the druids can hold. However, there is one exception - elves are the only race in RD that can stock up manna. If you buy more manna that you can hold, it will decreases every turn until it reaches the maximal amount. Magic is very powerful, but you cannot use it without a healthy supply of manna.
+
+
+
+	
+
+
+	
+		
+
+
+ 
+
+
+
+ 
+
+ Mages are the main magical profession. They cast spells using manna and protect you from enemy spells. The more mages you have the more likely it is that spells will be successful and the more powerful your spells are.
+
+
+
+	
+
+
+	
+		
+
+
+ 
+
+
+
+ 
+ Scientists are a very important profession. Although they do not produce any material goods, they are essential for you Kingdom. They raise the productivity of all professions and 'produce' Science Points. Scientists can increase a proffession`s productivity by up to 100%. If you build economical buildings Universities, they raise it even more! Universities raise the influence of Scientists on professions by the % shown in the Buildings menu.
+
+	
+
+
+	
+		
+
+       You can define the profession on which Scientists should work. You do this by typing in the % of Scientists that should develop this craft. For example, you have 5000 Scientists with a productivity of 480%. This means, that every turn they produce 24000 Science Points. If you direct 15% of Scientists to develop a profession, 3600 Science points per turn are transferred to this craft. Science Points for each profession are counted individually. Each turn, every profession looses 10% of invested Science Points and afterwards the transferred Science points are added. If the number of Science Points overdraws the maximum amount, it is lowered to that amount. The % in the 'Science' box is calculated according to the ratio between transferred Science Points and the maximum amount of Science Points. The maximum number of Science points is defined by your land size. Science is inertial - if you do not have the needed amount of Scientists to keep the maximal Science, it decreases slowly, not at once. You should have as much Scientists as it is needed to keep your Science at 100% + the influence of Universities. If you have more, any additional Science Points are transferred to develop Science. When you have more Science Points than the turn limit for developing Science, the additional Science Points are 'given back' to you Scientists for their own studies. These studies can someday make for a breakthrough, which will significantly help to develop your Science.
+ 	
+
+
+	
+		
+
+ 
+
+      The productivity of a novice worker is 1/10 of the productivity of a trained worker. Every turn 1/6 of novice workers become trained. If you have any schools built and/or Professors, the training ratio is greater.
+
+
+ 		
+
+
+	
+	
+
+
+ 
+
+
+ 
+			
+ 
+
+
+
+    	Ostatnia aktualizacja: 2007-02-22 18:38:03
+
+					

@@ -1,0 +1,112 @@
+
+
+Red Dragon - manuál
+
+
+ 
+
+  
+     	
+    
+    	
+    	
+
+
+  
+    
+
+    
+    	
+     	
+    
+
+
+      
+
+   
+      
+      
+	    V obrazovce politika také uzavíráš s ostatními členy Tvé aliance pakty. Pakty nemůžeš uzavřít se členy jiných aliancí. Tato část začíná textem Navrhnout pakt, za kterým je v závorce uveden počet paktů které smíš mít uzavřeny. Standardně je to 5 paktů, po postavení speciální budovy Ambasáda 6 paktů. Pokud chceš s jiným gubernátem uzavřít pakt, vyber z rolovací lišty gubernát, se kterým pakt chceš uzavřít. V rolovací liště Typ paktu vyber, jaký pakt chceš uzavřít a potvrď tlačítkem Proveď.
+
+      Aby byl pakt uzavřen, musí jej potvrdit obě strany. Gubernátu, kterému je navrhován pakt, se v levé tabulce objeví hlášení o nabídce paktu. Pakty může rovněž měnit imperátor či vojevůdce z jednoho místa pro všechny gubernáty aliance. 
+
+
+      Pro každý pakt si můžeš vybrat, jestli ho chceš přijmout či odmítnout. Až se rozhodneš, zvol Tebou vybranou možnost a následně potvrď tlačítkem Proveď. Nabídka se Ti bude zobrazovat tak dlouho, dokud se nerozhodneš pro nějakou z možností, nebo dokud ji nestáhne ten, kdo ji nabízí.
+
+      Do této tabulky se rovněž vypisují pakty, které jsi nabídl a ještě nebyly přijaty či odmítnuty. Každý Tebou nabízený pakt můžeš odvolat (a to ať už ho druhá strana přijala, nebo teprv na přijetí čeká, jen se každý případ řeší jinak).
+
+      V dolní tabulce je vypisován seznam uzavřených, uzavíraných nebo rušených, ale ještě platných paktů. Pokud je pakt přijatý a nebyl vypovězen žádnou stranou, je vedle něj zaškrtávací políčko. To slouží ke zrušení paktu. Pokud jej zatrhneš a potvrdíš tlačítkem Potvrdď změny, pakt přejde do stádia vypovězení. Pakty, které toto zaškrtávací políčko nemají, jsou ve stádiu vypovězení.
+
+      Jsou čtyři druhy paktů. Jejich výpis je barevně rozlišen aby bylo na první pohled jasné které pakty máte uzavřeny:
+
+
+  	
+  	typ paktu	barva	popis paktu
+
+  	obchodní	bíla	Území druhé strany se virtuálně přičte k území Tvého gubernátu a zvýší tak efektivitu obchodníků. Přičítá se velikost gubernátů podle stavu z předchozí půlnoci (ne aktuální území).
+
+
+ 	magický	modrá	Mágové gubernátu, se kterým máš magický pakt, pomáhají bránit proti nepřátelské magii.
+
+ 	vojenský	zelená	Spojencova armáda pomáhá bránit. Ale jen ta část armády, kterou nechal spojenec doma. Na obraně se nepodílí spojencovy věže, domobrana a padlé legie.
+
+ 	zlodějský	šedá	Spojencovi zloději, kteří zůstali doma, pomáhají bránit proti zlodějským útokům.
+
+ 	
+
+      
+	    Je možné uzavřít libovolnou kombinaci těchto paktů. S každým členem aliance může být uzavřen jen jeden pakt stejného druhu. To znamená, že nemůžeš mít například dva obchodní pakty se stejným gubernátem.
+
+      
+      Pokud uzavřeš obchodní pakt, počítá se pro zvýšení efektivitiy obchodníků celé území propaktovávaného gubernátu. Pokud máš obchodních paktů více (s více gubernáty), všechny připočítávají celé území. Obchodní pakt má tedy vždy 100% účinnost bez ohledu na počet paktů. Obchodní pakt platí až po přepočtu. Do přepočtu dne, kdy byl založen, nijak nepřispívá. Jeho vypovězení se rovněž projeví až po přepočtu, ten den, co byl vypovězen, má stále plnou účinnost.
+
+  
+      Uzavíraní ostatních paktů se řídí jinými pravidly co do účinnosti tak i platnosti. Pokud máš jeden pakt stejného druhu, počítá se jako pomoc jen 50% magické síly nebo počtu armády či zlodějů druhého gubernátu. Pokud máš dva pakty, počítá se jen 45% od každého z těchto gubernátů. S vyšším počtem paktů stejného druhu účinek ještě klesá podle následující tabulky:
+
+
+
+ 	
+ 	
+ počet paktů stejného druhu	příspěvek obrany od každého z nich
+
+ 1	50%
+
+ 2	45%
+
+ 3	40%
+
+
+ 4	35%
+
+ 5 a více	30%
+
+ 
+        
+       
+	    U magického, vojenského a zlodějského paktu platí pravidlo, že v den uzavření přispívají o přepočtu pouze poloviční silou. Až druhý den platí naplno. Tyto pakty platí poloviční silou ještě ten den, kdy byly zrušeny (resp. při přepočtu). Vypovíš-li tedy například vojenský pakt v 16 hodin, bude ještě v rámci přepočtu uvažováno 50% jeho síly. Naopak pokud přijmeš například zlodějský pakt v 10 hodin, bude se o přepočtu uvažovat jen 50% jeho síly. Těch 50% je počítáno z účinku závisejícího na počtu paktů. Tedy pokud přijmeš třetí vojenský pakt, bude Ti o přepočtu pomáhat jen 0,50*0,40 = 0,20, tedy 20% armády, která v tomto gubernátu zůstala o přepočtu doma. Pakty, které mají jen poloviční platnost jsou vynačeny tmavě červenou barvou.
+
+
+  
+      Okamžité zrušení všech paktů lze docílit jen vystoupením z aliance. Pokud do ní budeš přijat zpět, nepočítá se ani těch 50% z paktů, které jsi měl předtím uzavřeny.
+
+      Pakty, které jsi stihl uzavřít a zase zrušit během jednoho dne, nemají žádný účinek. Naopak pakty, které jsi měl uzavřené, pak zrušil a následně znovu uzavřel, se počítají stejně, jako kdyby se jeden pak rušil a druhý uzavíral (tedy dvakrát polovina).
+
+	    POZOR!! Pakt uzavřený na nějaký počet procent ještě nezaručuje, že tolik procent zlodějů, mágů nebo vojáků od paktářů půjde bránit Tvůj gubernát. Každý gubernát může své zloděje, mágy i vojáky nechat bránit svou zem buďto přímo na jejích hranicích, nebo je může stáhnout jen do měst a bránit pouze tam. Obojí má své výhody i nevýhody. Je jasné, že zlodějům se lépe hlídá několik tajných chodeb vedoucích do města, než dlouhé lány země na hranicích. I mágové snáz ochrání před temným zaklínadlem jen plochu města, než kdyby museli odrážet toto kouzlo po celé zemi. Stejně i vojáci mají proti útočníkům značnou výhodu, když stojí na hradbách. Tady je jasná výhoda obrany měst. Na druhou stranu, jednotky bránící na hranicích gubernátu, se mohou snadno přesouvat, aby pomohli s obranou i v sousedních zemích. Každý gubernátor si může v tomto menu (Politika) nastavit, kolik procent zlodějů, mágů a vojáků stáhne do svých měst. Tato procenta mohou být různá pro zloděje, mágy i vojáky a Ty je můžeš nastavit tím, že jejich číselnou hodnotu zadáš do tří textových polí Kolik procent zlodějů/mágů/vojáků bude bránit Tvá města. Tolik procent z Tvých jednotek nepůjde bránit Tvé paktáře. Procenta paktů se tedy (pro Tvé paktáře) počítají jen z toho zbytku, který nebrání města. Stejně jako Tvůj gubernát brání jen ta část vojáků Tvých sousedů, která nebrání jejich města (samozřejmě z nich brání jen tolik procent, kolik dává pakt). Zloději, kteří brání ve městech, mají k obraně bonus +5%. Mágové, kteří chrání před magií města, mají k obraně bonus +70%. Vojáci, kteří bojují na hradbách, mají bonus k obraně +25%. Protože přesuny vojsk (a také zlodějů i mágů) nějakou dobu travají, nelze nastavení procent měnit lusknutím prstů. Každá změna nastavení potřebuje jeden den na to, aby se rozdistribuovala mezi Tvé jednotky a byla provedena. To znamená, že když dnes provedeš změnu nastavení, projeví se tato změna až o přepočtu ze zítřku na pozítří (pro dnešní přepočet zůstává hodnota stará).
+
+
+        
+      
+      
+
+
+Zpět na změny
+
+
+     
+      	
+     	
+
+
+
+
+
