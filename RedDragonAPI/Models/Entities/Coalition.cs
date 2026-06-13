@@ -21,8 +21,15 @@ public class Coalition
 
     public int MaxMembers { get; set; } = 17;
 
+    /// <summary>Postęp budowy PPS w procentach (do wyświetlania).</summary>
     [Column(TypeName = "decimal(5,2)")]
     public decimal PSOProgress { get; set; } = 0.00m;
+
+    /// <summary>Budulec zainwestowany we wspólną budowę Pałacu Sądu Ostatecznego (docs/MECHANIKA.md §12, §14.3).</summary>
+    public long PpsBudulec { get; set; } = 0;
+
+    /// <summary>Czy koalicja rozpoczęła budowę PPS.</summary>
+    public bool IsBuildingPps { get; set; } = false;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

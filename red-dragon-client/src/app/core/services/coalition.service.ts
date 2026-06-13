@@ -4,6 +4,20 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Coalition, ServiceResult } from '../models/kingdom.model';
 
+export interface PpsStatus {
+  hasCoalition: boolean;
+  isBuilding: boolean;
+  investedBudulec: number;
+  cost: number;
+  percent: number;
+  coalitionLand: number;
+  requiredLand: number;
+  landThresholdMet: boolean;
+  isLeader: boolean;
+  role?: string;
+  myBudulecStored: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,6 +25,18 @@ export class CoalitionService {
   private apiUrl = `${environment.apiUrl}/coalition`;
 
   constructor(private http: HttpClient) {}
+
+  getPps(): Observable<PpsStatus> {
+    return this.http.get<PpsStatus>(`${this.apiUrl}/pps`);
+  }
+
+  startPps(): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/pps/start`, {});
+  }
+
+  contributePps(budulec: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/pps/contribute`, { budulec });
+  }
 
   getCoalitions(eraId?: number): Observable<Coalition[]> {
     const params = eraId ? `?eraId=${eraId}` : '';

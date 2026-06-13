@@ -41,6 +41,43 @@
         </div>
       </div>
 
+      <!-- Pałac Sądu Ostatecznego -->
+      <div class="pps-section" *ngIf="pps as p">
+        <h4>Pałac Sądu Ostatecznego</h4>
+        <p class="pps-desc">
+          Wspólna budowa kończąca erę. Wymaga {{ p.cost | number }} budulca i co najmniej
+          {{ p.requiredLand | number }} akrów koalicji. Udany atak na członka resetuje budowę do zera!
+        </p>
+
+        <div class="pps-stats">
+          <span>Obszar koalicji:
+            <strong [class.ok]="p.landThresholdMet" [class.bad]="!p.landThresholdMet">
+              {{ p.coalitionLand | number }} / {{ p.requiredLand | number }}
+            </strong>
+          </span>
+          <span>Twój budulec w magazynie: <strong>{{ p.myBudulecStored | number }}</strong></span>
+        </div>
+
+        <ng-container *ngIf="p.isBuilding; else notBuilding">
+          <div class="pps-bar">
+            <div class="fill" [style.width.%]="p.percent"></div>
+            <span class="pct">{{ p.percent }}% ({{ p.investedBudulec | number }} / {{ p.cost | number }})</span>
+          </div>
+          <div class="form-row">
+            <input type="number" min="1" [(ngModel)]="contributeAmount" placeholder="Budulec do wpłaty">
+            <button class="btn-action" (click)="contributePps()">Wpłać budulec</button>
+          </div>
+        </ng-container>
+        <ng-template #notBuilding>
+          <button class="btn-action" *ngIf="p.isLeader" (click)="startPps()"
+                  [disabled]="!p.landThresholdMet"
+                  [title]="p.landThresholdMet ? '' : 'Za mało akrów koalicji'">
+            Rozpocznij budowę PPS
+          </button>
+          <p class="pps-hint" *ngIf="!p.isLeader">Budowę może rozpocząć tylko Imperator.</p>
+        </ng-template>
+      </div>
+
       <button class="btn-danger" (click)="leaveCoalition()">Opuść koalicję</button>
     </div>
 

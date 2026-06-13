@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RedDragonAPI.Data;
+using RedDragonAPI.Helpers;
 using RedDragonAPI.Models.DTOs;
 using RedDragonAPI.Models.Entities;
 
@@ -211,6 +212,110 @@ public class CoalitionController : ControllerBase
         await _context.SaveChangesAsync();
 
         return Ok(new ServiceResult { Success = true, Message = $"Usunięto {commander.Name} z funkcji Głównodowodzącego." });
+    }
+
+    // === Pałac Sądu Ostatecznego (PPS) — docs/MECHANIKA.md §12, §14.3 ===
+    private const long PpsCost = 10_000_000;        // budulec na ukończenie
+    private const long PpsRequiredLand = 750_000;   // min. obszar koalicji przez całą budowę
+
+    [HttpGet("pps")]
+    public async Task<ActionResult<PpsStatusDto>> GetPps()
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+
+        if (kingdom.CoalitionId == null)
+            return Ok(new PpsStatusDto
+            {
+                HasCoalition = false, Cost = PpsCost, RequiredLand = PpsRequiredLand,
+                MyBudulecStored = kingdom.BudulecStored
+            });
+
+        var coalition = await _context.Coalitions
+            .Include(c => c.Members)
+            .FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+        if (coalition == null) return NotFound("Koalicja nie istnieje.");
+
+        long land = coalition.Members.Sum(m => (long)m.Land);
+        return Ok(new PpsStatusDto
+        {
+            HasCoalition = true,
+            IsBuilding = coalition.IsBuildingPps,
+            InvestedBudulec = coalition.PpsBudulec,
+            Cost = PpsCost,
+            Percent = Math.Round((decimal)coalition.PpsBudulec / PpsCost * 100m, 2),
+            CoalitionLand = land,
+            RequiredLand = PpsRequiredLand,
+            LandThresholdMet = land >= PpsRequiredLand,
+            IsLeader = coalition.LeaderKingdomId == kingdom.Id,
+            Role = kingdom.CoalitionRole,
+            MyBudulecStored = kingdom.BudulecStored
+        });
+    }
+
+    [HttpPost("pps/start")]
+    public async Task<ActionResult<ServiceResult>> StartPps()
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null) return BadRequest("Nie należysz do koalicji.");
+        if (kingdom.CoalitionRole != "Imperator") return BadRequest("Tylko Imperator może rozpocząć budowę PPS.");
+
+        var coalition = await _context.Coalitions
+            .Include(c => c.Members)
+            .FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+        if (coalition == null) return NotFound("Koalicja nie istnieje.");
+        if (coalition.IsBuildingPps) return BadRequest("Budowa PPS już trwa.");
+
+        long land = coalition.Members.Sum(m => (long)m.Land);
+        if (land < PpsRequiredLand)
+            return BadRequest($"Koalicja musi mieć co najmniej {PpsRequiredLand:N0} akrów (ma {land:N0}).");
+
+        coalition.IsBuildingPps = true;
+        await _context.SaveChangesAsync();
+        return Ok(new ServiceResult { Success = true, Message = "Rozpoczęto budowę Pałacu Sądu Ostatecznego!" });
+    }
+
+    [HttpPost("pps/contribute")]
+    public async Task<ActionResult<ServiceResult>> ContributePps([FromBody] ContributePpsDto dto)
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null) return BadRequest("Nie należysz do koalicji.");
+        if (dto.Budulec <= 0) return BadRequest("Podaj dodatnią ilość budulca.");
+
+        var coalition = await _context.Coalitions
+            .Include(c => c.Members)
+            .FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+        if (coalition == null) return NotFound("Koalicja nie istnieje.");
+        if (!coalition.IsBuildingPps) return BadRequest("Koalicja nie rozpoczęła budowy PPS.");
+
+        long give = Math.Min(dto.Budulec, kingdom.BudulecStored);
+        if (give <= 0) return BadRequest("Nie masz budulca w magazynie.");
+
+        kingdom.BudulecStored -= give;
+        coalition.PpsBudulec += give;
+        coalition.PSOProgress = Math.Min(100m, (decimal)coalition.PpsBudulec / PpsCost * 100m);
+
+        long land = coalition.Members.Sum(m => (long)m.Land);
+
+        if (coalition.PpsBudulec >= PpsCost && land >= PpsRequiredLand)
+        {
+            await _context.SaveChangesAsync();
+            await EraConcluder.ConcludeAsync(_context, coalition);
+            return Ok(new ServiceResult
+            {
+                Success = true,
+                Message = "Pałac Sądu Ostatecznego ukończony! Era zakończona — Wasza koalicja trafia do Panteonu. Świat odradza się od nowa."
+            });
+        }
+
+        await _context.SaveChangesAsync();
+        return Ok(new ServiceResult
+        {
+            Success = true,
+            Message = $"Wpłacono {give:N0} budulca. Postęp PPS: {coalition.PSOProgress:0.##}% (obszar koalicji {land:N0}/{PpsRequiredLand:N0})."
+        });
     }
 
     private async Task<Kingdom?> GetCurrentKingdom()

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CoalitionService } from '../../core/services/coalition.service';
+import { CoalitionService, PpsStatus } from '../../core/services/coalition.service';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { Coalition, Kingdom, KingdomSummary } from '../../core/models/kingdom.model';
 
@@ -18,6 +18,8 @@ export class CoalitionComponent implements OnInit {
   selectedCommanderId: number | null = null;
   coalitionMembers: KingdomSummary[] = [];
   currentMainCommander: KingdomSummary | null = null;
+  pps: PpsStatus | null = null;
+  contributeAmount = 0;
 
   constructor(private coalitionService: CoalitionService, private kingdomService: KingdomService) {}
 
@@ -27,11 +29,32 @@ export class CoalitionComponent implements OnInit {
     this.kingdomService.getMyKingdom().subscribe(k => {
       this.kingdom = k;
       this.loadCoalitionMembers();
+      this.loadPps();
     });
-    this.coalitionService.getCoalitions().subscribe(c => { 
-      this.coalitions = c; 
+    this.coalitionService.getCoalitions().subscribe(c => {
+      this.coalitions = c;
       this.loading = false;
       this.loadCoalitionMembers();
+    });
+  }
+
+  loadPps(): void {
+    if (!this.kingdom?.coalitionId) { this.pps = null; return; }
+    this.coalitionService.getPps().subscribe({ next: p => this.pps = p, error: () => this.pps = null });
+  }
+
+  startPps(): void {
+    this.coalitionService.startPps().subscribe({
+      next: res => { this.message = res.message || 'Rozpoczęto budowę PPS.'; this.load(); this.clearMsg(); },
+      error: err => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
+  }
+
+  contributePps(): void {
+    if (this.contributeAmount <= 0) { this.message = 'Podaj ilość budulca.'; this.clearMsg(); return; }
+    this.coalitionService.contributePps(this.contributeAmount).subscribe({
+      next: res => { this.message = res.message || 'Wpłacono budulec.'; this.contributeAmount = 0; this.load(); this.clearMsg(); },
+      error: err => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
     });
   }
 

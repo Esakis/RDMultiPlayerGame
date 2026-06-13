@@ -230,6 +230,18 @@ public class BattleService : IBattleService
             defender.Stone -= resourcesStolen.Stone;
             attacker.Weapons += resourcesStolen.Weapons;
             defender.Weapons -= resourcesStolen.Weapons;
+
+            // Udany atak na członka koalicji resetuje budowę Pałacu Sądu Ostatecznego
+            if (defender.CoalitionId != null)
+            {
+                var defCoalition = await _context.Coalitions
+                    .FirstOrDefaultAsync(c => c.Id == defender.CoalitionId && c.IsBuildingPps);
+                if (defCoalition != null)
+                {
+                    defCoalition.PpsBudulec = 0;
+                    defCoalition.PSOProgress = 0m;
+                }
+            }
         }
 
         // Doświadczenie generałów: zależne od sumy sił i wyrównania starcia
