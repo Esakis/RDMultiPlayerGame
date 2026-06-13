@@ -1,5 +1,19 @@
 :host { display: block; padding: 10px 15px; }
 
+.treasury-section {
+  border: 1px solid #b8860b;
+  background: rgba(50, 45, 15, 0.3);
+  padding: 10px 12px;
+  margin: 12px 0;
+
+  h4 { color: #ffd700; margin: 0 0 6px; }
+  .treasury-stats { display: flex; gap: 22px; font-size: 14px; margin-bottom: 8px;
+    strong { color: #e8d5b0; } strong.gold { color: #ffd700; } }
+  .form-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px;
+    label { font-size: 13px; min-width: 95px; color: #c9a86a; }
+    input { padding: 5px 8px; background: #fff; border: 2px solid #8b7355; color: #000; width: 110px; } }
+}
+
 .election-section {
   border: 1px solid #b8860b;
   background: rgba(60, 50, 10, 0.3);

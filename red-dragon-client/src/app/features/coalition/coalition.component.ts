@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CoalitionService, PpsStatus, War, Election } from '../../core/services/coalition.service';
+import { CoalitionService, PpsStatus, War, Election, Treasury } from '../../core/services/coalition.service';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { Coalition, Kingdom, KingdomSummary } from '../../core/models/kingdom.model';
 
@@ -23,6 +23,10 @@ export class CoalitionComponent implements OnInit {
   wars: War[] = [];
   declareTargetId: number | null = null;
   election: Election | null = null;
+  treasury: Treasury | null = null;
+  depGold = 0; depBudulec = 0;
+  wdrGold = 0; wdrBudulec = 0;
+  fundPpsAmount = 0;
 
   constructor(private coalitionService: CoalitionService, private kingdomService: KingdomService) {}
 
@@ -46,6 +50,32 @@ export class CoalitionComponent implements OnInit {
     this.coalitionService.getPps().subscribe({ next: p => this.pps = p, error: () => this.pps = null });
     this.coalitionService.getWars().subscribe({ next: w => this.wars = w, error: () => this.wars = [] });
     this.coalitionService.getElection().subscribe({ next: e => this.election = e, error: () => this.election = null });
+    this.coalitionService.getTreasury().subscribe({ next: t => this.treasury = t, error: () => this.treasury = null });
+  }
+
+  private treasuryOp(obs: any): void {
+    obs.subscribe({
+      next: (res: any) => { this.message = res.message || ''; this.load(); this.clearMsg(); },
+      error: (err: any) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
+  }
+
+  deposit(): void {
+    if (this.depGold <= 0 && this.depBudulec <= 0) { this.message = 'Podaj kwotę.'; this.clearMsg(); return; }
+    this.treasuryOp(this.coalitionService.depositTreasury(this.depGold || 0, this.depBudulec || 0));
+    this.depGold = 0; this.depBudulec = 0;
+  }
+
+  withdraw(): void {
+    if (this.wdrGold <= 0 && this.wdrBudulec <= 0) { this.message = 'Podaj kwotę.'; this.clearMsg(); return; }
+    this.treasuryOp(this.coalitionService.withdrawTreasury(this.wdrGold || 0, this.wdrBudulec || 0));
+    this.wdrGold = 0; this.wdrBudulec = 0;
+  }
+
+  fundPps(): void {
+    if (this.fundPpsAmount <= 0) { this.message = 'Podaj ilość budulca.'; this.clearMsg(); return; }
+    this.treasuryOp(this.coalitionService.fundPpsFromTreasury(this.fundPpsAmount));
+    this.fundPpsAmount = 0;
   }
 
   vote(candidateKingdomId: number): void {

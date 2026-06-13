@@ -324,6 +324,111 @@ public class CoalitionController : ControllerBase
         });
     }
 
+    // === Kasa koalicji (docs/MECHANIKA.md §12) ===
+
+    [HttpGet("treasury")]
+    public async Task<ActionResult<TreasuryDto>> GetTreasury()
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null)
+            return Ok(new TreasuryDto { HasCoalition = false, MyGold = kingdom.Gold, MyBudulecStored = kingdom.BudulecStored });
+
+        var coalition = await _context.Coalitions.FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+        if (coalition == null) return NotFound("Koalicja nie istnieje.");
+
+        return Ok(new TreasuryDto
+        {
+            HasCoalition = true,
+            TreasuryGold = coalition.TreasuryGold,
+            TreasuryBudulec = coalition.TreasuryBudulec,
+            IsLeader = coalition.LeaderKingdomId == kingdom.Id,
+            MyGold = kingdom.Gold,
+            MyBudulecStored = kingdom.BudulecStored,
+            IsBuildingPps = coalition.IsBuildingPps
+        });
+    }
+
+    [HttpPost("treasury/deposit")]
+    public async Task<ActionResult<ServiceResult>> DepositTreasury([FromBody] TreasuryTransferDto dto)
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null) return BadRequest("Nie należysz do koalicji.");
+        if (dto.Gold < 0 || dto.Budulec < 0) return BadRequest("Nieprawidłowa kwota.");
+        if (dto.Gold == 0 && dto.Budulec == 0) return BadRequest("Podaj kwotę do wpłaty.");
+
+        var coalition = await _context.Coalitions.FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+        if (coalition == null) return NotFound("Koalicja nie istnieje.");
+
+        long gold = Math.Min(dto.Gold, kingdom.Gold);
+        long budulec = Math.Min(dto.Budulec, kingdom.BudulecStored);
+        kingdom.Gold -= gold;
+        kingdom.BudulecStored -= budulec;
+        coalition.TreasuryGold += gold;
+        coalition.TreasuryBudulec += budulec;
+        await _context.SaveChangesAsync();
+
+        return Ok(new ServiceResult { Success = true, Message = $"Wpłacono do kasy: {gold:N0} złota, {budulec:N0} budulca." });
+    }
+
+    [HttpPost("treasury/withdraw")]
+    public async Task<ActionResult<ServiceResult>> WithdrawTreasury([FromBody] TreasuryTransferDto dto)
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null) return BadRequest("Nie należysz do koalicji.");
+        if (kingdom.CoalitionRole != "Imperator") return BadRequest("Tylko Imperator może wypłacać z kasy.");
+        if (dto.Gold < 0 || dto.Budulec < 0) return BadRequest("Nieprawidłowa kwota.");
+
+        var coalition = await _context.Coalitions.FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+        if (coalition == null) return NotFound("Koalicja nie istnieje.");
+
+        long gold = Math.Min(dto.Gold, coalition.TreasuryGold);
+        long budulec = Math.Min(dto.Budulec, coalition.TreasuryBudulec);
+        coalition.TreasuryGold -= gold;
+        coalition.TreasuryBudulec -= budulec;
+        kingdom.Gold += gold;
+        kingdom.BudulecStored += budulec;
+        await _context.SaveChangesAsync();
+
+        return Ok(new ServiceResult { Success = true, Message = $"Wypłacono z kasy: {gold:N0} złota, {budulec:N0} budulca." });
+    }
+
+    [HttpPost("treasury/fund-pps")]
+    public async Task<ActionResult<ServiceResult>> FundPpsFromTreasury([FromBody] FundPpsDto dto)
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null) return BadRequest("Nie należysz do koalicji.");
+        if (kingdom.CoalitionRole != "Imperator") return BadRequest("Tylko Imperator może finansować PPS z kasy.");
+        if (dto.Budulec <= 0) return BadRequest("Podaj ilość budulca.");
+
+        var coalition = await _context.Coalitions
+            .Include(c => c.Members)
+            .FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+        if (coalition == null) return NotFound("Koalicja nie istnieje.");
+        if (!coalition.IsBuildingPps) return BadRequest("Koalicja nie rozpoczęła budowy PPS.");
+
+        long give = Math.Min(dto.Budulec, coalition.TreasuryBudulec);
+        if (give <= 0) return BadRequest("Kasa nie ma budulca.");
+
+        coalition.TreasuryBudulec -= give;
+        coalition.PpsBudulec += give;
+        coalition.PSOProgress = Math.Min(100m, (decimal)coalition.PpsBudulec / PpsCost * 100m);
+
+        long land = coalition.Members.Sum(m => (long)m.Land);
+        if (coalition.PpsBudulec >= PpsCost && land >= PpsRequiredLand)
+        {
+            await _context.SaveChangesAsync();
+            await EraConcluder.ConcludeAsync(_context, coalition);
+            return Ok(new ServiceResult { Success = true, Message = "Pałac Sądu Ostatecznego ukończony z kasy koalicji! Era zakończona." });
+        }
+
+        await _context.SaveChangesAsync();
+        return Ok(new ServiceResult { Success = true, Message = $"Przekazano z kasy {give:N0} budulca na PPS. Postęp: {coalition.PSOProgress:0.##}%." });
+    }
+
     // === Wybory Imperatora (docs/MECHANIKA.md §12) ===
 
     [HttpGet("election")]

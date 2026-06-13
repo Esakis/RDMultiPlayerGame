@@ -31,6 +31,10 @@ public class Coalition
     /// <summary>Czy koalicja rozpoczęła budowę PPS.</summary>
     public bool IsBuildingPps { get; set; } = false;
 
+    // Kasa koalicji (docs/MECHANIKA.md §12) — wspólny skarbiec
+    public long TreasuryGold { get; set; } = 0;
+    public long TreasuryBudulec { get; set; } = 0;
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public Era Era { get; set; } = null!;

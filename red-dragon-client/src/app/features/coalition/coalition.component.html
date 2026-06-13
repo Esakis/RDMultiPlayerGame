@@ -41,6 +41,32 @@
         </div>
       </div>
 
+      <!-- Kasa koalicji -->
+      <div class="treasury-section" *ngIf="treasury?.hasCoalition as _t">
+        <h4>Kasa koalicji</h4>
+        <div class="treasury-stats">
+          <span>Złoto: <strong class="gold">{{ treasury?.treasuryGold | number }}</strong></span>
+          <span>Budulec: <strong>{{ treasury?.treasuryBudulec | number }}</strong></span>
+        </div>
+        <div class="form-row">
+          <label>Wpłać:</label>
+          <input type="number" min="0" [(ngModel)]="depGold" placeholder="złoto">
+          <input type="number" min="0" [(ngModel)]="depBudulec" placeholder="budulec">
+          <button class="btn-action" (click)="deposit()">Wpłać do kasy</button>
+        </div>
+        <div class="form-row" *ngIf="treasury?.isLeader">
+          <label>Wypłać:</label>
+          <input type="number" min="0" [(ngModel)]="wdrGold" placeholder="złoto">
+          <input type="number" min="0" [(ngModel)]="wdrBudulec" placeholder="budulec">
+          <button class="btn-action" (click)="withdraw()">Wypłać (Imperator)</button>
+        </div>
+        <div class="form-row" *ngIf="treasury?.isLeader && treasury?.isBuildingPps">
+          <label>Na PPS z kasy:</label>
+          <input type="number" min="0" [(ngModel)]="fundPpsAmount" placeholder="budulec">
+          <button class="btn-action" (click)="fundPps()">Finansuj PPS</button>
+        </div>
+      </div>
+
       <!-- Wybory Imperatora -->
       <div class="election-section" *ngIf="election?.hasCoalition">
         <h4>Wybory Imperatora</h4>

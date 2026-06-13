@@ -21,6 +21,16 @@ export interface Election {
   candidates: ElectionCandidate[];
 }
 
+export interface Treasury {
+  hasCoalition: boolean;
+  treasuryGold: number;
+  treasuryBudulec: number;
+  isLeader: boolean;
+  myGold: number;
+  myBudulecStored: number;
+  isBuildingPps: boolean;
+}
+
 export interface War {
   id: number;
   declaringCoalitionId: number;
@@ -65,6 +75,22 @@ export class CoalitionService {
 
   contributePps(budulec: number): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/pps/contribute`, { budulec });
+  }
+
+  getTreasury(): Observable<Treasury> {
+    return this.http.get<Treasury>(`${this.apiUrl}/treasury`);
+  }
+
+  depositTreasury(gold: number, budulec: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/treasury/deposit`, { gold, budulec });
+  }
+
+  withdrawTreasury(gold: number, budulec: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/treasury/withdraw`, { gold, budulec });
+  }
+
+  fundPpsFromTreasury(budulec: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/treasury/fund-pps`, { budulec });
   }
 
   getElection(): Observable<Election> {
