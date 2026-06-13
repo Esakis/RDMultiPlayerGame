@@ -383,6 +383,7 @@ public class KingdomService : IKingdomService
                 Race = k.Race,
                 Land = k.Land,
                 Population = k.Population,
+                CoalitionId = k.CoalitionId,
                 CoalitionTag = k.Coalition != null ? k.Coalition.Tag : null,
                 IsProtected = k.IsProtected,
                 IsFrozen = k.IsFrozen

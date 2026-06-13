@@ -31,6 +31,7 @@ import { GeneralsComponent } from './features/generals/generals.component';
 import { MarketComponent } from './features/market/market.component';
 import { LabyrinthComponent } from './features/labyrinth/labyrinth.component';
 import { DragonsComponent } from './features/dragons/dragons.component';
+import { AttackComponent } from './features/attack/attack.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { DragonsComponent } from './features/dragons/dragons.component';
     GeneralsComponent,
     MarketComponent,
     LabyrinthComponent,
-    DragonsComponent
+    DragonsComponent,
+    AttackComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,64 @@
+.game-panel {
+  padding: 16px;
+  color: #e8d5b0;
+  .panel-title { color: #d9542b; }
+}
+
+.lead { color: #c9b58a; font-size: 13px; max-width: 720px; line-height: 1.5; }
+
+.enemies {
+  margin: 8px 0; padding: 6px 10px; font-size: 13px;
+  border: 1px solid #8b0000; background: rgba(60, 10, 10, 0.3); color: #ffd1c0;
+  strong { color: #ff7b6b; }
+}
+
+.filters {
+  display: flex; gap: 18px; margin: 10px 0;
+  label { font-size: 13px; color: #c9a86a; }
+  select { background: #2a1208; color: #e8d5b0; border: 1px solid #5a3a1a; padding: 3px 6px; margin-left: 4px; }
+}
+
+.rd-table {
+  width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px;
+  th, td { border: 1px solid #5a3a1a; padding: 5px 8px; text-align: left; }
+  th { background: rgba(90, 40, 20, 0.5); color: #c9a86a; }
+  tr:nth-child(even) { background: rgba(0, 0, 0, 0.15); }
+  tr.selected { background: rgba(120, 80, 20, 0.35); }
+  tr.blocked { opacity: 0.55; }
+  .name { font-weight: bold; }
+  .num { text-align: right; }
+  .badge { color: #ff9b6b; }
+  .badge.ok { color: #8ed98e; }
+
+  &.units { max-width: 480px;
+    input { width: 90px; background: #2a1208; color: #e8d5b0; border: 1px solid #5a3a1a; padding: 2px 4px; }
+  }
+}
+
+.attack-form {
+  border: 1px solid #8b0000; background: rgba(40, 10, 10, 0.25); padding: 10px 14px; margin-top: 10px;
+  h3 { color: #ff7b6b; margin: 0 0 8px; }
+}
+
+.actions { display: flex; gap: 12px; margin-top: 10px; }
+
+.btn-cast {
+  background: linear-gradient(#5a4a2a, #3a2e18); color: #f0e0c0; border: 1px solid #c9a86a; padding: 3px 12px; cursor: pointer;
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+  &:not(:disabled):hover { background: linear-gradient(#6a5a3a, #4a3e28); }
+}
+
+.btn-attack {
+  background: linear-gradient(#8a2b1a, #5a1208); color: #f0e0c0; border: 1px solid #c9a86a; padding: 5px 18px; cursor: pointer;
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+  &:not(:disabled):hover { background: linear-gradient(#a83b22, #6a180a); }
+}
+
+.btn-cancel {
+  background: #2a1208; color: #e8d5b0; border: 1px solid #5a3a1a; padding: 5px 14px; cursor: pointer;
+  &:hover { border-color: #c9a86a; }
+}
+
+.info-msg { color: #8ed98e; margin: 8px 0; }
+.error-msg { color: #ff7b6b; margin: 8px 0; }
+.hint { font-style: italic; color: #a08a60; font-size: 12px; }

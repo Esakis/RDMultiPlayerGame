@@ -15,6 +15,7 @@ export class SidebarComponent {
     { label: 'Budowa', route: '/buildings' },
     { label: 'Zatrudnienie', route: '/economy' },
     { label: 'Wojsko', route: '/military' },
+    { label: 'Ataki', route: '/attack' },
     { label: 'Walka', route: '/reports' },
     { label: 'Magia', route: '/magic' },
     { label: 'Złodzieje', route: '/thieves' },

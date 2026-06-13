@@ -80,6 +80,7 @@ public class KingdomSummaryDto
     public string Race { get; set; } = string.Empty;
     public int Land { get; set; }
     public int Population { get; set; }
+    public int? CoalitionId { get; set; }
     public string? CoalitionTag { get; set; }
     public string? CoalitionRole { get; set; }
     public bool IsProtected { get; set; }

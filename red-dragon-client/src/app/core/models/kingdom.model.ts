@@ -54,8 +54,11 @@ export interface KingdomSummary {
   race: string;
   land: number;
   population: number;
+  coalitionId?: number | null;
   coalitionTag: string | null;
   coalitionRole?: string;
+  isProtected?: boolean;
+  isFrozen?: boolean;
 }
 
 export interface AssignWorkersDto {
