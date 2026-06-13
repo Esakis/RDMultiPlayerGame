@@ -48,6 +48,13 @@ export class MagicComponent implements OnInit {
     });
   }
 
+  setSchool(school: string): void {
+    this.kingdomService.setAppliedScience(school).subscribe({
+      next: r => { this.message = r.message ?? ''; this.kingdomService.getMyKingdom().subscribe(k => this.myKingdom = k); },
+      error: e => { this.error = e.error || 'Błąd wyboru szkoły.'; }
+    });
+  }
+
   load(): void {
     this.magic.getSpells().subscribe({
       next: s => { this.spells = s; this.loading = false; },

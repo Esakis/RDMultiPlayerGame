@@ -16,4 +16,5 @@ public interface IKingdomService
     Task<ServiceResult> SetMetamagicAsync(int userId, string mode);
     Task<ServiceResult> UpgradeBloodElixirAsync(int userId, string elixir);
     Task<ServiceResult> ChargeTotemAsync(int userId, string totem);
+    Task<ServiceResult> SetAppliedScienceAsync(int userId, string school);
 }

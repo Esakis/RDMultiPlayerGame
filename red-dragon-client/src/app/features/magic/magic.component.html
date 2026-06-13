@@ -51,6 +51,14 @@
     </div>
   </div>
 
+  <div class="metamagic" *ngIf="myKingdom?.race === 'Człowiek'">
+    <span class="mm-label">Nauka stosowana (szkoła):</span>
+    <button class="mm-btn" [class.active]="myKingdom?.appliedScienceSchool === 'None'" (click)="setSchool('None')">Brak</button>
+    <button class="mm-btn" [class.active]="myKingdom?.appliedScienceSchool === 'Thief'" (click)="setSchool('Thief')" title="+10% siły złodziei">Złodziejska</button>
+    <button class="mm-btn" [class.active]="myKingdom?.appliedScienceSchool === 'Magic'" (click)="setSchool('Magic')" title="+10% siły zaklęć">Magiczna</button>
+    <button class="mm-btn" [class.active]="myKingdom?.appliedScienceSchool === 'Military'" (click)="setSchool('Military')" title="+10% ataku">Wojskowa</button>
+  </div>
+
   <div class="info-msg" *ngIf="message">{{ message }}</div>
   <div class="error-msg" *ngIf="error">{{ error }}</div>
   <div class="loading" *ngIf="loading">Wczytywanie zaklęć...</div>

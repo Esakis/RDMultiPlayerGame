@@ -39,6 +39,7 @@ export interface Kingdom {
   totemPlunder: number;
   totemDragonSlay: number;
   totemDestruction: number;
+  appliedScienceSchool: string;
   isProtected: boolean;
   protectionDaysLeft: number;
   isFrozen: boolean;

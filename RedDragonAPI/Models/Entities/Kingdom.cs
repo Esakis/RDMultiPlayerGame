@@ -54,6 +54,10 @@ public class Kingdom
     public int TotemDragonSlay { get; set; } = 0;    // zabija %/lvl smoków wroga
     public int TotemDestruction { get; set; } = 0;   // +5%/lvl zdobytej ziemi (burzenie)
 
+    /// <summary>Nauka stosowana Człowieka (docs/MECHANIKA.md §2.2): None | Thief | Magic | Military (+10% w danej dziedzinie).</summary>
+    [MaxLength(20)]
+    public string AppliedScienceSchool { get; set; } = "None";
+
     // Ludność
     public int Population { get; set; } = 1000;
     public int Popularity { get; set; } = 100;

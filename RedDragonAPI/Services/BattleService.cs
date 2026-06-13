@@ -169,6 +169,10 @@ public class BattleService : IBattleService
         if (attacker.Race == "Wampir" && attacker.BloodElixirAttack > 0)
             attackPower = (long)(attackPower * (1m + 0.07m * attacker.BloodElixirAttack));
 
+        // Nauka stosowana Człowieka: szkoła wojskowa +10% ataku
+        if (attacker.Race == "Człowiek" && attacker.AppliedScienceSchool == "Military")
+            attackPower = (long)(attackPower * 1.10m);
+
         // Generałowie: Wódz zwiększa atak o lvl%, Obrońca (najlepszy w domu) obronę o lvl%
         var now = DateTime.UtcNow;
         var attackerGenerals = await _context.Generals
@@ -629,6 +633,10 @@ public class BattleService : IBattleService
         if (kingdom.Race == "Wampir" && kingdom.BloodElixirFocus > 0)
             powerVal *= 1m + 0.03m * kingdom.BloodElixirFocus;
 
+        // Nauka stosowana Człowieka: szkoła magiczna +10% siły zaklęć
+        if (kingdom.Race == "Człowiek" && kingdom.AppliedScienceSchool == "Magic")
+            powerVal *= 1.10m;
+
         long power = (long)powerVal;
 
         kingdom.Mana -= cost;
@@ -1029,8 +1037,9 @@ public class BattleService : IBattleService
         var attackerRace = await GetRaceAsync(attacker.Race);
         var defenderRace = await GetRaceAsync(defender.Race);
 
-        // siły złodziejskie z modyfikatorami rasowymi (+ eliksir Złodziei Wampira +5%/lvl)
+        // siły złodziejskie z modyfikatorami rasowymi (+ eliksir Złodziei Wampira, szkoła złodziejska Człowieka)
         decimal thiefBonus = attacker.Race == "Wampir" ? 0.05m * attacker.BloodElixirThief : 0m;
+        if (attacker.Race == "Człowiek" && attacker.AppliedScienceSchool == "Thief") thiefBonus += 0.10m;
         long attackPower = (long)(data.Thieves * (1m + attackerRace.ThiefPowerModifier + thiefBonus)
                                   * actionDef.SuccessBaseRate);
         var defThieves = defender.MilitaryUnits.FirstOrDefault(u => u.UnitType.EndsWith("_Zlodziej"));

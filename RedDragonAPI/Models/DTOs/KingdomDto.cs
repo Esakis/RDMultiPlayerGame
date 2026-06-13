@@ -27,6 +27,7 @@ public class KingdomDto
     public int TotemPlunder { get; set; }
     public int TotemDragonSlay { get; set; }
     public int TotemDestruction { get; set; }
+    public string AppliedScienceSchool { get; set; } = "None";
 
     // Ludność
     public int Population { get; set; }
@@ -98,6 +99,11 @@ public class BloodElixirDto
 public class ChargeTotemDto
 {
     public string Totem { get; set; } = string.Empty;
+}
+
+public class AppliedScienceDto
+{
+    public string School { get; set; } = "None";
 }
 
 public class AssignWorkersDto

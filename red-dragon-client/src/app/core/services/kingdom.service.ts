@@ -56,4 +56,8 @@ export class KingdomService {
   chargeTotem(totem: string): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/totem`, { totem });
   }
+
+  setAppliedScience(school: string): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/applied-science`, { school });
+  }
 }

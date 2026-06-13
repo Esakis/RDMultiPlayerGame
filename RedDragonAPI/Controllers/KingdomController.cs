@@ -98,6 +98,13 @@ public class KingdomController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
+    [HttpPost("applied-science")]
+    public async Task<ActionResult> SetAppliedScience([FromBody] AppliedScienceDto dto)
+    {
+        var result = await _kingdomService.SetAppliedScienceAsync(GetUserId(), dto.School);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
     [HttpPost("assign-workers")]
     public async Task<ActionResult> AssignWorkers([FromBody] AssignWorkersDto dto)
     {

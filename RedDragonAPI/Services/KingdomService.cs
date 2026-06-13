@@ -310,6 +310,28 @@ public class KingdomService : IKingdomService
         return ServiceResult.Ok($"Naładowano totem do poziomu {level + 1} (koszt {cost} many).");
     }
 
+    public async Task<ServiceResult> SetAppliedScienceAsync(int userId, string school)
+    {
+        if (school is not ("None" or "Thief" or "Magic" or "Military"))
+            return ServiceResult.Fail("Nieznana szkoła.");
+
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (kingdom.Race != "Człowiek") return ServiceResult.Fail("Nauka stosowana dostępna tylko dla Człowieka.");
+
+        kingdom.AppliedScienceSchool = school;
+        await _context.SaveChangesAsync();
+        string label = school switch
+        {
+            "Thief" => "złodziejska (+10% siły złodziei)",
+            "Magic" => "magiczna (+10% siły zaklęć)",
+            "Military" => "wojskowa (+10% ataku)",
+            _ => "wyłączona"
+        };
+        return ServiceResult.Ok($"Nauka stosowana: szkoła {label}.");
+    }
+
     public async Task<List<KingdomSummaryDto>> GetAllKingdomsAsync(int eraId)
     {
         return await _context.Kingdoms
@@ -363,6 +385,7 @@ public class KingdomService : IKingdomService
             TotemPlunder = kingdom.TotemPlunder,
             TotemDragonSlay = kingdom.TotemDragonSlay,
             TotemDestruction = kingdom.TotemDestruction,
+            AppliedScienceSchool = kingdom.AppliedScienceSchool,
             Population = kingdom.Population,
             Popularity = kingdom.Popularity,
             Wages = kingdom.Wages,
