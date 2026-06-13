@@ -33,6 +33,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<General> Generals { get; set; }
     public DbSet<Pact> Pacts { get; set; }
     public DbSet<MarketOrder> MarketOrders { get; set; }
+    public DbSet<LabyrinthExpedition> LabyrinthExpeditions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -256,6 +257,19 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(o => o.KingdomId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // LabyrinthExpedition -> Kingdom / General
+        modelBuilder.Entity<LabyrinthExpedition>()
+            .HasOne(e => e.Kingdom)
+            .WithMany()
+            .HasForeignKey(e => e.KingdomId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<LabyrinthExpedition>()
+            .HasOne(e => e.General)
+            .WithMany()
+            .HasForeignKey(e => e.GeneralId)
+            .OnDelete(DeleteBehavior.SetNull);
+
         // ForumPost -> ParentPost (self-referencing)
         modelBuilder.Entity<ForumPost>()
             .HasOne(f => f.ParentPost)
@@ -277,6 +291,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<BattleReport>().HasIndex(b => b.DefenderKingdomId);
         modelBuilder.Entity<MarketOrder>().HasIndex(o => new { o.Status, o.Resource });
         modelBuilder.Entity<MarketOrder>().HasIndex(o => o.KingdomId);
+        modelBuilder.Entity<LabyrinthExpedition>().HasIndex(e => new { e.KingdomId, e.Status });
     }
 
     private void ConfigureUniqueConstraints(ModelBuilder modelBuilder)

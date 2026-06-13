@@ -29,6 +29,9 @@ public class Kingdom
     public long Weapons { get; set; } = 0;
     public long Mana { get; set; } = 0;
 
+    // Kości zdobyte w labiryncie (docs/MECHANIKA.md §13)
+    public long LabyrinthDice { get; set; } = 0;
+
     // Ludność
     public int Population { get; set; } = 1000;
     public int Popularity { get; set; } = 100;

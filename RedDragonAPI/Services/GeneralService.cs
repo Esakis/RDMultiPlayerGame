@@ -86,6 +86,12 @@ public class GeneralService : IGeneralService
             .OrderByDescending(g => g.Experience)
             .ToListAsync();
 
+        // Generałowie aktualnie w labiryncie (mają IsOutside=true, ale to nie atak)
+        var inLabyrinth = await _context.LabyrinthExpeditions
+            .Where(e => e.KingdomId == kingdom.Id && e.Status == "Active" && e.GeneralId != null)
+            .Select(e => e.GeneralId!.Value)
+            .ToListAsync();
+
         return generals.Select(g => new GeneralDto
         {
             Id = g.Id,
@@ -95,6 +101,7 @@ public class GeneralService : IGeneralService
             Experience = g.Experience,
             Level = g.Level,
             Status = g.IsImprisoned ? "Więziony"
+                : inLabyrinth.Contains(g.Id) ? "W labiryncie"
                 : g.IsOutside ? "Poza księstwem"
                 : g.WoundedUntil.HasValue && g.WoundedUntil > DateTime.UtcNow ? "Ranny"
                 : "W domu"

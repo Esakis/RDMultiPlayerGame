@@ -22,6 +22,7 @@ builder.Services.AddScoped<IResourceService, ResourceService>();
 builder.Services.AddScoped<IGeneralService, GeneralService>();
 builder.Services.AddScoped<IPactService, PactService>();
 builder.Services.AddScoped<IMarketService, MarketService>();
+builder.Services.AddScoped<ILabyrinthService, LabyrinthService>();
 builder.Services.AddSingleton<JwtHelper>();
 
 // Background service dla przeliczenia

@@ -18,6 +18,7 @@ import { MagicComponent } from './features/magic/magic.component';
 import { ThievesComponent } from './features/thieves/thieves.component';
 import { GeneralsComponent } from './features/generals/generals.component';
 import { MarketComponent } from './features/market/market.component';
+import { LabyrinthComponent } from './features/labyrinth/labyrinth.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -37,6 +38,7 @@ const routes: Routes = [
   { path: 'thieves', component: ThievesComponent, canActivate: [AuthGuard] },
   { path: 'generals', component: GeneralsComponent, canActivate: [AuthGuard] },
   { path: 'market', component: MarketComponent, canActivate: [AuthGuard] },
+  { path: 'labyrinth', component: LabyrinthComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/dashboard' }
 ];
 

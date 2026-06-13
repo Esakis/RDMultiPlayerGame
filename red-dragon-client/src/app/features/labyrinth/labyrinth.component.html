@@ -1,0 +1,72 @@
+<div class="game-panel">
+  <h2 class="panel-title">Labirynt</h2>
+
+  <p class="lead">
+    Wyślij generała w głąb labiryntu. Każdy poziom (1 tura) to nowy łup, ale i rosnące
+    ryzyko: pułapka rani i kończy wyprawę, a strażnik może generała zabić — wtedy
+    zgromadzony łup przepada. Wycofaj się w porę, by zdeponować zdobycz.
+  </p>
+
+  <div class="info-msg" *ngIf="message">{{ message }}</div>
+  <div class="error-msg" *ngIf="error">{{ error }}</div>
+  <div class="loading" *ngIf="loading">Wczytywanie...</div>
+
+  <ng-container *ngIf="!loading && status">
+    <div class="stats-bar">
+      <span>Dostępne tury: <strong>{{ status.turnsAvailable }}</strong></span>
+      <span>Zebrane kości: <strong class="dice">{{ status.bankedDice }}</strong></span>
+    </div>
+
+    <!-- Aktywna wyprawa -->
+    <div class="expedition" *ngIf="status.hasActiveExpedition && status.expedition as e">
+      <h3>Wyprawa w toku</h3>
+      <div class="depth-banner">
+        <span class="general">{{ e.generalName }} (poz. {{ e.generalLevel }})</span>
+        <span class="depth">Głębokość: <strong>{{ e.depth }}</strong></span>
+      </div>
+
+      <p class="event" *ngIf="e.lastEvent">{{ e.lastEvent }}</p>
+
+      <table class="rd-table loot">
+        <tbody>
+          <tr><th>Złoto</th><td class="num gold">{{ e.pendingGold | number }}</td></tr>
+          <tr><th>Jedzenie</th><td class="num">{{ e.pendingFood | number }}</td></tr>
+          <tr><th>Kamień</th><td class="num">{{ e.pendingStone | number }}</td></tr>
+          <tr><th>Broń</th><td class="num">{{ e.pendingWeapons | number }}</td></tr>
+          <tr><th>Mana</th><td class="num">{{ e.pendingMana | number }}</td></tr>
+          <tr><th>Kości</th><td class="num dice">{{ e.pendingDice }}</td></tr>
+        </tbody>
+      </table>
+      <p class="hint">Łup powyżej trafi do skarbca dopiero po bezpiecznym zakończeniu wyprawy.</p>
+
+      <div class="actions">
+        <button class="btn-cast" (click)="advance()"
+                [disabled]="busy || status.turnsAvailable <= 0"
+                [title]="status.turnsAvailable <= 0 ? 'Brak tur' : ''">
+          Zejdź głębiej (1 tura)
+        </button>
+        <button class="btn-cancel" (click)="retreat()" [disabled]="busy">
+          Wycofaj się i zdeponuj łup
+        </button>
+      </div>
+    </div>
+
+    <!-- Brak wyprawy: wybór generała -->
+    <div class="enter" *ngIf="!status.hasActiveExpedition">
+      <h3>Wyślij generała</h3>
+      <ng-container *ngIf="status.availableGenerals.length > 0; else noGenerals">
+        <div class="form-row">
+          <select [(ngModel)]="selectedGeneralId">
+            <option *ngFor="let g of status.availableGenerals" [ngValue]="g.id">
+              {{ g.name }} — poz. {{ g.level }} ({{ g.primaryTrait }})
+            </option>
+          </select>
+          <button class="btn-cast" (click)="enter()" [disabled]="busy">Wejdź do labiryntu</button>
+        </div>
+      </ng-container>
+      <ng-template #noGenerals>
+        <p class="hint">Brak dostępnych generałów (potrzebny zdrowy generał w domu).</p>
+      </ng-template>
+    </div>
+  </ng-container>
+</div>

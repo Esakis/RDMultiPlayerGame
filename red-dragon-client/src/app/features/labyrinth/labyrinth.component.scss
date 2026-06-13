@@ -1,0 +1,116 @@
+.game-panel {
+  padding: 16px;
+  color: #e8d5b0;
+
+  .panel-title {
+    color: #d9542b;
+  }
+
+  h3 {
+    color: #c9a86a;
+    border-bottom: 1px solid #5a3a1a;
+    padding-bottom: 4px;
+    margin-top: 20px;
+  }
+}
+
+.lead {
+  color: #c9b58a;
+  font-size: 13px;
+  max-width: 640px;
+  line-height: 1.5;
+}
+
+.stats-bar {
+  display: flex;
+  gap: 24px;
+  margin: 10px 0;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #5a3a1a;
+
+  strong { color: #e8c350; }
+  .dice { color: #9ec6ff; }
+}
+
+.depth-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(90, 40, 20, 0.4);
+  border: 1px solid #5a3a1a;
+  padding: 8px 12px;
+
+  .general { color: #d9a86a; font-weight: bold; }
+  .depth strong { color: #ff9d5c; font-size: 18px; }
+}
+
+.event {
+  font-style: italic;
+  color: #e8d5b0;
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid #d9542b;
+  padding: 8px 12px;
+  margin: 10px 0;
+}
+
+.rd-table.loot {
+  width: 260px;
+  border-collapse: collapse;
+  font-size: 13px;
+
+  th, td {
+    border: 1px solid #5a3a1a;
+    padding: 4px 10px;
+  }
+  th { background: rgba(90, 40, 20, 0.5); color: #c9a86a; text-align: left; }
+  .num { text-align: right; }
+  .gold { color: #e8c350; }
+  .dice { color: #9ec6ff; }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  select {
+    background: #2a1208;
+    color: #e8d5b0;
+    border: 1px solid #5a3a1a;
+    padding: 4px 6px;
+    min-width: 260px;
+  }
+}
+
+.btn-cast {
+  background: linear-gradient(#8a2b1a, #5a1208);
+  color: #f0e0c0;
+  border: 1px solid #c9a86a;
+  padding: 5px 16px;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+  &:not(:disabled):hover { background: linear-gradient(#a83b22, #6a180a); }
+}
+
+.btn-cancel {
+  background: linear-gradient(#5a4a2a, #3a2e18);
+  color: #f0e0c0;
+  border: 1px solid #c9a86a;
+  padding: 5px 16px;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+  &:not(:disabled):hover { background: linear-gradient(#6a5a3a, #4a3e28); }
+}
+
+.info-msg { color: #8ed98e; margin: 8px 0; }
+.error-msg { color: #ff7b6b; margin: 8px 0; }
+.hint { font-style: italic; color: #a08a60; font-size: 12px; }
