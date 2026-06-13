@@ -87,16 +87,27 @@ public static class BattleCalculator
             armyPower += unit.Quantity * (unit.Definition.DefensePower + k);
         }
 
-        // Domobrana (Pospolite ruszenie): ludność broni z siłą (2 + k + bonus rasowy)
+        // Domobrana (Pospolite ruszenie): bronią ludzie w profesjach + złodzieje w domu,
+        // z siłą (2 + k + bonus rasowy). Bonusy: Goblin 3, Olbrzym 2,5, Ent +1, Br-Oug 1,5.
         if (Has(defender, "PospoliteRuszenie"))
         {
             decimal raceBonus = defenderRace.Name switch
             {
+                "Goblin" => 1m,
                 "Ent" => 1m,
                 "Olbrzym" => 0.5m,
+                "Br-Oug" => -0.5m,
                 _ => 0m
             };
-            armyPower += defender.Population * (2m + k + raceBonus);
+
+            // p = pracujący (poza bezrobotnymi) + złodzieje w domu; brak danych → populacja
+            long militiaPeople = defender.Professions != null && defender.Professions.Any()
+                ? defender.Professions.Where(p => p.ProfessionType != "Bezrobotni").Sum(p => (long)p.WorkerCount)
+                : defender.Population;
+            long homeThieves = defender.MilitaryUnits
+                .Where(u => IsThief(u.UnitType)).Sum(u => (long)u.Quantity);
+
+            armyPower += (militiaPeople + homeThieves) * (2m + k + raceBonus);
         }
 
         // Wieże obronne: v·(10+nbr)·(1 + 4v/(v+400)); Człowiek 10, pozostali 15

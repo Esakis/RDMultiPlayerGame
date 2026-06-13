@@ -135,6 +135,7 @@ public class BattleService : IBattleService
             .Include(k => k.MilitaryUnits).ThenInclude(m => m.Definition)
             .Include(k => k.Buildings).ThenInclude(b => b.Definition)
             .Include(k => k.Researches).ThenInclude(r => r.Tech)
+            .Include(k => k.Professions)
             .FirstOrDefaultAsync(k => k.Id == action.TargetKingdomId);
 
         if (attacker == null || defender == null)

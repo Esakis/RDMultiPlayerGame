@@ -278,13 +278,30 @@ public class ResourceService : IResourceService
             popularity -= 1 + (popularity - target) / 10;
 
         // f) −15, jeśli brakło złota na pensje
-        if (kingdom.Gold < 0)
+        bool wagesUnpaid = kingdom.Gold < 0;
+        if (wagesUnpaid)
         {
             popularity -= 15;
             kingdom.Gold = 0;
         }
 
         kingdom.Popularity = Math.Clamp(popularity, 0, 100);
+
+        // === Dezercja: niezapłacony żołd lub niska popularność = ucieczka armii ===
+        // (Nekromant/Wampir — armia nie dezerteruje; smoki zostają)
+        if (kingdom.Race is not ("Nekromant" or "Wampir"))
+        {
+            decimal desertRate = 0m;
+            if (wagesUnpaid) desertRate += 0.10m;                       // brak żołdu: −10%
+            if (kingdom.Popularity < 20) desertRate += 0.05m;          // bunt z biedy: −5%
+            else if (kingdom.Popularity < 40) desertRate += 0.02m;
+
+            if (desertRate > 0)
+            {
+                foreach (var unit in militaryUnits.Where(u => u.Quantity > 0 && !u.UnitType.EndsWith("_Smok")))
+                    unit.Quantity = Math.Max(0, unit.Quantity - (int)(unit.Quantity * desertRate));
+            }
+        }
 
         // === 7. Maksimum ludności (oryginalny wzór) ===
         // max = domy·(do+vo+ns+kn) + ziemia·(1 + (pp/100)·(2+vd+rb))
