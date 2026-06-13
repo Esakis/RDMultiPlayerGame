@@ -41,6 +41,13 @@ export class MagicComponent implements OnInit {
     });
   }
 
+  chargeTotem(totem: string): void {
+    this.kingdomService.chargeTotem(totem).subscribe({
+      next: r => { this.message = r.message ?? ''; this.load(); this.kingdomService.getMyKingdom().subscribe(k => this.myKingdom = k); },
+      error: e => { this.error = e.error || 'Błąd ładowania totemu.'; }
+    });
+  }
+
   load(): void {
     this.magic.getSpells().subscribe({
       next: s => { this.spells = s; this.loading = false; },

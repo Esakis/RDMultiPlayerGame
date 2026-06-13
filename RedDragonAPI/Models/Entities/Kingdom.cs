@@ -49,6 +49,11 @@ public class Kingdom
     public int BloodElixirBloodlust { get; set; } = 0;  // +12,5%/lvl strat wroga
     public int BloodElixirThief { get; set; } = 0;      // +5%/lvl siły złodziei
 
+    // Szamanizm Olbrzyma (docs/MECHANIKA.md §2.2) — 3 totemy ładowane maną (poziom 0–10)
+    public int TotemPlunder { get; set; } = 0;       // +5%/lvl zrabowanych surowców
+    public int TotemDragonSlay { get; set; } = 0;    // zabija %/lvl smoków wroga
+    public int TotemDestruction { get; set; } = 0;   // +5%/lvl zdobytej ziemi (burzenie)
+
     // Ludność
     public int Population { get; set; } = 1000;
     public int Popularity { get; set; } = 100;

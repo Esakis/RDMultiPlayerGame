@@ -36,6 +36,9 @@ export interface Kingdom {
   bloodElixirFocus: number;
   bloodElixirBloodlust: number;
   bloodElixirThief: number;
+  totemPlunder: number;
+  totemDragonSlay: number;
+  totemDestruction: number;
   isProtected: boolean;
   protectionDaysLeft: number;
   isFrozen: boolean;

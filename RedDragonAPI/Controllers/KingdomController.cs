@@ -91,6 +91,13 @@ public class KingdomController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
+    [HttpPost("totem")]
+    public async Task<ActionResult> ChargeTotem([FromBody] ChargeTotemDto dto)
+    {
+        var result = await _kingdomService.ChargeTotemAsync(GetUserId(), dto.Totem);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
     [HttpPost("assign-workers")]
     public async Task<ActionResult> AssignWorkers([FromBody] AssignWorkersDto dto)
     {

@@ -278,6 +278,38 @@ public class KingdomService : IKingdomService
         return ServiceResult.Ok($"Ulepszono eliksir do poziomu {level + 1} (koszt {cost} punktów krwi).");
     }
 
+    public async Task<ServiceResult> ChargeTotemAsync(int userId, string totem)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (kingdom.Race != "Olbrzym") return ServiceResult.Fail("Szamanizm dostępny tylko dla Olbrzyma.");
+
+        int level = totem switch
+        {
+            "Plunder" => kingdom.TotemPlunder,
+            "DragonSlay" => kingdom.TotemDragonSlay,
+            "Destruction" => kingdom.TotemDestruction,
+            _ => -1
+        };
+        if (level < 0) return ServiceResult.Fail("Nieznany totem.");
+        if (level >= 10) return ServiceResult.Fail("Totem jest maksymalnie naładowany.");
+
+        long cost = (long)kingdom.Land * 20;
+        if (kingdom.Mana < cost)
+            return ServiceResult.Fail($"Za mało many (potrzeba {cost}, masz {kingdom.Mana}).");
+
+        kingdom.Mana -= cost;
+        switch (totem)
+        {
+            case "Plunder": kingdom.TotemPlunder++; break;
+            case "DragonSlay": kingdom.TotemDragonSlay++; break;
+            case "Destruction": kingdom.TotemDestruction++; break;
+        }
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok($"Naładowano totem do poziomu {level + 1} (koszt {cost} many).");
+    }
+
     public async Task<List<KingdomSummaryDto>> GetAllKingdomsAsync(int eraId)
     {
         return await _context.Kingdoms
@@ -328,6 +360,9 @@ public class KingdomService : IKingdomService
             BloodElixirFocus = kingdom.BloodElixirFocus,
             BloodElixirBloodlust = kingdom.BloodElixirBloodlust,
             BloodElixirThief = kingdom.BloodElixirThief,
+            TotemPlunder = kingdom.TotemPlunder,
+            TotemDragonSlay = kingdom.TotemDragonSlay,
+            TotemDestruction = kingdom.TotemDestruction,
             Population = kingdom.Population,
             Popularity = kingdom.Popularity,
             Wages = kingdom.Wages,

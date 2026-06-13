@@ -33,6 +33,24 @@
     </div>
   </div>
 
+  <div class="blood-magic" *ngIf="myKingdom?.race === 'Olbrzym'">
+    <h3>Szamanizm — ładowanie totemów (koszt: obszar × 20 many)</h3>
+    <div class="elixirs">
+      <div class="elixir">
+        <span>Totem Grabieży (+5%/lvl łupów): <strong>{{ myKingdom?.totemPlunder }}/10</strong></span>
+        <button class="mm-btn" (click)="chargeTotem('Plunder')" [disabled]="(myKingdom?.totemPlunder || 0) >= 10">Naładuj</button>
+      </div>
+      <div class="elixir">
+        <span>Totem Niszczycielstwa (+5%/lvl ziemi): <strong>{{ myKingdom?.totemDestruction }}/10</strong></span>
+        <button class="mm-btn" (click)="chargeTotem('Destruction')" [disabled]="(myKingdom?.totemDestruction || 0) >= 10">Naładuj</button>
+      </div>
+      <div class="elixir">
+        <span>Totem Smokobójstwa (zabija %/lvl smoków): <strong>{{ myKingdom?.totemDragonSlay }}/10</strong></span>
+        <button class="mm-btn" (click)="chargeTotem('DragonSlay')" [disabled]="(myKingdom?.totemDragonSlay || 0) >= 10">Naładuj</button>
+      </div>
+    </div>
+  </div>
+
   <div class="info-msg" *ngIf="message">{{ message }}</div>
   <div class="error-msg" *ngIf="error">{{ error }}</div>
   <div class="loading" *ngIf="loading">Wczytywanie zaklęć...</div>

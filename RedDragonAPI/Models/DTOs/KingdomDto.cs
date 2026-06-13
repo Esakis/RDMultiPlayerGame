@@ -24,6 +24,9 @@ public class KingdomDto
     public int BloodElixirFocus { get; set; }
     public int BloodElixirBloodlust { get; set; }
     public int BloodElixirThief { get; set; }
+    public int TotemPlunder { get; set; }
+    public int TotemDragonSlay { get; set; }
+    public int TotemDestruction { get; set; }
 
     // Ludność
     public int Population { get; set; }
@@ -90,6 +93,11 @@ public class SetMetamagicDto
 public class BloodElixirDto
 {
     public string Elixir { get; set; } = string.Empty;
+}
+
+public class ChargeTotemDto
+{
+    public string Totem { get; set; } = string.Empty;
 }
 
 public class AssignWorkersDto

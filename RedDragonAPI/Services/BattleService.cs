@@ -280,6 +280,27 @@ public class BattleService : IBattleService
             landCaptured = BattleCalculator.CalculateLandCaptured(defender, defenderRace);
             resourcesStolen = BattleCalculator.CalculateResourcesStolen(defender);
 
+            // Szamanizm Olbrzyma: totemy Grabieży / Niszczycielstwa / Smokobójstwa
+            if (attacker.Race == "Olbrzym")
+            {
+                if (attacker.TotemPlunder > 0)
+                {
+                    decimal m = 1m + 0.05m * attacker.TotemPlunder;
+                    resourcesStolen.Gold = (long)(resourcesStolen.Gold * m);
+                    resourcesStolen.Food = (long)(resourcesStolen.Food * m);
+                    resourcesStolen.Stone = (long)(resourcesStolen.Stone * m);
+                    resourcesStolen.Weapons = (long)(resourcesStolen.Weapons * m);
+                }
+                if (attacker.TotemDestruction > 0)
+                    landCaptured = (int)(landCaptured * (1m + 0.05m * attacker.TotemDestruction));
+                if (attacker.TotemDragonSlay > 0)
+                {
+                    decimal killPct = Math.Min(1m, 0.05m * attacker.TotemDragonSlay);
+                    foreach (var d in defender.MilitaryUnits.Where(u => u.UnitType.EndsWith("_Smok") && u.Quantity > 0))
+                        d.Quantity = Math.Max(0, d.Quantity - (int)(d.Quantity * killPct));
+                }
+            }
+
             defender.Land -= landCaptured;
             attacker.Land += landCaptured;
 

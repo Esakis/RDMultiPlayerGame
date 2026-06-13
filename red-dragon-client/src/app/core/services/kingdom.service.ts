@@ -52,4 +52,8 @@ export class KingdomService {
   upgradeBloodElixir(elixir: string): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/blood-elixir`, { elixir });
   }
+
+  chargeTotem(totem: string): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/totem`, { totem });
+  }
 }
