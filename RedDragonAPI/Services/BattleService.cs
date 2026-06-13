@@ -230,6 +230,12 @@ public class BattleService : IBattleService
                 unit.Quantity = Math.Max(0, unit.Quantity - casualty.Value);
         }
 
+        // Nekromancja: polegli żołnierze zasilają cmentarz Nekromanta
+        long attackerDead = attackerCasualties.Sum(c => (long)c.Value);
+        long defenderDead = defenderCasualties.Sum(c => (long)c.Value);
+        if (defender.Race == "Nekromant") defender.Bodies += attackerDead + defenderDead;
+        if (attacker.Race == "Nekromant") attacker.Bodies += attackerDead;
+
         // Straty cywilów obrońcy (25% strat armii; 50%/100% przy domobranie)
         double defCasualtyRate = defenderCasualties.Count > 0 && defender.MilitaryUnits.Sum(u => u.Quantity) > 0
             ? (double)defenderCasualties.Sum(c => c.Value) / Math.Max(1, defender.MilitaryUnits.Sum(u => u.Quantity))
@@ -363,6 +369,59 @@ public class BattleService : IBattleService
         int draco = await _context.Researches
             .CountAsync(r => r.KingdomId == kingdom.Id && r.IsCompleted && r.TechType.StartsWith("Smoko"));
         return (dragons, DragonHelper.ComputeCap(kingdom, draco));
+    }
+
+    /// <summary>
+    /// Nekromancja (docs/MECHANIKA.md §2.2): Ofiarowanie zamienia 10% populacji w ciała;
+    /// przywołania wskrzeszają jednostki kosztem wolnych magów i ciał.
+    /// Wolni magowie = magowie − 0,5×(armia + złodzieje).
+    /// </summary>
+    private async Task<ServiceResult> HandleNecromancyAsync(Kingdom kingdom, SpellDefinition spell, int mages)
+    {
+        if (spell.EffectType == "Sacrifice")
+        {
+            long sacrificed = (long)(kingdom.Population * 0.10);
+            if (sacrificed <= 0) return ServiceResult.Fail("Za mała populacja na ofiarowanie.");
+            kingdom.Population = Math.Max(100, kingdom.Population - (int)sacrificed);
+            kingdom.Bodies += sacrificed;
+            return ServiceResult.Ok($"Ofiarowano {sacrificed} mieszkańców — ciała trafiły na cmentarz (razem {kingdom.Bodies}).");
+        }
+
+        var units = await _context.MilitaryUnits.Where(m => m.KingdomId == kingdom.Id).ToListAsync();
+        long soldiers = units.Where(u => !u.UnitType.EndsWith("_Zlodziej") && !u.UnitType.EndsWith("_Smok"))
+            .Sum(u => (long)u.Quantity);
+        long thieves = units.Where(u => u.UnitType.EndsWith("_Zlodziej")).Sum(u => (long)u.Quantity);
+        double freeMages = Math.Max(0, mages - 0.5 * (soldiers + thieves));
+
+        (string unitType, double pct, double bodyCost) = spell.EffectType switch
+        {
+            "SummonE2" => ("Nekromant_Ghul", 0.10, 1.0),
+            "SummonE1" => ("Nekromant_Szkielet", 0.26, 1.0 / 6),
+            "SummonHoplites" => ("Nekromant_Hoplita", 0.50, 1.0 / 6),
+            "SummonThieves" => ("Nekromant_Zlodziej", 0.50, 0.5),
+            _ => ("", 0, 0)
+        };
+        if (unitType == "") return ServiceResult.Fail("Nieznane przywołanie.");
+
+        int byMages = (int)(freeMages * pct);
+        int byBodies = (int)(kingdom.Bodies / bodyCost);
+        int summon = Math.Min(byMages, byBodies);
+        if (summon <= 0)
+            return ServiceResult.Fail("Za mało wolnych magów lub ciał, by kogoś wskrzesić.");
+
+        long bodiesUsed = (long)Math.Ceiling(summon * bodyCost);
+        kingdom.Bodies = Math.Max(0, kingdom.Bodies - bodiesUsed);
+
+        var unit = units.FirstOrDefault(u => u.UnitType == unitType);
+        if (unit == null)
+            _context.MilitaryUnits.Add(new MilitaryUnit
+            {
+                KingdomId = kingdom.Id, UnitType = unitType, Quantity = summon, InTraining = 0
+            });
+        else
+            unit.Quantity += summon;
+
+        return ServiceResult.Ok($"Wskrzeszono {summon}× {unitType.Replace("Nekromant_", "")} (zużyto {bodiesUsed} ciał).");
     }
 
     /// <summary>Dodaje 1 smoka do armii księstwa (jednostka rasowa _Smok).</summary>
@@ -529,6 +588,14 @@ public class BattleService : IBattleService
                 return added
                     ? ServiceResult.Ok($"Czerwony Smok dołączył do Twojej armii! Koszt: {cost} many.")
                     : ServiceResult.Fail("Twoja rasa nie potrafi przywoływać smoków.");
+            }
+
+            // Nekromancja: Ofiarowanie i przywołania armii z ciał
+            if (spell.EffectType is "Sacrifice" or "SummonE2" or "SummonE1" or "SummonHoplites" or "SummonThieves")
+            {
+                var nres = await HandleNecromancyAsync(kingdom, spell, mages);
+                await _context.SaveChangesAsync();
+                return nres;
             }
 
             _context.ActiveSpells.Add(new ActiveSpell

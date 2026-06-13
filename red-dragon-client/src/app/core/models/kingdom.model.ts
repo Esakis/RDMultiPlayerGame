@@ -28,6 +28,7 @@ export interface Kingdom {
   coalitionRole: string | null;
   eraId: number;
   eraName: string | null;
+  bodies: number;
   isProtected: boolean;
   protectionDaysLeft: number;
   isFrozen: boolean;

@@ -32,6 +32,9 @@ public class Kingdom
     // Kości zdobyte w labiryncie (docs/MECHANIKA.md §13)
     public long LabyrinthDice { get; set; } = 0;
 
+    // Ciała na cmentarzu — surowiec Nekromancji (docs/MECHANIKA.md §2.2)
+    public long Bodies { get; set; } = 0;
+
     // Ludność
     public int Population { get; set; } = 1000;
     public int Popularity { get; set; } = 100;

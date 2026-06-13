@@ -11,6 +11,9 @@
     <button class="btn-freeze" (click)="toggleFreeze()">
       {{ kingdom.isFrozen ? 'Odmróź księstwo' : 'Zamroź księstwo' }}
     </button>
+    <span class="status bodies" *ngIf="kingdom.race === 'Nekromant'">
+      💀 Ciała na cmentarzu: {{ kingdom.bodies | number }}
+    </span>
   </div>
 
   <div class="kingdom-title-bar">

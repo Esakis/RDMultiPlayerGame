@@ -265,6 +265,7 @@ public class KingdomService : IKingdomService
             BudulecStored = kingdom.BudulecStored,
             Weapons = kingdom.Weapons,
             Mana = kingdom.Mana,
+            Bodies = kingdom.Bodies,
             Population = kingdom.Population,
             Popularity = kingdom.Popularity,
             Wages = kingdom.Wages,

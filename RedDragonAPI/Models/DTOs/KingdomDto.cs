@@ -16,6 +16,7 @@ public class KingdomDto
     public long BudulecStored { get; set; }
     public long Weapons { get; set; }
     public long Mana { get; set; }
+    public long Bodies { get; set; }
 
     // Ludność
     public int Population { get; set; }
