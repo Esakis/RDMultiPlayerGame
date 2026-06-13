@@ -8,7 +8,7 @@
       <div class="rank-row" *ngFor="let k of kingdoms; let i = index" [class.top3]="i < 3">
         <span class="pos">{{ i + 1 }}</span>
         <span class="name">{{ k.name }}</span>
-        <span>{{ k.race }}</span>
+        <span class="race"><img class="race-mini" [src]="k.race | raceImage" [alt]="k.race">{{ k.race }}</span>
         <span class="land">{{ k.land }}</span>
         <span>{{ k.population | numberFormat }}</span>
         <span class="tag">{{ k.coalitionTag || '-' }}</span>

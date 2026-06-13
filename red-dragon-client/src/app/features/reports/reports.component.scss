@@ -1,5 +1,6 @@
 :host { display: block; padding: 10px 15px; }
 h2 { color: #ffd700; margin: 0 0 15px 0; font-size: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.6); }
+.walka-title { display: flex; align-items: center; gap: 10px; .title-icon { height: 38px; } }
 .report-list { display: flex; flex-direction: column; gap: 8px; }
 .report-card {
   background: linear-gradient(180deg, #4a1818 0%, #2a0a0a 100%); border: 2px solid #8b0000; padding: 12px;

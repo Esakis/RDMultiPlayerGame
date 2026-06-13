@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { NumberFormatPipe } from './shared/pipes/number-format.pipe';
+import { RaceImagePipe } from './shared/pipes/race-image.pipe';
 
 import { HeaderComponent } from './shared/components/header/header.component';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
@@ -37,6 +38,7 @@ import { AttackComponent } from './features/attack/attack.component';
   declarations: [
     AppComponent,
     NumberFormatPipe,
+    RaceImagePipe,
     HeaderComponent,
     SidebarComponent,
     LoginComponent,

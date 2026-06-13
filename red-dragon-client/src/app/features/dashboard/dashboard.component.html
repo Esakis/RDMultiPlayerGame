@@ -32,7 +32,7 @@
   <div class="kingdom-title-bar">
     <div class="portrait-area">
       <div class="portrait-frame">
-        <div class="portrait-placeholder race-img">{{ kingdom.race }}</div>
+        <img class="portrait-img" [src]="kingdom.race | raceImage" [alt]="kingdom.race" [title]="kingdom.race">
       </div>
       <div class="kingdom-meta">
         <span class="online-info">online {{ kingdom.age }} ID: {{ kingdom.id }}</span>

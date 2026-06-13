@@ -1,5 +1,5 @@
 <div class="page-content">
-  <h2>Walka - Raporty</h2>
+  <h2 class="walka-title"><img src="assets/img/role/obronca.png" alt="Obrońca" class="title-icon"> Walka — Raporty</h2>
   <div *ngIf="!loading; else loadingTpl">
     <div class="report-list" *ngIf="reports.length > 0; else emptyTpl">
       <div class="report-card" *ngFor="let r of reports" [class.victory]="r.result === 'Victory'" [class.defeat]="r.result === 'Defeat'">

@@ -13,6 +13,7 @@
         <h4>Członkowie:</h4>
         <div class="member-list">
           <div class="member-item" *ngFor="let member of coalitionMembers" [ngClass]="getMemberRoleClass(member.coalitionRole)">
+            <img class="race-mini" [src]="member.race | raceImage" [alt]="member.race" [title]="member.race">
             <span class="member-name">{{ member.name }}</span>
             <span class="member-role" *ngIf="member.coalitionRole !== 'Member'">{{ getRoleDisplay(member.coalitionRole) }}</span>
           </div>

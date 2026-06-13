@@ -1,4 +1,6 @@
 :host { display: block; padding: 10px 15px; }
+.race { display: flex; align-items: center; gap: 6px; }
+.race-mini { width: 20px; height: 20px; object-fit: cover; border: 1px solid #5a2020; }
 h2 { color: #ffd700; margin: 0 0 15px 0; font-size: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.6); }
 .ranking-table { display: flex; flex-direction: column; gap: 2px; }
 .rank-row {

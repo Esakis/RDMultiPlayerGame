@@ -1,5 +1,8 @@
 <div class="game-panel">
-  <h2 class="panel-title">Ataki — wyprawy wojenne</h2>
+  <h2 class="panel-title">
+    <img src="assets/img/role/napastnik.png" alt="Napastnik" class="title-icon">
+    Ataki — wyprawy wojenne
+  </h2>
 
   <p class="lead">
     Atak wykonywany jest podczas najbliższego przeliczenia (przepad). Możesz zaatakować
@@ -38,7 +41,7 @@
       <tbody>
         <tr *ngFor="let r of targets" [class.selected]="selectedTarget?.id === r.k.id" [class.blocked]="!r.attackable">
           <td class="name">{{ r.k.name }}</td>
-          <td>{{ r.k.race }}</td>
+          <td class="race-cell"><img class="race-mini" [src]="r.k.race | raceImage" [alt]="r.k.race">{{ r.k.race }}</td>
           <td class="num">{{ r.k.land | number }}</td>
           <td>{{ r.k.coalitionTag ? '[' + r.k.coalitionTag + ']' : '—' }}</td>
           <td><span class="badge" [class.ok]="r.attackable">{{ r.reason }}</span></td>

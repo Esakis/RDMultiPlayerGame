@@ -1,8 +1,12 @@
 .game-panel {
   padding: 16px;
   color: #e8d5b0;
-  .panel-title { color: #d9542b; }
+  .panel-title { color: #d9542b; display: flex; align-items: center; gap: 10px;
+    .title-icon { height: 40px; } }
 }
+
+.race-cell { white-space: nowrap; }
+.race-mini { width: 22px; height: 22px; object-fit: cover; vertical-align: middle; margin-right: 6px; border: 1px solid #5a3a1a; }
 
 .lead { color: #c9b58a; font-size: 13px; max-width: 720px; line-height: 1.5; }
 
