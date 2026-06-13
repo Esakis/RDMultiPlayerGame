@@ -37,9 +37,16 @@ public class Kingdom
     public int Popularity { get; set; } = 100;
     public int Wages { get; set; } = 50;
 
-    // Edukacja (from Naukowcy, max 15%)
+    // Edukacja (from Naukowcy, max 15%) — legacy mnożnik produkcji
     [Column(TypeName = "decimal(5,2)")]
     public decimal Education { get; set; } = 0;
+
+    // Badania: Punkty Nauki (docs/MECHANIKA.md §13). SciencePoints to nadprodukcja
+    // odłożona „w zapasie", CurrentResearchTech to aktualnie rozwijana dziedzina.
+    public long SciencePoints { get; set; } = 0;
+
+    [MaxLength(100)]
+    public string? CurrentResearchTech { get; set; }
 
     // Tury
     public int TurnsAvailable { get; set; } = 15;

@@ -195,17 +195,8 @@ public class DailyResetService : BackgroundService
                 }
             }
 
-            // 6. Zakończ badania
-            var completedResearch = await context.Researches
-                .Where(r => r.IsInProgress && r.CompletesAt <= DateTime.UtcNow)
-                .ToListAsync();
-
-            foreach (var research in completedResearch)
-            {
-                research.IsInProgress = false;
-                research.IsCompleted = true;
-                research.CompletedAt = DateTime.UtcNow;
-            }
+            // 6. Badania kończą się teraz przez Punkty Nauki (ResourceService),
+            //    nie przez czas — patrz docs/MECHANIKA.md §13.
 
             await context.SaveChangesAsync();
 

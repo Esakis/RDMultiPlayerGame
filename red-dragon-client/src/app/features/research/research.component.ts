@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ResearchService } from '../../core/services/research.service';
-import { TechDefinition, Research } from '../../core/models/kingdom.model';
+import { TechDefinition, ResearchStatus } from '../../core/models/kingdom.model';
 
 @Component({
   selector: 'app-research',
@@ -9,36 +9,57 @@ import { TechDefinition, Research } from '../../core/models/kingdom.model';
 })
 export class ResearchComponent implements OnInit {
   techDefs: TechDefinition[] = [];
-  myResearch: Research[] = [];
+  status: ResearchStatus | null = null;
   loading = true;
   message = '';
-  categories = ['Economy', 'Military', 'Magic', 'Thieves'];
+  error = '';
+
+  // Kolejność wyświetlania kategorii (pozostałe dołączane na końcu)
+  private categoryOrder = ['Nauka', 'Budowa', 'Magia', 'Wojsko', 'Ekonomia', 'Ziemia', 'Czas', 'Smoki'];
+
+  categoryLabels: { [key: string]: string } = {
+    Nauka: '🔬 Nauka', Budowa: '🏛️ Budowa', Magia: '🔮 Magia', Wojsko: '⚔️ Wojsko',
+    Ekonomia: '💰 Ekonomia', Ziemia: '🌍 Ziemia', Czas: '⏳ Czas', Smoki: '🐉 Smoki'
+  };
 
   constructor(private researchService: ResearchService) {}
 
   ngOnInit(): void { this.load(); }
 
   load(): void {
-    this.researchService.getAvailableTechnologies().subscribe(t => this.techDefs = t);
-    this.researchService.getMyResearch().subscribe(r => { this.myResearch = r; this.loading = false; });
+    this.researchService.getAvailableTechnologies().subscribe({
+      next: t => { this.techDefs = t; this.loading = false; },
+      error: () => { this.loading = false; this.error = 'Błąd wczytywania badań.'; }
+    });
+    this.researchService.getStatus().subscribe({ next: s => this.status = s, error: () => {} });
   }
 
-  getByCategory(cat: string): TechDefinition[] {
+  get categories(): string[] {
+    const present = Array.from(new Set(this.techDefs.map(t => t.category)));
+    const ordered = this.categoryOrder.filter(c => present.includes(c));
+    const rest = present.filter(c => !this.categoryOrder.includes(c));
+    return [...ordered, ...rest];
+  }
+
+  byCategory(cat: string): TechDefinition[] {
     return this.techDefs.filter(t => t.category === cat);
   }
 
-  getResearchStatus(techType: string): Research | undefined {
-    return this.myResearch.find(r => r.techType === techType);
+  catLabel(cat: string): string {
+    return this.categoryLabels[cat] ?? cat;
   }
 
-  startResearch(techType: string): void {
-    this.researchService.startResearch(techType).subscribe({
-      next: (res) => { this.message = res.message || 'Badanie rozpoczęte.'; this.load(); setTimeout(() => this.message = '', 4000); },
-      error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; setTimeout(() => this.message = '', 4000); }
+  progress(t: TechDefinition): number {
+    if (t.costScience <= 0) return 0;
+    return Math.min(100, Math.round(t.investedScience / t.costScience * 100));
+  }
+
+  invest(t: TechDefinition): void {
+    this.message = '';
+    this.error = '';
+    this.researchService.startResearch(t.techType).subscribe({
+      next: res => { this.message = res.message || 'Rozpoczęto rozwój.'; this.load(); },
+      error: err => { this.error = err.error?.message || err.error || 'Błąd.'; }
     });
-  }
-
-  getCatName(cat: string): string {
-    return { 'Economy': '💰 Ekonomia', 'Military': '⚔️ Wojsko', 'Magic': '🔮 Magia', 'Thieves': '🗡️ Złodzieje' }[cat] || cat;
   }
 }

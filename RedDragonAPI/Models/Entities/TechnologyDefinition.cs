@@ -23,8 +23,11 @@ public class TechnologyDefinition
     public int Level { get; set; } = 1;
 
     // Koszty
-    public int CostGold { get; set; }
-    public int ResearchTime { get; set; }
+    public int CostGold { get; set; }       // legacy (mechanika złota/czasu — nieużywane)
+    public int ResearchTime { get; set; }    // legacy
+
+    /// <summary>Punkty Nauki (SP) potrzebne do zbadania (mechanika manuala, docs/MECHANIKA.md §13).</summary>
+    public long CostScience { get; set; }
 
     // Wymagania
     [MaxLength(100)]

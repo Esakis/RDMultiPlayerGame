@@ -8,11 +8,19 @@ using RedDragonAPI.Models.Entities;
 
 namespace RedDragonAPI.Controllers;
 
+/// <summary>
+/// Badania wg manuala (docs/MECHANIKA.md §13, docs/zrodla/manual-pl/vyzkum.txt):
+/// dziedziny rozwijane Punktami Nauki (SP) produkowanymi przez naukowców.
+/// Gracz wybiera dziedzinę, w którą inwestowana jest nadprodukcja SP (jak budowa
+/// budynku specjalnego); zmiana niedokończonej dziedziny kosztuje 1/3 zainwestowanych SP.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
 public class ResearchController : ControllerBase
 {
+    private static readonly long[] DevelopmentCaps = { 20_000, 35_000, 50_000, 100_000, 130_000, 150_000 };
+
     private readonly ApplicationDbContext _context;
 
     public ResearchController(ApplicationDbContext context)
@@ -23,23 +31,19 @@ public class ResearchController : ControllerBase
     [HttpGet("available")]
     public async Task<ActionResult<List<TechDefinitionDto>>> GetAvailableTechnologies()
     {
-        var userId = GetUserId();
-        var kingdom = await _context.Kingdoms
-            .Include(k => k.Researches)
-            .Include(k => k.Buildings)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
-
+        var kingdom = await LoadKingdomAsync();
         if (kingdom == null)
             return NotFound("Nie znaleziono księstwa.");
 
-        var hasUniversity = kingdom.Buildings.Any(b => b.BuildingType == "University" && b.Quantity > 0);
-
-        var definitions = await _context.TechnologyDefinitions.ToListAsync();
+        var hasUniversity = HasUniversity(kingdom);
+        var definitions = await _context.TechnologyDefinitions.OrderBy(d => d.Id).ToListAsync();
 
         var result = definitions.Select(d =>
         {
             var research = kingdom.Researches.FirstOrDefault(r => r.TechType == d.TechType);
             var (canResearch, reason) = CheckCanResearch(kingdom, d, hasUniversity);
+            bool isCompleted = research?.IsCompleted ?? false;
+            bool isCurrent = kingdom.CurrentResearchTech == d.TechType;
 
             return new TechDefinitionDto
             {
@@ -48,20 +52,41 @@ public class ResearchController : ControllerBase
                 Category = d.Category,
                 DisplayName = d.DisplayName,
                 Description = d.Description,
-                CostGold = d.CostGold,
-                ResearchTime = d.ResearchTime,
+                CostScience = d.CostScience,
+                InvestedScience = research?.InvestedScience ?? 0,
+                IsCurrent = isCurrent,
                 RequiredTech = d.RequiredTech,
                 RequiredBuilding = d.RequiredBuilding,
                 EffectType = d.EffectType,
                 EffectValue = d.EffectValue,
-                CanResearch = canResearch && research == null,
-                CannotResearchReason = research != null
-                    ? (research.IsCompleted ? "Już zbadane" : "W trakcie badania")
+                IsCompleted = isCompleted,
+                CanResearch = canResearch && !isCompleted && !isCurrent,
+                CannotResearchReason = isCompleted ? "Już zbadane"
+                    : isCurrent ? "Rozwijane teraz"
                     : reason
             };
         }).ToList();
 
         return Ok(result);
+    }
+
+    [HttpGet("status")]
+    public async Task<ActionResult<ResearchStatusDto>> GetStatus()
+    {
+        var kingdom = await LoadKingdomAsync();
+        if (kingdom == null)
+            return NotFound("Nie znaleziono księstwa.");
+
+        int devLevel = kingdom.Researches.Count(r => r.IsCompleted && r.TechType.StartsWith("Wynalazki"));
+        long cap = DevelopmentCaps[Math.Min(devLevel, DevelopmentCaps.Length - 1)];
+        decimal mult = kingdom.Race switch { "Człowiek" => 1.33m, "Goblin" => 0.8m, _ => 1m };
+
+        return Ok(new ResearchStatusDto
+        {
+            SciencePoints = kingdom.SciencePoints,
+            CurrentResearchTech = kingdom.CurrentResearchTech,
+            SciencePerTurnCap = (long)(cap * mult)
+        });
     }
 
     [HttpGet("my-research")]
@@ -83,8 +108,7 @@ public class ResearchController : ControllerBase
             Category = r.Tech?.Category ?? "",
             Description = r.Tech?.Description,
             IsCompleted = r.IsCompleted,
-            IsInProgress = r.IsInProgress,
-            CompletesAt = r.CompletesAt
+            IsInProgress = r.IsInProgress
         }).ToList();
 
         return Ok(result);
@@ -93,58 +117,76 @@ public class ResearchController : ControllerBase
     [HttpPost("start")]
     public async Task<ActionResult> StartResearch([FromBody] StartResearchDto dto)
     {
-        var userId = GetUserId();
-        var kingdom = await _context.Kingdoms
-            .Include(k => k.Researches)
-            .Include(k => k.Buildings)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
-
+        var kingdom = await LoadKingdomAsync();
         if (kingdom == null)
             return NotFound("Nie znaleziono księstwa.");
 
         var techDef = await _context.TechnologyDefinitions
             .FirstOrDefaultAsync(t => t.TechType == dto.TechType);
-
         if (techDef == null)
-            return BadRequest("Nieznana technologia.");
+            return BadRequest("Nieznana dziedzina.");
 
-        // Sprawdź czy już badane
         var existing = kingdom.Researches.FirstOrDefault(r => r.TechType == dto.TechType);
-        if (existing != null)
-            return BadRequest(existing.IsCompleted ? "Już zbadane." : "Badanie już w toku.");
+        if (existing != null && existing.IsCompleted)
+            return BadRequest("Już zbadane.");
+        if (kingdom.CurrentResearchTech == dto.TechType)
+            return BadRequest("Ta dziedzina jest już rozwijana.");
 
-        // Sprawdź czy jest inny research w toku
-        if (kingdom.Researches.Any(r => r.IsInProgress))
-            return BadRequest("Możesz prowadzić tylko jedno badanie na raz.");
-
-        var hasUniversity = kingdom.Buildings.Any(b => b.BuildingType == "University" && b.Quantity > 0);
-        var (canResearch, reason) = CheckCanResearch(kingdom, techDef, hasUniversity);
-
+        var (canResearch, reason) = CheckCanResearch(kingdom, techDef, HasUniversity(kingdom));
         if (!canResearch)
             return BadRequest(reason);
 
-        if (kingdom.Gold < techDef.CostGold)
-            return BadRequest($"Za mało złota. Potrzeba: {techDef.CostGold}");
-
-        kingdom.Gold -= techDef.CostGold;
-
-        var research = new Research
+        // Zmiana niedokończonej dziedziny: tracimy 1/3 zainwestowanych SP w poprzedniej
+        if (!string.IsNullOrEmpty(kingdom.CurrentResearchTech))
         {
-            KingdomId = kingdom.Id,
-            TechType = dto.TechType,
-            IsInProgress = true,
-            CompletesAt = DateTime.UtcNow.AddDays(techDef.ResearchTime)
-        };
+            var previous = kingdom.Researches.FirstOrDefault(r =>
+                r.TechType == kingdom.CurrentResearchTech && !r.IsCompleted);
+            if (previous != null)
+            {
+                previous.InvestedScience = previous.InvestedScience * 2 / 3;
+                previous.IsInProgress = false;
+            }
+        }
 
-        _context.Researches.Add(research);
+        // Ustaw bieżącą dziedzinę (utwórz rekord badania, jeśli nie istnieje)
+        if (existing == null)
+        {
+            existing = new Research
+            {
+                KingdomId = kingdom.Id,
+                TechType = dto.TechType,
+                IsInProgress = true,
+                InvestedScience = 0
+            };
+            _context.Researches.Add(existing);
+        }
+        else
+        {
+            existing.IsInProgress = true; // wznawiamy (zachowuje dotychczasowe SP)
+        }
+
+        kingdom.CurrentResearchTech = dto.TechType;
         await _context.SaveChangesAsync();
 
         return Ok(new ServiceResult
         {
             Success = true,
-            Message = $"Rozpoczęto badanie {techDef.DisplayName}. Ukończenie za {techDef.ResearchTime} dni."
+            Message = $"Naukowcy rozwijają teraz: {techDef.DisplayName}. " +
+                      $"Potrzeba {techDef.CostScience:N0} Punktów Nauki."
         });
     }
+
+    private async Task<Kingdom?> LoadKingdomAsync()
+    {
+        var userId = GetUserId();
+        return await _context.Kingdoms
+            .Include(k => k.Researches)
+            .Include(k => k.Buildings)
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+    }
+
+    private static bool HasUniversity(Kingdom kingdom) =>
+        kingdom.Buildings.Any(b => b.BuildingType == "University" && b.Quantity > 0);
 
     private (bool canResearch, string? reason) CheckCanResearch(
         Kingdom kingdom, TechnologyDefinition techDef, bool hasUniversity)
@@ -169,8 +211,5 @@ public class ResearchController : ControllerBase
         return (true, null);
     }
 
-    private int GetUserId()
-    {
-        return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-    }
+    private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
 }

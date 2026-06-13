@@ -146,14 +146,22 @@ export interface TechDefinition {
   category: string;
   displayName: string;
   description: string | null;
-  costGold: number;
-  researchTime: number;
+  costScience: number;
+  investedScience: number;
+  isCurrent: boolean;
   requiredTech: string | null;
   requiredBuilding: string | null;
   effectType: string | null;
   effectValue: number;
+  isCompleted: boolean;
   canResearch: boolean;
   cannotResearchReason: string | null;
+}
+
+export interface ResearchStatus {
+  sciencePoints: number;
+  currentResearchTech: string | null;
+  sciencePerTurnCap: number;
 }
 
 export interface Research {

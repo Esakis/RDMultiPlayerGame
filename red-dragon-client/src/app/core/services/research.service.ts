@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { TechDefinition, Research, ServiceResult } from '../models/kingdom.model';
+import { TechDefinition, Research, ResearchStatus, ServiceResult } from '../models/kingdom.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,10 @@ export class ResearchService {
 
   getMyResearch(): Observable<Research[]> {
     return this.http.get<Research[]>(`${this.apiUrl}/my-research`);
+  }
+
+  getStatus(): Observable<ResearchStatus> {
+    return this.http.get<ResearchStatus>(`${this.apiUrl}/status`);
   }
 
   startResearch(techType: string): Observable<ServiceResult> {

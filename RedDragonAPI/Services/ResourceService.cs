@@ -21,6 +21,11 @@ public class ResourceService : IResourceService
     private const long ArmorerWeaponsBase = 3;
     private const decimal MasonStonePerBudulec = 2m;
 
+    // Badania (docs/MECHANIKA.md §13): bazowe SP na naukowca/turę oraz limit SP/turę
+    // wg poziomu dziedziny „Wynalazczość" (Rozwój): 20k / 35k / 50k / 100k / 130k / 150k.
+    private const decimal ScientistSciencePerWorker = 25m;
+    private static readonly long[] DevelopmentCaps = { 20_000, 35_000, 50_000, 100_000, 130_000, 150_000 };
+
     public ResourceService(ApplicationDbContext context)
     {
         _context = context;
@@ -121,15 +126,25 @@ public class ResourceService : IResourceService
                     }
                     break;
                 case "Naukowcy":
-                    // Naukowcy podnoszą „wynalezienie" (Education, max 15%);
-                    // maks. przyrost badań za turę: obszar·1,1 (modyfikator rasowy)
+                    // Naukowcy produkują Punkty Nauki (SP) inwestowane w wybraną dziedzinę.
+                    // Limit SP/turę zależy od poziomu „Wynalazczości" i rasy (Człowiek +33%,
+                    // Goblin −20%). Nadprodukcja daje szansę na „przełom" (kilkukrotny przyrost).
                     if (prof.WorkerCount > 0)
                     {
-                        decimal researchPoints = prof.WorkerCount * Productivity(prof, race.BonusScientists)
-                                                 * (1m + race.ResearchModifier);
-                        decimal maxPerTurn = kingdom.Land * 1.1m * (1m + race.ResearchModifier);
-                        production = (long)Math.Min(researchPoints, maxPerTurn);
-                        kingdom.Education = Math.Min(15m, kingdom.Education + production / 10000m);
+                        decimal spRaw = prof.WorkerCount * ScientistSciencePerWorker
+                                        * Productivity(prof, race.BonusScientists);
+                        long cap = await ScienceCapAsync(kingdom);
+                        long sp = (long)Math.Min(spRaw, cap);
+
+                        if (spRaw > cap && cap > 0)
+                        {
+                            double overChance = Math.Min(0.10, 0.01 + 0.09 * (double)((spRaw - cap) / cap));
+                            if (Random.Shared.NextDouble() < overChance)
+                                sp = (long)(sp * (1.5 + Random.Shared.NextDouble() * 2.5)); // przełom: 1,5–4×
+                        }
+
+                        production = sp;
+                        await InvestScienceAsync(kingdom, sp);
                     }
                     break;
                 case "Magowie":
@@ -332,6 +347,59 @@ public class ResourceService : IResourceService
         }
 
         kingdom.TurnNumber++;
+    }
+
+    /// <summary>Limit SP/turę: baza wg poziomu Wynalazczości × modyfikator rasy.</summary>
+    private async Task<long> ScienceCapAsync(Kingdom kingdom)
+    {
+        int devLevel = await _context.Researches.CountAsync(r =>
+            r.KingdomId == kingdom.Id && r.IsCompleted && r.TechType.StartsWith("Wynalazki"));
+        long cap = DevelopmentCaps[Math.Min(devLevel, DevelopmentCaps.Length - 1)];
+        decimal mult = kingdom.Race switch { "Człowiek" => 1.33m, "Goblin" => 0.8m, _ => 1m };
+        return (long)(cap * mult);
+    }
+
+    /// <summary>
+    /// Inwestuje SP w aktualnie rozwijaną dziedzinę; po osiągnięciu progu kończy badanie,
+    /// a nadwyżkę odkłada do zapasu (SciencePoints). Bez wybranej dziedziny SP idą do zapasu.
+    /// </summary>
+    private async Task InvestScienceAsync(Kingdom kingdom, long sp)
+    {
+        if (sp <= 0) return;
+
+        if (string.IsNullOrEmpty(kingdom.CurrentResearchTech))
+        {
+            kingdom.SciencePoints += sp;
+            return;
+        }
+
+        var research = await _context.Researches
+            .FirstOrDefaultAsync(r => r.KingdomId == kingdom.Id && r.TechType == kingdom.CurrentResearchTech);
+        var tech = await _context.TechnologyDefinitions.AsNoTracking()
+            .FirstOrDefaultAsync(t => t.TechType == kingdom.CurrentResearchTech);
+
+        if (research == null || tech == null || research.IsCompleted)
+        {
+            kingdom.CurrentResearchTech = null;
+            kingdom.SciencePoints += sp;
+            return;
+        }
+
+        // Dorzucamy zgromadzony zapas do bieżącej inwestycji
+        long pool = sp + kingdom.SciencePoints;
+        kingdom.SciencePoints = 0;
+        research.InvestedScience += pool;
+
+        if (research.InvestedScience >= tech.CostScience)
+        {
+            long leftover = research.InvestedScience - tech.CostScience;
+            research.InvestedScience = tech.CostScience;
+            research.IsCompleted = true;
+            research.IsInProgress = false;
+            research.CompletedAt = DateTime.UtcNow;
+            kingdom.CurrentResearchTech = null;
+            kingdom.SciencePoints = leftover;
+        }
     }
 
     private static bool IsEliteTwo(MilitaryUnit unit)
