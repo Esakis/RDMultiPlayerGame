@@ -62,6 +62,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  toggleFreeze(): void {
+    if (!this.kingdom) return;
+    const op = this.kingdom.isFrozen
+      ? this.kingdomService.unfreeze()
+      : this.kingdomService.freeze();
+    op.subscribe({
+      next: (res) => { this.message = res.message || ''; this.loadKingdom(); setTimeout(() => this.message = '', 5000); },
+      error: (err) => { this.message = err.error?.message || err.error || 'Błąd.'; setTimeout(() => this.message = '', 5000); }
+    });
+  }
+
   getDelta(key: string): string {
     const val = this.deltas[key];
     if (val === undefined || val === 0) return '';

@@ -150,6 +150,12 @@ public class CoalitionController : ControllerBase
             }
         }
 
+        // Wyczyść głosy wyborcze związane z odchodzącym księstwem
+        var voters = await _context.Kingdoms
+            .Where(k => k.ImperatorVoteForKingdomId == kingdom.Id).ToListAsync();
+        foreach (var v in voters) v.ImperatorVoteForKingdomId = null;
+        kingdom.ImperatorVoteForKingdomId = null;
+
         kingdom.CoalitionId = null;
         kingdom.CoalitionRole = null;
         await _context.SaveChangesAsync();
@@ -316,6 +322,94 @@ public class CoalitionController : ControllerBase
             Success = true,
             Message = $"Wpłacono {give:N0} budulca. Postęp PPS: {coalition.PSOProgress:0.##}% (obszar koalicji {land:N0}/{PpsRequiredLand:N0})."
         });
+    }
+
+    // === Wybory Imperatora (docs/MECHANIKA.md §12) ===
+
+    [HttpGet("election")]
+    public async Task<ActionResult<ElectionDto>> GetElection()
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null) return Ok(new ElectionDto { HasCoalition = false });
+
+        var coalition = await _context.Coalitions.FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+        if (coalition == null) return NotFound("Koalicja nie istnieje.");
+
+        var members = await _context.Kingdoms
+            .Where(k => k.CoalitionId == kingdom.CoalitionId).ToListAsync();
+        var memberIds = members.Select(m => m.Id).ToHashSet();
+        var voteCounts = members
+            .Where(m => m.ImperatorVoteForKingdomId != null && memberIds.Contains(m.ImperatorVoteForKingdomId.Value))
+            .GroupBy(m => m.ImperatorVoteForKingdomId!.Value)
+            .ToDictionary(g => g.Key, g => g.Count());
+
+        return Ok(new ElectionDto
+        {
+            HasCoalition = true,
+            CurrentImperatorId = coalition.LeaderKingdomId,
+            CurrentImperatorName = members.FirstOrDefault(m => m.Id == coalition.LeaderKingdomId)?.Name,
+            MyVoteKingdomId = kingdom.ImperatorVoteForKingdomId,
+            TotalMembers = members.Count,
+            Candidates = members.Select(m => new ElectionCandidateDto
+            {
+                KingdomId = m.Id,
+                Name = m.Name,
+                Votes = voteCounts.GetValueOrDefault(m.Id, 0),
+                IsImperator = coalition.LeaderKingdomId == m.Id,
+                IsMyVote = kingdom.ImperatorVoteForKingdomId == m.Id
+            }).OrderByDescending(c => c.Votes).ThenBy(c => c.Name).ToList()
+        });
+    }
+
+    [HttpPost("vote")]
+    public async Task<ActionResult<ServiceResult>> Vote([FromBody] VoteImperatorDto dto)
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null) return BadRequest("Nie należysz do koalicji.");
+
+        var candidate = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.Id == dto.CandidateKingdomId && k.CoalitionId == kingdom.CoalitionId);
+        if (candidate == null) return BadRequest("Kandydat nie należy do Twojej koalicji.");
+
+        kingdom.ImperatorVoteForKingdomId = candidate.Id;
+
+        var coalition = await _context.Coalitions.FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+        if (coalition != null) await RecomputeImperatorAsync(coalition);
+
+        await _context.SaveChangesAsync();
+        return Ok(new ServiceResult { Success = true, Message = $"Oddano głos na {candidate.Name}." });
+    }
+
+    /// <summary>Przelicza wybory: kandydat z największą liczbą głosów zostaje Imperatorem (remis = bez zmian).</summary>
+    private async Task RecomputeImperatorAsync(Coalition coalition)
+    {
+        var members = await _context.Kingdoms.Where(k => k.CoalitionId == coalition.Id).ToListAsync();
+        if (members.Count == 0) return;
+
+        var memberIds = members.Select(m => m.Id).ToHashSet();
+        var tally = members
+            .Where(m => m.ImperatorVoteForKingdomId != null && memberIds.Contains(m.ImperatorVoteForKingdomId.Value))
+            .GroupBy(m => m.ImperatorVoteForKingdomId!.Value)
+            .Select(g => new { KingdomId = g.Key, Votes = g.Count() })
+            .OrderByDescending(x => x.Votes)
+            .ToList();
+        if (tally.Count == 0) return;
+
+        int topVotes = tally[0].Votes;
+        var leaders = tally.Where(x => x.Votes == topVotes).ToList();
+        if (leaders.Count != 1) return;                       // remis — władza bez zmian
+
+        int newImperatorId = leaders[0].KingdomId;
+        if (coalition.LeaderKingdomId == newImperatorId) return;
+
+        var oldImperator = members.FirstOrDefault(m => m.CoalitionRole == "Imperator");
+        if (oldImperator != null) oldImperator.CoalitionRole = "Member";
+
+        var newImperator = members.First(m => m.Id == newImperatorId);
+        newImperator.CoalitionRole = "Imperator";
+        coalition.LeaderKingdomId = newImperatorId;
     }
 
     // === Wojny koalicji (docs/MECHANIKA.md §12, §14.4) ===

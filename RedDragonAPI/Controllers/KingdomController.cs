@@ -63,6 +63,20 @@ public class KingdomController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPost("freeze")]
+    public async Task<ActionResult> Freeze()
+    {
+        var result = await _kingdomService.FreezeAsync(GetUserId());
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
+    [HttpPost("unfreeze")]
+    public async Task<ActionResult> Unfreeze()
+    {
+        var result = await _kingdomService.UnfreezeAsync(GetUserId());
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
     [HttpPost("assign-workers")]
     public async Task<ActionResult> AssignWorkers([FromBody] AssignWorkersDto dto)
     {

@@ -36,4 +36,12 @@ export class KingdomService {
   buyLand(amount: number): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/buy-land`, { amount });
   }
+
+  freeze(): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/freeze`, {});
+  }
+
+  unfreeze(): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/unfreeze`, {});
+  }
 }

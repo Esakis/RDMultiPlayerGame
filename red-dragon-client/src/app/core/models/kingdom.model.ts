@@ -29,6 +29,8 @@ export interface Kingdom {
   eraId: number;
   eraName: string | null;
   isProtected: boolean;
+  protectionDaysLeft: number;
+  isFrozen: boolean;
   buildings: Building[];
   militaryUnits: MilitaryUnit[];
   professions: Profession[];

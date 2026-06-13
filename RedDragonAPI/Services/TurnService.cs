@@ -25,6 +25,9 @@ public class TurnService : ITurnService
         if (kingdom == null)
             return new TurnResultDto { Success = false, Message = "Nie znaleziono księstwa." };
 
+        if (kingdom.IsFrozen)
+            return new TurnResultDto { Success = false, Message = "Księstwo jest zamrożone — odmróź je, aby działać." };
+
         if (kingdom.TurnsAvailable <= 0)
             return new TurnResultDto { Success = false, Message = "Brak dostępnych tur." };
 

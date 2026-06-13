@@ -41,6 +41,30 @@
         </div>
       </div>
 
+      <!-- Wybory Imperatora -->
+      <div class="election-section" *ngIf="election?.hasCoalition">
+        <h4>Wybory Imperatora</h4>
+        <p class="election-current">
+          Obecny Imperator: <strong>{{ election?.currentImperatorName || '—' }}</strong>
+          <span class="muted"> · członków: {{ election?.totalMembers }}</span>
+        </p>
+        <table class="vote-table">
+          <thead><tr><th>Kandydat</th><th>Głosy</th><th></th></tr></thead>
+          <tbody>
+            <tr *ngFor="let c of election?.candidates" [class.imperator]="c.isImperator">
+              <td>{{ c.name }} <span class="imp-tag" *ngIf="c.isImperator">[Imperator]</span></td>
+              <td class="votes">{{ c.votes }}</td>
+              <td>
+                <button class="btn-sm" (click)="vote(c.kingdomId)" [disabled]="c.isMyVote">
+                  {{ c.isMyVote ? 'Twój głos' : 'Głosuj' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="hint">Kandydat z największą liczbą głosów zostaje Imperatorem. Remis — władza bez zmian.</p>
+      </div>
+
       <!-- Wojny -->
       <div class="wars-section">
         <h4>Wojny</h4>

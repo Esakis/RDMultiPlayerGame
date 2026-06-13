@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedDragonAPI.Data;
 
@@ -11,9 +12,11 @@ using RedDragonAPI.Data;
 namespace RedDragonAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260613084756_AddFreezeAndNovice")]
+    partial class AddFreezeAndNovice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1457,7 +1460,7 @@ namespace RedDragonAPI.Migrations
                             Id = 1,
                             IsActive = true,
                             Name = "Era Przebudzenia",
-                            StartedAt = new DateTime(2026, 6, 13, 8, 58, 44, 354, DateTimeKind.Utc).AddTicks(8927),
+                            StartedAt = new DateTime(2026, 6, 13, 8, 47, 55, 782, DateTimeKind.Utc).AddTicks(2183),
                             Theme = "Pierwsza era nowego świata Red Dragon"
                         });
                 });
@@ -1607,9 +1610,6 @@ namespace RedDragonAPI.Migrations
 
                     b.Property<long>("Gold")
                         .HasColumnType("bigint");
-
-                    b.Property<int?>("ImperatorVoteForKingdomId")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsFrozen")
                         .HasColumnType("bit");

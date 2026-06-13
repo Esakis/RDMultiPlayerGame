@@ -11,4 +11,6 @@ public interface IKingdomService
     Task<ServiceResult> AssignWorkersAsync(int userId, AssignWorkersDto dto);
     Task<ServiceResult> BuyLandAsync(int userId, int amount);
     Task<List<KingdomSummaryDto>> GetAllKingdomsAsync(int eraId);
+    Task<ServiceResult> FreezeAsync(int userId);
+    Task<ServiceResult> UnfreezeAsync(int userId);
 }

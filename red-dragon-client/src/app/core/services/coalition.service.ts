@@ -4,6 +4,23 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Coalition, ServiceResult } from '../models/kingdom.model';
 
+export interface ElectionCandidate {
+  kingdomId: number;
+  name: string;
+  votes: number;
+  isImperator: boolean;
+  isMyVote: boolean;
+}
+
+export interface Election {
+  hasCoalition: boolean;
+  currentImperatorId?: number;
+  currentImperatorName?: string;
+  myVoteKingdomId?: number;
+  totalMembers: number;
+  candidates: ElectionCandidate[];
+}
+
 export interface War {
   id: number;
   declaringCoalitionId: number;
@@ -48,6 +65,14 @@ export class CoalitionService {
 
   contributePps(budulec: number): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/pps/contribute`, { budulec });
+  }
+
+  getElection(): Observable<Election> {
+    return this.http.get<Election>(`${this.apiUrl}/election`);
+  }
+
+  vote(candidateKingdomId: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/vote`, { candidateKingdomId });
   }
 
   getWars(): Observable<War[]> {

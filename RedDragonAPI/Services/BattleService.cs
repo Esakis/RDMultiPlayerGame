@@ -25,6 +25,9 @@ public class BattleService : IBattleService
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
 
+        if (kingdom.IsFrozen)
+            return ServiceResult.Fail("Twoje księstwo jest zamrożone — odmróź je, aby atakować.");
+
         if (kingdom.TurnsAvailable <= 0)
             return ServiceResult.Fail("Brak dostępnych tur.");
 
@@ -39,6 +42,9 @@ public class BattleService : IBattleService
 
         if (target.IsProtected)
             return ServiceResult.Fail("Cel jest pod ochroną początkową (nowicjusz).");
+
+        if (target.IsFrozen)
+            return ServiceResult.Fail("Cel jest zamrożony — nie można go zaatakować.");
 
         // Limit wielkości: cel nie może być 4× mniejszy ani 4× większy (docs/MECHANIKA.md §14.4)
         if (target.Land > kingdom.Land * 4 || target.Land * 4 < kingdom.Land)
@@ -132,6 +138,10 @@ public class BattleService : IBattleService
             .FirstOrDefaultAsync(k => k.Id == action.TargetKingdomId);
 
         if (attacker == null || defender == null)
+            return new BattleResult { Success = false };
+
+        // Zamrożony obrońca jest chroniony — atak nie dochodzi do skutku
+        if (defender.IsFrozen)
             return new BattleResult { Success = false };
 
         var attackerRace = await _context.RaceDefinitions.AsNoTracking()
@@ -463,6 +473,9 @@ public class BattleService : IBattleService
         if (!available)
             return ServiceResult.Fail("Twoja rasa nie zna tego zaklęcia (za mało ksiąg magii).");
 
+        if (kingdom.IsFrozen)
+            return ServiceResult.Fail("Twoje księstwo jest zamrożone — odmróź je, aby czarować.");
+
         int mages = TrainedMages(kingdom);
         if (mages <= 0)
             return ServiceResult.Fail("Nie masz wyszkolonych magów.");
@@ -533,6 +546,8 @@ public class BattleService : IBattleService
             return ServiceResult.Fail("Nie znaleziono celu.");
         if (target.IsProtected)
             return ServiceResult.Fail("Cel jest pod ochroną początkową.");
+        if (target.IsFrozen)
+            return ServiceResult.Fail("Cel jest zamrożony — nie można go zaatakować zaklęciem.");
 
         // Zaklęcia ofensywne na członka obcej koalicji tylko w stanie wojny (docs/MECHANIKA.md §14.4)
         if (target.CoalitionId != null && target.CoalitionId != kingdom.CoalitionId

@@ -191,6 +191,38 @@ public class KingdomService : IKingdomService
         return ServiceResult.Ok($"Zakupiono {amount} akrów za {cost} złota.");
     }
 
+    public async Task<ServiceResult> FreezeAsync(int userId)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (kingdom.IsFrozen) return ServiceResult.Fail("Księstwo jest już zamrożone.");
+
+        // Nie można zamrozić, gdy są zaplanowane ataki na Twoje księstwo (zapobiega unikom)
+        bool incoming = await _context.QueuedActions.AnyAsync(q =>
+            q.TargetKingdomId == kingdom.Id && q.Status == "Pending" && q.ActionType == "MilitaryAttack");
+        if (incoming)
+            return ServiceResult.Fail("Nie możesz zamrozić księstwa — masz zaplanowane ataki wymierzone w Ciebie.");
+
+        kingdom.IsFrozen = true;
+        kingdom.FrozenAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok("Księstwo zamrożone. Przeliczenia i ataki są wstrzymane do odmrożenia.");
+    }
+
+    public async Task<ServiceResult> UnfreezeAsync(int userId)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (!kingdom.IsFrozen) return ServiceResult.Fail("Księstwo nie jest zamrożone.");
+
+        kingdom.IsFrozen = false;
+        kingdom.FrozenAt = null;
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok("Księstwo odmrożone — możesz znów działać.");
+    }
+
     public async Task<List<KingdomSummaryDto>> GetAllKingdomsAsync(int eraId)
     {
         return await _context.Kingdoms
@@ -203,7 +235,9 @@ public class KingdomService : IKingdomService
                 Race = k.Race,
                 Land = k.Land,
                 Population = k.Population,
-                CoalitionTag = k.Coalition != null ? k.Coalition.Tag : null
+                CoalitionTag = k.Coalition != null ? k.Coalition.Tag : null,
+                IsProtected = k.IsProtected,
+                IsFrozen = k.IsFrozen
             })
             .ToListAsync();
     }
@@ -249,6 +283,8 @@ public class KingdomService : IKingdomService
             EraId = kingdom.EraId,
             EraName = kingdom.Era?.Name,
             IsProtected = kingdom.IsProtected,
+            ProtectionDaysLeft = kingdom.ProtectionDaysLeft,
+            IsFrozen = kingdom.IsFrozen,
             Buildings = kingdom.Buildings.Select(b => new BuildingDto
             {
                 Id = b.Id,

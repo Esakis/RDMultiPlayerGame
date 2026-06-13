@@ -46,8 +46,10 @@ public class KingdomDto
     public int EraId { get; set; }
     public string? EraName { get; set; }
 
-    // Ochrona
+    // Ochrona (nowicjusz) i mrożenie
     public bool IsProtected { get; set; }
+    public int ProtectionDaysLeft { get; set; }
+    public bool IsFrozen { get; set; }
 
     // Budynki
     public List<BuildingDto> Buildings { get; set; } = new();
@@ -68,6 +70,8 @@ public class KingdomSummaryDto
     public int Population { get; set; }
     public string? CoalitionTag { get; set; }
     public string? CoalitionRole { get; set; }
+    public bool IsProtected { get; set; }
+    public bool IsFrozen { get; set; }
 }
 
 public class AssignWorkersDto

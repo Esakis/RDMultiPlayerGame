@@ -1,6 +1,18 @@
 <div class="stolica-page" *ngIf="kingdom; else loadingTpl">
   <div class="toast" *ngIf="message">{{ message }}</div>
 
+  <div class="status-bar">
+    <span class="status novice" *ngIf="kingdom.isProtected">
+      🛡 Nowicjusz — ochrona przed atakami ({{ kingdom.protectionDaysLeft }} dni / do 2000 akrów)
+    </span>
+    <span class="status frozen" *ngIf="kingdom.isFrozen">
+      ❄ Księstwo zamrożone — przeliczenia i ataki wstrzymane
+    </span>
+    <button class="btn-freeze" (click)="toggleFreeze()">
+      {{ kingdom.isFrozen ? 'Odmróź księstwo' : 'Zamroź księstwo' }}
+    </button>
+  </div>
+
   <div class="kingdom-title-bar">
     <div class="portrait-area">
       <div class="portrait-frame">

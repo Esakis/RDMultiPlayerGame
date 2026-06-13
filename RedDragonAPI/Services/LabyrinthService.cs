@@ -115,6 +115,8 @@ public class LabyrinthService : ILabyrinthService
         var kingdom = await GetKingdomAsync(userId);
         if (kingdom == null)
             return ServiceResult<LabyrinthStatusDto>.Fail("Nie znaleziono księstwa.");
+        if (kingdom.IsFrozen)
+            return ServiceResult<LabyrinthStatusDto>.Fail("Księstwo jest zamrożone — odmróź je, aby działać.");
 
         if (await GetActiveExpeditionAsync(kingdom.Id) != null)
             return ServiceResult<LabyrinthStatusDto>.Fail("Inny generał jest już w labiryncie.");
@@ -151,6 +153,8 @@ public class LabyrinthService : ILabyrinthService
         var kingdom = await GetKingdomAsync(userId);
         if (kingdom == null)
             return ServiceResult<LabyrinthStatusDto>.Fail("Nie znaleziono księstwa.");
+        if (kingdom.IsFrozen)
+            return ServiceResult<LabyrinthStatusDto>.Fail("Księstwo jest zamrożone — odmróź je, aby działać.");
         if (kingdom.TurnsAvailable <= 0)
             return ServiceResult<LabyrinthStatusDto>.Fail("Brak dostępnych tur.");
 

@@ -2,6 +2,31 @@
   padding: 10px 15px;
 }
 
+.status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+
+  .status {
+    padding: 4px 10px;
+    border: 1px solid;
+    font-size: 13px;
+    &.novice { color: #8ed98e; border-color: #3a6a3a; background: rgba(40, 80, 40, 0.25); }
+    &.frozen { color: #9ec6ff; border-color: #3a5a8a; background: rgba(40, 60, 100, 0.25); }
+  }
+
+  .btn-freeze {
+    background: linear-gradient(#2a5a8a, #163a5a);
+    color: #e0f0ff;
+    border: 1px solid #6a9ad0;
+    padding: 4px 14px;
+    cursor: pointer;
+    &:hover { background: linear-gradient(#356aa0, #1d4a70); }
+  }
+}
+
 .toast {
   background: rgba(76, 175, 80, 0.2);
   border: 1px solid #4caf50;

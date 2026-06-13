@@ -69,12 +69,19 @@ public class Kingdom
     [MaxLength(50)]
     public string? CoalitionRole { get; set; }
 
+    /// <summary>Na kogo to księstwo głosuje w wyborach Imperatora koalicji (docs/MECHANIKA.md §12).</summary>
+    public int? ImperatorVoteForKingdomId { get; set; }
+
     // Era
     public int EraId { get; set; }
 
-    // Ochrona poczatkowa
+    // Ochrona poczatkowa (status nowicjusza)
     public bool IsProtected { get; set; } = true;
     public int ProtectionDaysLeft { get; set; } = 5;
+
+    // Mrożenie (zmrazení) — zawieszenie gubernatu na czas nieobecności
+    public bool IsFrozen { get; set; } = false;
+    public DateTime? FrozenAt { get; set; }
 
     // Timestamps
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

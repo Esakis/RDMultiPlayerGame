@@ -119,10 +119,11 @@ public class DailyResetService : BackgroundService
             foreach (var general in outsideGenerals)
                 general.IsOutside = false;
 
-            // 3. Odnów tury
+            // 3. Odnów tury (pomijamy zamrożone gubernaty)
+            const int NoviceLandCap = 2000; // nowicjusz traci ochronę po przekroczeniu obszaru
             var kingdoms = await context.Kingdoms
                 .Include(k => k.Buildings).ThenInclude(b => b.Definition)
-                .Where(k => k.Era.IsActive)
+                .Where(k => k.Era.IsActive && !k.IsFrozen)
                 .ToListAsync();
 
             foreach (var kingdom in kingdoms)
@@ -155,7 +156,8 @@ public class DailyResetService : BackgroundService
                 if (kingdom.IsProtected)
                 {
                     kingdom.ProtectionDaysLeft--;
-                    if (kingdom.ProtectionDaysLeft <= 0)
+                    // Status nowicjusza kończy się po wyczerpaniu dni lub przekroczeniu obszaru
+                    if (kingdom.ProtectionDaysLeft <= 0 || kingdom.Land >= NoviceLandCap)
                         kingdom.IsProtected = false;
                 }
             }

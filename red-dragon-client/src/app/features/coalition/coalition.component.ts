@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CoalitionService, PpsStatus, War } from '../../core/services/coalition.service';
+import { CoalitionService, PpsStatus, War, Election } from '../../core/services/coalition.service';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { Coalition, Kingdom, KingdomSummary } from '../../core/models/kingdom.model';
 
@@ -22,6 +22,7 @@ export class CoalitionComponent implements OnInit {
   contributeAmount = 0;
   wars: War[] = [];
   declareTargetId: number | null = null;
+  election: Election | null = null;
 
   constructor(private coalitionService: CoalitionService, private kingdomService: KingdomService) {}
 
@@ -41,9 +42,17 @@ export class CoalitionComponent implements OnInit {
   }
 
   loadPps(): void {
-    if (!this.kingdom?.coalitionId) { this.pps = null; this.wars = []; return; }
+    if (!this.kingdom?.coalitionId) { this.pps = null; this.wars = []; this.election = null; return; }
     this.coalitionService.getPps().subscribe({ next: p => this.pps = p, error: () => this.pps = null });
     this.coalitionService.getWars().subscribe({ next: w => this.wars = w, error: () => this.wars = [] });
+    this.coalitionService.getElection().subscribe({ next: e => this.election = e, error: () => this.election = null });
+  }
+
+  vote(candidateKingdomId: number): void {
+    this.coalitionService.vote(candidateKingdomId).subscribe({
+      next: res => { this.message = res.message || 'Głos oddany.'; this.load(); this.clearMsg(); },
+      error: err => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
   }
 
   get otherCoalitions(): Coalition[] {
