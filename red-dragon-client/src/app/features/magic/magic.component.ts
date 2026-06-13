@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MagicService, SpellListItem } from '../../core/services/magic.service';
 import { KingdomService } from '../../core/services/kingdom.service';
-import { KingdomSummary } from '../../core/models/kingdom.model';
+import { KingdomSummary, Kingdom } from '../../core/models/kingdom.model';
 
 @Component({
   selector: 'app-magic',
@@ -11,6 +11,7 @@ import { KingdomSummary } from '../../core/models/kingdom.model';
 export class MagicComponent implements OnInit {
   spells: SpellListItem[] = [];
   kingdoms: KingdomSummary[] = [];
+  myKingdom: Kingdom | null = null;
   targetId: { [spellType: string]: number } = {};
   message = '';
   error = '';
@@ -23,6 +24,14 @@ export class MagicComponent implements OnInit {
   ngOnInit(): void {
     this.load();
     this.kingdomService.getAllKingdoms().subscribe(k => this.kingdoms = k);
+    this.kingdomService.getMyKingdom().subscribe(k => this.myKingdom = k);
+  }
+
+  setMetamagic(mode: string): void {
+    this.kingdomService.setMetamagic(mode).subscribe({
+      next: r => { this.message = r.message ?? ''; this.load(); this.kingdomService.getMyKingdom().subscribe(k => this.myKingdom = k); },
+      error: e => { this.error = e.error || 'Błąd zmiany metamagii.'; }
+    });
   }
 
   load(): void {

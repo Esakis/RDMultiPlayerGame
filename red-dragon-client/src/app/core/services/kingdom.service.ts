@@ -44,4 +44,8 @@ export class KingdomService {
   unfreeze(): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/unfreeze`, {});
   }
+
+  setMetamagic(mode: string): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/metamagic`, { mode });
+  }
 }

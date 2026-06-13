@@ -29,6 +29,7 @@ export interface Kingdom {
   eraId: number;
   eraName: string | null;
   bodies: number;
+  metamagicMode: string;
   isProtected: boolean;
   protectionDaysLeft: number;
   isFrozen: boolean;

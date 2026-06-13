@@ -348,6 +348,15 @@ public class BattleService : IBattleService
         if (kingdom.Race == "Elf" && spell.Category == "Biała")
             cost *= 0.75m;
 
+        // Metamagia Dżina: wzmocniona +25% ceny, przyspieszona −10% ceny
+        if (kingdom.Race == "Dżin")
+            cost *= kingdom.MetamagicMode switch
+            {
+                "Strengthened" => 1.25m,
+                "Accelerated" => 0.90m,
+                _ => 1m
+            };
+
         // Przywołanie smoka: koszt rośnie stromo z liczbą posiadanych smoków
         if (spell.EffectType == "SummonDragon")
         {
@@ -556,7 +565,18 @@ public class BattleService : IBattleService
         }
 
         // siła zaklęcia = liczba wyszkolonych magów (z bonusem rasowym)
-        long power = (long)(mages * (1m + race.BonusMages));
+        decimal powerVal = mages * (1m + race.BonusMages);
+
+        // Metamagia Dżina: wzmocniona +10% siły, przyspieszona −25% siły
+        if (kingdom.Race == "Dżin")
+            powerVal *= kingdom.MetamagicMode switch
+            {
+                "Strengthened" => 1.10m,
+                "Accelerated" => 0.75m,
+                _ => 1m
+            };
+
+        long power = (long)powerVal;
 
         kingdom.Mana -= cost;
         kingdom.TurnsAvailable--;

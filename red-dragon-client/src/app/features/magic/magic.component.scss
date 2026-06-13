@@ -57,6 +57,16 @@
   }
 }
 
+.metamagic {
+  display: flex; align-items: center; gap: 8px; margin: 8px 0;
+  .mm-label { color: #c9a86a; font-size: 13px; }
+  .mm-btn {
+    background: #2a1208; color: #e8d5b0; border: 1px solid #5a3a1a; padding: 3px 10px; cursor: pointer; font-size: 12px;
+    &.active { background: linear-gradient(#8a2b1a, #5a1208); border-color: #c9a86a; color: #f0e0c0; }
+    &:hover { border-color: #c9a86a; }
+  }
+}
+
 .info-msg { color: #8ed98e; margin: 8px 0; }
 .error-msg { color: #ff7b6b; margin: 8px 0; }
 .hint { font-style: italic; color: #a08a60; }

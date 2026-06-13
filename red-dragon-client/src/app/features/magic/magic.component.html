@@ -4,6 +4,13 @@
     Magia
   </h2>
 
+  <div class="metamagic" *ngIf="myKingdom?.race === 'Dżin'">
+    <span class="mm-label">Metamagia:</span>
+    <button class="mm-btn" [class.active]="myKingdom?.metamagicMode === 'None'" (click)="setMetamagic('None')">Wyłączona</button>
+    <button class="mm-btn" [class.active]="myKingdom?.metamagicMode === 'Strengthened'" (click)="setMetamagic('Strengthened')" title="+10% siły, +25% ceny">Wzmocniona</button>
+    <button class="mm-btn" [class.active]="myKingdom?.metamagicMode === 'Accelerated'" (click)="setMetamagic('Accelerated')" title="−25% siły, −10% ceny">Przyspieszona</button>
+  </div>
+
   <div class="info-msg" *ngIf="message">{{ message }}</div>
   <div class="error-msg" *ngIf="error">{{ error }}</div>
   <div class="loading" *ngIf="loading">Wczytywanie zaklęć...</div>

@@ -13,4 +13,5 @@ public interface IKingdomService
     Task<List<KingdomSummaryDto>> GetAllKingdomsAsync(int eraId);
     Task<ServiceResult> FreezeAsync(int userId);
     Task<ServiceResult> UnfreezeAsync(int userId);
+    Task<ServiceResult> SetMetamagicAsync(int userId, string mode);
 }

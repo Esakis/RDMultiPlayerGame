@@ -223,6 +223,27 @@ public class KingdomService : IKingdomService
         return ServiceResult.Ok("Księstwo odmrożone — możesz znów działać.");
     }
 
+    public async Task<ServiceResult> SetMetamagicAsync(int userId, string mode)
+    {
+        if (mode is not ("None" or "Strengthened" or "Accelerated"))
+            return ServiceResult.Fail("Nieznany tryb metamagii.");
+
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (kingdom.Race != "Dżin") return ServiceResult.Fail("Metamagia dostępna tylko dla Dżina.");
+
+        kingdom.MetamagicMode = mode;
+        await _context.SaveChangesAsync();
+        string label = mode switch
+        {
+            "Strengthened" => "wzmocniona (+10% siły, +25% ceny)",
+            "Accelerated" => "przyspieszona (−25% siły, −10% ceny)",
+            _ => "wyłączona"
+        };
+        return ServiceResult.Ok($"Metamagia: {label}.");
+    }
+
     public async Task<List<KingdomSummaryDto>> GetAllKingdomsAsync(int eraId)
     {
         return await _context.Kingdoms
@@ -266,6 +287,7 @@ public class KingdomService : IKingdomService
             Weapons = kingdom.Weapons,
             Mana = kingdom.Mana,
             Bodies = kingdom.Bodies,
+            MetamagicMode = kingdom.MetamagicMode,
             Population = kingdom.Population,
             Popularity = kingdom.Popularity,
             Wages = kingdom.Wages,

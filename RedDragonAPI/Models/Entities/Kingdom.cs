@@ -35,6 +35,10 @@ public class Kingdom
     // Ciała na cmentarzu — surowiec Nekromancji (docs/MECHANIKA.md §2.2)
     public long Bodies { get; set; } = 0;
 
+    /// <summary>Metamagia Dżina (docs/MECHANIKA.md §2.2): None | Strengthened | Accelerated.</summary>
+    [MaxLength(20)]
+    public string MetamagicMode { get; set; } = "None";
+
     // Ludność
     public int Population { get; set; } = 1000;
     public int Popularity { get; set; } = 100;

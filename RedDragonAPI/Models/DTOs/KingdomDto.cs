@@ -17,6 +17,7 @@ public class KingdomDto
     public long Weapons { get; set; }
     public long Mana { get; set; }
     public long Bodies { get; set; }
+    public string MetamagicMode { get; set; } = "None";
 
     // Ludność
     public int Population { get; set; }
@@ -73,6 +74,11 @@ public class KingdomSummaryDto
     public string? CoalitionRole { get; set; }
     public bool IsProtected { get; set; }
     public bool IsFrozen { get; set; }
+}
+
+public class SetMetamagicDto
+{
+    public string Mode { get; set; } = "None";
 }
 
 public class AssignWorkersDto

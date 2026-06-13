@@ -77,6 +77,13 @@ public class KingdomController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
+    [HttpPost("metamagic")]
+    public async Task<ActionResult> SetMetamagic([FromBody] SetMetamagicDto dto)
+    {
+        var result = await _kingdomService.SetMetamagicAsync(GetUserId(), dto.Mode);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
     [HttpPost("assign-workers")]
     public async Task<ActionResult> AssignWorkers([FromBody] AssignWorkersDto dto)
     {
