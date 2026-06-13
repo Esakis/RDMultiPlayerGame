@@ -299,7 +299,47 @@ public class BattleService : IBattleService
         if (kingdom.Race == "Elf" && spell.Category == "Biała")
             cost *= 0.75m;
 
+        // Przywołanie smoka: koszt rośnie stromo z liczbą posiadanych smoków
+        if (spell.EffectType == "SummonDragon")
+        {
+            long dragons = await _context.MilitaryUnits
+                .Where(m => m.KingdomId == kingdom.Id && m.UnitType.EndsWith("_Smok"))
+                .SumAsync(m => (long)m.Quantity);
+            cost *= DragonHelper.SummonCostMultiplier(dragons);
+        }
+
         return Math.Max(1, (long)cost);
+    }
+
+    /// <summary>Liczba posiadanych smoków i aktualny limit (budynki + badania).</summary>
+    private async Task<(long dragons, long cap)> GetDragonStatusAsync(Kingdom kingdom)
+    {
+        long dragons = await _context.MilitaryUnits
+            .Where(m => m.KingdomId == kingdom.Id && m.UnitType.EndsWith("_Smok"))
+            .SumAsync(m => (long)m.Quantity);
+        int draco = await _context.Researches
+            .CountAsync(r => r.KingdomId == kingdom.Id && r.IsCompleted && r.TechType.StartsWith("Smoko"));
+        return (dragons, DragonHelper.ComputeCap(kingdom, draco));
+    }
+
+    /// <summary>Dodaje 1 smoka do armii księstwa (jednostka rasowa _Smok).</summary>
+    private async Task<bool> AddDragonAsync(Kingdom kingdom)
+    {
+        var dragonDef = await _context.UnitDefinitions
+            .FirstOrDefaultAsync(u => u.Race == kingdom.Race && u.UnitType.EndsWith("_Smok"));
+        if (dragonDef == null) return false;
+
+        var unit = await _context.MilitaryUnits
+            .FirstOrDefaultAsync(m => m.KingdomId == kingdom.Id && m.UnitType == dragonDef.UnitType);
+        if (unit == null)
+            _context.MilitaryUnits.Add(new MilitaryUnit
+            {
+                KingdomId = kingdom.Id, UnitType = dragonDef.UnitType, Quantity = 1, InTraining = 0
+            });
+        else
+            unit.Quantity += 1;
+
+        return true;
     }
 
     private async Task<RaceDefinition> GetRaceAsync(string raceName)
@@ -402,6 +442,14 @@ public class BattleService : IBattleService
         if (kingdom.Mana < cost)
             return ServiceResult.Fail($"Za mało many. Potrzeba: {cost}, posiadasz: {kingdom.Mana}.");
 
+        // Przywołanie smoka: sprawdź limit zanim pobierzemy manę i turę
+        if (spell.EffectType == "SummonDragon")
+        {
+            var (dragons, cap) = await GetDragonStatusAsync(kingdom);
+            if (dragons >= cap)
+                return ServiceResult.Fail($"Osiągnięto limit smoków ({cap}). Rozbuduj Smokodrap/Portal/Ministerstwo smoków lub rozwiń badania o smokach.");
+        }
+
         // siła zaklęcia = liczba wyszkolonych magów (z bonusem rasowym)
         long power = (long)(mages * (1m + race.BonusMages));
 
@@ -425,6 +473,16 @@ public class BattleService : IBattleService
                 kingdom.Gold += goldGained;
                 await _context.SaveChangesAsync();
                 return ServiceResult.Ok($"Mannamorfoza zamieniła {manaLeft} many na {goldGained} złota.");
+            }
+
+            // Przywołanie smoka: dodaje 1 smoka do armii (limit sprawdzony wyżej)
+            if (spell.EffectType == "SummonDragon")
+            {
+                bool added = await AddDragonAsync(kingdom);
+                await _context.SaveChangesAsync();
+                return added
+                    ? ServiceResult.Ok($"Czerwony Smok dołączył do Twojej armii! Koszt: {cost} many.")
+                    : ServiceResult.Fail("Twoja rasa nie potrafi przywoływać smoków.");
             }
 
             _context.ActiveSpells.Add(new ActiveSpell

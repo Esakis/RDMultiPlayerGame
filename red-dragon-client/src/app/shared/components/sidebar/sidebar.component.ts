@@ -22,6 +22,7 @@ export class SidebarComponent {
     { label: 'Polityka', route: '/coalition' },
     { label: 'Rynek', route: '/market' },
     { label: 'Labirynt', route: '/labyrinth' },
+    { label: 'Smoki', route: '/dragons' },
     { label: 'Statystyki', route: '/ranking' },
     { label: 'Szkoła', route: '/research' },
     { label: 'Koniec', route: '/messages' },

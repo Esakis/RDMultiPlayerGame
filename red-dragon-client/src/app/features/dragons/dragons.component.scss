@@ -1,0 +1,72 @@
+.game-panel {
+  padding: 16px;
+  color: #e8d5b0;
+
+  .panel-title { color: #d9542b; }
+}
+
+.lead {
+  color: #c9b58a;
+  font-size: 13px;
+  max-width: 680px;
+  line-height: 1.5;
+  strong { color: #e8c350; }
+}
+
+.dragon-count {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 14px 0 6px;
+
+  .big { font-size: 34px; font-weight: bold; color: #ff7b4d; }
+  .cap { color: #c9a86a; }
+}
+
+.bar {
+  height: 18px;
+  background: #2a1208;
+  border: 1px solid #5a3a1a;
+  max-width: 420px;
+  margin-bottom: 16px;
+
+  .fill {
+    height: 100%;
+    background: linear-gradient(#d9542b, #8a2b1a);
+  }
+}
+
+.rd-table {
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 16px;
+
+  th, td {
+    border: 1px solid #5a3a1a;
+    padding: 6px 12px;
+    text-align: left;
+  }
+  th { background: rgba(90, 40, 20, 0.5); color: #c9a86a; }
+  .bonus { color: #7ec0ee; font-weight: bold; }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-cast {
+  background: linear-gradient(#8a2b1a, #5a1208);
+  color: #f0e0c0;
+  border: 1px solid #c9a86a;
+  padding: 5px 16px;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+  &:not(:disabled):hover { background: linear-gradient(#a83b22, #6a180a); }
+}
+
+.error-msg { color: #ff7b6b; margin: 8px 0; }
+.loading { color: #c9b58a; }
+.hint { font-style: italic; color: #a08a60; font-size: 12px; }

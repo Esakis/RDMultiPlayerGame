@@ -30,6 +30,7 @@ import { ThievesComponent } from './features/thieves/thieves.component';
 import { GeneralsComponent } from './features/generals/generals.component';
 import { MarketComponent } from './features/market/market.component';
 import { LabyrinthComponent } from './features/labyrinth/labyrinth.component';
+import { DragonsComponent } from './features/dragons/dragons.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { LabyrinthComponent } from './features/labyrinth/labyrinth.component';
     ThievesComponent,
     GeneralsComponent,
     MarketComponent,
-    LabyrinthComponent
+    LabyrinthComponent,
+    DragonsComponent
   ],
   imports: [
     BrowserModule,
