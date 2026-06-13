@@ -42,6 +42,13 @@ public class Kingdom
     /// <summary>Gniew Enta (docs/MECHANIKA.md §2.2): +100% ataku po stratach, do najbliższego przeliczenia.</summary>
     public bool EntWrathActive { get; set; } = false;
 
+    // Krwawa magia Wampira (docs/MECHANIKA.md §2.2) — punkty krwi (max 50×obszar) i 4 eliksiry (0–4 lvl)
+    public long BloodPoints { get; set; } = 0;
+    public int BloodElixirAttack { get; set; } = 0;     // +7%/lvl siły ataku
+    public int BloodElixirFocus { get; set; } = 0;      // +3%/lvl siły magów
+    public int BloodElixirBloodlust { get; set; } = 0;  // +12,5%/lvl strat wroga
+    public int BloodElixirThief { get; set; } = 0;      // +5%/lvl siły złodziei
+
     // Ludność
     public int Population { get; set; } = 1000;
     public int Popularity { get; set; } = 100;

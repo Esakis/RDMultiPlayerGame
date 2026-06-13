@@ -244,6 +244,40 @@ public class KingdomService : IKingdomService
         return ServiceResult.Ok($"Metamagia: {label}.");
     }
 
+    public async Task<ServiceResult> UpgradeBloodElixirAsync(int userId, string elixir)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (kingdom.Race != "Wampir") return ServiceResult.Fail("Krwawa magia dostępna tylko dla Wampira.");
+
+        int level = elixir switch
+        {
+            "Attack" => kingdom.BloodElixirAttack,
+            "Focus" => kingdom.BloodElixirFocus,
+            "Bloodlust" => kingdom.BloodElixirBloodlust,
+            "Thief" => kingdom.BloodElixirThief,
+            _ => -1
+        };
+        if (level < 0) return ServiceResult.Fail("Nieznany eliksir.");
+        if (level >= 4) return ServiceResult.Fail("Eliksir osiągnął maksymalny poziom.");
+
+        long cost = (long)(level + 1) * kingdom.Land * 3;
+        if (kingdom.BloodPoints < cost)
+            return ServiceResult.Fail($"Za mało punktów krwi (potrzeba {cost}, masz {kingdom.BloodPoints}).");
+
+        kingdom.BloodPoints -= cost;
+        switch (elixir)
+        {
+            case "Attack": kingdom.BloodElixirAttack++; break;
+            case "Focus": kingdom.BloodElixirFocus++; break;
+            case "Bloodlust": kingdom.BloodElixirBloodlust++; break;
+            case "Thief": kingdom.BloodElixirThief++; break;
+        }
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok($"Ulepszono eliksir do poziomu {level + 1} (koszt {cost} punktów krwi).");
+    }
+
     public async Task<List<KingdomSummaryDto>> GetAllKingdomsAsync(int eraId)
     {
         return await _context.Kingdoms
@@ -289,6 +323,11 @@ public class KingdomService : IKingdomService
             Bodies = kingdom.Bodies,
             MetamagicMode = kingdom.MetamagicMode,
             EntWrathActive = kingdom.EntWrathActive,
+            BloodPoints = kingdom.BloodPoints,
+            BloodElixirAttack = kingdom.BloodElixirAttack,
+            BloodElixirFocus = kingdom.BloodElixirFocus,
+            BloodElixirBloodlust = kingdom.BloodElixirBloodlust,
+            BloodElixirThief = kingdom.BloodElixirThief,
             Population = kingdom.Population,
             Popularity = kingdom.Popularity,
             Wages = kingdom.Wages,

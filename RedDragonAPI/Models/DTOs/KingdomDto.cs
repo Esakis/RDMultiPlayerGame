@@ -19,6 +19,11 @@ public class KingdomDto
     public long Bodies { get; set; }
     public string MetamagicMode { get; set; } = "None";
     public bool EntWrathActive { get; set; }
+    public long BloodPoints { get; set; }
+    public int BloodElixirAttack { get; set; }
+    public int BloodElixirFocus { get; set; }
+    public int BloodElixirBloodlust { get; set; }
+    public int BloodElixirThief { get; set; }
 
     // Ludność
     public int Population { get; set; }
@@ -80,6 +85,11 @@ public class KingdomSummaryDto
 public class SetMetamagicDto
 {
     public string Mode { get; set; } = "None";
+}
+
+public class BloodElixirDto
+{
+    public string Elixir { get; set; } = string.Empty;
 }
 
 public class AssignWorkersDto

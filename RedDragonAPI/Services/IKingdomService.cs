@@ -14,4 +14,5 @@ public interface IKingdomService
     Task<ServiceResult> FreezeAsync(int userId);
     Task<ServiceResult> UnfreezeAsync(int userId);
     Task<ServiceResult> SetMetamagicAsync(int userId, string mode);
+    Task<ServiceResult> UpgradeBloodElixirAsync(int userId, string elixir);
 }

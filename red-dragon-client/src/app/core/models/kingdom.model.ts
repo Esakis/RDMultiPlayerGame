@@ -31,6 +31,11 @@ export interface Kingdom {
   bodies: number;
   metamagicMode: string;
   entWrathActive: boolean;
+  bloodPoints: number;
+  bloodElixirAttack: number;
+  bloodElixirFocus: number;
+  bloodElixirBloodlust: number;
+  bloodElixirThief: number;
   isProtected: boolean;
   protectionDaysLeft: number;
   isFrozen: boolean;

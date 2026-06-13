@@ -48,4 +48,8 @@ export class KingdomService {
   setMetamagic(mode: string): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/metamagic`, { mode });
   }
+
+  upgradeBloodElixir(elixir: string): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/blood-elixir`, { elixir });
+  }
 }
