@@ -41,6 +41,31 @@
         </div>
       </div>
 
+      <!-- Wojny -->
+      <div class="wars-section">
+        <h4>Wojny</h4>
+        <div class="war-list" *ngIf="wars.length > 0; else noWars">
+          <div class="war-row" *ngFor="let w of wars">
+            <span class="war-vs">{{ w.declaringName }} ⚔ {{ w.targetName }}</span>
+            <span class="war-tag" *ngIf="w.opponentName">
+              {{ w.isMyDeclaration ? 'wypowiedziana przez nas' : 'przeciw nam' }}
+            </span>
+            <button class="btn-sm" *ngIf="kingdom?.coalitionRole === 'Imperator' && w.opponentCoalitionId"
+                    (click)="endWar(w)">Zawrzyj pokój</button>
+          </div>
+        </div>
+        <ng-template #noWars><p class="empty">Brak aktywnych wojen.</p></ng-template>
+
+        <div class="form-row" *ngIf="kingdom?.coalitionRole === 'Imperator'">
+          <label>Wypowiedz wojnę:</label>
+          <select [(ngModel)]="declareTargetId">
+            <option [ngValue]="null">Wybierz koalicję...</option>
+            <option *ngFor="let c of otherCoalitions" [ngValue]="c.id">{{ c.name }}</option>
+          </select>
+          <button class="btn-danger" (click)="declareWar()" [disabled]="!declareTargetId">Wypowiedz</button>
+        </div>
+      </div>
+
       <!-- Pałac Sądu Ostatecznego -->
       <div class="pps-section" *ngIf="pps as p">
         <h4>Pałac Sądu Ostatecznego</h4>

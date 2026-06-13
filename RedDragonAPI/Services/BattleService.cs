@@ -37,6 +37,22 @@ public class BattleService : IBattleService
         if (target.Id == kingdom.Id)
             return ServiceResult.Fail("Nie możesz atakować samego siebie.");
 
+        if (target.IsProtected)
+            return ServiceResult.Fail("Cel jest pod ochroną początkową (nowicjusz).");
+
+        // Limit wielkości: cel nie może być 4× mniejszy ani 4× większy (docs/MECHANIKA.md §14.4)
+        if (target.Land > kingdom.Land * 4 || target.Land * 4 < kingdom.Land)
+            return ServiceResult.Fail("Cel jest zbyt duży lub zbyt mały (limit 4×).");
+
+        // Koalicja: nie atakuj sojusznika; obcą koalicję tylko w stanie wojny
+        if (target.CoalitionId != null)
+        {
+            if (target.CoalitionId == kingdom.CoalitionId)
+                return ServiceResult.Fail("Nie możesz atakować członka własnej koalicji.");
+            if (!await WarHelper.AreAtWarAsync(_context, kingdom.CoalitionId, target.CoalitionId))
+                return ServiceResult.Fail("Możesz zaatakować członka obcej koalicji tylko w stanie wojny — wasze koalicje muszą sobie wypowiedzieć wojnę.");
+        }
+
         // Sprawdź czy gracz ma wystarczającą ilość jednostek
         foreach (var unit in dto.Units)
         {
@@ -517,6 +533,11 @@ public class BattleService : IBattleService
             return ServiceResult.Fail("Nie znaleziono celu.");
         if (target.IsProtected)
             return ServiceResult.Fail("Cel jest pod ochroną początkową.");
+
+        // Zaklęcia ofensywne na członka obcej koalicji tylko w stanie wojny (docs/MECHANIKA.md §14.4)
+        if (target.CoalitionId != null && target.CoalitionId != kingdom.CoalitionId
+            && !await WarHelper.AreAtWarAsync(_context, kingdom.CoalitionId, target.CoalitionId))
+            return ServiceResult.Fail("Możesz rzucać zaklęcia na członka obcej koalicji tylko w stanie wojny.");
 
         _context.QueuedActions.Add(new QueuedAction
         {

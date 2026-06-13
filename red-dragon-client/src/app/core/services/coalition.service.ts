@@ -4,6 +4,18 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Coalition, ServiceResult } from '../models/kingdom.model';
 
+export interface War {
+  id: number;
+  declaringCoalitionId: number;
+  declaringName: string;
+  targetCoalitionId: number;
+  targetName: string;
+  declaredAt: string;
+  isMyDeclaration: boolean;
+  opponentCoalitionId: number;
+  opponentName: string;
+}
+
 export interface PpsStatus {
   hasCoalition: boolean;
   isBuilding: boolean;
@@ -36,6 +48,18 @@ export class CoalitionService {
 
   contributePps(budulec: number): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/pps/contribute`, { budulec });
+  }
+
+  getWars(): Observable<War[]> {
+    return this.http.get<War[]>(`${this.apiUrl}/wars`);
+  }
+
+  declareWar(targetCoalitionId: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/war/declare`, { targetCoalitionId });
+  }
+
+  endWar(warId: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/war/${warId}/end`, {});
   }
 
   getCoalitions(eraId?: number): Observable<Coalition[]> {

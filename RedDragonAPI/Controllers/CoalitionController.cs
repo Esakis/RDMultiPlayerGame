@@ -318,6 +318,95 @@ public class CoalitionController : ControllerBase
         });
     }
 
+    // === Wojny koalicji (docs/MECHANIKA.md §12, §14.4) ===
+
+    [HttpGet("wars")]
+    public async Task<ActionResult<List<WarDto>>> GetWars()
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+
+        var wars = await _context.Wars
+            .Where(w => w.EraId == kingdom.EraId && w.Status == "Active")
+            .Include(w => w.DeclaringCoalition)
+            .Include(w => w.TargetCoalition)
+            .OrderByDescending(w => w.DeclaredAt)
+            .ToListAsync();
+
+        int? myCoalition = kingdom.CoalitionId;
+        return Ok(wars.Select(w =>
+        {
+            bool mine = w.DeclaringCoalitionId == myCoalition;
+            bool involved = mine || w.TargetCoalitionId == myCoalition;
+            return new WarDto
+            {
+                Id = w.Id,
+                DeclaringCoalitionId = w.DeclaringCoalitionId,
+                DeclaringName = w.DeclaringCoalition.Name,
+                TargetCoalitionId = w.TargetCoalitionId,
+                TargetName = w.TargetCoalition.Name,
+                DeclaredAt = w.DeclaredAt,
+                IsMyDeclaration = mine,
+                OpponentCoalitionId = involved ? (mine ? w.TargetCoalitionId : w.DeclaringCoalitionId) : 0,
+                OpponentName = involved ? (mine ? w.TargetCoalition.Name : w.DeclaringCoalition.Name) : string.Empty
+            };
+        }).ToList());
+    }
+
+    [HttpPost("war/declare")]
+    public async Task<ActionResult<ServiceResult>> DeclareWar([FromBody] DeclareWarDto dto)
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null) return BadRequest("Nie należysz do koalicji.");
+        if (kingdom.CoalitionRole != "Imperator") return BadRequest("Tylko Imperator może wypowiadać wojny.");
+
+        // Wypowiedzenie wojny możliwe tylko do 20:00 (czas serwera)
+        if (DateTime.UtcNow.Hour >= 20)
+            return BadRequest("Wojnę można wypowiedzieć tylko do godziny 20:00.");
+
+        if (dto.TargetCoalitionId == kingdom.CoalitionId)
+            return BadRequest("Nie możesz wypowiedzieć wojny własnej koalicji.");
+
+        var targetCoalition = await _context.Coalitions
+            .FirstOrDefaultAsync(c => c.Id == dto.TargetCoalitionId && c.EraId == kingdom.EraId);
+        if (targetCoalition == null) return NotFound("Nie znaleziono koalicji celu.");
+
+        if (await WarHelper.AreAtWarAsync(_context, kingdom.CoalitionId, dto.TargetCoalitionId))
+            return BadRequest("Twoja koalicja jest już w stanie wojny z tą koalicją.");
+
+        _context.Wars.Add(new War
+        {
+            EraId = kingdom.EraId,
+            DeclaringCoalitionId = kingdom.CoalitionId.Value,
+            TargetCoalitionId = dto.TargetCoalitionId,
+            Status = "Active"
+        });
+        await _context.SaveChangesAsync();
+
+        return Ok(new ServiceResult { Success = true, Message = $"Wypowiedziano wojnę koalicji '{targetCoalition.Name}'!" });
+    }
+
+    [HttpPost("war/{id}/end")]
+    public async Task<ActionResult<ServiceResult>> EndWar(int id)
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom == null) return NotFound("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null) return BadRequest("Nie należysz do koalicji.");
+        if (kingdom.CoalitionRole != "Imperator") return BadRequest("Tylko Imperator może zakończyć wojnę.");
+
+        var war = await _context.Wars.FirstOrDefaultAsync(w => w.Id == id && w.Status == "Active");
+        if (war == null) return NotFound("Nie znaleziono aktywnej wojny.");
+        if (war.DeclaringCoalitionId != kingdom.CoalitionId && war.TargetCoalitionId != kingdom.CoalitionId)
+            return BadRequest("Twoja koalicja nie bierze udziału w tej wojnie.");
+
+        war.Status = "Ended";
+        war.EndedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        return Ok(new ServiceResult { Success = true, Message = "Zawarto pokój — wojna zakończona." });
+    }
+
     private async Task<Kingdom?> GetCurrentKingdom()
     {
         var userId = GetUserId();

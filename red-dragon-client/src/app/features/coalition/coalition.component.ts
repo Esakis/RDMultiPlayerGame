@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CoalitionService, PpsStatus } from '../../core/services/coalition.service';
+import { CoalitionService, PpsStatus, War } from '../../core/services/coalition.service';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { Coalition, Kingdom, KingdomSummary } from '../../core/models/kingdom.model';
 
@@ -20,6 +20,8 @@ export class CoalitionComponent implements OnInit {
   currentMainCommander: KingdomSummary | null = null;
   pps: PpsStatus | null = null;
   contributeAmount = 0;
+  wars: War[] = [];
+  declareTargetId: number | null = null;
 
   constructor(private coalitionService: CoalitionService, private kingdomService: KingdomService) {}
 
@@ -39,8 +41,28 @@ export class CoalitionComponent implements OnInit {
   }
 
   loadPps(): void {
-    if (!this.kingdom?.coalitionId) { this.pps = null; return; }
+    if (!this.kingdom?.coalitionId) { this.pps = null; this.wars = []; return; }
     this.coalitionService.getPps().subscribe({ next: p => this.pps = p, error: () => this.pps = null });
+    this.coalitionService.getWars().subscribe({ next: w => this.wars = w, error: () => this.wars = [] });
+  }
+
+  get otherCoalitions(): Coalition[] {
+    return this.coalitions.filter(c => c.id !== this.kingdom?.coalitionId);
+  }
+
+  declareWar(): void {
+    if (!this.declareTargetId) { this.message = 'Wybierz koalicję.'; this.clearMsg(); return; }
+    this.coalitionService.declareWar(this.declareTargetId).subscribe({
+      next: res => { this.message = res.message || 'Wojna wypowiedziana.'; this.declareTargetId = null; this.load(); this.clearMsg(); },
+      error: err => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
+  }
+
+  endWar(war: War): void {
+    this.coalitionService.endWar(war.id).subscribe({
+      next: res => { this.message = res.message || 'Pokój zawarty.'; this.load(); this.clearMsg(); },
+      error: err => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
   }
 
   startPps(): void {
