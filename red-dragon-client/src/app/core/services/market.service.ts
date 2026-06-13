@@ -32,6 +32,18 @@ export interface CreateMarketOrder {
   pricePerUnit: number;
 }
 
+export interface MarketTransaction {
+  id: number;
+  resource: string;
+  quantity: number;
+  pricePerUnit: number;
+  grossGold: number;
+  tax: number;
+  iAmBuyer: boolean;
+  counterpartyName: string;
+  occurredAt: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class MarketService {
   private apiUrl = `${environment.apiUrl}/market`;
@@ -52,5 +64,9 @@ export class MarketService {
 
   cancelOrder(orderId: number): Observable<ServiceResult> {
     return this.http.delete<ServiceResult>(`${this.apiUrl}/orders/${orderId}`);
+  }
+
+  getHistory(): Observable<MarketTransaction[]> {
+    return this.http.get<MarketTransaction[]>(`${this.apiUrl}/history`);
   }
 }

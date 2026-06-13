@@ -11,6 +11,7 @@ public interface IMarketService
     Task<ServiceResult> CreateOrderAsync(int userId, CreateMarketOrderDto dto);
     Task<ServiceResult> FillOrderAsync(int userId, FillMarketOrderDto dto);
     Task<ServiceResult> CancelOrderAsync(int userId, int orderId);
+    Task<List<MarketTransactionDto>> GetHistoryAsync(int userId);
 }
 
 /// <summary>
@@ -180,6 +181,15 @@ public class MarketService : IMarketService
         long units = dto.Quantity;
         long value = units * order.PricePerUnit;
 
+        // Podatek rynkowy: 15% bazowo, obniżany badaniami Rachunkowość (12/8/5%).
+        // Płaci go odbiorca złota — używamy jego poziomu badań.
+        int goldRecipientId = order.OrderType == "Sell" ? owner.Id : kingdom.Id;
+        decimal taxRate = await MarketTaxAsync(goldRecipientId);
+        long tax = (long)(value * taxRate);
+        long net = value - tax;
+
+        int buyerId, sellerId; // buyer = odbiorca zasobu, seller = odbiorca złota
+
         if (order.OrderType == "Sell")
         {
             // Wystawca sprzedaje zasób — realizujący KUPUJE: płaci złoto, dostaje zasób z depozytu
@@ -187,7 +197,8 @@ public class MarketService : IMarketService
                 return ServiceResult.Fail("Za mało złota na zakup.");
             kingdom.Gold -= value;
             AddResource(kingdom, order.Resource, units);
-            owner.Gold += value;
+            owner.Gold += net;                 // sprzedawca dostaje kwotę po podatku
+            buyerId = kingdom.Id; sellerId = owner.Id;
         }
         else // Buy
         {
@@ -195,9 +206,21 @@ public class MarketService : IMarketService
             if (GetResource(kingdom, order.Resource) < units)
                 return ServiceResult.Fail("Za mało zasobu na sprzedaż.");
             AddResource(kingdom, order.Resource, -units);
-            kingdom.Gold += value;
+            kingdom.Gold += net;               // sprzedający dostaje kwotę po podatku
             AddResource(owner, order.Resource, units);
+            buyerId = owner.Id; sellerId = kingdom.Id;
         }
+
+        _context.MarketTransactions.Add(new MarketTransaction
+        {
+            BuyerKingdomId = buyerId,
+            SellerKingdomId = sellerId,
+            Resource = order.Resource,
+            Quantity = units,
+            PricePerUnit = order.PricePerUnit,
+            GrossGold = value,
+            Tax = tax
+        });
 
         order.RemainingQuantity -= units;
         if (order.RemainingQuantity <= 0)
@@ -205,8 +228,8 @@ public class MarketService : IMarketService
 
         await _context.SaveChangesAsync();
         return ServiceResult.Ok(order.OrderType == "Sell"
-            ? $"Kupiono {units} {ResourceName(order.Resource)} za {value} złota."
-            : $"Sprzedano {units} {ResourceName(order.Resource)} za {value} złota.");
+            ? $"Kupiono {units} {ResourceName(order.Resource)} za {value} złota (podatek {tax})."
+            : $"Sprzedano {units} {ResourceName(order.Resource)} za {net} złota (podatek {tax}).");
     }
 
     public async Task<ServiceResult> CancelOrderAsync(int userId, int orderId)
@@ -229,6 +252,45 @@ public class MarketService : IMarketService
         order.Status = "Cancelled";
         await _context.SaveChangesAsync();
         return ServiceResult.Ok("Ofertę wycofano, depozyt zwrócono.");
+    }
+
+    /// <summary>Stawka podatku rynkowego wg poziomu badań Rachunkowość (Calculating/Reckoning/Accountancy).</summary>
+    private async Task<decimal> MarketTaxAsync(int kingdomId)
+    {
+        int lvl = await _context.Researches
+            .CountAsync(r => r.KingdomId == kingdomId && r.IsCompleted && r.Tech.EffectType == "MerchantBonus");
+        return lvl switch { >= 3 => 0.05m, 2 => 0.08m, 1 => 0.12m, _ => 0.15m };
+    }
+
+    public async Task<List<MarketTransactionDto>> GetHistoryAsync(int userId)
+    {
+        var kingdom = await GetKingdomAsync(userId);
+        if (kingdom == null) return new List<MarketTransactionDto>();
+
+        var tx = await _context.MarketTransactions
+            .Where(t => t.BuyerKingdomId == kingdom.Id || t.SellerKingdomId == kingdom.Id)
+            .Include(t => t.BuyerKingdom)
+            .Include(t => t.SellerKingdom)
+            .OrderByDescending(t => t.OccurredAt)
+            .Take(50)
+            .ToListAsync();
+
+        return tx.Select(t =>
+        {
+            bool iAmBuyer = t.BuyerKingdomId == kingdom.Id;
+            return new MarketTransactionDto
+            {
+                Id = t.Id,
+                Resource = t.Resource,
+                Quantity = t.Quantity,
+                PricePerUnit = t.PricePerUnit,
+                GrossGold = t.GrossGold,
+                Tax = t.Tax,
+                IAmBuyer = iAmBuyer,
+                CounterpartyName = iAmBuyer ? t.SellerKingdom.Name : t.BuyerKingdom.Name,
+                OccurredAt = t.OccurredAt
+            };
+        }).ToList();
     }
 
     private static string ResourceName(string resource) => resource switch

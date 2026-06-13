@@ -108,5 +108,27 @@
       </tbody>
     </table>
     <ng-template #noMine><p class="hint">Nie masz wystawionych ofert.</p></ng-template>
+
+    <p class="hint">Podatek rynkowy: 15% (badania Rachunkowość obniżają do 12/8/5%) — płaci go odbiorca złota.</p>
+
+    <!-- Historia transakcji -->
+    <h3>Historia transakcji</h3>
+    <table class="rd-table" *ngIf="history.length > 0; else noHistory">
+      <thead>
+        <tr><th>Typ</th><th>Surowiec</th><th>Ilość</th><th>Cena/szt.</th><th>Wartość</th><th>Podatek</th><th>Kontrahent</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of history">
+          <td>{{ t.iAmBuyer ? 'Kupno' : 'Sprzedaż' }}</td>
+          <td>{{ resourceLabel(t.resource) }}</td>
+          <td class="num">{{ t.quantity | number }}</td>
+          <td class="num gold">{{ t.pricePerUnit | number }}</td>
+          <td class="num gold">{{ t.grossGold | number }}</td>
+          <td class="num">{{ t.tax | number }}</td>
+          <td>{{ t.counterpartyName }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noHistory><p class="hint">Brak transakcji.</p></ng-template>
   </ng-container>
 </div>

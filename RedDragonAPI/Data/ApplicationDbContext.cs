@@ -35,6 +35,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<MarketOrder> MarketOrders { get; set; }
     public DbSet<LabyrinthExpedition> LabyrinthExpeditions { get; set; }
     public DbSet<War> Wars { get; set; }
+    public DbSet<MarketTransaction> MarketTransactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -271,6 +272,19 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(e => e.GeneralId)
             .OnDelete(DeleteBehavior.SetNull);
 
+        // MarketTransaction -> Buyer / Seller
+        modelBuilder.Entity<MarketTransaction>()
+            .HasOne(t => t.BuyerKingdom)
+            .WithMany()
+            .HasForeignKey(t => t.BuyerKingdomId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<MarketTransaction>()
+            .HasOne(t => t.SellerKingdom)
+            .WithMany()
+            .HasForeignKey(t => t.SellerKingdomId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         // War -> Era / Coalitions
         modelBuilder.Entity<War>()
             .HasOne(w => w.Era)
@@ -313,6 +327,8 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<MarketOrder>().HasIndex(o => o.KingdomId);
         modelBuilder.Entity<LabyrinthExpedition>().HasIndex(e => new { e.KingdomId, e.Status });
         modelBuilder.Entity<War>().HasIndex(w => new { w.EraId, w.Status });
+        modelBuilder.Entity<MarketTransaction>().HasIndex(t => t.BuyerKingdomId);
+        modelBuilder.Entity<MarketTransaction>().HasIndex(t => t.SellerKingdomId);
     }
 
     private void ConfigureUniqueConstraints(ModelBuilder modelBuilder)

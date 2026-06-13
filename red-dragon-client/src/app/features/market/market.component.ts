@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MarketService, MarketOrder, CreateMarketOrder } from '../../core/services/market.service';
+import { MarketService, MarketOrder, CreateMarketOrder, MarketTransaction } from '../../core/services/market.service';
 
 @Component({
   selector: 'app-market',
@@ -11,6 +11,7 @@ export class MarketComponent implements OnInit {
   noAccessReason = '';
   orders: MarketOrder[] = [];
   myOrders: MarketOrder[] = [];
+  history: MarketTransaction[] = [];
   message = '';
   error = '';
   loading = true;
@@ -50,6 +51,7 @@ export class MarketComponent implements OnInit {
       },
       error: () => { this.loading = false; this.error = 'Błąd wczytywania rynku.'; }
     });
+    this.market.getHistory().subscribe({ next: h => this.history = h, error: () => this.history = [] });
   }
 
   resourceLabel(r: string): string {

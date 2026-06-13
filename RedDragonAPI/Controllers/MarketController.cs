@@ -46,4 +46,10 @@ public class MarketController : ControllerBase
         var result = await _marketService.CancelOrderAsync(UserId, id);
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
+
+    [HttpGet("history")]
+    public async Task<IActionResult> GetHistory()
+    {
+        return Ok(await _marketService.GetHistoryAsync(UserId));
+    }
 }

@@ -36,3 +36,16 @@ public class FillMarketOrderDto
     public int OrderId { get; set; }
     public long Quantity { get; set; }
 }
+
+public class MarketTransactionDto
+{
+    public int Id { get; set; }
+    public string Resource { get; set; } = string.Empty;
+    public long Quantity { get; set; }
+    public long PricePerUnit { get; set; }
+    public long GrossGold { get; set; }
+    public long Tax { get; set; }
+    public bool IAmBuyer { get; set; }
+    public string CounterpartyName { get; set; } = string.Empty;
+    public DateTime OccurredAt { get; set; }
+}
