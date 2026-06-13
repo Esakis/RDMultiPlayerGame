@@ -1,0 +1,112 @@
+<div class="game-panel">
+  <h2 class="panel-title">Rynek surowców</h2>
+
+  <div class="info-msg" *ngIf="message">{{ message }}</div>
+  <div class="error-msg" *ngIf="error">{{ error }}</div>
+  <div class="loading" *ngIf="loading">Wczytywanie rynku...</div>
+
+  <p class="hint no-access" *ngIf="!loading && !hasAccess">{{ noAccessReason }}</p>
+
+  <ng-container *ngIf="!loading && hasAccess">
+    <!-- Wystawienie nowej oferty -->
+    <div class="order-form">
+      <h3>Wystaw ofertę</h3>
+      <div class="form-row">
+        <label>
+          Typ
+          <select [(ngModel)]="form.orderType">
+            <option value="Sell">Sprzedaż</option>
+            <option value="Buy">Kupno</option>
+          </select>
+        </label>
+        <label>
+          Surowiec
+          <select [(ngModel)]="form.resource">
+            <option *ngFor="let r of resources" [value]="r.value">{{ r.label }}</option>
+          </select>
+        </label>
+        <label>
+          Ilość
+          <input type="number" min="1" [(ngModel)]="form.quantity">
+        </label>
+        <label>
+          Cena / szt. (złoto)
+          <input type="number" min="1" [(ngModel)]="form.pricePerUnit">
+        </label>
+        <button class="btn-cast" (click)="createOrder()">Wystaw</button>
+      </div>
+      <p class="hint" *ngIf="form.quantity > 0 && form.pricePerUnit > 0">
+        {{ form.orderType === 'Sell'
+            ? 'Zdeponujesz ' + form.quantity + ' szt. surowca; otrzymasz '
+            : 'Zdeponujesz ' }}
+        {{ (form.quantity * form.pricePerUnit) | number }} złota{{ form.orderType === 'Sell' ? ' po sprzedaży.' : ' na poczet zakupu.' }}
+      </p>
+    </div>
+
+    <!-- Oferty innych graczy -->
+    <h3>Oferty na rynku</h3>
+    <table class="rd-table" *ngIf="orders.length > 0; else noOrders">
+      <thead>
+        <tr>
+          <th>Typ</th>
+          <th>Surowiec</th>
+          <th>Dostępne</th>
+          <th>Cena / szt.</th>
+          <th>Wartość</th>
+          <th>Księstwo</th>
+          <th>Ilość</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let o of orders">
+          <td>{{ o.orderType === 'Sell' ? 'Sprzedaje' : 'Kupuje' }}</td>
+          <td>{{ resourceLabel(o.resource) }}</td>
+          <td class="num">{{ o.remainingQuantity | number }}</td>
+          <td class="num gold">{{ o.pricePerUnit | number }}</td>
+          <td class="num gold">{{ o.totalPrice | number }}</td>
+          <td>{{ o.kingdomName }}</td>
+          <td>
+            <input type="number" min="1" [max]="o.remainingQuantity"
+                   [placeholder]="o.remainingQuantity" [(ngModel)]="fillQty[o.id]">
+          </td>
+          <td>
+            <button class="btn-cast" (click)="fill(o)">
+              {{ o.orderType === 'Sell' ? 'Kup' : 'Sprzedaj' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noOrders><p class="hint">Brak ofert innych graczy.</p></ng-template>
+
+    <!-- Moje oferty -->
+    <h3>Moje oferty</h3>
+    <table class="rd-table" *ngIf="myOrders.length > 0; else noMine">
+      <thead>
+        <tr>
+          <th>Typ</th>
+          <th>Surowiec</th>
+          <th>Pozostało / Wystawiono</th>
+          <th>Cena / szt.</th>
+          <th>Depozyt</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let o of myOrders">
+          <td>{{ o.orderType === 'Sell' ? 'Sprzedaż' : 'Kupno' }}</td>
+          <td>{{ resourceLabel(o.resource) }}</td>
+          <td class="num">{{ o.remainingQuantity | number }} / {{ o.quantity | number }}</td>
+          <td class="num gold">{{ o.pricePerUnit | number }}</td>
+          <td class="num gold">
+            {{ (o.orderType === 'Sell' ? o.remainingQuantity : o.totalPrice) | number }}
+            {{ o.orderType === 'Sell' ? 'szt.' : 'zł' }}
+          </td>
+          <td><button class="btn-cancel" (click)="cancel(o)">Wycofaj</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noMine><p class="hint">Nie masz wystawionych ofert.</p></ng-template>
+  </ng-container>
+</div>

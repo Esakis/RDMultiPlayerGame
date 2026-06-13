@@ -20,6 +20,7 @@ export class SidebarComponent {
     { label: 'Złodzieje', route: '/thieves' },
     { label: 'Generałowie', route: '/generals' },
     { label: 'Polityka', route: '/coalition' },
+    { label: 'Rynek', route: '/market' },
     { label: 'Statystyki', route: '/ranking' },
     { label: 'Szkoła', route: '/research' },
     { label: 'Koniec', route: '/messages' },

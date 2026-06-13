@@ -28,6 +28,7 @@ import { ForumComponent } from './features/forum/forum.component';
 import { MagicComponent } from './features/magic/magic.component';
 import { ThievesComponent } from './features/thieves/thieves.component';
 import { GeneralsComponent } from './features/generals/generals.component';
+import { MarketComponent } from './features/market/market.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { GeneralsComponent } from './features/generals/generals.component';
     ForumComponent,
     MagicComponent,
     ThievesComponent,
-    GeneralsComponent
+    GeneralsComponent,
+    MarketComponent
   ],
   imports: [
     BrowserModule,

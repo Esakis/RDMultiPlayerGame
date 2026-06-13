@@ -32,6 +32,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<RaceDefinition> RaceDefinitions { get; set; }
     public DbSet<General> Generals { get; set; }
     public DbSet<Pact> Pacts { get; set; }
+    public DbSet<MarketOrder> MarketOrders { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -248,6 +249,13 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(p => p.TargetKingdomId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // MarketOrder -> Kingdom
+        modelBuilder.Entity<MarketOrder>()
+            .HasOne(o => o.Kingdom)
+            .WithMany()
+            .HasForeignKey(o => o.KingdomId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         // ForumPost -> ParentPost (self-referencing)
         modelBuilder.Entity<ForumPost>()
             .HasOne(f => f.ParentPost)
@@ -267,6 +275,8 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<MilitaryUnit>().HasIndex(m => m.KingdomId);
         modelBuilder.Entity<BattleReport>().HasIndex(b => b.AttackerKingdomId);
         modelBuilder.Entity<BattleReport>().HasIndex(b => b.DefenderKingdomId);
+        modelBuilder.Entity<MarketOrder>().HasIndex(o => new { o.Status, o.Resource });
+        modelBuilder.Entity<MarketOrder>().HasIndex(o => o.KingdomId);
     }
 
     private void ConfigureUniqueConstraints(ModelBuilder modelBuilder)
