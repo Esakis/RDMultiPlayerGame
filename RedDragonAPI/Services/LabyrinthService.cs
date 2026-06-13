@@ -11,6 +11,7 @@ public interface ILabyrinthService
     Task<ServiceResult<LabyrinthStatusDto>> EnterAsync(int userId, int generalId);
     Task<ServiceResult<LabyrinthStatusDto>> AdvanceAsync(int userId);
     Task<ServiceResult<LabyrinthStatusDto>> RetreatAsync(int userId);
+    Task<ServiceResult<LabyrinthStatusDto>> SpendDiceAsync(int userId, string rewardType);
 }
 
 /// <summary>
@@ -24,10 +25,25 @@ public class LabyrinthService : ILabyrinthService
 {
     private readonly ApplicationDbContext _context;
 
+    /// <summary>Nagrody do kupienia za zebrane kości (docs/MECHANIKA.md §13).</summary>
+    public static readonly (string Type, string Name, string Description, int DiceCost)[] RewardCatalog =
+    {
+        ("Zloto", "Sakwa złota", "Złoto skalowane obszarem (akry × 200)", 5),
+        ("Surowce", "Skrzynia surowców", "Kamień, jedzenie i broń (skalowane obszarem)", 5),
+        ("Mana", "Kryształ many", "Mana (akry × 25)", 3),
+        ("Doswiadczenie", "Eliksir doświadczenia", "+50 000 doświadczenia najlepszemu generałowi", 8),
+        ("Tura", "Klepsydra", "+1 tura (do limitu)", 6)
+    };
+
     public LabyrinthService(ApplicationDbContext context)
     {
         _context = context;
     }
+
+    /// <summary>Poziom wiedzy o smokach — zwiększa łupy i kości w labiryncie.</summary>
+    private async Task<int> DragonLoreAsync(int kingdomId) =>
+        await _context.Researches.CountAsync(r =>
+            r.KingdomId == kingdomId && r.IsCompleted && r.TechType.StartsWith("Smoko"));
 
     private async Task<Kingdom?> GetKingdomAsync(int userId) =>
         await _context.Kingdoms.FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
@@ -81,7 +97,16 @@ public class LabyrinthService : ILabyrinthService
                 PrimaryTrait = g.PrimaryTrait
             }).ToList(),
             BankedDice = kingdom.LabyrinthDice,
-            TurnsAvailable = kingdom.TurnsAvailable
+            TurnsAvailable = kingdom.TurnsAvailable,
+            DragonLore = await DragonLoreAsync(kingdom.Id),
+            Rewards = RewardCatalog.Select(r => new LabyrinthRewardDto
+            {
+                Type = r.Type,
+                Name = r.Name,
+                Description = r.Description,
+                DiceCost = r.DiceCost,
+                CanAfford = kingdom.LabyrinthDice >= r.DiceCost
+            }).ToList()
         };
     }
 
@@ -138,7 +163,9 @@ public class LabyrinthService : ILabyrinthService
         int d = exp.Depth;
         var rng = Random.Shared;
         bool elf = kingdom.Race == "Elf";
-        decimal lootMult = elf ? 1.5m : 1.0m;
+        int dragonLore = await DragonLoreAsync(kingdom.Id);
+        // Elf zbiera 1,5×; wiedza o smokach +15% łupów/kości za poziom (manual)
+        decimal lootMult = (elf ? 1.5m : 1.0m) * (1m + dragonLore * 0.15m);
         var general = exp.General!;
 
         // Łup materialny skalowany głębią
@@ -163,7 +190,7 @@ public class LabyrinthService : ILabyrinthService
                 // Przeżył — pokonany potwór strzeże skarbu (podwójny łup), wyprawa trwa
                 exp.PendingGold += Loot(120, 240);
                 exp.PendingWeapons += Loot(60, 140);
-                if (rng.Next(2) == 0) exp.PendingDice += 1;
+                exp.PendingDice += 1 + dragonLore + (rng.Next(2) == 0 ? 1 : 0);
                 general.Experience += d * 90;
                 message = $"Poziom {d}: {general.Name} pokonał strażnika labiryntu i splądrował jego skarbiec!";
                 exp.LastEvent = message;
@@ -198,7 +225,7 @@ public class LabyrinthService : ILabyrinthService
         }
         else if (roll < monsterChance + trapChance + diceChance)
         {
-            int dice = rng.Next(1, 4);
+            int dice = rng.Next(1, 4) + dragonLore;
             exp.PendingDice += dice;
             general.Experience += d * 20;
             message = $"Poziom {d}: {general.Name} znalazł {dice} magicznych kości.";
@@ -208,6 +235,17 @@ public class LabyrinthService : ILabyrinthService
         {
             general.Experience += d * 10;
             message = $"Poziom {d}: pusta, zakurzona komnata. Nic ciekawego.";
+            exp.LastEvent = message;
+        }
+        else if (rng.Next(7) == 0)
+        {
+            // Bogata komnata skarbów (jackpot) — duży łup i garść kości
+            exp.PendingGold += Loot(300, 600);
+            exp.PendingWeapons += Loot(80, 200);
+            int dice = 2 + dragonLore + rng.Next(3);
+            exp.PendingDice += dice;
+            general.Experience += d * 70;
+            message = $"Poziom {d}: {general.Name} natrafił na bogatą komnatę skarbów! ({dice} kości)";
             exp.LastEvent = message;
         }
         else
@@ -246,6 +284,63 @@ public class LabyrinthService : ILabyrinthService
         exp.Status = "Ended";
         string message = $"{exp.General.Name} wycofał się z labiryntu (głębokość {exp.Depth}) i zdeponował łup.";
         exp.LastEvent = message;
+        await _context.SaveChangesAsync();
+
+        var status = await BuildStatusAsync(kingdom);
+        return ServiceResult<LabyrinthStatusDto>.Ok(status, message);
+    }
+
+    public async Task<ServiceResult<LabyrinthStatusDto>> SpendDiceAsync(int userId, string rewardType)
+    {
+        var kingdom = await GetKingdomAsync(userId);
+        if (kingdom == null)
+            return ServiceResult<LabyrinthStatusDto>.Fail("Nie znaleziono księstwa.");
+
+        var reward = RewardCatalog.FirstOrDefault(r => r.Type == rewardType);
+        if (reward.Type == null)
+            return ServiceResult<LabyrinthStatusDto>.Fail("Nieznana nagroda.");
+        if (kingdom.LabyrinthDice < reward.DiceCost)
+            return ServiceResult<LabyrinthStatusDto>.Fail($"Za mało kości (potrzeba {reward.DiceCost}).");
+
+        string message;
+        switch (rewardType)
+        {
+            case "Zloto":
+                long gold = kingdom.Land * 200L;
+                kingdom.Gold += gold;
+                message = $"Wymieniono kości na {gold:N0} złota.";
+                break;
+            case "Surowce":
+                long stone = kingdom.Land * 60L, food = kingdom.Land * 60L, weapons = kingdom.Land * 40L;
+                kingdom.Stone += stone; kingdom.Food += food; kingdom.Weapons += weapons;
+                message = $"Wymieniono kości na surowce ({stone:N0} kamienia, {food:N0} jedzenia, {weapons:N0} broni).";
+                break;
+            case "Mana":
+                long mana = kingdom.Land * 25L;
+                kingdom.Mana += mana;
+                message = $"Wymieniono kości na {mana:N0} many.";
+                break;
+            case "Doswiadczenie":
+                var gen = await _context.Generals
+                    .Where(g => g.KingdomId == kingdom.Id)
+                    .OrderByDescending(g => g.Experience)
+                    .FirstOrDefaultAsync();
+                if (gen == null)
+                    return ServiceResult<LabyrinthStatusDto>.Fail("Nie masz generała, który mógłby zdobyć doświadczenie.");
+                gen.Experience += 50_000;
+                message = $"Generał {gen.Name} zdobył 50 000 doświadczenia.";
+                break;
+            case "Tura":
+                if (kingdom.TurnsAvailable >= kingdom.MaxTurns)
+                    return ServiceResult<LabyrinthStatusDto>.Fail("Masz już maksymalną liczbę tur.");
+                kingdom.TurnsAvailable = Math.Min(kingdom.MaxTurns, kingdom.TurnsAvailable + 1);
+                message = "Klepsydra dodała 1 turę.";
+                break;
+            default:
+                return ServiceResult<LabyrinthStatusDto>.Fail("Nieznana nagroda.");
+        }
+
+        kingdom.LabyrinthDice -= reward.DiceCost;
         await _context.SaveChangesAsync();
 
         var status = await BuildStatusAsync(kingdom);

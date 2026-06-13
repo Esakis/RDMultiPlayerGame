@@ -25,12 +25,22 @@ export interface LabyrinthExpedition {
   lastEvent?: string;
 }
 
+export interface LabyrinthReward {
+  type: string;
+  name: string;
+  description: string;
+  diceCost: number;
+  canAfford: boolean;
+}
+
 export interface LabyrinthStatus {
   hasActiveExpedition: boolean;
   expedition?: LabyrinthExpedition;
   availableGenerals: LabyrinthGeneral[];
   bankedDice: number;
   turnsAvailable: number;
+  dragonLore: number;
+  rewards: LabyrinthReward[];
 }
 
 export interface LabyrinthResult extends ServiceResult {
@@ -57,5 +67,9 @@ export class LabyrinthService {
 
   retreat(): Observable<LabyrinthResult> {
     return this.http.post<LabyrinthResult>(`${this.apiUrl}/retreat`, {});
+  }
+
+  spend(rewardType: string): Observable<LabyrinthResult> {
+    return this.http.post<LabyrinthResult>(`${this.apiUrl}/spend`, { rewardType });
   }
 }

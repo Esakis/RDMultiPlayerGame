@@ -111,6 +111,27 @@
   &:not(:disabled):hover { background: linear-gradient(#6a5a3a, #4a3e28); }
 }
 
+.dice-shop {
+  margin-top: 20px;
+
+  h3 { color: #c9a86a; border-bottom: 1px solid #5a3a1a; padding-bottom: 4px; }
+
+  .rd-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 6px;
+
+    th, td { border: 1px solid #5a3a1a; padding: 5px 8px; text-align: left; }
+    th { background: rgba(90, 40, 20, 0.5); color: #c9a86a; }
+    tr:nth-child(even) { background: rgba(0, 0, 0, 0.15); }
+    .reward-name { font-weight: bold; white-space: nowrap; }
+    .reward-desc { color: #c9b58a; }
+    .num { text-align: right; white-space: nowrap; }
+    .dice { color: #9ec6ff; }
+  }
+}
+
 .info-msg { color: #8ed98e; margin: 8px 0; }
 .error-msg { color: #ff7b6b; margin: 8px 0; }
 .hint { font-style: italic; color: #a08a60; font-size: 12px; }

@@ -46,4 +46,11 @@ public class LabyrinthController : ControllerBase
         var result = await _labyrinthService.RetreatAsync(UserId);
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
+
+    [HttpPost("spend")]
+    public async Task<IActionResult> SpendDice([FromBody] SpendDiceDto dto)
+    {
+        var result = await _labyrinthService.SpendDiceAsync(UserId, dto.RewardType);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
 }

@@ -15,6 +15,28 @@
     <div class="stats-bar">
       <span>Dostępne tury: <strong>{{ status.turnsAvailable }}</strong></span>
       <span>Zebrane kości: <strong class="dice">{{ status.bankedDice }}</strong></span>
+      <span *ngIf="status.dragonLore > 0">Wiedza o smokach: <strong class="dice">poz. {{ status.dragonLore }}</strong> (+{{ status.dragonLore * 15 }}% łupów)</span>
+    </div>
+
+    <!-- Skarbiec kości -->
+    <div class="dice-shop" *ngIf="status.rewards.length > 0">
+      <h3>Skarbiec kości</h3>
+      <p class="hint">Wymień zebrane kości na nagrody. Łup z labiryntu rośnie z badaniami o smokach.</p>
+      <table class="rd-table">
+        <thead>
+          <tr><th>Nagroda</th><th>Opis</th><th>Koszt</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of status.rewards">
+            <td class="reward-name">{{ r.name }}</td>
+            <td class="reward-desc">{{ r.description }}</td>
+            <td class="num dice">{{ r.diceCost }} kości</td>
+            <td>
+              <button class="btn-cast" (click)="spendDice(r.type)" [disabled]="busy || !r.canAfford">Wymień</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Aktywna wyprawa -->

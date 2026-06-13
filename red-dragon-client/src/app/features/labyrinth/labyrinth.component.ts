@@ -60,4 +60,8 @@ export class LabyrinthComponent implements OnInit {
   retreat(): void {
     this.handle(this.labyrinth.retreat());
   }
+
+  spendDice(type: string): void {
+    this.handle(this.labyrinth.spend(type));
+  }
 }
