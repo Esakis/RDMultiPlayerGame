@@ -2,6 +2,12 @@
   padding: 10px 15px;
 }
 
+.change-race {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; font-size: 13px; color: #d4af37;
+  select { padding: 4px 8px; background: #fff; border: 2px solid #8b7355; color: #000; }
+  .warn { color: #ff9b6b; font-style: italic; font-size: 12px; }
+}
+
 .status-bar {
   display: flex;
   flex-wrap: wrap;

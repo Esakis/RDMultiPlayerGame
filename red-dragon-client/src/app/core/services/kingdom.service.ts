@@ -60,4 +60,8 @@ export class KingdomService {
   setAppliedScience(school: string): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/applied-science`, { school });
   }
+
+  changeRace(race: string): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/change-race`, { race });
+  }
 }

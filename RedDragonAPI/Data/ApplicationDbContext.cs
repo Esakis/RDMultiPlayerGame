@@ -580,7 +580,8 @@ public class ApplicationDbContext : DbContext
             // === BUDYNKI SPECJALNE - Rząd 7 (koszt bazowy 200000, 7 tur) ===
             new BuildingDefinition { Id = 701, BuildingType = "MinisterstwoSmokow", Category = "Specjalne", DisplayName = "Ministerstwo smoków", Description = "Pełna kontrola nad smokami", IsSpecial = true, Row = 7, Col = 1, BaseCost = 200000, BuildTime = 7, CostLand = 0, RequiredBuildingType = "Portal" },
             new BuildingDefinition { Id = 702, BuildingType = "SanktuariumBerserkerow", Category = "Specjalne", DisplayName = "Sanktuarium berserkerów", Description = "Najsilniejsze jednostki wojskowe", IsSpecial = true, Row = 7, Col = 2, BaseCost = 200000, BuildTime = 7, CostLand = 0, RequiredBuildingType = "KoszarySpecjalne" },
-            new BuildingDefinition { Id = 703, BuildingType = "KlasztorMnichow", Category = "Specjalne", DisplayName = "Klasztor Smoczych Mnichów", Description = "Ostateczna obrona", IsSpecial = true, Row = 7, Col = 3, BaseCost = 200000, BuildTime = 7, CostLand = 0, RequiredBuildingType = "PospoliteRuszenie", DefenseBonus = 0.40m }
+            new BuildingDefinition { Id = 703, BuildingType = "KlasztorMnichow", Category = "Specjalne", DisplayName = "Klasztor Smoczych Mnichów", Description = "Ostateczna obrona", IsSpecial = true, Row = 7, Col = 3, BaseCost = 200000, BuildTime = 7, CostLand = 0, RequiredBuildingType = "PospoliteRuszenie", DefenseBonus = 0.40m },
+            new BuildingDefinition { Id = 704, BuildingType = "PalacZmian", Category = "Specjalne", DisplayName = "Pałac Zmian", Description = "Umożliwia zmianę rasy w trakcie ery", IsSpecial = true, Row = 7, Col = 4, BaseCost = 150000, BuildTime = 7, CostLand = 0 }
         );
     }
 

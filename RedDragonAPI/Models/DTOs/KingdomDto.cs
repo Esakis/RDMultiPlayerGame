@@ -106,6 +106,11 @@ public class AppliedScienceDto
     public string School { get; set; } = "None";
 }
 
+public class ChangeRaceDto
+{
+    public string Race { get; set; } = string.Empty;
+}
+
 public class AssignWorkersDto
 {
     public string ProfessionType { get; set; } = string.Empty;

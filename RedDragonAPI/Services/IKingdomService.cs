@@ -17,4 +17,5 @@ public interface IKingdomService
     Task<ServiceResult> UpgradeBloodElixirAsync(int userId, string elixir);
     Task<ServiceResult> ChargeTotemAsync(int userId, string totem);
     Task<ServiceResult> SetAppliedScienceAsync(int userId, string school);
+    Task<ServiceResult> ChangeRaceAsync(int userId, string race);
 }

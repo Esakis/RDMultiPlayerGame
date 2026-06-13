@@ -105,6 +105,13 @@ public class KingdomController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
+    [HttpPost("change-race")]
+    public async Task<ActionResult> ChangeRace([FromBody] ChangeRaceDto dto)
+    {
+        var result = await _kingdomService.ChangeRaceAsync(GetUserId(), dto.Race);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
     [HttpPost("assign-workers")]
     public async Task<ActionResult> AssignWorkers([FromBody] AssignWorkersDto dto)
     {

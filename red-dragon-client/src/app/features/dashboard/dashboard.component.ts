@@ -62,6 +62,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  races = ['Człowiek', 'Elf', 'Krasnolud', 'Hobbit', 'Nekromant', 'Dżin', 'Goblin', 'Ent', 'Wampir', 'Olbrzym'];
+  selectedRace = '';
+
+  get canChangeRace(): boolean {
+    return !!this.kingdom?.buildings?.some(b => b.buildingType === 'PalacZmian' && b.quantity > 0 && !b.isUnderConstruction);
+  }
+
+  changeRace(): void {
+    if (!this.selectedRace) { this.message = 'Wybierz rasę.'; return; }
+    this.kingdomService.changeRace(this.selectedRace).subscribe({
+      next: (res) => { this.message = res.message || ''; this.selectedRace = ''; this.loadKingdom(); setTimeout(() => this.message = '', 6000); },
+      error: (err) => { this.message = err.error?.message || err.error || 'Błąd.'; setTimeout(() => this.message = '', 6000); }
+    });
+  }
+
   toggleFreeze(): void {
     if (!this.kingdom) return;
     const op = this.kingdom.isFrozen

@@ -332,6 +332,45 @@ public class KingdomService : IKingdomService
         return ServiceResult.Ok($"Nauka stosowana: szkoła {label}.");
     }
 
+    public async Task<ServiceResult> ChangeRaceAsync(int userId, string race)
+    {
+        var kingdom = await _context.Kingdoms
+            .Include(k => k.Buildings)
+            .Include(k => k.MilitaryUnits)
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
+
+        bool hasPalace = kingdom.Buildings.Any(b =>
+            b.BuildingType == "PalacZmian" && b.Quantity > 0 && !b.IsUnderConstruction);
+        if (!hasPalace) return ServiceResult.Fail("Wymagany Pałac Zmian.");
+        if (race == kingdom.Race) return ServiceResult.Fail("To już Twoja rasa.");
+
+        var raceDef = await _context.RaceDefinitions.FirstOrDefaultAsync(r => r.Name == race);
+        if (raceDef == null) return ServiceResult.Fail("Nieznana rasa.");
+        if (kingdom.TurnsAvailable <= 0) return ServiceResult.Fail("Brak dostępnych tur.");
+
+        kingdom.TurnsAvailable--;
+        kingdom.Race = race;
+        kingdom.IsMagicRace = raceDef.MagicBooks > 0;
+        kingdom.TurnsPerDay = raceDef.TurnsPerDay;
+        kingdom.MaxTurns = raceDef.TurnsPerDay * 3 + 4;
+
+        // Reset mechanik rasowych poprzedniej rasy
+        kingdom.MetamagicMode = "None";
+        kingdom.AppliedScienceSchool = "None";
+        kingdom.EntWrathActive = false;
+        kingdom.Bodies = 0;
+        kingdom.BloodPoints = 0;
+        kingdom.BloodElixirAttack = kingdom.BloodElixirFocus = kingdom.BloodElixirBloodlust = kingdom.BloodElixirThief = 0;
+        kingdom.TotemPlunder = kingdom.TotemDragonSlay = kingdom.TotemDestruction = 0;
+
+        // Jednostki są rasowe — armia poprzedniej rasy zostaje rozwiązana
+        _context.MilitaryUnits.RemoveRange(kingdom.MilitaryUnits);
+
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok($"Zmieniono rasę na {race}. Armia poprzedniej rasy została rozwiązana.");
+    }
+
     public async Task<List<KingdomSummaryDto>> GetAllKingdomsAsync(int eraId)
     {
         return await _context.Kingdoms

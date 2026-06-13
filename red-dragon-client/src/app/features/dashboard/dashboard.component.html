@@ -19,6 +19,16 @@
     </span>
   </div>
 
+  <div class="change-race" *ngIf="canChangeRace">
+    <span>🏛 Pałac Zmian:</span>
+    <select [(ngModel)]="selectedRace">
+      <option value="">— zmień rasę —</option>
+      <option *ngFor="let r of races" [value]="r" [disabled]="r === kingdom.race">{{ r }}</option>
+    </select>
+    <button class="btn-freeze" (click)="changeRace()" [disabled]="!selectedRace">Zmień rasę (1 tura)</button>
+    <span class="warn">Uwaga: armia obecnej rasy zostanie rozwiązana.</span>
+  </div>
+
   <div class="kingdom-title-bar">
     <div class="portrait-area">
       <div class="portrait-frame">
