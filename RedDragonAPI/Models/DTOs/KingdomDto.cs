@@ -18,6 +18,7 @@ public class KingdomDto
     public long Mana { get; set; }
     public long Bodies { get; set; }
     public string MetamagicMode { get; set; } = "None";
+    public bool EntWrathActive { get; set; }
 
     // Ludność
     public int Population { get; set; }

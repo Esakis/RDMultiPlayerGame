@@ -14,6 +14,9 @@
     <span class="status bodies" *ngIf="kingdom.race === 'Nekromant'">
       💀 Ciała na cmentarzu: {{ kingdom.bodies | number }}
     </span>
+    <span class="status wrath" *ngIf="kingdom.entWrathActive">
+      🌳 Gniew Enta — następny atak +100%
+    </span>
   </div>
 
   <div class="kingdom-title-bar">

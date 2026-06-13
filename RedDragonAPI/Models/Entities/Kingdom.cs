@@ -39,6 +39,9 @@ public class Kingdom
     [MaxLength(20)]
     public string MetamagicMode { get; set; } = "None";
 
+    /// <summary>Gniew Enta (docs/MECHANIKA.md §2.2): +100% ataku po stratach, do najbliższego przeliczenia.</summary>
+    public bool EntWrathActive { get; set; } = false;
+
     // Ludność
     public int Population { get; set; } = 1000;
     public int Popularity { get; set; } = 100;

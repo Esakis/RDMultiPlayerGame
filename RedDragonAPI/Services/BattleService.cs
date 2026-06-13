@@ -158,6 +158,13 @@ public class BattleService : IBattleService
         decimal atkBonus = await ResearchEffects.MaxEffectAsync(_context, attacker.Id, "AttackBonus");
         if (atkBonus > 0) attackPower = (long)(attackPower * (1m + atkBonus));
 
+        // Gniew Enta: atakujący Ent w szale ma +100% siły ataku (szał zużywa się przy ataku)
+        if (attacker.Race == "Ent" && attacker.EntWrathActive)
+        {
+            attackPower *= 2;
+            attacker.EntWrathActive = false;
+        }
+
         // Generałowie: Wódz zwiększa atak o lvl%, Obrońca (najlepszy w domu) obronę o lvl%
         var now = DateTime.UtcNow;
         var attackerGenerals = await _context.Generals
@@ -235,6 +242,9 @@ public class BattleService : IBattleService
         long defenderDead = defenderCasualties.Sum(c => (long)c.Value);
         if (defender.Race == "Nekromant") defender.Bodies += attackerDead + defenderDead;
         if (attacker.Race == "Nekromant") attacker.Bodies += attackerDead;
+
+        // Gniew Enta: Ent, który poniósł straty, wpada w szał (+100% ataku do przeliczenia)
+        if (defender.Race == "Ent" && defenderDead > 0) defender.EntWrathActive = true;
 
         // Straty cywilów obrońcy (25% strat armii; 50%/100% przy domobranie)
         double defCasualtyRate = defenderCasualties.Count > 0 && defender.MilitaryUnits.Sum(u => u.Quantity) > 0

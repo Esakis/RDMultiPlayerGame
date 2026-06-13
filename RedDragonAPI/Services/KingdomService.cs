@@ -288,6 +288,7 @@ public class KingdomService : IKingdomService
             Mana = kingdom.Mana,
             Bodies = kingdom.Bodies,
             MetamagicMode = kingdom.MetamagicMode,
+            EntWrathActive = kingdom.EntWrathActive,
             Population = kingdom.Population,
             Popularity = kingdom.Popularity,
             Wages = kingdom.Wages,
