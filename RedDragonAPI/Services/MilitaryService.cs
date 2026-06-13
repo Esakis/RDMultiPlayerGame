@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RedDragonAPI.Data;
+using RedDragonAPI.Helpers;
 using RedDragonAPI.Models.DTOs;
 using RedDragonAPI.Models.Entities;
 
@@ -140,7 +141,10 @@ public class MilitaryService : IMilitaryService
         else
         {
             militaryUnit.InTraining += dto.Quantity;
-            militaryUnit.TrainingCompletesAt = DateTime.UtcNow.AddDays(unitDef.TrainingTime);
+            // Badania Treningu skracają czas szkolenia (do -50%)
+            decimal trainSpeed = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "TrainingSpeed");
+            double trainDays = unitDef.TrainingTime * (double)(1m - trainSpeed);
+            militaryUnit.TrainingCompletesAt = DateTime.UtcNow.AddDays(Math.Max(0.04, trainDays));
         }
 
         await _context.SaveChangesAsync();

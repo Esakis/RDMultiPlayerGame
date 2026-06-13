@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RedDragonAPI.Data;
+using RedDragonAPI.Helpers;
 using RedDragonAPI.Models.DTOs;
 using RedDragonAPI.Models.Entities;
 
@@ -108,7 +109,10 @@ public class BuildingService : IBuildingService
         int quantity = definition.IsSpecial ? 1 : dto.Quantity;
 
         // Red Dragon: economic buildings cost gold + 1 budulec per building + land
-        long totalCostGold = (long)definition.CostGold * quantity;
+        // Rabat badań: Architektura (specjalne) / Inżynieria (gospodarcze)
+        decimal buildDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id,
+            definition.IsSpecial ? "SpecialBuildingCostReduction" : "EcoBuildingCostReduction");
+        long totalCostGold = (long)(definition.CostGold * quantity * (1m - buildDiscount));
         int totalCostBudulec = quantity; // 1 budulec per economic building
         int totalCostLand = definition.CostLand * quantity;
 

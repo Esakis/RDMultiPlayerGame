@@ -127,6 +127,10 @@ public class BattleService : IBattleService
         long attackPower = BattleCalculator.CalculateAttackPower(attacker, attackData.Units, attackerRace);
         long defensePower = BattleCalculator.CalculateDefensePower(defender, defenderRace);
 
+        // Badania broni (Ostrzenie/Naprawa/Przekuwanie) zwiększają siłę ataku
+        decimal atkBonus = await ResearchEffects.MaxEffectAsync(_context, attacker.Id, "AttackBonus");
+        if (atkBonus > 0) attackPower = (long)(attackPower * (1m + atkBonus));
+
         // Generałowie: Wódz zwiększa atak o lvl%, Obrońca (najlepszy w domu) obronę o lvl%
         var now = DateTime.UtcNow;
         var attackerGenerals = await _context.Generals

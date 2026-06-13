@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RedDragonAPI.Data;
+using RedDragonAPI.Helpers;
 using RedDragonAPI.Models.Entities;
 
 namespace RedDragonAPI.Services;
@@ -61,7 +62,13 @@ public class ResourceService : IResourceService
         // produktywność = (100 − pn·0,9)/100 · (1+rb) · (1+pv) · (1+cech) · ...
         // pn — % nowicjuszy (nowicjusz pracuje na 10%), rb — bonus rasowy,
         // pv — wynalezienie (tu: Education z naukowców).
-        decimal inventedBonus = 1m + (kingdom.Education / 100m);
+        // Bonusy badań: ogólna produkcja (Wynalazczość), handel (Rachunkowość), kamień (Górnictwo)
+        decimal productionBonus = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "ProductionBonus");
+        decimal merchantResearchBonus = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "MerchantBonus");
+        decimal stoneResearchBonus = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "StoneBonus");
+        double scienceBonus = (double)await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "ScienceBonus");
+
+        decimal inventedBonus = 1m + (kingdom.Education / 100m) + productionBonus;
 
         decimal Productivity(Profession prof, decimal raceBonus)
         {
@@ -92,7 +99,7 @@ public class ResourceService : IResourceService
                     kingdom.Mana += production;
                     break;
                 case "Kamieniarze":
-                    production = (long)(prof.WorkerCount * StonemasonStoneBase * Productivity(prof, race.BonusStonemasons));
+                    production = (long)(prof.WorkerCount * StonemasonStoneBase * Productivity(prof, race.BonusStonemasons) * (1m + stoneResearchBonus));
                     kingdom.Stone += production;
                     break;
                 case "Murarze":
@@ -120,7 +127,7 @@ public class ResourceService : IResourceService
                                 : p.ProposerKingdom.Land)
                             .SumAsync(l => (long)l);
                         decimal goldPerMerchant = 500m * tradeLand / (tradeLand + prof.WorkerCount * 10m);
-                        production = (long)(prof.WorkerCount * goldPerMerchant * Productivity(prof, race.BonusMerchants));
+                        production = (long)(prof.WorkerCount * goldPerMerchant * Productivity(prof, race.BonusMerchants) * (1m + merchantResearchBonus));
                         merchantGold = production;
                         kingdom.Gold += production;
                     }
@@ -138,9 +145,10 @@ public class ResourceService : IResourceService
 
                         if (spRaw > cap && cap > 0)
                         {
-                            double overChance = Math.Min(0.10, 0.01 + 0.09 * (double)((spRaw - cap) / cap));
+                            // Empiryzm (ScienceBonus): +szansa i +wartość przełomu
+                            double overChance = Math.Min(0.10 + scienceBonus, 0.01 + 0.09 * (double)((spRaw - cap) / cap) + scienceBonus);
                             if (Random.Shared.NextDouble() < overChance)
-                                sp = (long)(sp * (1.5 + Random.Shared.NextDouble() * 2.5)); // przełom: 1,5–4×
+                                sp = (long)(sp * (1.5 + Random.Shared.NextDouble() * 2.5) * (1 + scienceBonus)); // przełom: 1,5–4×
                         }
 
                         production = sp;

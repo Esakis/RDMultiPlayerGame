@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RedDragonAPI.Data;
+using RedDragonAPI.Helpers;
 using RedDragonAPI.Models.DTOs;
 using RedDragonAPI.Models.Entities;
 
@@ -177,6 +178,9 @@ public class KingdomService : IKingdomService
 
         // Oryginalny wzór: cena = ((z+x)^3,5 − z^3,5) / 600 000
         long cost = CalculateLandCost(kingdom.Land, amount);
+        // Rabat badań: Rekultywacja/Osadnictwo (LandCostReduction)
+        decimal landDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "LandCostReduction");
+        cost = (long)(cost * (1m - landDiscount));
         if (kingdom.Gold < cost)
             return ServiceResult.Fail($"Za mało złota. Potrzeba: {cost}, posiadasz: {kingdom.Gold}");
 
