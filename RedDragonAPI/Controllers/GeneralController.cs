@@ -32,6 +32,13 @@ public class GeneralController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
+    [HttpPost("{id}/reroll-secondary")]
+    public async Task<IActionResult> RerollSecondary(int id)
+    {
+        var result = await _generalService.RerollSecondaryTraitAsync(UserId, id);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Dismiss(int id)
     {

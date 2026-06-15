@@ -44,6 +44,11 @@ public class General
     /// </summary>
     public bool IsPending { get; set; } = false;
 
+    /// <summary>
+    /// Ile razy gracz przelosował cechę drugorzędną podczas zatrudniania (limit 2).
+    /// </summary>
+    public int SecondaryRerollsUsed { get; set; } = 0;
+
     public DateTime ArrivedAt { get; set; } = DateTime.UtcNow;
 
     public Kingdom Kingdom { get; set; } = null!;

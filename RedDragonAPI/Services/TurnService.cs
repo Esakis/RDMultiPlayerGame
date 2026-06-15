@@ -53,6 +53,15 @@ public class TurnService : ITurnService
         // Generuj zasoby za tę turę
         await _resourceService.GenerateResourcesForKingdomAsync(kingdom);
 
+        // Generałowie zdobywają doświadczenie z każdą turą (pomijamy będących na wyprawie,
+        // uwięzionych i oczekujących w poczekalni). Wartość łatwa do dostrojenia.
+        const int GeneralExpPerTurn = 250;
+        var homeGenerals = await _context.Generals
+            .Where(g => g.KingdomId == kingdom.Id && !g.IsPending && !g.IsOutside && !g.IsImprisoned)
+            .ToListAsync();
+        foreach (var gen in homeGenerals)
+            gen.Experience += GeneralExpPerTurn;
+
         await _context.SaveChangesAsync();
 
         // Próba przyjścia generała (gwarantowana, gdy księstwo nie ma żadnego generała)

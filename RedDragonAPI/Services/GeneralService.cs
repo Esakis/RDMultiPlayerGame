@@ -9,6 +9,7 @@ public interface IGeneralService
 {
     Task<List<GeneralDto>> GetGeneralsAsync(int userId);
     Task<ServiceResult> AcceptGeneralAsync(int userId, int generalId);
+    Task<ServiceResult> RerollSecondaryTraitAsync(int userId, int generalId);
     Task<ServiceResult> DismissGeneralAsync(int userId, int generalId);
     Task ProcessGeneralArrivalsAsync();
     Task<bool> TryGeneralArrivalAsync(Kingdom kingdom);
@@ -103,6 +104,7 @@ public class GeneralService : IGeneralService
             Experience = g.Experience,
             Level = g.Level,
             IsPending = g.IsPending,
+            SecondaryRerollsLeft = Math.Max(0, 2 - g.SecondaryRerollsUsed),
             Status = g.IsPending ? "Oczekuje na decyzję"
                 : g.IsImprisoned ? "Więziony"
                 : inLabyrinth.Contains(g.Id) ? "W labiryncie"
@@ -128,6 +130,36 @@ public class GeneralService : IGeneralService
         general.ArrivedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
         return ServiceResult.Ok($"Generał {general.Name} dołączył do twojego księstwa.");
+    }
+
+    /// <summary>
+    /// Przelosowanie cechy drugorzędnej oczekującego generała (przy zatrudnianiu, maks. 2 razy).
+    /// </summary>
+    public async Task<ServiceResult> RerollSecondaryTraitAsync(int userId, int generalId)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null)
+            return ServiceResult.Fail("Nie znaleziono księstwa.");
+
+        var general = await _context.Generals
+            .FirstOrDefaultAsync(g => g.Id == generalId && g.KingdomId == kingdom.Id && g.IsPending);
+        if (general == null)
+            return ServiceResult.Fail("Nie znaleziono oczekującego generała.");
+        if (general.SecondaryRerollsUsed >= 2)
+            return ServiceResult.Fail("Wykorzystałeś już obie próby zmiany cechy drugorzędnej.");
+
+        // Losujemy nową cechę, najlepiej inną niż obecna
+        var options = AllowedSecondary[general.PrimaryTrait]
+            .Where(s => s != general.SecondaryTrait).ToArray();
+        if (options.Length == 0) options = AllowedSecondary[general.PrimaryTrait];
+
+        general.SecondaryTrait = options[Random.Shared.Next(options.Length)];
+        general.SecondaryRerollsUsed++;
+        await _context.SaveChangesAsync();
+
+        int left = Math.Max(0, 2 - general.SecondaryRerollsUsed);
+        return ServiceResult.Ok($"Nowa cecha drugorzędna: {general.SecondaryTrait}. Pozostałe próby: {left}.");
     }
 
     public async Task<ServiceResult> DismissGeneralAsync(int userId, int generalId)
@@ -228,8 +260,9 @@ public class GeneralService : IGeneralService
         else
         {
             // szansa maleje z liczbą generałów; Akademia dowodzenia podwaja.
-            // Baza obniżona z 0,25 do 0,08, bo losowanie odpala się teraz co turę, nie raz dziennie.
-            chance = 0.08 * (1.0 - (double)activeCount / limit);
+            // Wysoka baza jest bezpieczna: naraz czeka tylko jeden kandydat (musisz go przyjąć/odrzucić),
+            // więc per-tura kontroluje tylko odstęp między kolejnymi kandydatami.
+            chance = 0.35 * (1.0 - (double)activeCount / limit);
             if (kingdom.Buildings.Any(b =>
                     b.BuildingType == "AkademiaWojskowa" && b.Quantity > 0 && !b.IsUnderConstruction))
                 chance *= 2;

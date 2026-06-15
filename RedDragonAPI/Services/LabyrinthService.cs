@@ -201,16 +201,18 @@ public class LabyrinthService : ILabyrinthService
             }
             else
             {
-                // Zginął — łup przepada, generał usunięty
-                message = $"Poziom {d}: {general.Name} zginął w starciu ze strażnikiem labiryntu. Łup przepadł.";
-                exp.GeneralId = null;
-                exp.General = null;
+                // Generał nie ginie — ledwo uchodzi z życiem, wraca ciężko ranny na kilka dni,
+                // a zgromadzony łup przepada (kara za zbyt głębokie ryzyko).
+                int woundDays = Math.Min(7, 2 + d / 3);
+                general.WoundedUntil = DateTime.UtcNow.AddDays(woundDays);
+                general.IsOutside = false;
+                general.Experience += d * 30;
                 exp.Status = "Ended";
-                _context.Generals.Remove(general);
+                message = $"Poziom {d}: {general.Name} ledwo uszedł z życiem ze starcia ze strażnikiem labiryntu — wraca ciężko ranny na {woundDays} dni, a zgromadzony łup przepadł.";
                 exp.LastEvent = message;
                 await _context.SaveChangesAsync();
-                var diedStatus = await BuildStatusAsync(kingdom);
-                return ServiceResult<LabyrinthStatusDto>.Ok(diedStatus, message);
+                var woundedStatus = await BuildStatusAsync(kingdom);
+                return ServiceResult<LabyrinthStatusDto>.Ok(woundedStatus, message);
             }
         }
         else if (roll < monsterChance + trapChance)

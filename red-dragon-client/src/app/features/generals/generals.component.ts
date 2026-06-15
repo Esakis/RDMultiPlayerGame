@@ -65,6 +65,13 @@ export class GeneralsComponent implements OnInit {
     });
   }
 
+  rerollSecondary(general: General): void {
+    this.generalService.rerollSecondary(general.id).subscribe({
+      next: r => { this.message = r.message ?? ''; this.error = ''; this.load(); },
+      error: e => { this.error = e.error || 'Błąd zmiany cechy drugorzędnej.'; }
+    });
+  }
+
   reject(general: General): void {
     if (!confirm(`Odrzucić generała ${this.trait(general.primaryTrait)} ${general.name}? Pojawi się szansa na innego.`)) {
       return;

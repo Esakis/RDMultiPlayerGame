@@ -31,10 +31,17 @@
         <tr *ngFor="let g of pending">
           <td class="g-name">{{ g.name }}</td>
           <td>{{ trait(g.primaryTrait) }}</td>
-          <td>{{ trait(g.secondaryTrait) }}</td>
           <td>
-            <button class="btn-accept" (click)="accept(g)">Przyjmij</button>
-            <button class="btn-dismiss" (click)="reject(g)">Odrzuć</button>
+            {{ trait(g.secondaryTrait) }}
+            <button type="button" class="btn-reroll" (click)="rerollSecondary(g)"
+                    [disabled]="g.secondaryRerollsLeft <= 0"
+                    [title]="g.secondaryRerollsLeft > 0 ? 'Przelosuj cechę drugorzędną' : 'Brak prób'">
+              🎲 Zmień ({{ g.secondaryRerollsLeft }})
+            </button>
+          </td>
+          <td>
+            <button type="button" class="btn-accept" (click)="accept(g)">Przyjmij</button>
+            <button type="button" class="btn-dismiss" (click)="reject(g)">Odrzuć</button>
           </td>
         </tr>
       </tbody>

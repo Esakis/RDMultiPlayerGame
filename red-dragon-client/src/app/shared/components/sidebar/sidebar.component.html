@@ -6,11 +6,11 @@
        class="menu-btn">
       {{ item.label }}
     </a>
-    <button class="menu-btn logout-btn" (click)="logout()">Wyloguj się</button>
+    <button type="button" class="menu-btn logout-btn" (click)="logout()">Wyloguj się</button>
   </div>
 
   <div class="turn-button-container">
-    <button class="turn-btn" (click)="onTurnClick()" title="Użyj tury">
+    <button type="button" class="turn-btn" (click)="onTurnClick()" title="Użyj tury">
       <div class="turn-circle-outer">
         <div class="turn-circle-inner"></div>
       </div>

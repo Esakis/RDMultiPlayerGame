@@ -13,6 +13,7 @@ export interface General {
   level: number;
   status: string;
   isPending: boolean;
+  secondaryRerollsLeft: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -27,6 +28,10 @@ export class GeneralService {
 
   accept(id: number): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/${id}/accept`, {});
+  }
+
+  rerollSecondary(id: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/${id}/reroll-secondary`, {});
   }
 
   dismiss(id: number): Observable<ServiceResult> {

@@ -51,6 +51,19 @@
 
     &:hover { border-color: #5ad95a; }
   }
+
+  .btn-reroll {
+    background: linear-gradient(#3a2a5a, #1c0c3a);
+    color: #f0e0c0;
+    border: 1px solid #6a5a8a;
+    padding: 2px 8px;
+    margin-left: 8px;
+    font-size: 12px;
+    cursor: pointer;
+
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:not(:disabled):hover { border-color: #a98ad9; }
+  }
 }
 
 .pending-box {

@@ -57,6 +57,7 @@ public class GeneralDto
     public int Level { get; set; }
     public string Status { get; set; } = string.Empty;
     public bool IsPending { get; set; }
+    public int SecondaryRerollsLeft { get; set; }
 }
 
 public class PactDto
