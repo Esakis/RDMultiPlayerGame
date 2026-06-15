@@ -143,3 +143,4 @@ D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\obj\Debug\net8.0\refint\RedDragonAPI
 D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\obj\Debug\net8.0\RedDragonAPI.pdb
 D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\obj\Debug\net8.0\RedDragonAPI.genruntimeconfig.cache
 D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\obj\Debug\net8.0\ref\RedDragonAPI.dll
+D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
