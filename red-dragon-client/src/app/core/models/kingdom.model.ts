@@ -47,6 +47,23 @@ export interface Kingdom {
   buildings: Building[];
   militaryUnits: MilitaryUnit[];
   professions: Profession[];
+  activeSpells: ActiveSpellInfo[];
+  pendingGeneralCount: number;
+  recentEvents: KingdomEvent[];
+}
+
+export interface ActiveSpellInfo {
+  spellType: string;
+  displayName: string;
+  category: string;
+  power: number;
+  isPositive: boolean;
+}
+
+export interface KingdomEvent {
+  category: string;
+  message: string;
+  createdAt: string;
 }
 
 export interface KingdomSummary {

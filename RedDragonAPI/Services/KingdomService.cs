@@ -23,11 +23,16 @@ public class KingdomService : IKingdomService
             .Include(k => k.Buildings).ThenInclude(b => b.Definition)
             .Include(k => k.MilitaryUnits).ThenInclude(m => m.Definition)
             .Include(k => k.Professions)
+            .Include(k => k.ActiveSpells).ThenInclude(s => s.Spell)
             .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
 
         if (kingdom == null) return null;
 
-        return MapToDto(kingdom);
+        int pendingGenerals = await _context.Generals
+            .CountAsync(g => g.KingdomId == kingdom.Id && g.IsPending);
+        var recentEvents = await GetRecentEventsAsync(kingdom.Id);
+
+        return MapToDto(kingdom, pendingGenerals, recentEvents);
     }
 
     public async Task<KingdomDto?> GetKingdomByIdAsync(int kingdomId)
@@ -38,11 +43,36 @@ public class KingdomService : IKingdomService
             .Include(k => k.Buildings).ThenInclude(b => b.Definition)
             .Include(k => k.MilitaryUnits).ThenInclude(m => m.Definition)
             .Include(k => k.Professions)
+            .Include(k => k.ActiveSpells).ThenInclude(s => s.Spell)
             .FirstOrDefaultAsync(k => k.Id == kingdomId);
 
         if (kingdom == null) return null;
 
-        return MapToDto(kingdom);
+        int pendingGenerals = await _context.Generals
+            .CountAsync(g => g.KingdomId == kingdom.Id && g.IsPending);
+        var recentEvents = await GetRecentEventsAsync(kingdom.Id);
+
+        return MapToDto(kingdom, pendingGenerals, recentEvents);
+    }
+
+    /// <summary>Zdarzenia odnotowane od ostatniego przeliczenia (5:00) — pokazywane na Stolicy.</summary>
+    private async Task<List<KingdomEventDto>> GetRecentEventsAsync(int kingdomId)
+    {
+        var todayReset = DateTime.Today.AddHours(5);
+        var lastResetLocal = DateTime.Now >= todayReset ? todayReset : todayReset.AddDays(-1);
+        var sinceUtc = lastResetLocal.ToUniversalTime();
+
+        return await _context.KingdomEvents
+            .Where(e => e.KingdomId == kingdomId && e.CreatedAt >= sinceUtc)
+            .OrderByDescending(e => e.CreatedAt)
+            .Take(30)
+            .Select(e => new KingdomEventDto
+            {
+                Category = e.Category,
+                Message = e.Message,
+                CreatedAt = e.CreatedAt
+            })
+            .ToListAsync();
     }
 
     // Rasy oryginalnego Red Dragon: 10 z reddragon.cz + Gnom i Br-Oug
@@ -399,7 +429,8 @@ public class KingdomService : IKingdomService
         return Math.Max(1, (long)Math.Ceiling(cost));
     }
 
-    private static KingdomDto MapToDto(Kingdom kingdom)
+    private static KingdomDto MapToDto(Kingdom kingdom, int pendingGeneralCount = 0,
+        List<KingdomEventDto>? recentEvents = null)
     {
         return new KingdomDto
         {
@@ -482,7 +513,18 @@ public class KingdomService : IKingdomService
                 MaxCapacity = p.MaxCapacity,
                 ProductionPerTurn = p.ProductionPerTurn,
                 NovicePercent = p.NovicePercent
-            }).ToList()
+            }).ToList(),
+            PendingGeneralCount = pendingGeneralCount,
+            ActiveSpells = kingdom.ActiveSpells.Select(s => new ActiveSpellDto
+            {
+                SpellType = s.SpellType,
+                DisplayName = s.Spell?.DisplayName ?? s.SpellType,
+                Category = s.Spell?.Category ?? "",
+                Power = s.Power,
+                IsPositive = s.Spell != null &&
+                    (s.Spell.Category == "Biała" || s.Spell.Category == "Tarcze")
+            }).ToList(),
+            RecentEvents = recentEvents ?? new List<KingdomEventDto>()
         };
     }
 }

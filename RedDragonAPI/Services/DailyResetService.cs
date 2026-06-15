@@ -167,14 +167,24 @@ public class DailyResetService : BackgroundService
 
             // 4. Zakończ szkolenie jednostek
             var trainingUnits = await context.MilitaryUnits
+                .Include(m => m.Definition)
                 .Where(m => m.InTraining > 0 && m.TrainingCompletesAt <= DateTime.UtcNow)
                 .ToListAsync();
 
             foreach (var unit in trainingUnits)
             {
+                int trained = unit.InTraining;
                 unit.Quantity += unit.InTraining;
                 unit.InTraining = 0;
                 unit.TrainingCompletesAt = null;
+
+                string name = unit.Definition?.DisplayName ?? unit.UnitType;
+                context.KingdomEvents.Add(new KingdomEvent
+                {
+                    KingdomId = unit.KingdomId,
+                    Category = "Training",
+                    Message = $"Wyszkolono: {name} ×{trained}"
+                });
             }
 
             // 5. Spadek siły zaklęć (oryginalny wzór):
@@ -254,6 +264,7 @@ public class DailyResetService : BackgroundService
         if (data == null) return;
 
         var building = await context.Buildings
+            .Include(b => b.Definition)
             .FirstOrDefaultAsync(b => b.KingdomId == action.KingdomId && b.BuildingType == data.BuildingType);
 
         if (building != null)
@@ -261,6 +272,14 @@ public class DailyResetService : BackgroundService
             building.Quantity += data.Quantity;
             building.IsUnderConstruction = false;
             building.ConstructionCompletesAt = null;
+
+            string name = building.Definition?.DisplayName ?? building.BuildingType;
+            context.KingdomEvents.Add(new KingdomEvent
+            {
+                KingdomId = action.KingdomId,
+                Category = "Construction",
+                Message = $"Ukończono budowę: {name}" + (data.Quantity > 1 ? $" ×{data.Quantity}" : "")
+            });
         }
     }
 

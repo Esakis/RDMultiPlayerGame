@@ -36,6 +36,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<LabyrinthExpedition> LabyrinthExpeditions { get; set; }
     public DbSet<War> Wars { get; set; }
     public DbSet<MarketTransaction> MarketTransactions { get; set; }
+    public DbSet<KingdomEvent> KingdomEvents { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -156,6 +157,13 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(a => a.SpellType)
             .HasPrincipalKey(sd => sd.SpellType)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // KingdomEvent -> Kingdom
+        modelBuilder.Entity<KingdomEvent>()
+            .HasOne(e => e.Kingdom)
+            .WithMany()
+            .HasForeignKey(e => e.KingdomId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // QueuedAction -> Kingdom
         modelBuilder.Entity<QueuedAction>()

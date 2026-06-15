@@ -44,8 +44,12 @@ export class AppComponent implements OnInit {
   useTurn(): void {
     this.kingdomService.useTurn().subscribe({
       next: (res) => {
-        this.turnService.emitDeltas(res.deltas || {});
         this.loadKingdom();
+        // Przejdź na Stolicę i dopiero po zakończeniu nawigacji wyemituj delty,
+        // aby świeżo zamontowany dashboard zdążył się zasubskrybować i je pokazać.
+        this.router.navigate(['/dashboard']).then(() => {
+          this.turnService.emitDeltas(res.deltas || {});
+        });
       },
       error: () => {}
     });

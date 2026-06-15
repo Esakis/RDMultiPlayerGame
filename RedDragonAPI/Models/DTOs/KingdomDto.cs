@@ -72,6 +72,27 @@ public class KingdomDto
 
     // Zawody
     public List<ProfessionDto> Professions { get; set; } = new();
+
+    // Wydarzenia / status (wyświetlane na Stolicy)
+    public List<ActiveSpellDto> ActiveSpells { get; set; } = new();
+    public int PendingGeneralCount { get; set; }
+    public List<KingdomEventDto> RecentEvents { get; set; } = new();
+}
+
+public class ActiveSpellDto
+{
+    public string SpellType { get; set; } = string.Empty;
+    public string DisplayName { get; set; } = string.Empty;
+    public string Category { get; set; } = string.Empty;
+    public int Power { get; set; }
+    public bool IsPositive { get; set; }
+}
+
+public class KingdomEventDto
+{
+    public string Category { get; set; } = string.Empty;
+    public string Message { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
 }
 
 public class KingdomSummaryDto

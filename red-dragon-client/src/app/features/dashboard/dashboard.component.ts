@@ -65,6 +65,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   races = ['Człowiek', 'Elf', 'Krasnolud', 'Hobbit', 'Nekromant', 'Dżin', 'Goblin', 'Ent', 'Wampir', 'Olbrzym'];
   selectedRace = '';
 
+  get constructionEvents() {
+    return this.kingdom?.recentEvents?.filter(e => e.category === 'Construction') ?? [];
+  }
+
+  get trainingEvents() {
+    return this.kingdom?.recentEvents?.filter(e => e.category === 'Training') ?? [];
+  }
+
+  get hasAnyEvent(): boolean {
+    return !!this.kingdom &&
+      (this.kingdom.pendingGeneralCount > 0 ||
+       (this.kingdom.activeSpells?.length ?? 0) > 0 ||
+       (this.kingdom.recentEvents?.length ?? 0) > 0);
+  }
+
   /** Numer bieżącej tury (1-indeksowany): nowy dzień startuje od 1, ostatnia = przydział. */
   get currentTurnNumber(): number {
     if (!this.kingdom) return 0;
