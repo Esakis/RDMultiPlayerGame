@@ -18,8 +18,11 @@ namespace RedDragonAPI.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            // Istniejące królestwa: przydział cyklu = aktualnie dostępne tury (licznik startuje od 0 zużytych)
-            migrationBuilder.Sql("UPDATE [Kingdoms] SET [TurnsCapacity] = [TurnsAvailable];");
+            // Istniejące królestwa: przydział cyklu = dostępne tury, ale nie mniej niż dzienny przydział,
+            // by licznik miał sensowny mianownik (np. po zużyciu części tur pokaże użyte/dzienny limit).
+            migrationBuilder.Sql(
+                "UPDATE [Kingdoms] SET [TurnsCapacity] = " +
+                "CASE WHEN [TurnsAvailable] < [TurnsPerDay] THEN [TurnsPerDay] ELSE [TurnsAvailable] END;");
 
             migrationBuilder.UpdateData(
                 table: "Eras",
