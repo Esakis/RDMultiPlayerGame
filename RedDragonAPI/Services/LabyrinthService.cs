@@ -67,7 +67,7 @@ public class LabyrinthService : ILabyrinthService
         var active = await GetActiveExpeditionAsync(kingdom.Id);
 
         var available = await _context.Generals
-            .Where(g => g.KingdomId == kingdom.Id && !g.IsOutside && !g.IsImprisoned
+            .Where(g => g.KingdomId == kingdom.Id && !g.IsOutside && !g.IsImprisoned && !g.IsPending
                         && (g.WoundedUntil == null || g.WoundedUntil <= DateTime.UtcNow))
             .OrderByDescending(g => g.Experience)
             .ToListAsync();

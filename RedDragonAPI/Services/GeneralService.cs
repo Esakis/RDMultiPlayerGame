@@ -8,8 +8,10 @@ namespace RedDragonAPI.Services;
 public interface IGeneralService
 {
     Task<List<GeneralDto>> GetGeneralsAsync(int userId);
+    Task<ServiceResult> AcceptGeneralAsync(int userId, int generalId);
     Task<ServiceResult> DismissGeneralAsync(int userId, int generalId);
     Task ProcessGeneralArrivalsAsync();
+    Task<bool> TryGeneralArrivalAsync(Kingdom kingdom);
 }
 
 /// <summary>
@@ -100,12 +102,32 @@ public class GeneralService : IGeneralService
             SecondaryTrait = g.SecondaryTrait,
             Experience = g.Experience,
             Level = g.Level,
-            Status = g.IsImprisoned ? "Więziony"
+            IsPending = g.IsPending,
+            Status = g.IsPending ? "Oczekuje na decyzję"
+                : g.IsImprisoned ? "Więziony"
                 : inLabyrinth.Contains(g.Id) ? "W labiryncie"
                 : g.IsOutside ? "Poza księstwem"
                 : g.WoundedUntil.HasValue && g.WoundedUntil > DateTime.UtcNow ? "Ranny"
                 : "W domu"
         }).ToList();
+    }
+
+    public async Task<ServiceResult> AcceptGeneralAsync(int userId, int generalId)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null)
+            return ServiceResult.Fail("Nie znaleziono księstwa.");
+
+        var general = await _context.Generals
+            .FirstOrDefaultAsync(g => g.Id == generalId && g.KingdomId == kingdom.Id && g.IsPending);
+        if (general == null)
+            return ServiceResult.Fail("Nie znaleziono oczekującego generała.");
+
+        general.IsPending = false;
+        general.ArrivedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok($"Generał {general.Name} dołączył do twojego księstwa.");
     }
 
     public async Task<ServiceResult> DismissGeneralAsync(int userId, int generalId)
@@ -127,7 +149,7 @@ public class GeneralService : IGeneralService
         return ServiceResult.Ok($"Generał {general.Name} został zwolniony ze służby.");
     }
 
-    /// <summary>Wywoływane przy przeliczeniu: przychodzenie nowych generałów.</summary>
+    /// <summary>Wywoływane przy dziennym przeliczeniu: próba przyjścia generała dla każdego księstwa.</summary>
     public async Task ProcessGeneralArrivalsAsync()
     {
         var kingdoms = await _context.Kingdoms
@@ -135,49 +157,100 @@ public class GeneralService : IGeneralService
             .Where(k => k.Era.IsActive)
             .ToListAsync();
 
-        var counts = await _context.Generals
+        // Aktywni (bez oczekujących) na potrzeby limitu/szansy oraz zbiór księstw z oczekującym kandydatem
+        var activeCounts = await _context.Generals
+            .Where(g => !g.IsPending)
             .GroupBy(g => g.KingdomId)
             .Select(g => new { KingdomId = g.Key, Count = g.Count() })
             .ToDictionaryAsync(x => x.KingdomId, x => x.Count);
 
+        var pendingKingdoms = (await _context.Generals
+            .Where(g => g.IsPending)
+            .Select(g => g.KingdomId)
+            .Distinct()
+            .ToListAsync()).ToHashSet();
+
         foreach (var kingdom in kingdoms)
+            TryArrival(kingdom, activeCounts.GetValueOrDefault(kingdom.Id, 0),
+                pendingKingdoms.Contains(kingdom.Id),
+                await GetGeneralsLimitAsync(kingdom));
+
+        await _context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Próba przyjścia generała dla pojedynczego księstwa — wywoływane przy każdej użytej turze
+    /// (manual: „If you have none, a new General surely comes in the next turn").
+    /// Nowy generał trafia do poczekalni (IsPending) i czeka na decyzję gracza.
+    /// Zakłada, że kingdom.Buildings są już załadowane. Zapisuje zmiany, jeśli generał przyszedł.
+    /// </summary>
+    public async Task<bool> TryGeneralArrivalAsync(Kingdom kingdom)
+    {
+        int activeCount = await _context.Generals.CountAsync(g => g.KingdomId == kingdom.Id && !g.IsPending);
+        bool hasPending = await _context.Generals.AnyAsync(g => g.KingdomId == kingdom.Id && g.IsPending);
+        int limit = await GetGeneralsLimitAsync(kingdom);
+
+        bool arrived = TryArrival(kingdom, activeCount, hasPending, limit);
+        if (arrived) await _context.SaveChangesAsync();
+        return arrived;
+    }
+
+    /// <summary>Limit aktywnych generałów: bazowy z rasy, +Pałac do 8.</summary>
+    private async Task<int> GetGeneralsLimitAsync(Kingdom kingdom)
+    {
+        var race = await _context.RaceDefinitions.AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Name == kingdom.Race);
+        int limit = race?.GeneralsLimit ?? 6;
+        // Pałac podnosi limit do 8 (rasy z limitem 8 mają go zawsze)
+        bool hasPalace = kingdom.Buildings.Any(b =>
+            b.BuildingType == "RezydencjaGenerala" && b.Quantity > 0 && !b.IsUnderConstruction);
+        if (hasPalace) limit = Math.Max(limit, 8);
+        return limit;
+    }
+
+    /// <summary>
+    /// Wspólna logika losowania przyjścia. Przy 0 aktywnych generałów przyjście jest gwarantowane;
+    /// dalej szansa maleje z liczbą generałów, a Akademia dowodzenia ją podwaja.
+    /// Gdy w poczekalni już ktoś czeka — nie przychodzi kolejny. Nie zapisuje zmian.
+    /// </summary>
+    private bool TryArrival(Kingdom kingdom, int activeCount, bool hasPending, int limit)
+    {
+        // Jeden kandydat na raz — dopóki gracz nie zdecyduje, nowi nie przychodzą
+        if (hasPending) return false;
+
+        if (activeCount >= limit) return false;
+
+        double chance;
+        if (activeCount == 0)
         {
-            var race = await _context.RaceDefinitions.AsNoTracking()
-                .FirstOrDefaultAsync(r => r.Name == kingdom.Race);
-
-            int limit = race?.GeneralsLimit ?? 6;
-            // Pałac podnosi limit do 8 (rasy z limitem 8 mają go zawsze)
-            bool hasPalace = kingdom.Buildings.Any(b =>
-                b.BuildingType == "RezydencjaGenerala" && b.Quantity > 0 && !b.IsUnderConstruction);
-            if (hasPalace) limit = Math.Max(limit, 8);
-
-            int current = counts.GetValueOrDefault(kingdom.Id, 0);
-            if (current >= limit) continue;
-            if (!hasPalace && current >= 6) continue;
-
-            // szansa maleje z liczbą generałów; Akademia dowodzenia podwaja
-            double chance = 0.25 * (1.0 - (double)current / limit);
+            chance = 1.0; // wg manuala: gdy nie masz generała, kolejny przychodzi na pewno
+        }
+        else
+        {
+            // szansa maleje z liczbą generałów; Akademia dowodzenia podwaja.
+            // Baza obniżona z 0,25 do 0,08, bo losowanie odpala się teraz co turę, nie raz dziennie.
+            chance = 0.08 * (1.0 - (double)activeCount / limit);
             if (kingdom.Buildings.Any(b =>
                     b.BuildingType == "AkademiaWojskowa" && b.Quantity > 0 && !b.IsUnderConstruction))
                 chance *= 2;
-
-            if (Random.Shared.NextDouble() >= chance) continue;
-
-            string primary = PrimaryTraits[Random.Shared.Next(PrimaryTraits.Length)];
-            var secondaries = AllowedSecondary[primary];
-            string secondary = secondaries[Random.Shared.Next(secondaries.Length)];
-
-            _context.Generals.Add(new General
-            {
-                KingdomId = kingdom.Id,
-                Name = Names[Random.Shared.Next(Names.Length)],
-                PrimaryTrait = primary,
-                SecondaryTrait = secondary,
-                Experience = 0,
-                ArrivedAt = DateTime.UtcNow
-            });
         }
 
-        await _context.SaveChangesAsync();
+        if (Random.Shared.NextDouble() >= chance) return false;
+
+        string primary = PrimaryTraits[Random.Shared.Next(PrimaryTraits.Length)];
+        var secondaries = AllowedSecondary[primary];
+        string secondary = secondaries[Random.Shared.Next(secondaries.Length)];
+
+        _context.Generals.Add(new General
+        {
+            KingdomId = kingdom.Id,
+            Name = Names[Random.Shared.Next(Names.Length)],
+            PrimaryTrait = primary,
+            SecondaryTrait = secondary,
+            Experience = 0,
+            IsPending = true, // czeka na decyzję gracza (przyjąć / odrzucić)
+            ArrivedAt = DateTime.UtcNow
+        });
+        return true;
     }
 }

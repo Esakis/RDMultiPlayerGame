@@ -38,6 +38,12 @@ public class General
     /// <summary>Ranny do tej daty (nie bierze udziału w walkach)</summary>
     public DateTime? WoundedUntil { get; set; }
 
+    /// <summary>
+    /// Generał czeka w „poczekalni" na decyzję gracza (przyjąć / odrzucić).
+    /// Oczekujący nie liczy się do siły księstwa ani limitu aktywnych generałów.
+    /// </summary>
+    public bool IsPending { get; set; } = false;
+
     public DateTime ArrivedAt { get; set; } = DateTime.UtcNow;
 
     public Kingdom Kingdom { get; set; } = null!;

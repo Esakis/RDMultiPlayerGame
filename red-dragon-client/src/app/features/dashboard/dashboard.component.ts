@@ -65,6 +65,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   races = ['Człowiek', 'Elf', 'Krasnolud', 'Hobbit', 'Nekromant', 'Dżin', 'Goblin', 'Ent', 'Wampir', 'Olbrzym'];
   selectedRace = '';
 
+  /** Numer bieżącej tury (1-indeksowany): nowy dzień startuje od 1, ostatnia = przydział. */
+  get currentTurnNumber(): number {
+    if (!this.kingdom) return 0;
+    const used = this.kingdom.turnsCapacity - this.kingdom.turnsAvailable;
+    return this.kingdom.turnsAvailable > 0
+      ? Math.min(used + 1, this.kingdom.turnsCapacity)
+      : this.kingdom.turnsCapacity;
+  }
+
   get canChangeRace(): boolean {
     return !!this.kingdom?.buildings?.some(b => b.buildingType === 'PalacZmian' && b.quantity > 0 && !b.isUnderConstruction);
   }

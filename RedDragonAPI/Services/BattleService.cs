@@ -176,11 +176,11 @@ public class BattleService : IBattleService
         // Generałowie: Wódz zwiększa atak o lvl%, Obrońca (najlepszy w domu) obronę o lvl%
         var now = DateTime.UtcNow;
         var attackerGenerals = await _context.Generals
-            .Where(g => g.KingdomId == attacker.Id && !g.IsImprisoned
+            .Where(g => g.KingdomId == attacker.Id && !g.IsImprisoned && !g.IsPending
                         && (g.WoundedUntil == null || g.WoundedUntil <= now))
             .ToListAsync();
         var defenderGenerals = await _context.Generals
-            .Where(g => g.KingdomId == defender.Id && !g.IsImprisoned && !g.IsOutside
+            .Where(g => g.KingdomId == defender.Id && !g.IsImprisoned && !g.IsOutside && !g.IsPending
                         && (g.WoundedUntil == null || g.WoundedUntil <= now))
             .ToListAsync();
 

@@ -56,6 +56,7 @@ public class GeneralDto
     public long Experience { get; set; }
     public int Level { get; set; }
     public string Status { get; set; } = string.Empty;
+    public bool IsPending { get; set; }
 }
 
 public class PactDto

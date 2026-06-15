@@ -25,6 +25,13 @@ public class GeneralController : ControllerBase
         return Ok(await _generalService.GetGeneralsAsync(UserId));
     }
 
+    [HttpPost("{id}/accept")]
+    public async Task<IActionResult> Accept(int id)
+    {
+        var result = await _generalService.AcceptGeneralAsync(UserId, id);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Dismiss(int id)
     {

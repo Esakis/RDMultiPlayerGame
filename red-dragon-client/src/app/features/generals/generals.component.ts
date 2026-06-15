@@ -46,8 +46,33 @@ export class GeneralsComponent implements OnInit {
     });
   }
 
+  get pending(): General[] {
+    return this.generals.filter(g => g.isPending);
+  }
+
+  get active(): General[] {
+    return this.generals.filter(g => !g.isPending);
+  }
+
   trait(key: string): string {
     return this.traitNames[key] ?? key;
+  }
+
+  accept(general: General): void {
+    this.generalService.accept(general.id).subscribe({
+      next: r => { this.message = r.message ?? ''; this.error = ''; this.load(); },
+      error: e => { this.error = e.error || 'Błąd przyjmowania generała.'; }
+    });
+  }
+
+  reject(general: General): void {
+    if (!confirm(`Odrzucić generała ${this.trait(general.primaryTrait)} ${general.name}? Pojawi się szansa na innego.`)) {
+      return;
+    }
+    this.generalService.dismiss(general.id).subscribe({
+      next: r => { this.message = 'Generał został odrzucony.'; this.error = ''; this.load(); },
+      error: e => { this.error = e.error || 'Błąd odrzucania generała.'; }
+    });
   }
 
   dismiss(general: General): void {

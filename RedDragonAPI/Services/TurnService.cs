@@ -8,11 +8,13 @@ public class TurnService : ITurnService
 {
     private readonly ApplicationDbContext _context;
     private readonly IResourceService _resourceService;
+    private readonly IGeneralService _generalService;
 
-    public TurnService(ApplicationDbContext context, IResourceService resourceService)
+    public TurnService(ApplicationDbContext context, IResourceService resourceService, IGeneralService generalService)
     {
         _context = context;
         _resourceService = resourceService;
+        _generalService = generalService;
     }
 
     public async Task<TurnResultDto> UseTurnAsync(int userId)
@@ -52,6 +54,9 @@ public class TurnService : ITurnService
         await _resourceService.GenerateResourcesForKingdomAsync(kingdom);
 
         await _context.SaveChangesAsync();
+
+        // Próba przyjścia generała (gwarantowana, gdy księstwo nie ma żadnego generała)
+        await _generalService.TryGeneralArrivalAsync(kingdom);
 
         // Calculate deltas
         var deltas = new Dictionary<string, long>

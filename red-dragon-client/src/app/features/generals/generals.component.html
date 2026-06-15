@@ -9,12 +9,39 @@
   <div class="loading" *ngIf="loading">Wczytywanie generałów...</div>
 
   <p class="hint">
-    Generałowie przychodzą losowo podczas przeliczenia — im więcej ich masz, tym
-    rzadziej zjawiają się nowi. Wódz zwiększa siłę ataku o swój poziom w procentach,
-    Obrońca tak samo wzmacnia obronę. Generał prowadzący atak wraca po przeliczeniu.
+    Generałowie przychodzą losowo przy wykorzystywaniu tur — im więcej ich masz, tym
+    rzadziej zjawiają się nowi (gdy nie masz żadnego, kolejny przyjdzie na pewno).
+    Każdego nowego generała musisz przyjąć lub odrzucić. Wódz zwiększa siłę ataku o swój
+    poziom w procentach, Obrońca tak samo wzmacnia obronę. Generał prowadzący atak wraca po przeliczeniu.
   </p>
 
-  <table class="rd-table" *ngIf="generals.length > 0">
+  <!-- Poczekalnia: nowi generałowie czekający na decyzję -->
+  <div class="pending-box" *ngIf="pending.length > 0">
+    <h3 class="pending-title">Nowy generał zgłosił się do służby</h3>
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th>Imię</th>
+          <th>Cecha główna</th>
+          <th>Cecha drugorzędna</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let g of pending">
+          <td class="g-name">{{ g.name }}</td>
+          <td>{{ trait(g.primaryTrait) }}</td>
+          <td>{{ trait(g.secondaryTrait) }}</td>
+          <td>
+            <button class="btn-accept" (click)="accept(g)">Przyjmij</button>
+            <button class="btn-dismiss" (click)="reject(g)">Odrzuć</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <table class="rd-table" *ngIf="active.length > 0">
     <thead>
       <tr>
         <th>Imię</th>
@@ -27,7 +54,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let g of generals">
+      <tr *ngFor="let g of active">
         <td class="g-name">{{ g.name }}</td>
         <td>{{ trait(g.primaryTrait) }}</td>
         <td>{{ trait(g.secondaryTrait) }}</td>
@@ -43,7 +70,7 @@
     </tbody>
   </table>
 
-  <p class="hint" *ngIf="!loading && generals.length === 0">
-    Nie masz jeszcze żadnych generałów — czekaj cierpliwie, któryś zjawi się po przeliczeniu.
+  <p class="hint" *ngIf="!loading && active.length === 0 && pending.length === 0">
+    Nie masz jeszcze żadnych generałów — wykorzystaj turę, a któryś na pewno się zgłosi.
   </p>
 </div>

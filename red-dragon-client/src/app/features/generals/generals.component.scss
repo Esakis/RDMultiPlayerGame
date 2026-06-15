@@ -40,6 +40,27 @@
     &:disabled { opacity: 0.4; cursor: not-allowed; }
     &:not(:disabled):hover { border-color: #d9542b; }
   }
+
+  .btn-accept {
+    background: linear-gradient(#1c5a12, #0c3a08);
+    color: #f0e0c0;
+    border: 1px solid #4a8a3a;
+    padding: 3px 10px;
+    margin-right: 6px;
+    cursor: pointer;
+
+    &:hover { border-color: #5ad95a; }
+  }
+}
+
+.pending-box {
+  border: 1px solid #c9a86a;
+  background: rgba(90, 60, 20, 0.18);
+  padding: 10px 12px;
+  margin-bottom: 18px;
+
+  .pending-title { margin: 0 0 8px; color: #d9a54b; font-size: 15px; }
+  .rd-table { margin-bottom: 0; }
 }
 
 .info-msg { color: #8ed98e; margin: 8px 0; }

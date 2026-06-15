@@ -12,6 +12,7 @@ export interface General {
   experience: number;
   level: number;
   status: string;
+  isPending: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -22,6 +23,10 @@ export class GeneralService {
 
   getGenerals(): Observable<General[]> {
     return this.http.get<General[]>(this.apiUrl);
+  }
+
+  accept(id: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/${id}/accept`, {});
   }
 
   dismiss(id: number): Observable<ServiceResult> {
