@@ -374,10 +374,8 @@ public class BattleService : IBattleService
     {
         decimal sorceryDiscount = await _context.Researches
             .Where(r => r.KingdomId == kingdom.Id && r.IsCompleted && r.TechType.StartsWith("Czarodziejstwo"))
-            .Include(r => r.Tech)
-            .Select(r => r.Tech!.EffectValue)
-            .DefaultIfEmpty(0m)
-            .MaxAsync();
+            .Select(r => (decimal?)r.Tech!.EffectValue)
+            .MaxAsync() ?? 0m;
 
         bool hasMagicPalace = kingdom.Buildings.Any(b =>
             b.BuildingType == "PalacMagiczny" && b.Quantity > 0 && !b.IsUnderConstruction);

@@ -266,11 +266,14 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(e => e.KingdomId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Restrict zamiast SetNull: SQL Server odrzuca wiele sciezek kaskadowych
+        // (Kingdom -> Expedition cascade oraz Kingdom -> General -> Expedition).
+        // Zerowanie GeneralId przy smierci generala wykonuje LabyrinthService w kodzie.
         modelBuilder.Entity<LabyrinthExpedition>()
             .HasOne(e => e.General)
             .WithMany()
             .HasForeignKey(e => e.GeneralId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Restrict);
 
         // MarketTransaction -> Buyer / Seller
         modelBuilder.Entity<MarketTransaction>()

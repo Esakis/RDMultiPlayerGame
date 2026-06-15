@@ -16,6 +16,7 @@ export interface Kingdom {
   wages: number;
   education: number;
   turnsAvailable: number;
+  turnsCapacity: number;
   turnsPerDay: number;
   maxTurns: number;
   turnNumber: number;

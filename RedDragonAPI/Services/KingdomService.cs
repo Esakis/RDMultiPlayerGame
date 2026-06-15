@@ -81,6 +81,7 @@ public class KingdomService : IKingdomService
             Wages = 50,
             Education = 0,
             TurnsAvailable = turnsPerDay,
+            TurnsCapacity = turnsPerDay,
             TurnsPerDay = turnsPerDay,
             // „trojtah" — maksymalnie potrójny dzienny przydział (+4, by standard dawał 49)
             MaxTurns = turnsPerDay * 3 + 4,
@@ -431,6 +432,7 @@ public class KingdomService : IKingdomService
             Wages = kingdom.Wages,
             Education = kingdom.Education,
             TurnsAvailable = kingdom.TurnsAvailable,
+            TurnsCapacity = kingdom.TurnsCapacity,
             TurnsPerDay = kingdom.TurnsPerDay,
             MaxTurns = kingdom.MaxTurns,
             TurnNumber = kingdom.TurnNumber,

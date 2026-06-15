@@ -16,9 +16,8 @@ public static class ResearchEffects
     {
         return await ctx.Researches
             .Where(r => r.KingdomId == kingdomId && r.IsCompleted && r.Tech.EffectType == effectType)
-            .Select(r => r.Tech.EffectValue)
-            .DefaultIfEmpty(0m)
-            .MaxAsync();
+            .Select(r => (decimal?)r.Tech.EffectValue)
+            .MaxAsync() ?? 0m;
     }
 
     /// <summary>Suma wartości efektów danego typu wśród ukończonych badań (efekty addytywne).</summary>

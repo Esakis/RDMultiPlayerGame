@@ -338,6 +338,8 @@ public class LabyrinthService : ILabyrinthService
                 if (kingdom.TurnsAvailable >= kingdom.MaxTurns)
                     return ServiceResult<LabyrinthStatusDto>.Fail("Masz już maksymalną liczbę tur.");
                 kingdom.TurnsAvailable = Math.Min(kingdom.MaxTurns, kingdom.TurnsAvailable + 1);
+                // Bonusowa tura zwiększa przydział cyklu, by licznik 0→max nie zszedł poniżej zera
+                kingdom.TurnsCapacity = Math.Max(kingdom.TurnsCapacity, kingdom.TurnsAvailable);
                 message = "Klepsydra dodała 1 turę.";
                 break;
             default:

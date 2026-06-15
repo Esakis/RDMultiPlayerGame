@@ -152,6 +152,9 @@ public class DailyResetService : BackgroundService
                     kingdom.TurnsAvailable + totalTurnsToAdd,
                     maxTurns);
 
+                // Nowy cykl: przydział = aktualnie dostępne tury (mianownik licznika 0→max)
+                kingdom.TurnsCapacity = kingdom.TurnsAvailable;
+
                 kingdom.Age++;
                 if (kingdom.IsProtected)
                 {

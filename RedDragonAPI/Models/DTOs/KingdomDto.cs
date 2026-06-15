@@ -37,6 +37,7 @@ public class KingdomDto
 
     // Tury
     public int TurnsAvailable { get; set; }
+    public int TurnsCapacity { get; set; }
     public int TurnsPerDay { get; set; }
     public int MaxTurns { get; set; }
     public int TurnNumber { get; set; }

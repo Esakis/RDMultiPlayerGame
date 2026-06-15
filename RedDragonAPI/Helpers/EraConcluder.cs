@@ -74,7 +74,7 @@ public static class EraConcluder
             k.Budulec = 0; k.BudulecStored = 0; k.Weapons = 0; k.Mana = 0;
             k.Population = 1000; k.Popularity = 100; k.Wages = 50; k.Education = 0;
             k.SciencePoints = 0; k.CurrentResearchTech = null; k.LabyrinthDice = 0;
-            k.TurnsPerDay = tpd; k.TurnsAvailable = tpd; k.MaxTurns = tpd * 3 + 4;
+            k.TurnsPerDay = tpd; k.TurnsAvailable = tpd; k.TurnsCapacity = tpd; k.MaxTurns = tpd * 3 + 4;
             k.TurnNumber = 0; k.Age = 0;
             k.CurrentSpecialBuilding = null; k.SpecialBuildingProgress = 0; k.SpecialBuildingCost = 0;
             k.CoalitionId = null; k.CoalitionRole = null;

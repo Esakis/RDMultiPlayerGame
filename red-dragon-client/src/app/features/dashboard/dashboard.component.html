@@ -41,7 +41,7 @@
     <div class="kingdom-name-area">
       <h2>{{ kingdom.name }}
         <span class="coalition-tag" *ngIf="kingdom.coalitionName">*{{ kingdom.coalitionName }}*</span>
-        {{ kingdom.turnsAvailable }}/{{ kingdom.maxTurns }}
+        {{ kingdom.turnsCapacity - kingdom.turnsAvailable }}/{{ kingdom.turnsCapacity }}
       </h2>
     </div>
   </div>

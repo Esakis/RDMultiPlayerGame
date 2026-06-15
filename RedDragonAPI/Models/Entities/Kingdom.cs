@@ -80,6 +80,12 @@ public class Kingdom
     public int MaxTurns { get; set; } = 49;
     public int TurnNumber { get; set; } = 0;
 
+    /// <summary>
+    /// Przydział tur w bieżącym cyklu (po ostatnim resecie dziennym) — mianownik licznika 0→max.
+    /// Wykorzystane tury = TurnsCapacity - TurnsAvailable (licznik rośnie w miarę grania).
+    /// </summary>
+    public int TurnsCapacity { get; set; } = 15;
+
     // Wiek księstwa (day count)
     public int Age { get; set; } = 0;
 

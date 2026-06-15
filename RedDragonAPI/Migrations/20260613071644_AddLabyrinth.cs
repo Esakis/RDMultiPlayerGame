@@ -45,7 +45,7 @@ namespace RedDragonAPI.Migrations
                         column: x => x.GeneralId,
                         principalTable: "Generals",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_LabyrinthExpeditions_Kingdoms_KingdomId",
                         column: x => x.KingdomId,
