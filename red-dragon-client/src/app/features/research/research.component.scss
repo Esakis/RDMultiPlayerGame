@@ -172,13 +172,16 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    height: 60%;
-    width: auto;
+    /* kwadratowy box + object-fit: contain => podkład jest idealnym kołem,
+       a wąska buteleczka zachowuje proporcje i ląduje wyśrodkowana w środku */
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
     pointer-events: none;
     /* podkład pod buteleczkę: półprzezroczysty krążek z konturem */
-    padding: 12px;
+    padding: 11px;
     box-sizing: content-box;
-    background: radial-gradient(circle at 50% 45%, rgba(20, 12, 6, 0.72), rgba(20, 12, 6, 0.45));
+    background: radial-gradient(circle at 50% 40%, rgba(20, 12, 6, 0.82), rgba(20, 12, 6, 0.55));
     border: 2px solid rgba(255, 212, 84, 0.85);
     border-radius: 50%;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7), 0 0 10px rgba(0, 0, 0, 0.6);
