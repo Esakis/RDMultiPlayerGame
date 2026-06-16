@@ -35,13 +35,12 @@ public class ResearchController : ControllerBase
         if (kingdom == null)
             return NotFound("Nie znaleziono księstwa.");
 
-        var hasUniversity = HasUniversity(kingdom);
         var definitions = await _context.TechnologyDefinitions.OrderBy(d => d.Id).ToListAsync();
 
         var result = definitions.Select(d =>
         {
             var research = kingdom.Researches.FirstOrDefault(r => r.TechType == d.TechType);
-            var (canResearch, reason) = CheckCanResearch(kingdom, d, hasUniversity);
+            var (canResearch, reason) = CheckCanResearch(kingdom, d);
             bool isCompleted = research?.IsCompleted ?? false;
             bool isCurrent = kingdom.CurrentResearchTech == d.TechType;
 
@@ -132,7 +131,7 @@ public class ResearchController : ControllerBase
         if (kingdom.CurrentResearchTech == dto.TechType)
             return BadRequest("Ta dziedzina jest już rozwijana.");
 
-        var (canResearch, reason) = CheckCanResearch(kingdom, techDef, HasUniversity(kingdom));
+        var (canResearch, reason) = CheckCanResearch(kingdom, techDef);
         if (!canResearch)
             return BadRequest(reason);
 
@@ -185,15 +184,11 @@ public class ResearchController : ControllerBase
             .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
     }
 
-    private static bool HasUniversity(Kingdom kingdom) =>
-        kingdom.Buildings.Any(b => b.BuildingType == "University" && b.Quantity > 0);
-
     private (bool canResearch, string? reason) CheckCanResearch(
-        Kingdom kingdom, TechnologyDefinition techDef, bool hasUniversity)
+        Kingdom kingdom, TechnologyDefinition techDef)
     {
-        if (!hasUniversity)
-            return (false, "Wymaga Uniwersytetu.");
-
+        // W Red Dragon badania prowadzą naukowcy (profesja) inwestując Punkty Nauki —
+        // nie ma wymogu budynku „uniwersytetu". Wymagane są jedynie wcześniejsze dziedziny.
         if (!string.IsNullOrEmpty(techDef.RequiredTech))
         {
             var prereq = kingdom.Researches.FirstOrDefault(r => r.TechType == techDef.RequiredTech && r.IsCompleted);

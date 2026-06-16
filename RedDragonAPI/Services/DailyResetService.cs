@@ -139,8 +139,8 @@ public class DailyResetService : BackgroundService
                     bonusTurns += 1;
                 }
 
-                // Badania Czasu (Zakrzywienie/Załamanie czasu): +1 tura każde
-                bonusTurns += (int)await ResearchEffects.SumEffectAsync(context, kingdom.Id, "BonusTurns");
+                // Badania Czasu (Zakrzywienie/Załamanie) dają tury jednorazowo w chwili
+                // odkrycia (ResourceService.InvestScienceAsync), nie co turę.
 
                 int totalTurnsToAdd = kingdom.TurnsPerDay + bonusTurns;
 

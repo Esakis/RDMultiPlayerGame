@@ -4,6 +4,9 @@ main {
     margin-left: 140px;
     min-height: calc(100vh - 130px);
     background: linear-gradient(180deg, #2a0a0a 0%, #1a0505 100%);
+    // Treść ponad panelem bocznym (z-index 90), by dymki/tooltipy nie chowały się za nim.
+    position: relative;
+    z-index: 95;
   }
 }
 

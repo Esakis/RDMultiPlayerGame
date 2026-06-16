@@ -33,10 +33,25 @@ export class GeneralsComponent implements OnInit {
     'BialaMagia': 'Biała magia'
   };
 
+  // Portrety wg cechy głównej (grafiki wycięte z oryginalnego Red Dragon — generalowie/doradcy).
+  private traitPortraits: { [key: string]: string } = {
+    'Wodz': 'wodz',
+    'Obronca': 'obronca',
+    'Mag': 'mag',
+    'Zlodziej': 'zlodziej',
+    'Kupiec': 'kupiec',
+    'Profesor': 'profesor'
+  };
+
   constructor(private generalService: GeneralService) {}
 
   ngOnInit(): void {
     this.load();
+  }
+
+  portrait(trait: string): string {
+    const file = this.traitPortraits[trait] ?? 'wodz';
+    return `assets/img/generalowie/${file}.png`;
   }
 
   load(): void {

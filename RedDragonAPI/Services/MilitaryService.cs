@@ -105,6 +105,25 @@ public class MilitaryService : IMilitaryService
         long totalWeapons = (long)unitDef.CostWeapons * dto.Quantity;
         long totalFood = (long)unitDef.CostFood * dto.Quantity;
 
+        // Badanie Rekrutacja (RecruitCostReduction): tańsi złodzieje (Dracopedia: −5/10/20%).
+        if (unitDef.UnitType.EndsWith("_Zlodziej"))
+        {
+            decimal thiefDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "RecruitCostReduction");
+            totalGold = (long)(totalGold * (1m - thiefDiscount));
+        }
+
+        // Łańcuch broni (Ostrzenie/Naprawa/Przekuwanie): obniża koszt broni jednostek
+        // E2 (o 5/15/20), a Przekuwanie dodatkowo E1 o 5. E2 = KoszarySpecjalne, E1 = OltarzInicjacji.
+        decimal weaponCut = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "WeaponCostReduction");
+        if (weaponCut > 0)
+        {
+            long perUnitCut = unitDef.RequiredBuilding == "KoszarySpecjalne" ? (long)weaponCut
+                : unitDef.RequiredBuilding == "OltarzInicjacji" && weaponCut >= 20m ? 5
+                : 0;
+            if (perUnitCut > 0)
+                totalWeapons = Math.Max(0, totalWeapons - perUnitCut * dto.Quantity);
+        }
+
         if (kingdom.Gold < totalGold) return ServiceResult.Fail($"Za mało złota. Potrzeba: {totalGold}");
         if (kingdom.Weapons < totalWeapons) return ServiceResult.Fail($"Za mało broni. Potrzeba: {totalWeapons}");
         if (kingdom.Food < totalFood) return ServiceResult.Fail($"Za mało żywności. Potrzeba: {totalFood}");

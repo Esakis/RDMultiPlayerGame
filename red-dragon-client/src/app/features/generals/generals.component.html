@@ -29,7 +29,10 @@
       </thead>
       <tbody>
         <tr *ngFor="let g of pending">
-          <td class="g-name">{{ g.name }}</td>
+          <td class="g-name">
+            <img class="g-portrait" [src]="portrait(g.primaryTrait)" [alt]="trait(g.primaryTrait)">
+            {{ g.name }}
+          </td>
           <td>{{ trait(g.primaryTrait) }}</td>
           <td>
             {{ trait(g.secondaryTrait) }}
@@ -62,7 +65,10 @@
     </thead>
     <tbody>
       <tr *ngFor="let g of active">
-        <td class="g-name">{{ g.name }}</td>
+        <td class="g-name">
+          <img class="g-portrait" [src]="portrait(g.primaryTrait)" [alt]="trait(g.primaryTrait)">
+          {{ g.name }}
+        </td>
         <td>{{ trait(g.primaryTrait) }}</td>
         <td>{{ trait(g.secondaryTrait) }}</td>
         <td class="num">{{ g.level }}</td>

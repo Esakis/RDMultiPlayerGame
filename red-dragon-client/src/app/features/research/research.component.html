@@ -1,10 +1,10 @@
 <div class="game-panel">
-  <h2 class="panel-title">Szkoła — Badania</h2>
+  <h2 class="panel-title">Nauka</h2>
 
   <p class="lead">
     Naukowcy produkują <strong>Punkty Nauki (SP)</strong>, które inwestujesz w wybraną
-    dziedzinę — podobnie jak budowę budynku specjalnego. Zmiana niedokończonej dziedziny
-    kosztuje 1/3 zainwestowanych SP. Badania są trwałe — nie da się ich zniszczyć.
+    dziedzinę. Najedź na ikonę, by zobaczyć efekt i koszt; kliknij dostępną dziedzinę,
+    by rozpocząć badanie. Zmiana niedokończonej dziedziny kosztuje 1/3 zainwestowanych SP.
   </p>
 
   <div class="info-msg" *ngIf="message">{{ message }}</div>
@@ -18,46 +18,78 @@
     <span *ngIf="!status.currentResearchTech" class="idle">Brak wybranej dziedziny</span>
   </div>
 
+  <p class="legend">
+    <span class="lg lg-av">dostępne</span>
+    <span class="lg lg-cur">w trakcie</span>
+    <span class="lg lg-lock">niedostępne</span>
+    <span class="lg lg-done">zbadane</span>
+  </p>
+
   <ng-container *ngIf="!loading">
-    <div class="category" *ngFor="let cat of categories">
-      <h3>{{ catLabel(cat) }}</h3>
-      <table class="rd-table">
-        <thead>
-          <tr>
-            <th>Dziedzina</th>
-            <th>Efekt</th>
-            <th>Koszt (SP)</th>
-            <th>Postęp</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let t of byCategory(cat)"
-              [class.done]="t.isCompleted" [class.current]="t.isCurrent">
-            <td class="tech-name">
-              {{ t.displayName }}
-              <span class="badge done-badge" *ngIf="t.isCompleted">✓</span>
-              <span class="badge cur-badge" *ngIf="t.isCurrent">●</span>
-            </td>
-            <td class="tech-desc">{{ t.description }}</td>
-            <td class="num">{{ t.costScience | number }}</td>
-            <td class="progress-cell">
-              <div class="bar" *ngIf="!t.isCompleted">
-                <div class="fill" [style.width.%]="progress(t)"></div>
-                <span class="pct">{{ progress(t) }}%</span>
-              </div>
-              <span *ngIf="t.isCompleted" class="done-text">zbadane</span>
-            </td>
-            <td>
-              <button class="btn-cast" (click)="invest(t)"
-                      [disabled]="!t.canResearch"
-                      [title]="t.cannotResearchReason || ''">
-                {{ t.investedScience > 0 && !t.isCompleted ? 'Wznów' : 'Rozwijaj' }}
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- specjalizacje (krótsze dziedziny) — na górze, jak na oryginalnym drzewku -->
+    <ng-container *ngTemplateOutlet="treeTpl; context: { $implicit: specChains, cls: 'spec-tree' }"></ng-container>
+    <div class="tree-sep"></div>
+    <!-- 6 głównych łańcuchów 5-poziomowych — niżej -->
+    <ng-container *ngTemplateOutlet="treeTpl; context: { $implicit: mainChains, cls: 'main-tree' }"></ng-container>
   </ng-container>
+
+  <ng-template #treeTpl let-list let-cls="cls">
+    <div class="tree" [class.spec-tree]="cls === 'spec-tree'" [class.main-tree]="cls === 'main-tree'">
+      <div class="chain" *ngFor="let chain of list">
+        <ng-container *ngFor="let t of chain; let i = index">
+          <span class="arrow" *ngIf="isDependent(chain, i)">▼</span>
+          <span class="vgap" *ngIf="i > 0 && !isDependent(chain, i)"></span>
+
+          <div class="tile"
+               [class.completed]="t.isCompleted"
+               [class.current]="t.isCurrent"
+               [class.available]="!t.isCompleted && !t.isCurrent && t.canResearch"
+               [class.locked]="!t.isCompleted && !t.isCurrent && !t.canResearch"
+               (click)="onTileClick(t)">
+            <img class="tile-img" [src]="techIcon(t)" [alt]="t.displayName">
+
+            <!-- nakładki stanów -->
+            <span class="xmark" *ngIf="!t.isCompleted && !t.isCurrent && !t.canResearch">✕</span>
+            <img class="flask" *ngIf="t.isCurrent" src="assets/img/nauka/flask.png" alt="w trakcie">
+            <span class="done-tick" *ngIf="t.isCompleted">✓</span>
+
+            <!-- pasek postępu dla rozwijanej dziedziny -->
+            <div class="tile-bar" *ngIf="t.isCurrent">
+              <div class="tile-fill" [style.width.%]="progress(t)"></div>
+            </div>
+
+            <!-- dymek hover: efekt + koszt -->
+            <div class="tip">
+              <strong class="tip-name">{{ t.displayName }}</strong>
+              <div class="tip-effect">{{ t.description }}</div>
+              <div class="tip-cost">Koszt: {{ t.costScience | number }} SP</div>
+              <div class="tip-prog" *ngIf="t.isCurrent">W trakcie — {{ progress(t) }}%</div>
+              <div class="tip-done" *ngIf="t.isCompleted">Zbadane ✓</div>
+              <div class="tip-lock" *ngIf="!t.canResearch && !t.isCompleted && !t.isCurrent">
+                {{ t.cannotResearchReason || 'Wymaga wcześniejszych dziedzin' }}
+              </div>
+              <div class="tip-go" *ngIf="t.canResearch && !t.isCompleted && !t.isCurrent">
+                Kliknij, aby rozpocząć
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- popup potwierdzenia uruchomienia badania -->
+<div class="modal-backdrop" *ngIf="confirmTech" (click)="cancelConfirm()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <img class="modal-img" [src]="techIcon(confirmTech)" [alt]="confirmTech.displayName">
+    <h3>{{ confirmTech.displayName }}</h3>
+    <p class="modal-effect">{{ confirmTech.description }}</p>
+    <p class="modal-cost">Koszt: <strong>{{ confirmTech.costScience | number }} SP</strong></p>
+    <p class="modal-q">Czy chcesz rozpocząć to badanie?</p>
+    <div class="modal-actions">
+      <button class="btn-yes" (click)="confirmStart()">Uruchom</button>
+      <button class="btn-no" (click)="cancelConfirm()">Anuluj</button>
+    </div>
+  </div>
 </div>

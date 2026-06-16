@@ -23,9 +23,10 @@ public class ResourceService : IResourceService
     private const decimal MasonStonePerBudulec = 2m;
 
     // Badania (docs/MECHANIKA.md §13): bazowe SP na naukowca/turę oraz limit SP/turę
-    // wg poziomu dziedziny „Wynalazczość" (Rozwój): 20k / 35k / 50k / 100k / 130k / 150k.
+    // wg poziomu dziedziny „Wynalazczość": bazowo 20k, a po odkryciach limit ustala
+    // efekt ScienceCap (35k / 50k / 100k / 125k / 150k — wartość najwyższego odkrycia).
     private const decimal ScientistSciencePerWorker = 25m;
-    private static readonly long[] DevelopmentCaps = { 20_000, 35_000, 50_000, 100_000, 130_000, 150_000 };
+    private const long BaseScienceCap = 20_000;
 
     public ResourceService(ApplicationDbContext context)
     {
@@ -64,9 +65,12 @@ public class ResourceService : IResourceService
         // pv — wynalezienie (tu: Education z naukowców).
         // Bonusy badań: ogólna produkcja (Wynalazczość), handel (Rachunkowość), kamień (Górnictwo)
         decimal productionBonus = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "ProductionBonus");
-        decimal merchantResearchBonus = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "MerchantBonus");
-        decimal stoneResearchBonus = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "StoneBonus");
         double scienceBonus = (double)await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "ScienceBonus");
+        // Górnictwo odkrywkowe: stabilny urobek złota = % złota alchemików (Dracopedia).
+        decimal mineGoldRate = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "MineGold");
+        // Inżynieria zaawansowana: murarze zużywają 10% mniej kamienia.
+        bool masonsStoneSaver = await _context.Researches.AnyAsync(r =>
+            r.KingdomId == kingdom.Id && r.IsCompleted && r.TechType == "Inzynieria4");
 
         decimal inventedBonus = 1m + (kingdom.Education / 100m) + productionBonus;
 
@@ -89,6 +93,9 @@ public class ResourceService : IResourceService
                 case "Alchemicy":
                     production = (long)(prof.WorkerCount * AlchemistGoldBase * Productivity(prof, race.BonusAlchemists));
                     kingdom.Gold += production;
+                    // Górnictwo odkrywkowe: dodatkowy stabilny urobek złota
+                    if (mineGoldRate > 0)
+                        kingdom.Gold += (long)(production * mineGoldRate);
                     break;
                 case "Chłopi":
                     production = (long)(prof.WorkerCount * FarmerFoodBase * Productivity(prof, race.BonusFarmers));
@@ -99,14 +106,16 @@ public class ResourceService : IResourceService
                     kingdom.Mana += production;
                     break;
                 case "Kamieniarze":
-                    production = (long)(prof.WorkerCount * StonemasonStoneBase * Productivity(prof, race.BonusStonemasons) * (1m + stoneResearchBonus));
+                    production = (long)(prof.WorkerCount * StonemasonStoneBase * Productivity(prof, race.BonusStonemasons));
                     kingdom.Stone += production;
                     break;
                 case "Murarze":
-                    // Murarze przerabiają kamień na budulec (infrapunkty)
-                    long stoneNeeded = (long)(prof.WorkerCount * MasonStonePerBudulec);
+                    // Murarze przerabiają kamień na budulec (infrapunkty).
+                    // Inżynieria zaawansowana: −10% zużycia kamienia.
+                    decimal stonePerBudulec = MasonStonePerBudulec * (masonsStoneSaver ? 0.9m : 1m);
+                    long stoneNeeded = (long)(prof.WorkerCount * stonePerBudulec);
                     long stoneUsed = Math.Min(stoneNeeded, kingdom.Stone);
-                    production = (long)(stoneUsed / MasonStonePerBudulec * Productivity(prof, race.BonusMasons));
+                    production = (long)(stoneUsed / stonePerBudulec * Productivity(prof, race.BonusMasons));
                     kingdom.Stone -= stoneUsed;
                     kingdom.Budulec += production;
                     break;
@@ -127,7 +136,7 @@ public class ResourceService : IResourceService
                                 : p.ProposerKingdom.Land)
                             .SumAsync(l => (long)l);
                         decimal goldPerMerchant = 500m * tradeLand / (tradeLand + prof.WorkerCount * 10m);
-                        production = (long)(prof.WorkerCount * goldPerMerchant * Productivity(prof, race.BonusMerchants) * (1m + merchantResearchBonus));
+                        production = (long)(prof.WorkerCount * goldPerMerchant * Productivity(prof, race.BonusMerchants));
                         merchantGold = production;
                         kingdom.Gold += production;
                     }
@@ -377,9 +386,8 @@ public class ResourceService : IResourceService
     /// <summary>Limit SP/turę: baza wg poziomu Wynalazczości × modyfikator rasy.</summary>
     private async Task<long> ScienceCapAsync(Kingdom kingdom)
     {
-        int devLevel = await _context.Researches.CountAsync(r =>
-            r.KingdomId == kingdom.Id && r.IsCompleted && r.TechType.StartsWith("Wynalazki"));
-        long cap = DevelopmentCaps[Math.Min(devLevel, DevelopmentCaps.Length - 1)];
+        long researched = (long)await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "ScienceCap");
+        long cap = Math.Max(BaseScienceCap, researched);
         decimal mult = kingdom.Race switch { "Człowiek" => 1.33m, "Goblin" => 0.8m, _ => 1m };
         return (long)(cap * mult);
     }
@@ -424,6 +432,14 @@ public class ResourceService : IResourceService
             research.CompletedAt = DateTime.UtcNow;
             kingdom.CurrentResearchTech = null;
             kingdom.SciencePoints = leftover;
+
+            // Czas (Zakrzywienie/Załamanie): jednorazowy zastrzyk tur w chwili odkrycia.
+            // Zakrzywienie działa tylko do 10. dnia wieku księstwa.
+            if (tech.EffectType == "StartTurns"
+                && (tech.TechType != "ZakrzywCzasu" || kingdom.Age <= 10))
+            {
+                kingdom.TurnsAvailable += (int)tech.EffectValue;
+            }
         }
     }
 

@@ -24,7 +24,7 @@ export class SidebarComponent {
     { label: 'Rynek', route: '/market' },
     { label: 'Smoki', route: '/dragons' },
     { label: 'Statystyki', route: '/ranking' },
-    { label: 'Szkoła', route: '/research' },
+    { label: 'Nauka', route: '/research' },
     { label: 'Koniec', route: '/messages' },
   ];
 

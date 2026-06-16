@@ -30,6 +30,18 @@
   .g-name { font-weight: bold; }
   .num { text-align: right; }
 
+  .g-portrait {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #8a5a3a;
+    background: #1a0c06;
+    vertical-align: middle;
+    margin-right: 8px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+  }
+
   .btn-dismiss {
     background: linear-gradient(#5a1208, #3a0c04);
     color: #f0e0c0;

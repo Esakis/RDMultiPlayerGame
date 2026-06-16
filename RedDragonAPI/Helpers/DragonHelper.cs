@@ -6,7 +6,7 @@ namespace RedDragonAPI.Helpers;
 /// Mechanika smoków (docs/MECHANIKA.md §8, §9). Smoki wzmacniają armię
 /// (BattleCalculator: ×(1+r/(50+r)) + r·100). Limit smoków rośnie z budynkami
 /// (Smokodrap → Portal → Ministerstwo smoków) i badaniami DragonKnowledge
-/// (Smokoastronomia/anatomia/dynamika: +6/16/20%). Koszt przywołania rośnie
+/// (Smokoastronomia/anatomia/dynamika: +12/32/40%). Koszt przywołania rośnie
 /// stromo z liczbą smoków wg wzoru manuala.
 /// </summary>
 public static class DragonHelper
@@ -26,9 +26,9 @@ public static class DragonHelper
 
         decimal dracoBonus = dracoLevel switch
         {
-            >= 3 => 0.20m,
-            2 => 0.16m,
-            1 => 0.06m,
+            >= 3 => 0.40m,
+            2 => 0.32m,
+            1 => 0.12m,
             _ => 0m
         };
 
