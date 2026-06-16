@@ -177,6 +177,20 @@
             Nic [0%]
           </div>
         </div>
+
+        <div class="preview-card">
+          <div class="preview-image research-img">
+            <span *ngIf="!kingdom.currentResearch">📚 Nauka</span>
+            <span *ngIf="kingdom.currentResearch">{{ kingdom.currentResearch }}</span>
+          </div>
+          <div class="preview-label" *ngIf="kingdom.currentResearch">
+            {{ kingdom.currentResearch }}
+            [{{ kingdom.researchCost > 0 ? ((kingdom.researchProgress / kingdom.researchCost) * 100 | number:'1.0-0') : 0 }}%]
+          </div>
+          <div class="preview-label" *ngIf="!kingdom.currentResearch">
+            Nic nie badane — zapas: {{ kingdom.sciencePoints | numberFormat }} PN
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -50,6 +50,12 @@ public class KingdomDto
     public int SpecialBuildingProgress { get; set; }
     public int SpecialBuildingCost { get; set; }
 
+    // Nauka (badanie) w toku
+    public string? CurrentResearch { get; set; }
+    public long ResearchProgress { get; set; }
+    public long ResearchCost { get; set; }
+    public long SciencePoints { get; set; }
+
     // Koalicja
     public int? CoalitionId { get; set; }
     public string? CoalitionName { get; set; }

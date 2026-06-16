@@ -31,8 +31,9 @@ public class KingdomService : IKingdomService
         int pendingGenerals = await _context.Generals
             .CountAsync(g => g.KingdomId == kingdom.Id && g.IsPending);
         var recentEvents = await GetRecentEventsAsync(kingdom.Id);
+        var research = await GetCurrentResearchInfoAsync(kingdom);
 
-        return MapToDto(kingdom, pendingGenerals, recentEvents);
+        return MapToDto(kingdom, pendingGenerals, recentEvents, research);
     }
 
     public async Task<KingdomDto?> GetKingdomByIdAsync(int kingdomId)
@@ -51,8 +52,25 @@ public class KingdomService : IKingdomService
         int pendingGenerals = await _context.Generals
             .CountAsync(g => g.KingdomId == kingdom.Id && g.IsPending);
         var recentEvents = await GetRecentEventsAsync(kingdom.Id);
+        var research = await GetCurrentResearchInfoAsync(kingdom);
 
-        return MapToDto(kingdom, pendingGenerals, recentEvents);
+        return MapToDto(kingdom, pendingGenerals, recentEvents, research);
+    }
+
+    /// <summary>Aktualnie rozwijana dziedzina nauki wraz z postępem (docs/MECHANIKA.md §13).</summary>
+    private async Task<(string? Name, long Progress, long Cost)> GetCurrentResearchInfoAsync(Kingdom kingdom)
+    {
+        if (string.IsNullOrEmpty(kingdom.CurrentResearchTech))
+            return (null, 0, 0);
+
+        var tech = await _context.TechnologyDefinitions.AsNoTracking()
+            .FirstOrDefaultAsync(t => t.TechType == kingdom.CurrentResearchTech);
+        if (tech == null) return (null, 0, 0);
+
+        var research = await _context.Researches.AsNoTracking()
+            .FirstOrDefaultAsync(r => r.KingdomId == kingdom.Id && r.TechType == kingdom.CurrentResearchTech);
+
+        return (tech.DisplayName, research?.InvestedScience ?? 0, tech.CostScience);
     }
 
     /// <summary>Zdarzenia odnotowane od ostatniego przeliczenia (5:00) — pokazywane na Stolicy.</summary>
@@ -430,7 +448,8 @@ public class KingdomService : IKingdomService
     }
 
     private static KingdomDto MapToDto(Kingdom kingdom, int pendingGeneralCount = 0,
-        List<KingdomEventDto>? recentEvents = null)
+        List<KingdomEventDto>? recentEvents = null,
+        (string? Name, long Progress, long Cost) research = default)
     {
         return new KingdomDto
         {
@@ -471,6 +490,10 @@ public class KingdomService : IKingdomService
             CurrentSpecialBuilding = kingdom.CurrentSpecialBuilding,
             SpecialBuildingProgress = kingdom.SpecialBuildingProgress,
             SpecialBuildingCost = kingdom.SpecialBuildingCost,
+            CurrentResearch = research.Name,
+            ResearchProgress = research.Progress,
+            ResearchCost = research.Cost,
+            SciencePoints = kingdom.SciencePoints,
             CoalitionId = kingdom.CoalitionId,
             CoalitionName = kingdom.Coalition?.Name,
             CoalitionRole = kingdom.CoalitionRole,

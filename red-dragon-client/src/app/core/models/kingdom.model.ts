@@ -24,6 +24,10 @@ export interface Kingdom {
   currentSpecialBuilding: string | null;
   specialBuildingProgress: number;
   specialBuildingCost: number;
+  currentResearch: string | null;
+  researchProgress: number;
+  researchCost: number;
+  sciencePoints: number;
   coalitionId: number | null;
   coalitionName: string | null;
   coalitionRole: string | null;
