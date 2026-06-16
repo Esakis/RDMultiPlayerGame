@@ -11,28 +11,6 @@
     <button class="mm-btn" [class.active]="myKingdom?.metamagicMode === 'Accelerated'" (click)="setMetamagic('Accelerated')" title="−25% siły, −10% ceny">Przyspieszona</button>
   </div>
 
-  <div class="blood-magic" *ngIf="myKingdom?.race === 'Wampir'">
-    <h3>Krwawa magia — punkty krwi: <span class="blood">{{ myKingdom?.bloodPoints | number }}</span></h3>
-    <div class="elixirs">
-      <div class="elixir">
-        <span>Ataku (+7%/lvl): <strong>{{ myKingdom?.bloodElixirAttack }}/4</strong></span>
-        <button class="mm-btn" (click)="upgradeElixir('Attack')" [disabled]="(myKingdom?.bloodElixirAttack || 0) >= 4">Ulepsz</button>
-      </div>
-      <div class="elixir">
-        <span>Krwiożerczości (+12,5%/lvl strat): <strong>{{ myKingdom?.bloodElixirBloodlust }}/4</strong></span>
-        <button class="mm-btn" (click)="upgradeElixir('Bloodlust')" [disabled]="(myKingdom?.bloodElixirBloodlust || 0) >= 4">Ulepsz</button>
-      </div>
-      <div class="elixir">
-        <span>Skupienia (+3%/lvl magów): <strong>{{ myKingdom?.bloodElixirFocus }}/4</strong></span>
-        <button class="mm-btn" (click)="upgradeElixir('Focus')" [disabled]="(myKingdom?.bloodElixirFocus || 0) >= 4">Ulepsz</button>
-      </div>
-      <div class="elixir">
-        <span>Złodziei (+5%/lvl): <strong>{{ myKingdom?.bloodElixirThief }}/4</strong></span>
-        <button class="mm-btn" (click)="upgradeElixir('Thief')" [disabled]="(myKingdom?.bloodElixirThief || 0) >= 4">Ulepsz</button>
-      </div>
-    </div>
-  </div>
-
   <div class="blood-magic" *ngIf="myKingdom?.race === 'Olbrzym'">
     <h3>Szamanizm — ładowanie totemów (koszt: obszar × 20 many)</h3>
     <div class="elixirs">

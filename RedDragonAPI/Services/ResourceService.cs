@@ -221,8 +221,8 @@ public class ResourceService : IResourceService
         }
 
         // === 4. Jedzenie ===
-        // ludność je wg rasy (Olbrzym 2); armia je 1 (Nekromant i Wampir — armia nie je)
-        bool armyEats = kingdom.Race is not ("Nekromant" or "Wampir");
+        // ludność je wg rasy (Olbrzym 2); armia je 1 (Nekromant — armia nieumarłych nie je)
+        bool armyEats = kingdom.Race != "Nekromant";
         int totalSoldiers = militaryUnits
             .Where(u => !u.UnitType.EndsWith("_Smok"))
             .Sum(u => u.Quantity);
@@ -297,8 +297,8 @@ public class ResourceService : IResourceService
         kingdom.Popularity = Math.Clamp(popularity, 0, 100);
 
         // === Dezercja: niezapłacony żołd lub niska popularność = ucieczka armii ===
-        // (Nekromant/Wampir — armia nie dezerteruje; smoki zostają)
-        if (kingdom.Race is not ("Nekromant" or "Wampir"))
+        // (Nekromant — armia nieumarłych nie dezerteruje; smoki zostają)
+        if (kingdom.Race != "Nekromant")
         {
             decimal desertRate = 0m;
             if (wagesUnpaid) desertRate += 0.10m;                       // brak żołdu: −10%

@@ -84,13 +84,6 @@ public class KingdomController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
-    [HttpPost("blood-elixir")]
-    public async Task<ActionResult> UpgradeBloodElixir([FromBody] BloodElixirDto dto)
-    {
-        var result = await _kingdomService.UpgradeBloodElixirAsync(GetUserId(), dto.Elixir);
-        return result.Success ? Ok(result) : BadRequest(result.Message);
-    }
-
     [HttpPost("totem")]
     public async Task<ActionResult> ChargeTotem([FromBody] ChargeTotemDto dto)
     {

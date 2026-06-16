@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  races = ['Człowiek', 'Elf', 'Krasnolud', 'Hobbit', 'Nekromant', 'Dżin', 'Goblin', 'Ent', 'Wampir', 'Olbrzym'];
+  races = ['Człowiek', 'Elf', 'Krasnolud', 'Hobbit', 'Nekromant', 'Dżin', 'Goblin', 'Ent', 'Olbrzym'];
   selectedRace = '';
 
   get constructionEvents() {

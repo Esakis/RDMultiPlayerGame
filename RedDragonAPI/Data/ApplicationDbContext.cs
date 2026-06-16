@@ -478,18 +478,6 @@ public class ApplicationDbContext : DbContext
             },
             new RaceDefinition
             {
-                Id = 9, Name = "Wampir", NameCz = "Vampýr",
-                Description = "Jednostki wojskowe są naszą najsilniejszą stroną. Jak tylko posmakują krwi wrogów, zmieniają się w żądne krwi bestie nie do zatrzymania. Także nasi złodzieje są uważani za jednych z najlepszych w tej profesji.",
-                EaseRating = 60, MagicRating = 85, ThievesRating = 90, DefenseRating = 80, EconomyRating = 40, AttackRating = 90,
-                MagicBooks = 3, TurnsPerDay = 15, GeneralsLimit = 8, LimitedSpellsPerRecalc = 5,
-                HouseCapacityBase = 3, PopPerAcreBase = 3, FoodPerPop = 1,
-                BonusAlchemists = 0.20m, BonusMages = 0.20m,
-                E1Attack = 4, E1Defense = 2, E2Attack = 10, E2Defense = 5, MachineAttack = 5,
-                ThiefPowerModifier = 0.10m,
-                SpecialTraits = "Armia nie je (nie umiera w głodzie); odporny na Zarazę; Głupota/Somnambulizm/Ospałość o połowę tańsze; 25% upitych żołnierzy wroga umiera; mechanika Krwawa magia (punkty krwi za zabitych wrogów odblokowują eliksiry: złodziei +5%/lvl, ataku +7%/lvl, magów +3%/lvl, strat +12,5%/lvl)."
-            },
-            new RaceDefinition
-            {
                 Id = 10, Name = "Olbrzym", NameCz = "Obr",
                 Description = "Jedynym, co nas interesuje, jest walka! Nie jest nas, co prawda, wielu, ale nasze jednostki są najsilniejsze ze wszystkich. Wybierz nas, a zmiażdżymy każdego, kto stanie na naszej drodze!",
                 EaseRating = 70, MagicRating = 55, ThievesRating = 55, DefenseRating = 70, EconomyRating = 60, AttackRating = 100,
@@ -600,7 +588,7 @@ public class ApplicationDbContext : DbContext
     /// Jednostki wg oryginału: każda rasa ma Hoplitę (1/1), Elitę 1 i 2 stopnia,
     /// Machinę wojenną, Złodzieja i Smoka. Statystyki atak/obrona z rebalansu
     /// „31. wieku"; nazwy i koszty elit wg manuala RDx2 (urza.cz) — nazwy jednostek
-    /// Wampira i Olbrzyma rekonstruowane (brak źródła). Hoplici szkolą się
+    /// Olbrzyma rekonstruowane (brak źródła). Hoplici szkolą się
     /// z bezrobotnych; elity powstają przez przelew (hoplita→E1→E2).
     /// </summary>
     private void SeedUnitDefinitions(ModelBuilder modelBuilder)
@@ -663,13 +651,6 @@ public class ApplicationDbContext : DbContext
             new UnitDefinition { Id = 84, UnitType = "Ent_Machina", Race = "Ent", DisplayName = "Machina wojenna", Description = "Burzy budynki wroga", CostGold = 800, CostWeapons = 50, AttackPower = 5, DefensePower = 0, RequiredBuilding = "KonstrukcjaMachin", TrainingTime = 1 },
             new UnitDefinition { Id = 85, UnitType = "Ent_Zlodziej", Race = "Ent", DisplayName = "Złodziej", Description = "Armia podziemia", CostGold = 1200, CostWeapons = 0, AttackPower = 0, DefensePower = 0, RequiredBuilding = "GildiaZlodziei", TrainingTime = 1 },
             new UnitDefinition { Id = 86, UnitType = "Ent_Smok", Race = "Ent", DisplayName = "Smok", Description = "Potężna bestia — wzmacnia armię", CostGold = 0, CostWeapons = 0, AttackPower = 100, DefensePower = 100, RequiredBuilding = "Smokodrap", TrainingTime = 1 },
-            // === Wampir ===
-            new UnitDefinition { Id = 91, UnitType = "Wampir_Hoplita", Race = "Wampir", DisplayName = "Hoplita", Description = "Podstawowy żołnierz (nie je)", CostGold = 200, CostWeapons = 2, AttackPower = 1, DefensePower = 1, RequiredBuilding = "", TrainingTime = 1 },
-            new UnitDefinition { Id = 92, UnitType = "Wampir_Upior", Race = "Wampir", DisplayName = "Upiór", Description = "Elita 1. stopnia", CostGold = 700, CostWeapons = 20, AttackPower = 4, DefensePower = 2, RequiredBuilding = "OltarzInicjacji", TrainingTime = 1 },
-            new UnitDefinition { Id = 93, UnitType = "Wampir_Nosferatu", Race = "Wampir", DisplayName = "Nosferatu", Description = "Elita 2. stopnia", CostGold = 1800, CostWeapons = 160, AttackPower = 10, DefensePower = 5, RequiredBuilding = "KoszarySpecjalne", TrainingTime = 1 },
-            new UnitDefinition { Id = 94, UnitType = "Wampir_Machina", Race = "Wampir", DisplayName = "Machina wojenna", Description = "Burzy budynki wroga", CostGold = 800, CostWeapons = 50, AttackPower = 5, DefensePower = 0, RequiredBuilding = "KonstrukcjaMachin", TrainingTime = 1 },
-            new UnitDefinition { Id = 95, UnitType = "Wampir_Zlodziej", Race = "Wampir", DisplayName = "Złodziej", Description = "Armia podziemia", CostGold = 1200, CostWeapons = 0, AttackPower = 0, DefensePower = 0, RequiredBuilding = "GildiaZlodziei", TrainingTime = 1 },
-            new UnitDefinition { Id = 96, UnitType = "Wampir_Smok", Race = "Wampir", DisplayName = "Smok", Description = "Potężna bestia — wzmacnia armię", CostGold = 0, CostWeapons = 0, AttackPower = 100, DefensePower = 100, RequiredBuilding = "Smokodrap", TrainingTime = 1 },
             // === Olbrzym ===
             new UnitDefinition { Id = 101, UnitType = "Olbrzym_Hoplita", Race = "Olbrzym", DisplayName = "Hoplita", Description = "Podstawowy żołnierz", CostGold = 200, CostWeapons = 2, AttackPower = 1, DefensePower = 1, RequiredBuilding = "", TrainingTime = 1 },
             new UnitDefinition { Id = 102, UnitType = "Olbrzym_Glazomiot", Race = "Olbrzym", DisplayName = "Głazomiot", Description = "Elita 1. stopnia (burzy 0,1 budynku)", CostGold = 1200, CostWeapons = 40, AttackPower = 6, DefensePower = 6, RequiredBuilding = "OltarzInicjacji", TrainingTime = 1 },
@@ -841,7 +822,7 @@ public class ApplicationDbContext : DbContext
             new ThiefActionDefinition { Id = 5, ActionType = "WojnaGangow", DisplayName = "Wojna gangów", Description = "Zabija złodziei wroga", ThievesRequired = 80, SuccessBaseRate = 0.80m, EffectType = "ThiefWar" },
             new ThiefActionDefinition { Id = 6, ActionType = "WymordowanieMagow", DisplayName = "Wymordowanie magów", Description = "Zabija magów wroga", ThievesRequired = 120, SuccessBaseRate = 0.60m, EffectType = "KillMages" },
             new ThiefActionDefinition { Id = 7, ActionType = "ZabijanieLudnosci", DisplayName = "Zabijanie ludności", Description = "Morduje cywilów wroga", ThievesRequired = 100, SuccessBaseRate = 0.70m, EffectType = "KillPeople" },
-            new ThiefActionDefinition { Id = 8, ActionType = "UpijanieArmii", DisplayName = "Upijanie armii", Description = "Upija żołnierzy wroga — nie bronią w następnym przeliczeniu (Wampir: 25% upitych umiera)", ThievesRequired = 90, SuccessBaseRate = 0.70m, EffectType = "DrunkArmy" },
+            new ThiefActionDefinition { Id = 8, ActionType = "UpijanieArmii", DisplayName = "Upijanie armii", Description = "Upija żołnierzy wroga — nie bronią w następnym przeliczeniu", ThievesRequired = 90, SuccessBaseRate = 0.70m, EffectType = "DrunkArmy" },
             new ThiefActionDefinition { Id = 9, ActionType = "ZabojstwoGenerala", DisplayName = "Zabójstwo generała", Description = "Próba zamachu na generała wroga", ThievesRequired = 200, SuccessBaseRate = 0.30m, EffectType = "KillGeneral" },
             new ThiefActionDefinition { Id = 10, ActionType = "PorwanieGenerala", DisplayName = "Porwanie generała", Description = "Próba porwania generała wroga (można negocjować okup)", ThievesRequired = 200, SuccessBaseRate = 0.25m, EffectType = "KidnapGeneral" }
         );

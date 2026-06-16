@@ -33,7 +33,7 @@ public class RaceDefinition
     // Magia i czas
     public int MagicBooks { get; set; }                       // 0-5 ksiąg magii
     public int TurnsPerDay { get; set; } = 15;                // Goblin 17, Ent 13
-    public int GeneralsLimit { get; set; } = 6;               // Człowiek/Wampir 8
+    public int GeneralsLimit { get; set; } = 6;               // Człowiek 8
     public int LimitedSpellsPerRecalc { get; set; } = 2;      // Krasnolud 1, Ent 3, Olbrzym 4
 
     // Populacja

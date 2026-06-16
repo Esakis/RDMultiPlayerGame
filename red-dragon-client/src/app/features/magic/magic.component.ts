@@ -34,13 +34,6 @@ export class MagicComponent implements OnInit {
     });
   }
 
-  upgradeElixir(elixir: string): void {
-    this.kingdomService.upgradeBloodElixir(elixir).subscribe({
-      next: r => { this.message = r.message ?? ''; this.kingdomService.getMyKingdom().subscribe(k => this.myKingdom = k); },
-      error: e => { this.error = e.error || 'Błąd ulepszania eliksiru.'; }
-    });
-  }
-
   chargeTotem(totem: string): void {
     this.kingdomService.chargeTotem(totem).subscribe({
       next: r => { this.message = r.message ?? ''; this.load(); this.kingdomService.getMyKingdom().subscribe(k => this.myKingdom = k); },

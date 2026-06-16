@@ -165,10 +165,6 @@ public class BattleService : IBattleService
             attacker.EntWrathActive = false;
         }
 
-        // Krwawa magia Wampira: eliksir Ataku (+7%/lvl)
-        if (attacker.Race == "Wampir" && attacker.BloodElixirAttack > 0)
-            attackPower = (long)(attackPower * (1m + 0.07m * attacker.BloodElixirAttack));
-
         // Nauka stosowana Człowieka: szkoła wojskowa +10% ataku
         if (attacker.Race == "Człowiek" && attacker.AppliedScienceSchool == "Military")
             attackPower = (long)(attackPower * 1.10m);
@@ -229,13 +225,6 @@ public class BattleService : IBattleService
         var defenderCasualties = BattleCalculator.CalculateDefenderCasualties(
             defender.MilitaryUnits, attackPower, defensePower, attackerWins, defenderRace);
 
-        // Krwawa magia Wampira: eliksir Krwiożerczości zwiększa straty wroga (+12,5%/lvl)
-        if (attacker.Race == "Wampir" && attacker.BloodElixirBloodlust > 0)
-        {
-            decimal mult = 1m + 0.125m * attacker.BloodElixirBloodlust;
-            defenderCasualties = defenderCasualties.ToDictionary(c => c.Key, c => (int)(c.Value * mult));
-        }
-
         // Zastosuj straty atakującego
         foreach (var casualty in attackerCasualties)
         {
@@ -260,13 +249,6 @@ public class BattleService : IBattleService
 
         // Gniew Enta: Ent, który poniósł straty, wpada w szał (+100% ataku do przeliczenia)
         if (defender.Race == "Ent" && defenderDead > 0) defender.EntWrathActive = true;
-
-        // Krwawa magia Wampira: punkty krwi za zabitych wrogów (max 50×obszar)
-        if (attacker.Race == "Wampir" && defenderDead > 0)
-        {
-            long cap = 50L * attacker.Land;
-            attacker.BloodPoints = Math.Min(cap, attacker.BloodPoints + defenderDead * 10);
-        }
 
         // Straty cywilów obrońcy (25% strat armii; 50%/100% przy domobranie)
         double defCasualtyRate = defenderCasualties.Count > 0 && defender.MilitaryUnits.Sum(u => u.Quantity) > 0
@@ -626,10 +608,6 @@ public class BattleService : IBattleService
                 "Accelerated" => 0.75m,
                 _ => 1m
             };
-
-        // Krwawa magia Wampira: eliksir Skupienia (+3%/lvl siły magów)
-        if (kingdom.Race == "Wampir" && kingdom.BloodElixirFocus > 0)
-            powerVal *= 1m + 0.03m * kingdom.BloodElixirFocus;
 
         // Nauka stosowana Człowieka: szkoła magiczna +10% siły zaklęć
         if (kingdom.Race == "Człowiek" && kingdom.AppliedScienceSchool == "Magic")
@@ -1035,8 +1013,8 @@ public class BattleService : IBattleService
         var attackerRace = await GetRaceAsync(attacker.Race);
         var defenderRace = await GetRaceAsync(defender.Race);
 
-        // siły złodziejskie z modyfikatorami rasowymi (+ eliksir Złodziei Wampira, szkoła złodziejska Człowieka)
-        decimal thiefBonus = attacker.Race == "Wampir" ? 0.05m * attacker.BloodElixirThief : 0m;
+        // siły złodziejskie z modyfikatorami rasowymi (+ szkoła złodziejska Człowieka)
+        decimal thiefBonus = 0m;
         if (attacker.Race == "Człowiek" && attacker.AppliedScienceSchool == "Thief") thiefBonus += 0.10m;
         long attackPower = (long)(data.Thieves * (1m + attackerRace.ThiefPowerModifier + thiefBonus)
                                   * actionDef.SuccessBaseRate);
@@ -1155,22 +1133,10 @@ public class BattleService : IBattleService
                 }
             case "DrunkArmy":
                 {
-                    // upita armia: Wampir zabija 25% upitych; pozostali — osłabienie odnotowane w raporcie
+                    // upita armia: osłabienie odnotowane w raporcie
                     int affected = defender.MilitaryUnits
                         .Where(u => !u.UnitType.EndsWith("_Smok") && !u.UnitType.EndsWith("_Zlodziej"))
                         .Sum(u => u.Quantity) / 4;
-                    if (attacker.Race == "Wampir")
-                    {
-                        int killedTotal = 0;
-                        foreach (var unit in defender.MilitaryUnits.Where(u =>
-                                     u.Quantity > 0 && !u.UnitType.EndsWith("_Smok") && !u.UnitType.EndsWith("_Zlodziej")))
-                        {
-                            int killed = (int)(unit.Quantity * 0.0625); // 25% z 1/4 upitych
-                            unit.Quantity -= killed;
-                            killedTotal += killed;
-                        }
-                        return $"Upito ~{affected} żołnierzy; {killedTotal} zapiło się na śmierć (Wampir).";
-                    }
                     return $"Upito ~{affected} żołnierzy — nie staną do obrony przy najbliższym przeliczeniu.";
                 }
             case "KillGeneral":

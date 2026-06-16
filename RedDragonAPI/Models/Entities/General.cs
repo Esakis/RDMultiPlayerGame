@@ -5,7 +5,7 @@ namespace RedDragonAPI.Models.Entities;
 
 /// <summary>
 /// Generał wg oryginalnego Red Dragon (docs/MECHANIKA.md §11, docs/zrodla/urza-generalove.txt).
-/// Limit 6 (8 z Pałacem; Człowiek/Wampir zawsze 8). Poziom z doświadczenia:
+/// Limit 6 (8 z Pałacem; Człowiek zawsze 8). Poziom z doświadczenia:
 /// lvl ≈ int((exp/100)^0,25) + 1.
 /// </summary>
 [Table("Generals")]

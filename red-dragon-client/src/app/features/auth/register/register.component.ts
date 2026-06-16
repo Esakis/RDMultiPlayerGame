@@ -45,13 +45,11 @@ export class RegisterComponent {
       desc: 'Agresorzy z machinami wojennymi; +2 tury dziennie, brak magii.' },
     { name: 'Ent', img: 'assets/img/rasy/ent.png', books: 2, stats: [50, 60, 50, 100, 100, 50],
       desc: 'Najlepsza obrona w grze i znakomita farma; -2 tury dziennie.' },
-    { name: 'Wampir', img: 'assets/img/rasy/wampir.png', books: 3, stats: [60, 85, 90, 80, 40, 90],
-      desc: 'Uniwersał zasilany krwią wrogów — silny atak, magia i złodzieje.' },
     { name: 'Olbrzym', img: 'assets/img/rasy/olbrzym.png', books: 1, stats: [70, 55, 55, 70, 60, 100],
       desc: 'Najsilniejszy atak w grze i burzenie budynków; je za dwóch, nie może mieć złodziei.' },
-    { name: 'Gnom', img: 'assets/img/rasy/hobbit.png', books: 3, stats: [70, 70, 75, 60, 75, 55],
+    { name: 'Gnom', img: 'assets/img/rasy/gnom.png', books: 3, stats: [70, 70, 75, 60, 75, 55],
       desc: 'Mistrzowie alchemii z polskiego serwera RD — saperzy wysadzają wrogów, ale machin nie używają wcale.' },
-    { name: 'Br-Oug', img: 'assets/img/rasy/goblin.png', books: 3, stats: [50, 60, 55, 60, 45, 80],
+    { name: 'Br-Oug', img: 'assets/img/rasy/broug.png', books: 3, stats: [50, 60, 55, 60, 45, 80],
       desc: 'Płodna rasa z polskiego serwera RD — +4 mieszkańców na akr i najpotężniejsze machiny (8 ataku), ale drogie budowanie.' }
   ];
 

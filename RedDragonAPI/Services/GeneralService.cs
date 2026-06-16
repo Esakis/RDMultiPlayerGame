@@ -17,7 +17,7 @@ public interface IGeneralService
 
 /// <summary>
 /// Generałowie wg oryginału (docs/MECHANIKA.md §11): limit 6 (8 z Pałacem;
-/// Człowiek i Wampir zawsze 8), przychodzą losowo — im bliżej limitu, tym rzadziej;
+/// Człowiek zawsze 8), przychodzą losowo — im bliżej limitu, tym rzadziej;
 /// Akademia dowodzenia podwaja szansę.
 /// </summary>
 public class GeneralService : IGeneralService

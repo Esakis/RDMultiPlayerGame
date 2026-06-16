@@ -12,10 +12,9 @@ export class RaceImagePipe implements PipeTransform {
     'Dżin': 'dzin',
     'Goblin': 'goblin',
     'Ent': 'ent',
-    'Wampir': 'wampir',
     'Olbrzym': 'olbrzym',
-    'Gnom': 'hobbit',
-    'Br-Oug': 'goblin'
+    'Gnom': 'gnom',
+    'Br-Oug': 'broug'
   };
 
   transform(race: string | null | undefined): string {

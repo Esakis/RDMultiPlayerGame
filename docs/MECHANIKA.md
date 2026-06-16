@@ -50,7 +50,7 @@ Format charakterystyki z oficjalnej strony: sześć wartości 0–100
 | Dżin | Džin | 50;100;65;90;45;35 | 5 | najlepsi magowie |
 | Goblin | Skřet | 80;65;80;50;50;95 | 0 | agresor, machiny wojenne |
 | Ent | Ent | 50;60;50;100;100;50 | 2 | najlepsza obrona, świetna farma |
-| Wampir | Vampýr | 60;85;90;80;40;90 | 3 | uniwersał za cenę krwi |
+| ~~Wampir~~ | ~~Vampýr~~ | ~~60;85;90;80;40;90~~ | ~~3~~ | **USUNIĘTY z gry** (decyzja 2026-06-16; opis referencyjny) |
 | Olbrzym | Obr | 70;55;55;70;60;100 | 0 | najsilniejszy atak, burzenie |
 
 ### 2.1 Statystyki szczegółowe (rebalans „31. wieku", oficjalny blog)
@@ -123,7 +123,7 @@ sady owocowe mieszczą 100 E2 (każda daje 1/10 jedzenia sadu), mechanika **Gnie
 (po stratach: +100% ataku i +100% burzenia machin na 1 przeliczenie;
 próg = obszar×100 pkt; mieszkaniec=10 pkt, budynek=połowa ceny infra).
 
-**Wampir**: +20% alchemicy, +20% magowie, +10% złodzieje, 3 księgi,
+**Wampir** *(USUNIĘTY z implementacji — 2026-06-16; opis referencyjny oryginału, rasa niedostępna w grze, mechanika Krwawej magii wycięta z kodu)*: +20% alchemicy, +20% magowie, +10% złodzieje, 3 księgi,
 25% upitych żołnierzy umiera (akcja Upijanie armii), odporny na Mor,
 Stupidita/Somnambul/Ospałość −50% ceny, armia nie je (nie umiera w głodzie),
 8 generałów, mechanika **Krwawa magia** (punkty krwi za zabitych wrogów:
