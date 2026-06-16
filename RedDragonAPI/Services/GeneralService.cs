@@ -103,6 +103,7 @@ public class GeneralService : IGeneralService
             SecondaryTrait = g.SecondaryTrait,
             Experience = g.Experience,
             Level = g.Level,
+            ExperienceToNextLevel = g.ExperienceToNextLevel,
             IsPending = g.IsPending,
             SecondaryRerollsLeft = Math.Max(0, 2 - g.SecondaryRerollsUsed),
             Status = g.IsPending ? "Oczekuje na decyzję"

@@ -55,6 +55,7 @@ public class GeneralDto
     public string SecondaryTrait { get; set; } = string.Empty;
     public long Experience { get; set; }
     public int Level { get; set; }
+    public long ExperienceToNextLevel { get; set; }
     public string Status { get; set; } = string.Empty;
     public bool IsPending { get; set; }
     public int SecondaryRerollsLeft { get; set; }

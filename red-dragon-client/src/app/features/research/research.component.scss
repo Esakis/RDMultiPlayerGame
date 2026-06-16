@@ -172,10 +172,21 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    height: 72%;
+    height: 60%;
     width: auto;
     pointer-events: none;
-    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8));
+    /* podkład pod buteleczkę: półprzezroczysty krążek z konturem */
+    padding: 12px;
+    box-sizing: content-box;
+    background: radial-gradient(circle at 50% 45%, rgba(20, 12, 6, 0.72), rgba(20, 12, 6, 0.45));
+    border: 2px solid rgba(255, 212, 84, 0.85);
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7), 0 0 10px rgba(0, 0, 0, 0.6);
+    /* wyraźny kontur samej buteleczki */
+    filter:
+      drop-shadow(0 0 1px #000)
+      drop-shadow(0 0 1px #000)
+      drop-shadow(0 1px 3px rgba(0, 0, 0, 0.85));
   }
 
   /* zbadane — przyciemnione + znaczek */

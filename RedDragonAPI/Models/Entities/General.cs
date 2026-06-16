@@ -55,4 +55,12 @@ public class General
 
     [NotMapped]
     public int Level => (int)Math.Pow(Math.Max(Experience, 0) / 100.0, 0.25) + 1;
+
+    /// <summary>Doświadczenie potrzebne do osiągnięcia kolejnego poziomu (próg = 100 · poziom^4).</summary>
+    [NotMapped]
+    public long NextLevelExperience => 100L * (long)Math.Pow(Level, 4);
+
+    /// <summary>Ile doświadczenia brakuje do awansu na kolejny poziom.</summary>
+    [NotMapped]
+    public long ExperienceToNextLevel => Math.Max(0, NextLevelExperience - Experience);
 }

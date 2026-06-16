@@ -4,6 +4,8 @@
     Generałowie
   </h2>
 
+  <div class="banner">Sztab wojskowy</div>
+
   <div class="info-msg" *ngIf="message">{{ message }}</div>
   <div class="error-msg" *ngIf="error">{{ error }}</div>
   <div class="loading" *ngIf="loading">Wczytywanie generałów...</div>
@@ -18,70 +20,54 @@
   <!-- Poczekalnia: nowi generałowie czekający na decyzję -->
   <div class="pending-box" *ngIf="pending.length > 0">
     <h3 class="pending-title">Nowy generał zgłosił się do służby</h3>
-    <table class="rd-table">
-      <thead>
-        <tr>
-          <th>Imię</th>
-          <th>Cecha główna</th>
-          <th>Cecha drugorzędna</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let g of pending">
-          <td class="g-name">
-            <img class="g-portrait" [src]="portrait(g.primaryTrait)" [alt]="trait(g.primaryTrait)">
-            {{ g.name }}
-          </td>
-          <td>{{ trait(g.primaryTrait) }}</td>
-          <td>
-            {{ trait(g.secondaryTrait) }}
-            <button type="button" class="btn-reroll" (click)="rerollSecondary(g)"
-                    [disabled]="g.secondaryRerollsLeft <= 0"
-                    [title]="g.secondaryRerollsLeft > 0 ? 'Przelosuj cechę drugorzędną' : 'Brak prób'">
-              🎲 Zmień ({{ g.secondaryRerollsLeft }})
-            </button>
-          </td>
-          <td>
-            <button type="button" class="btn-accept" (click)="accept(g)">Przyjmij</button>
-            <button type="button" class="btn-dismiss" (click)="reject(g)">Odrzuć</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="general-grid">
+      <div class="general-card pending" *ngFor="let g of pending">
+        <div class="g-name">{{ g.name }}</div>
+        <div class="g-portrait-frame">
+          <img class="g-portrait" [src]="portrait(g.primaryTrait)" [alt]="trait(g.primaryTrait)">
+        </div>
+        <div class="g-trait-primary">{{ trait(g.primaryTrait) }}</div>
+        <div class="g-trait-secondary">
+          {{ trait(g.secondaryTrait) }}
+          <button type="button" class="btn-reroll" (click)="rerollSecondary(g)"
+                  [disabled]="g.secondaryRerollsLeft <= 0"
+                  [title]="g.secondaryRerollsLeft > 0 ? 'Przelosuj cechę drugorzędną' : 'Brak prób'">
+            🎲 Zmień ({{ g.secondaryRerollsLeft }})
+          </button>
+        </div>
+        <div class="g-actions">
+          <button type="button" class="btn-accept" (click)="accept(g)">Przyjmij</button>
+          <button type="button" class="btn-dismiss" (click)="reject(g)">Odrzuć</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <table class="rd-table" *ngIf="active.length > 0">
-    <thead>
-      <tr>
-        <th>Imię</th>
-        <th>Cecha główna</th>
-        <th>Cecha drugorzędna</th>
-        <th>Poziom</th>
-        <th>Doświadczenie</th>
-        <th>Stan</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let g of active">
-        <td class="g-name">
-          <img class="g-portrait" [src]="portrait(g.primaryTrait)" [alt]="trait(g.primaryTrait)">
-          {{ g.name }}
-        </td>
-        <td>{{ trait(g.primaryTrait) }}</td>
-        <td>{{ trait(g.secondaryTrait) }}</td>
-        <td class="num">{{ g.level }}</td>
-        <td class="num">{{ g.experience }}</td>
-        <td>{{ g.status }}</td>
-        <td>
-          <button class="btn-dismiss" (click)="dismiss(g)" [disabled]="g.status !== 'W domu'">
-            Zwolnij
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Aktywni generałowie -->
+  <div class="general-grid" *ngIf="active.length > 0">
+    <div class="general-card" *ngFor="let g of active">
+      <div class="g-name">{{ g.name }}</div>
+      <div class="g-portrait-frame">
+        <img class="g-portrait" [src]="portrait(g.primaryTrait)" [alt]="trait(g.primaryTrait)">
+      </div>
+      <div class="g-trait-primary">{{ trait(g.primaryTrait) }}</div>
+      <div class="g-trait-secondary">{{ trait(g.secondaryTrait) }}</div>
+
+      <div class="g-stats">
+        <div class="stat-label">Poziom:</div>
+        <div class="stat-value">{{ g.level }}</div>
+        <div class="stat-label">Doświadczenie:</div>
+        <div class="stat-value">{{ g.experience | number }}</div>
+        <div class="stat-status">{{ g.status }}</div>
+        <div class="stat-label">Do awansu:</div>
+        <div class="stat-value">{{ g.experienceToNextLevel | number }}</div>
+      </div>
+
+      <button class="btn-dismiss" (click)="dismiss(g)" [disabled]="g.status !== 'W domu'">
+        Zwolnij
+      </button>
+    </div>
+  </div>
 
   <p class="hint" *ngIf="!loading && active.length === 0 && pending.length === 0">
     Nie masz jeszcze żadnych generałów — wykorzystaj turę, a któryś na pewno się zgłosi.

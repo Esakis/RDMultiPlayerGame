@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { BuildingService } from '../../core/services/building.service';
 import { BuildingDefinition, Building } from '../../core/models/kingdom.model';
 
+type SpecialState = 'owned' | 'current' | 'available' | 'locked';
+
 @Component({
   selector: 'app-buildings',
   templateUrl: './buildings.component.html',
@@ -14,7 +16,12 @@ export class BuildingsComponent implements OnInit {
   message = '';
   quantities: { [key: string]: number } = {};
 
-  categories = ['Residential', 'Economic', 'Scientific', 'Military', 'Defensive', 'Special'];
+  // Etykiety polskich kategorii (zgodne z danymi z backendu)
+  private categoryLabels: { [k: string]: string } = {
+    Gospodarcze: '🏠 Gospodarcze', Warsztaty: '🔨 Warsztaty', Cechy: '⭐ Cechy',
+    Manufaktury: '🏭 Manufaktury', Pozostale: '📦 Pozostałe', Obrona: '🛡️ Obrona',
+    Wojskowe: '⚔️ Wojskowe', Specjalne: '✨ Specjalne'
+  };
 
   constructor(private buildingService: BuildingService) {}
 
@@ -33,8 +40,13 @@ export class BuildingsComponent implements OnInit {
     });
   }
 
+  /** Zwykłe kategorie (bez specjalnych), w kolejności wystąpienia w danych. */
+  get normalCategories(): string[] {
+    return Array.from(new Set(this.definitions.filter(d => !d.isSpecial).map(d => d.category)));
+  }
+
   getByCategory(cat: string): BuildingDefinition[] {
-    return this.definitions.filter(d => d.category === cat);
+    return this.definitions.filter(d => d.category === cat && !d.isSpecial);
   }
 
   getOwned(type: string): Building | undefined {
@@ -42,7 +54,7 @@ export class BuildingsComponent implements OnInit {
   }
 
   construct(def: BuildingDefinition): void {
-    const qty = this.quantities[def.buildingType] || 1;
+    const qty = def.isSpecial ? 1 : (this.quantities[def.buildingType] || 1);
     this.buildingService.construct({ buildingType: def.buildingType, quantity: qty }).subscribe({
       next: (res) => {
         this.message = res.message || 'Budowa rozpoczęta.';
@@ -57,10 +69,46 @@ export class BuildingsComponent implements OnInit {
   }
 
   getCategoryName(cat: string): string {
-    const map: {[k:string]:string} = {
-      'Residential': '🏠 Mieszkalne', 'Economic': '💰 Ekonomiczne', 'Scientific': '📚 Naukowe',
-      'Military': '⚔️ Wojskowe', 'Defensive': '🛡️ Obronne', 'Special': '⭐ Specjalne'
-    };
-    return map[cat] || cat;
+    return this.categoryLabels[cat] || cat;
+  }
+
+  // ===== Drzewko budynków specjalnych =====
+
+  /**
+   * Łańcuchy budynków specjalnych jako kolumny (jak w drzewku nauki):
+   * 6 kolumn, w każdej budynki posortowane wg rzędu (rosnący koszt bazowy).
+   * Zależność między kafelkami wynika z requiredBuildingType (strzałka w dół).
+   */
+  get specialChains(): BuildingDefinition[][] {
+    const specials = this.definitions.filter(d => d.isSpecial);
+    const cols = Array.from(new Set(specials.map(d => d.col))).sort((a, b) => a - b);
+    return cols.map(c =>
+      specials.filter(d => d.col === c).sort((a, b) => a.row - b.row));
+  }
+
+  get hasSpecial(): boolean {
+    return this.definitions.some(d => d.isSpecial);
+  }
+
+  /** Stan kafelka budynku specjalnego. */
+  specialState(def: BuildingDefinition): SpecialState {
+    const owned = this.getOwned(def.buildingType);
+    if (owned?.isUnderConstruction) return 'current';
+    if (owned && owned.quantity > 0) return 'owned';
+    if (def.canBuild) return 'available';
+    return 'locked';
+  }
+
+  /** Czy między kafelkiem a poprzednim w kolumnie istnieje realna zależność (strzałka). */
+  isDependent(chain: BuildingDefinition[], i: number): boolean {
+    return i > 0 && !!chain[i].requiredBuildingType
+      && chain[i].requiredBuildingType === chain[i - 1].buildingType;
+  }
+
+  /** Klik na kafelek: zbuduj tylko dostępny budynek specjalny. */
+  onSpecialClick(def: BuildingDefinition): void {
+    if (this.specialState(def) === 'available') {
+      this.construct(def);
+    }
   }
 }

@@ -11,6 +11,7 @@ export interface General {
   secondaryTrait: string;
   experience: number;
   level: number;
+  experienceToNextLevel: number;
   status: string;
   isPending: boolean;
   secondaryRerollsLeft: number;

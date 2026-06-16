@@ -77,6 +77,159 @@ h3 {
   .cannot-reason { color: #ff6666; font-size: 12px; font-style: italic; }
 }
 
+/* === Drzewko budynków specjalnych (kolumny łańcuchów jak w nauce) === */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 12px;
+  margin: 4px 0 12px;
+
+  .lg { display: inline-flex; align-items: center; gap: 5px; color: #c9b58a; }
+  .lg::before {
+    content: '';
+    width: 13px; height: 13px;
+    border: 1px solid #8a6a3a;
+    display: inline-block;
+  }
+  .lg-av::before   { background: rgba(70, 210, 70, 0.45); }
+  .lg-cur::before  { background: #1c5a12; }
+  .lg-lock::before { background:
+      linear-gradient(45deg, transparent 40%, #e23b2b 40%, #e23b2b 60%, transparent 60%),
+      linear-gradient(-45deg, transparent 40%, #e23b2b 40%, #e23b2b 60%, transparent 60%); }
+  .lg-done::before { background: #2a1208; }
+}
+
+.spec-tree {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px 14px;
+  margin-bottom: 24px;
+}
+
+.chain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+
+  .arrow { color: #b8860b; font-size: 13px; line-height: 1; }
+  .vgap { height: 11px; }
+}
+
+.node {
+  position: relative;
+  width: 150px;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6px 8px;
+  border: 3px solid #b8860b;
+  border-radius: 4px;
+  background: #15100a;
+  box-shadow: 0 0 0 1px #000, 0 2px 5px rgba(0, 0, 0, 0.6);
+  cursor: default;
+  transition: transform 0.08s, box-shadow 0.12s, border-color 0.12s;
+
+  .node-name { color: #e8d5b0; font-size: 13px; font-weight: bold; line-height: 1.25; }
+
+  /* dostępny — zielony nalot, klikalny */
+  &.available {
+    cursor: pointer;
+    background: #16280f;
+    .node-name { color: #d8f5c0; }
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 0 1px #000, 0 0 10px rgba(90, 230, 90, 0.7);
+      border-color: #ffd454;
+    }
+  }
+
+  /* w budowie */
+  &.current {
+    border-color: #4caf50;
+    background: #1c2a14;
+    .node-name { color: #b6e8a0; }
+  }
+
+  /* wybudowany */
+  &.owned {
+    border-color: #6a8a3a;
+    background: #20180c;
+    .node-name { color: #9ec06a; }
+    &::after {
+      content: '✓';
+      position: absolute;
+      right: 4px; bottom: 2px;
+      color: #8ed98e;
+      font-size: 14px;
+      font-weight: bold;
+      text-shadow: 0 0 3px #000;
+    }
+  }
+
+  /* niedostępny */
+  &.locked {
+    border-color: #6a4a2a;
+    .node-name { color: #8a7a5a; }
+    &::after {
+      content: '✕';
+      position: absolute;
+      right: 5px; top: 3px;
+      color: #ff2e1e;
+      font-size: 16px;
+      font-weight: bold;
+      opacity: 0.85;
+      text-shadow: 0 0 3px #000;
+    }
+  }
+
+  /* dymek hover */
+  .tip {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 8px);
+    transform: translateX(-50%);
+    width: 220px;
+    background: #1c1208;
+    border: 1px solid #c9a86a;
+    border-radius: 5px;
+    padding: 8px 10px;
+    color: #e8d5b0;
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: left;
+    z-index: 30;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.12s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+    pointer-events: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%; left: 50%;
+      transform: translateX(-50%);
+      border: 7px solid transparent;
+      border-top-color: #c9a86a;
+    }
+
+    .tip-name   { color: #ffd454; display: block; margin-bottom: 3px; }
+    .tip-effect { color: #c9b58a; margin-bottom: 4px; }
+    .tip-cost   { color: #9ec6ff; }
+    .tip-prog   { color: #ffb74d; }
+    .tip-done   { color: #8ed98e; }
+    .tip-lock   { color: #ff7b6b; }
+    .tip-go     { color: #8ed98e; font-style: italic; margin-top: 3px; }
+  }
+  &:hover .tip { opacity: 1; visibility: visible; }
+}
+
 .toast {
   background: rgba(0,0,0,0.4); border: 1px solid #66ff66; color: #66ff66;
   padding: 8px 14px; margin-bottom: 10px; font-size: 13px;
