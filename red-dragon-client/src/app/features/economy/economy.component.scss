@@ -22,6 +22,30 @@ h2 {
   .cost { color: #d4af37; font-size: 13px; }
 }
 
+/* === Karta pensji === */
+.wages-card {
+  .wages-controls {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;
+    label { color: #ffd700; font-weight: bold; font-size: 14px; }
+    input[type="range"] { flex: 1; min-width: 180px; accent-color: #d4af37; }
+    .wages-num {
+      width: 64px; padding: 5px 8px; background: #fff;
+      border: 2px solid #8b7355; color: #000; text-align: center; font-size: 13px;
+    }
+    .wages-gold { color: #d4af37; font-size: 13px; }
+    .btn-assign {
+      padding: 6px 14px; background: linear-gradient(180deg, #4a0808, #2a0808);
+      border: 2px solid #8b0000; color: #ffd700; cursor: pointer; font-weight: bold;
+      &:hover { background: linear-gradient(180deg, #6a0808, #4a0808); border-color: #ffd700; color: #fff; }
+    }
+  }
+  .wages-effect {
+    color: #ccc; font-size: 13px;
+    strong { color: #ffd700; &.good { color: #66ff66; } &.bad { color: #ff6666; } }
+    .muted { color: #999; }
+  }
+}
+
 .profession-table { display: flex; flex-direction: column; gap: 2px; }
 .prof-row {
   display: grid; grid-template-columns: 1fr 100px 160px 200px; align-items: center;

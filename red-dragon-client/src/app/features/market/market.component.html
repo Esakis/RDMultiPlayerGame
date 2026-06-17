@@ -143,28 +143,26 @@
   <ng-container *ngIf="pacts.inCoalition">
     <p class="hint" [innerHTML]="'mkt.pactsIntro' | translate"></p>
     <p class="hint slots">
-      {{ 'mkt.defensivePacts' | translate }}: <strong>{{ pacts.usedSlots }} / {{ pacts.limit }}</strong>.
+      {{ 'mkt.pactsCount' | translate }}: <strong>{{ pacts.usedSlots }} / {{ pacts.limit }}</strong>.
       {{ (pacts.hasAmbasada ? 'mkt.ambasadaHas' : 'mkt.ambasadaBuild') | translate }}
     </p>
 
-    <table class="rd-table" *ngIf="pacts.members.length > 0; else noMembers">
+    <table class="rd-table pact-table-grid" *ngIf="pacts.members.length > 0; else noMembers">
       <thead>
         <tr>
           <th>{{ 'rank.duchy' | translate }}</th>
-          <th>{{ 'mkt.changeType' | translate }}</th>
+          <th *ngFor="let t of pactTypes" class="pact-col">{{ t.label }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let m of pacts.members">
           <td>{{ m.name }}</td>
-          <td>
-            <select [ngModel]="m.pactType" (ngModelChange)="changePact(m, $event)"
-                    [ngClass]="pactClass(m.pactType)">
-              <option *ngFor="let t of pactTypes" [value]="t.value"
-                      [disabled]="t.value !== 'Handlowy' && t.value !== m.pactType && pactDisabled(m)">
-                {{ t.label }}
-              </option>
-            </select>
+          <td *ngFor="let t of pactTypes" class="pact-col">
+            <label class="pact-check" [ngClass]="pactClass(t.value)">
+              <input type="checkbox" [checked]="hasPact(m, t.value)"
+                     [disabled]="pactDisabled(m, t.value)"
+                     (change)="togglePact(m, t.value, $any($event.target).checked)">
+            </label>
           </td>
         </tr>
       </tbody>

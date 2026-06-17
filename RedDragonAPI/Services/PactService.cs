@@ -13,20 +13,24 @@ public interface IPactService
 
 /// <summary>
 /// Pakty wewnątrz koalicji wg modelu gry (docs/zrodla/urza-pakt.txt):
-/// z KAŻDYM współczłonkiem masz domyślnie pakt handlowy (bez rekordu w bazie).
-/// Zmiana typu na obronny (Magiczny/Wojskowy/Zlodziejski) tworzy rekord, który
-/// zastępuje handlowy dla tego sojusznika i zajmuje slot. Powrót na handlowy =
-/// usunięcie rekordu. Pakty są natychmiastowe (jednostronne), rekord jest wspólny
-/// dla obu stron (symetryczny efekt obronny i zajmuje slot u obu).
-/// Limit paktów obronnych: baza 5 + Ambasada (+1).
-/// Skuteczność obronna wg liczby paktów danego typu: 50%/45%/40%.
+/// istnieją 4 typy paktów (Handlowy, Magiczny, Wojskowy, Zlodziejski). Z każdym
+/// współczłonkiem koalicji można zawrzeć DOWOLNĄ KOMBINACJĘ tych paktów, ale tylko
+/// jeden pakt danego typu — więc maksymalnie 4 różne pakty z jednym księstwem.
+/// Każdy pakt to osobny rekord (wspólny dla obu stron, natychmiastowy/jednostronny).
+/// Pakt handlowy dolicza obszar sojusznika do efektywności kupców; pakty obronne
+/// (Magiczny/Wojskowy/Zlodziejski) wspomagają obronę. Limit łącznej liczby paktów:
+/// baza 5 + Ambasada (+1). Skuteczność obronna wg liczby paktów danego typu: 50%/45%/40%.
 /// </summary>
 public class PactService : IPactService
 {
     public const int BasePactLimit = 5; // +1 z Ambasadą
     public const string TradePactType = "Handlowy";
 
-    /// <summary>Typy paktów obronnych (handlowy jest stanem domyślnym, nie obronnym).</summary>
+    /// <summary>Wszystkie dozwolone typy paktów.</summary>
+    public static readonly string[] AllPactTypes =
+        { "Handlowy", "Magiczny", "Wojskowy", "Zlodziejski" };
+
+    /// <summary>Typy paktów obronnych (wspomagają obronę).</summary>
     public static readonly string[] DefensePactTypes =
         { "Magiczny", "Wojskowy", "Zlodziejski" };
 
@@ -73,9 +77,10 @@ public class PactService : IPactService
                         && (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id))
             .ToListAsync();
 
-        var typeByPartner = pacts.ToDictionary(
-            p => p.ProposerKingdomId == kingdom.Id ? p.TargetKingdomId : p.ProposerKingdomId,
-            p => p.PactType);
+        // Aktywne typy paktów per partner (może być kilka typów z jednym księstwem).
+        var typesByPartner = pacts
+            .GroupBy(p => p.ProposerKingdomId == kingdom.Id ? p.TargetKingdomId : p.ProposerKingdomId)
+            .ToDictionary(g => g.Key, g => g.Select(p => p.PactType).Distinct().ToList());
         dto.UsedSlots = pacts.Count;
 
         var members = await _context.Kingdoms
@@ -90,7 +95,7 @@ public class PactService : IPactService
                 Name = m.Name,
                 Race = m.Race,
                 Land = m.Land,
-                PactType = typeByPartner.TryGetValue(m.Id, out var t) ? t : TradePactType
+                ActivePacts = typesByPartner.TryGetValue(m.Id, out var t) ? t : new List<string>()
             })
             .OrderBy(m => m.Name)
             .ToList();
@@ -114,43 +119,36 @@ public class PactService : IPactService
         if (target.CoalitionId != kingdom.CoalitionId)
             return ServiceResult.Fail("Partner musi należeć do Twojej koalicji.");
 
-        bool isTrade = dto.PactType == TradePactType;
-        if (!isTrade && !DefensePactTypes.Contains(dto.PactType))
+        if (!AllPactTypes.Contains(dto.PactType))
             return ServiceResult.Fail("Nieznany typ paktu.");
 
-        // Istniejący pakt obronny z tym partnerem (rekord jest wspólny, w obu kierunkach).
+        // Istniejący pakt TEGO TYPU z tym partnerem (rekord wspólny w obu kierunkach).
         var existing = await _context.Pacts.FirstOrDefaultAsync(p => p.Status == "Active" &&
+            p.PactType == dto.PactType &&
             ((p.ProposerKingdomId == kingdom.Id && p.TargetKingdomId == target.Id) ||
              (p.ProposerKingdomId == target.Id && p.TargetKingdomId == kingdom.Id)));
 
-        if (isTrade)
+        if (!dto.Active)
         {
-            // Powrót do domyślnego paktu handlowego = usunięcie paktu obronnego.
+            // Zerwanie paktu danego typu.
             if (existing == null)
-                return ServiceResult.Ok($"Z księstwem {target.Name} masz już pakt handlowy.");
+                return ServiceResult.Ok($"Nie masz paktu {dto.PactType.ToLower()} z księstwem {target.Name}.");
             _context.Pacts.Remove(existing);
             await _context.SaveChangesAsync();
-            return ServiceResult.Ok($"Przywrócono domyślny pakt handlowy z księstwem {target.Name}.");
+            return ServiceResult.Ok($"Zerwano pakt {dto.PactType.ToLower()} z księstwem {target.Name}.");
         }
 
+        // Zawarcie paktu danego typu.
         if (existing != null)
-        {
-            if (existing.PactType == dto.PactType)
-                return ServiceResult.Ok($"Pakt {dto.PactType.ToLower()} z księstwem {target.Name} już obowiązuje.");
-            // Zmiana typu istniejącego paktu obronnego nie zajmuje nowego slotu.
-            existing.PactType = dto.PactType;
-            existing.ConfirmedAt = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
-            return ServiceResult.Ok($"Zmieniono pakt z księstwem {target.Name} na {dto.PactType.ToLower()}.");
-        }
+            return ServiceResult.Ok($"Pakt {dto.PactType.ToLower()} z księstwem {target.Name} już obowiązuje.");
 
-        // Nowy pakt obronny — sprawdź limit.
+        // Limit łącznej liczby paktów (wszystkich typów).
         int used = await _context.Pacts.CountAsync(p => p.Status == "Active" &&
             (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id));
         int limit = LimitFor(kingdom);
         if (used >= limit)
             return ServiceResult.Fail(
-                $"Osiągnięto limit {limit} paktów obronnych. Zbuduj Ambasadę, aby zwiększyć limit.");
+                $"Osiągnięto limit {limit} paktów. Zbuduj Ambasadę, aby zwiększyć limit.");
 
         _context.Pacts.Add(new Pact
         {

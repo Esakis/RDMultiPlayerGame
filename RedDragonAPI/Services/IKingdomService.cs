@@ -14,6 +14,7 @@ public interface IKingdomService
     Task<ServiceResult> FreezeAsync(int userId);
     Task<ServiceResult> UnfreezeAsync(int userId);
     Task<ServiceResult> DropProtectionAsync(int userId);
+    Task<ServiceResult> SetWagesAsync(int userId, int wages);
     Task<ServiceResult> SetMetamagicAsync(int userId, string mode);
     Task<ServiceResult> ChargeTotemAsync(int userId, string totem);
     Task<ServiceResult> SetAppliedScienceAsync(int userId, string school);

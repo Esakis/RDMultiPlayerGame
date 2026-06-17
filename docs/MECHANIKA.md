@@ -405,8 +405,15 @@ maskowanie. Generał może zginąć w walce, z rąk złodziei, w labiryncie lub 
 
 ## 13. Pozostałe systemy
 
-- **Labirynt** — minigra: generałowie eksplorują, zdobywają kości/surowce, mogą zginąć
-  (Elf bierze 1,5× surowców).
+- **Labirynt** (wg oryginału, `docs/zrodla/manual-pl/labyrint.txt`) — budżet akcji na
+  przeliczenie: 2 pkt (4 z **Zajazdem u Czerwonego Smoka** — wejście 2× zamiast 1×).
+  **Weź skarb** kosztuje 2 pkt (7 typów: złoto, surowce, doświadczenie, portal/smoki,
+  budulec, nauka, ludność); oprócz złota grozi raną, klątwą lub śmiercią generała
+  (generał >20 lvl nie ginie, wyjątek: branie Doświadczenia). **Akcje generała** po 1 pkt:
+  szukanie generała i Ołtarz (zmiana cechy drugorzędnej kosztem ½ doświadczenia) — nigdy
+  nie ranią. Skarb wynosisz dopiero po 5. turze przeliczenia. Poziom generała, zaklęcie
+  „Szczęście" (Fortuna, max 49%) i cecha drugorzędna **Odkrywca** (dodaje poziom generała
+  do Fortuny; dla Kupca/Profesora) zwiększają łup i zmniejszają ryzyko. Akcje nie kosztują tur.
 - **Rynek (trh)** — handel surowcami między graczami; dostęp wymaga Skrzyżowania
   szlaków handlowych; Rychlý trh (szybki rynek) — wygoda płatna.
 - **Badania (výzkum)** — punkty nauki od naukowców; dziedziny m.in.:

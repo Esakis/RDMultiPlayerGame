@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LabyrinthService, LabyrinthStatus, LabyrinthResult } from '../../core/services/labyrinth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-labyrinth',
@@ -34,7 +35,7 @@ export class LabyrinthComponent implements OnInit {
     });
   }
 
-  private handle(obs: ReturnType<LabyrinthService['advance']>): void {
+  private handle(obs: Observable<LabyrinthResult>): void {
     this.busy = true;
     this.message = '';
     this.error = '';
@@ -48,20 +49,18 @@ export class LabyrinthComponent implements OnInit {
     });
   }
 
-  enter(): void {
+  takeTreasure(type: string): void {
     if (!this.selectedGeneralId) { this.error = 'Wybierz generała.'; return; }
-    this.handle(this.labyrinth.enter(this.selectedGeneralId));
+    this.handle(this.labyrinth.takeTreasure(this.selectedGeneralId, type));
   }
 
-  advance(): void {
-    this.handle(this.labyrinth.advance());
+  searchGeneral(): void {
+    if (!this.selectedGeneralId) { this.error = 'Wybierz generała.'; return; }
+    this.handle(this.labyrinth.searchGeneral(this.selectedGeneralId));
   }
 
-  retreat(): void {
-    this.handle(this.labyrinth.retreat());
-  }
-
-  spendDice(type: string): void {
-    this.handle(this.labyrinth.spend(type));
+  changeAbility(): void {
+    if (!this.selectedGeneralId) { this.error = 'Wybierz generała.'; return; }
+    this.handle(this.labyrinth.changeAbility(this.selectedGeneralId));
   }
 }

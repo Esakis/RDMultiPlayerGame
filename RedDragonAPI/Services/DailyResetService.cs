@@ -155,6 +155,9 @@ public class DailyResetService : BackgroundService
                 // Nowy cykl: przydział = aktualnie dostępne tury (mianownik licznika 0→max)
                 kingdom.TurnsCapacity = kingdom.TurnsAvailable;
 
+                // Nowe przeliczenie — odnów budżet akcji labiryntu (docs/MECHANIKA.md §13)
+                kingdom.LabyrinthActionsUsed = 0;
+
                 kingdom.Age++;
                 if (kingdom.IsProtected)
                 {

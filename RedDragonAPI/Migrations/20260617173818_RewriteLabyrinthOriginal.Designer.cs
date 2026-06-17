@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedDragonAPI.Data;
 
@@ -11,9 +12,11 @@ using RedDragonAPI.Data;
 namespace RedDragonAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260617173818_RewriteLabyrinthOriginal")]
+    partial class RewriteLabyrinthOriginal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -529,7 +532,7 @@ namespace RedDragonAPI.Migrations
                             CostGold = 0,
                             CostLand = 0,
                             DefenseBonus = 0m,
-                            Description = "Obniża wymaganą pensję do 42 dla 100% popularności; pozwala wejść 2× do labiryntu na przeliczenie",
+                            Description = "Obniża wymaganą pensję do 42 dla 100% popularności",
                             DisplayName = "Zajazd u Czerwonego Smoka",
                             IsSpecial = true,
                             PopulationCapacity = 0,
@@ -1409,6 +1412,28 @@ namespace RedDragonAPI.Migrations
                             ProductionBonus = 0m,
                             Row = 7,
                             WorkshopCapacity = 0
+                        },
+                        new
+                        {
+                            Id = 706,
+                            BaseCost = 200000,
+                            BonusTurnsPerDay = 0,
+                            BuildTime = 7,
+                            BuildingType = "SanktuariumStworcy",
+                            Category = "Specjalne",
+                            Col = 6,
+                            CostBudulec = 1,
+                            CostGold = 0,
+                            CostLand = 0,
+                            DefenseBonus = 0m,
+                            Description = "Podwaja budżet akcji w labiryncie (2 skarby lub 4 akcje generała na przeliczenie)",
+                            DisplayName = "Sanktuarium Stwórcy",
+                            IsSpecial = true,
+                            PopulationCapacity = 0,
+                            ProductionBonus = 0m,
+                            RequiredBuildingType = "PospoliteRuszenie",
+                            Row = 7,
+                            WorkshopCapacity = 0
                         });
                 });
 
@@ -1505,7 +1530,7 @@ namespace RedDragonAPI.Migrations
                             Id = 1,
                             IsActive = true,
                             Name = "Era Przebudzenia",
-                            StartedAt = new DateTime(2026, 6, 17, 17, 53, 36, 242, DateTimeKind.Utc).AddTicks(5898),
+                            StartedAt = new DateTime(2026, 6, 17, 17, 38, 18, 91, DateTimeKind.Utc).AddTicks(6298),
                             Theme = "Pierwsza era nowego świata Red Dragon"
                         });
                 });

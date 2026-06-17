@@ -49,6 +49,10 @@ export class KingdomService {
     return this.http.post<ServiceResult>(`${this.apiUrl}/drop-protection`, {});
   }
 
+  setWages(wages: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/wages`, { wages });
+  }
+
   setMetamagic(mode: string): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/metamagic`, { mode });
   }

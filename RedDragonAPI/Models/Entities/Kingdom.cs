@@ -29,8 +29,10 @@ public class Kingdom
     public long Weapons { get; set; } = 0;
     public long Mana { get; set; } = 0;
 
-    // Kości zdobyte w labiryncie (docs/MECHANIKA.md §13)
-    public long LabyrinthDice { get; set; } = 0;
+    // Punkty akcji labiryntu wykorzystane w bieżącym przeliczeniu (docs/MECHANIKA.md §13).
+    // Budżet na przeliczenie: 2 pkt (4 z Sanktuarium Stwórcy); skarb kosztuje 2 pkt,
+    // akcja generała (szukanie / zmiana zdolności) 1 pkt. Zerowane w przeliczeniu dziennym.
+    public int LabyrinthActionsUsed { get; set; } = 0;
 
     // Ciała na cmentarzu — surowiec Nekromancji (docs/MECHANIKA.md §2.2)
     public long Bodies { get; set; } = 0;

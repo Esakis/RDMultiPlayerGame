@@ -9,13 +9,14 @@ export interface PactMember {
   name: string;
   race: string;
   land: number;
-  pactType: string; // 'Handlowy' (domyślny) | 'Magiczny' | 'Wojskowy' | 'Zlodziejski'
+  // Aktywne typy paktów z tym księstwem (do 4: Handlowy, Magiczny, Wojskowy, Zlodziejski).
+  activePacts: string[];
 }
 
 export interface PactStatus {
   inCoalition: boolean;
-  limit: number;      // maks. liczba paktów obronnych (5 + Ambasada)
-  usedSlots: number;  // liczba zawartych paktów obronnych
+  limit: number;      // maks. łączna liczba paktów (5 + Ambasada)
+  usedSlots: number;  // liczba zawartych paktów (wszystkich typów)
   hasAmbasada: boolean;
   members: PactMember[];
 }
@@ -30,7 +31,7 @@ export class PactService {
     return this.http.get<PactStatus>(this.apiUrl);
   }
 
-  setPact(targetKingdomId: number, pactType: string): Observable<ServiceResult> {
-    return this.http.post<ServiceResult>(`${this.apiUrl}/set`, { targetKingdomId, pactType });
+  setPact(targetKingdomId: number, pactType: string, active: boolean): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/set`, { targetKingdomId, pactType, active });
   }
 }

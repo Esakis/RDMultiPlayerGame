@@ -133,16 +133,22 @@ export class MarketComponent implements OnInit {
     return 'pact-' + type.toLowerCase();
   }
 
-  /** Czy zmiana typu paktu dla danego sojusznika spowodowałaby przekroczenie limitu. */
-  pactDisabled(member: PactMember): boolean {
-    return !!this.pacts && member.pactType === 'Handlowy' && this.pacts.usedSlots >= this.pacts.limit;
+  /** Czy z danym księstwem mamy aktywny pakt danego typu. */
+  hasPact(member: PactMember, type: string): boolean {
+    return member.activePacts.includes(type);
   }
 
-  changePact(member: PactMember, newType: string): void {
-    if (newType === member.pactType) return;
+  /** Checkbox zablokowany, gdy zawarcie nowego paktu przekroczyłoby limit. */
+  pactDisabled(member: PactMember, type: string): boolean {
+    if (this.hasPact(member, type)) return false; // odznaczenie zawsze dozwolone
+    return !!this.pacts && this.pacts.usedSlots >= this.pacts.limit;
+  }
+
+  /** Zawiera lub zrywa pakt danego typu z danym księstwem. */
+  togglePact(member: PactMember, type: string, active: boolean): void {
     this.pactMessage = '';
     this.pactError = '';
-    this.pactService.setPact(member.kingdomId, newType).subscribe({
+    this.pactService.setPact(member.kingdomId, type, active).subscribe({
       next: r => { this.pactMessage = r.message ?? ''; this.loadPacts(); },
       error: e => { this.pactError = e.error || this.translate.instant('mkt.errPact'); this.loadPacts(); }
     });

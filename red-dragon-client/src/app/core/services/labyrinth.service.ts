@@ -9,38 +9,29 @@ export interface LabyrinthGeneral {
   name: string;
   level: number;
   primaryTrait: string;
+  secondaryTrait: string;
 }
 
-export interface LabyrinthExpedition {
-  generalId: number;
-  generalName: string;
-  generalLevel: number;
-  depth: number;
-  pendingGold: number;
-  pendingFood: number;
-  pendingStone: number;
-  pendingWeapons: number;
-  pendingMana: number;
-  pendingDice: number;
-  lastEvent?: string;
-}
-
-export interface LabyrinthReward {
+export interface LabyrinthTreasure {
   type: string;
   name: string;
   description: string;
-  diceCost: number;
-  canAfford: boolean;
+  riskyForGeneral: boolean;
 }
 
 export interface LabyrinthStatus {
-  hasActiveExpedition: boolean;
-  expedition?: LabyrinthExpedition;
+  actionPoints: number;
+  maxActionPoints: number;
+  treasureCost: number;
+  generalActionCost: number;
+  hasDoubleEntry: boolean;
+  turnsUsedThisRecount: number;
+  turnsRequiredForTreasure: number;
+  canTakeTreasure: boolean;
+  fortuneLevel: number;
   availableGenerals: LabyrinthGeneral[];
-  bankedDice: number;
-  turnsAvailable: number;
-  dragonLore: number;
-  rewards: LabyrinthReward[];
+  treasures: LabyrinthTreasure[];
+  lastEvent?: string;
 }
 
 export interface LabyrinthResult extends ServiceResult {
@@ -57,19 +48,15 @@ export class LabyrinthService {
     return this.http.get<LabyrinthStatus>(this.apiUrl);
   }
 
-  enter(generalId: number): Observable<LabyrinthResult> {
-    return this.http.post<LabyrinthResult>(`${this.apiUrl}/enter`, { generalId });
+  takeTreasure(generalId: number, treasureType: string): Observable<LabyrinthResult> {
+    return this.http.post<LabyrinthResult>(`${this.apiUrl}/treasure`, { generalId, treasureType });
   }
 
-  advance(): Observable<LabyrinthResult> {
-    return this.http.post<LabyrinthResult>(`${this.apiUrl}/advance`, {});
+  searchGeneral(generalId: number): Observable<LabyrinthResult> {
+    return this.http.post<LabyrinthResult>(`${this.apiUrl}/search-general`, { generalId });
   }
 
-  retreat(): Observable<LabyrinthResult> {
-    return this.http.post<LabyrinthResult>(`${this.apiUrl}/retreat`, {});
-  }
-
-  spend(rewardType: string): Observable<LabyrinthResult> {
-    return this.http.post<LabyrinthResult>(`${this.apiUrl}/spend`, { rewardType });
+  changeAbility(generalId: number): Observable<LabyrinthResult> {
+    return this.http.post<LabyrinthResult>(`${this.apiUrl}/change-ability`, { generalId });
   }
 }

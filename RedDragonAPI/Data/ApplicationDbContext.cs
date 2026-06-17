@@ -33,7 +33,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<General> Generals { get; set; }
     public DbSet<Pact> Pacts { get; set; }
     public DbSet<MarketOrder> MarketOrders { get; set; }
-    public DbSet<LabyrinthExpedition> LabyrinthExpeditions { get; set; }
     public DbSet<War> Wars { get; set; }
     public DbSet<MarketTransaction> MarketTransactions { get; set; }
     public DbSet<KingdomEvent> KingdomEvents { get; set; }
@@ -267,22 +266,6 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(o => o.KingdomId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // LabyrinthExpedition -> Kingdom / General
-        modelBuilder.Entity<LabyrinthExpedition>()
-            .HasOne(e => e.Kingdom)
-            .WithMany()
-            .HasForeignKey(e => e.KingdomId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        // Restrict zamiast SetNull: SQL Server odrzuca wiele sciezek kaskadowych
-        // (Kingdom -> Expedition cascade oraz Kingdom -> General -> Expedition).
-        // Zerowanie GeneralId przy smierci generala wykonuje LabyrinthService w kodzie.
-        modelBuilder.Entity<LabyrinthExpedition>()
-            .HasOne(e => e.General)
-            .WithMany()
-            .HasForeignKey(e => e.GeneralId)
-            .OnDelete(DeleteBehavior.Restrict);
-
         // MarketTransaction -> Buyer / Seller
         modelBuilder.Entity<MarketTransaction>()
             .HasOne(t => t.BuyerKingdom)
@@ -336,7 +319,6 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<BattleReport>().HasIndex(b => b.DefenderKingdomId);
         modelBuilder.Entity<MarketOrder>().HasIndex(o => new { o.Status, o.Resource });
         modelBuilder.Entity<MarketOrder>().HasIndex(o => o.KingdomId);
-        modelBuilder.Entity<LabyrinthExpedition>().HasIndex(e => new { e.KingdomId, e.Status });
         modelBuilder.Entity<War>().HasIndex(w => new { w.EraId, w.Status });
         modelBuilder.Entity<MarketTransaction>().HasIndex(t => t.BuyerKingdomId);
         modelBuilder.Entity<MarketTransaction>().HasIndex(t => t.SellerKingdomId);
@@ -535,7 +517,7 @@ public class ApplicationDbContext : DbContext
             new BuildingDefinition { Id = 13, BuildingType = "WiezeObronne", Category = "Obrona", DisplayName = "Wieże obronne", Description = "Pomagają w obronie księstwa", CostGold = 300, CostBudulec = 1, CostLand = 1, BuildTime = 1, DefenseBonus = 0.03m },
             new BuildingDefinition { Id = 14, BuildingType = "KonstrukcjaMachin", Category = "Wojskowe", DisplayName = "Konstrukcja machin bojowych", Description = "Budowa machin wojennych", CostGold = 500, CostBudulec = 1, CostLand = 1, BuildTime = 1 },
             // === BUDYNKI SPECJALNE - Rząd 1 (koszt bazowy 500, 1 tura) ===
-            new BuildingDefinition { Id = 101, BuildingType = "ZajazdCzerwonego", Category = "Specjalne", DisplayName = "Zajazd u Czerwonego Smoka", Description = "Obniża wymaganą pensję do 42 dla 100% popularności", IsSpecial = true, Row = 1, Col = 1, BaseCost = 500, BuildTime = 1, CostLand = 0 },
+            new BuildingDefinition { Id = 101, BuildingType = "ZajazdCzerwonego", Category = "Specjalne", DisplayName = "Zajazd u Czerwonego Smoka", Description = "Obniża wymaganą pensję do 42 dla 100% popularności; pozwala wejść 2× do labiryntu na przeliczenie", IsSpecial = true, Row = 1, Col = 1, BaseCost = 500, BuildTime = 1, CostLand = 0 },
             new BuildingDefinition { Id = 102, BuildingType = "Mlyn", Category = "Specjalne", DisplayName = "Młyn", Description = "Bonus do produkcji chłopów", IsSpecial = true, Row = 1, Col = 2, BaseCost = 500, BuildTime = 1, CostLand = 0, ProductionBonus = 0.10m },
             new BuildingDefinition { Id = 103, BuildingType = "Ratusz", Category = "Specjalne", DisplayName = "Ratusz", Description = "Dodatkowe złoto z podatków", IsSpecial = true, Row = 1, Col = 3, BaseCost = 500, BuildTime = 1, CostLand = 0 },
             new BuildingDefinition { Id = 104, BuildingType = "KondensatorMagiczny", Category = "Specjalne", DisplayName = "Kondensator magiczny", Description = "Bonus do produkcji many", IsSpecial = true, Row = 1, Col = 4, BaseCost = 500, BuildTime = 1, CostLand = 0, ProductionBonus = 0.10m },

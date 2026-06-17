@@ -272,6 +272,21 @@ public class KingdomService : IKingdomService
         return ServiceResult.Ok("Księstwo odmrożone — możesz znów działać.");
     }
 
+    public async Task<ServiceResult> SetWagesAsync(int userId, int wages)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
+
+        // Płaca 0–50 złota na pracownika/turę (manual: max 50 = 100 popularności).
+        wages = Math.Clamp(wages, 0, 50);
+        kingdom.Wages = wages;
+        await _context.SaveChangesAsync();
+
+        int target = Math.Min(100, wages * 2);
+        return ServiceResult.Ok($"Ustawiono pensję na {wages} złota/pracownika. Docelowa popularność: {target}%.");
+    }
+
     public async Task<ServiceResult> DropProtectionAsync(int userId)
     {
         var kingdom = await _context.Kingdoms

@@ -87,26 +87,23 @@
     "loadingKingdom": "Ładowanie księstwa..."
   },
   "lab": {
-    "lead": "Wyślij generała w głąb labiryntu. Każdy poziom (1 tura) to nowy łup, ale i rosnące ryzyko: pułapka rani i kończy wyprawę, a strażnik może generała zabić — wtedy zgromadzony łup przepada. Wycofaj się w porę, by zdeponować zdobycz.",
-    "turnsAvailable": "Dostępne tury",
-    "bankedDice": "Zebrane kości",
-    "dragonLore": "Wiedza o smokach",
+    "lead": "Wyślij generała do labiryntu. Na każde przeliczenie masz budżet akcji: 2 punkty (4 z Zajazdem u Czerwonego Smoka — wtedy wejdziesz 2×). Wzięcie skarbu kosztuje 2 punkty (możliwa rana lub śmierć generała — oprócz złota), a akcja generała (szukanie / zmiana zdolności) 1 punkt i nigdy nie szkodzi. Wyższy poziom generała, zaklęcie „Szczęście" i cecha Odkrywca zwiększają łup i zmniejszają ryzyko. Skarb wynosisz dopiero po 5. turze przeliczenia. Akcje nie kosztują tur.",
+    "actionPoints": "Punkty akcji",
+    "doubleEntryActive": "Zajazd u Czerwonego Smoka — wejście ×2",
+    "turnsUsed": "Tury wykorzystane w tym przeliczeniu",
+    "fortune": "Szczęście (fart)",
     "lvl": "poz.",
-    "loot": "łupów",
-    "diceVault": "Skarbiec kości",
-    "diceVaultHint": "Wymień zebrane kości na nagrody. Łup z labiryntu rośnie z badaniami o smokach.",
-    "reward": "Nagroda",
-    "diceCount": "{{n}} kości",
-    "exchange": "Wymień",
-    "expeditionInProgress": "Wyprawa w toku",
-    "depth": "Głębokość",
-    "dice": "Kości",
-    "lootHint": "Łup powyżej trafi do skarbca dopiero po bezpiecznym zakończeniu wyprawy.",
-    "noTurns": "Brak tur",
-    "goDeeper": "Zejdź głębiej (1 tura)",
-    "retreat": "Wycofaj się i zdeponuj łup",
-    "sendGeneral": "Wyślij generała",
-    "enter": "Wejdź do labiryntu",
+    "sendGeneral": "Wybierz generała",
+    "takeTreasure": "Weź skarb",
+    "cost": "koszt {{n}} pkt",
+    "treasureLocked": "Skarb można wynieść dopiero po {{turns}}. turze tego przeliczenia (i potrzebujesz 2 punktów akcji).",
+    "reward": "Skarb",
+    "take": "Weź",
+    "risky": "Ryzyko: generał może zostać ranny lub zginąć.",
+    "generalActions": "Akcje generała",
+    "searchGeneral": "Szukaj generała",
+    "changeAbility": "Ołtarz — zmień zdolność",
+    "generalActionsHint": "Szukanie generała i Ołtarz nigdy nie ranią ani nie zabijają. Ołtarz zmienia cechę drugorzędną wybranego generała kosztem połowy doświadczenia.",
     "noGenerals": "Brak dostępnych generałów (potrzebny zdrowy generał w domu)."
   },
   "drg": {
@@ -169,7 +166,8 @@
       "MaskowanieISzpiegostwo": "Maskowanie i szpiegostwo",
       "CzarnaMagia": "Czarna magia",
       "MagiaCzasu": "Magia czasu",
-      "BialaMagia": "Biała magia"
+      "BialaMagia": "Biała magia",
+      "Odkrywca": "Odkrywca"
     }
   },
   "thf": {
@@ -223,7 +221,8 @@
     "errPact": "Błąd zmiany paktu.",
     "pactsTitle": "Pakty sojusznicze",
     "pactsNoCoalition": "Pakty zawierasz wyłącznie z członkami swojej koalicji. Dołącz do koalicji, aby paktować.",
-    "pactsIntro": "Z każdym sojusznikiem masz domyślnie <strong>pakt handlowy</strong>. Możesz zmienić go na pakt obronny (wojskowy, magiczny lub złodziejski) — wtedy ziemia tego sojusznika przestaje liczyć się do handlu, ale jego jednostki pomagają w obronie Twojego księstwa.",
+    "pactsIntro": "Z każdym sojusznikiem możesz zawrzeć <strong>dowolną kombinację 4 paktów</strong> (po jednym każdego typu). Pakt handlowy dolicza ziemię sojusznika do efektywności kupców; pakty wojskowy, magiczny i złodziejski wspomagają obronę Twojego księstwa. Zaznacz pakty, które chcesz zawrzeć.",
+    "pactsCount": "Zawarte pakty",
     "defensivePacts": "Pakty obronne",
     "ambasadaHas": "Ambasada zwiększyła Twój limit o 1.",
     "ambasadaBuild": "Zbuduj budynek specjalny Ambasada, aby zwiększyć limit o 1.",
@@ -237,7 +236,7 @@
       "Mana": "Mana"
     },
     "pact": {
-      "Handlowy": "Handlowy (domyślny)",
+      "Handlowy": "Handlowy",
       "Wojskowy": "Wojskowy",
       "Magiczny": "Magiczny",
       "Zlodziejski": "Złodziejski"
@@ -383,6 +382,13 @@
   "eco": {
     "manageTitle": "Zarządzanie Zawodami",
     "assignHint": "Przydziel pracowników do zawodów",
+    "wagesTitle": "Pensje pracowników",
+    "wagesHint": "Pensja to złoto wypłacane każdemu pracownikowi co turę (0–50). Im wyższa, tym większa popularność, ale i koszt. Cel popularności = pensja × 2 (maks. 100%). Płaca 50 daje pełne 100% popularności.",
+    "wagesLabel": "Pensja",
+    "wagesPerWorker": "złota / pracownika / turę",
+    "wagesApply": "Ustaw",
+    "wagesTarget": "Docelowa popularność",
+    "wagesCurrent": "obecna",
     "profession": "Zawód",
     "workers": "Pracownicy",
     "perTurn": "Produkcja/turę",

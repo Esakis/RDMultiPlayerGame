@@ -61,14 +61,14 @@ public class GeneralDto
     public int SecondaryRerollsLeft { get; set; }
 }
 
-/// <summary>Stan paktów księstwa: lista współczłonków koalicji z aktualnym typem paktu
-/// oraz informacja o limicie paktów obronnych.</summary>
+/// <summary>Stan paktów księstwa: lista współczłonków koalicji z aktywnymi typami paktów
+/// oraz informacja o globalnym limicie paktów.</summary>
 public class PactStatusDto
 {
     public bool InCoalition { get; set; }
-    /// <summary>Maks. liczba paktów obronnych (baza 5 + Ambasada).</summary>
+    /// <summary>Maks. łączna liczba paktów (baza 5 + Ambasada).</summary>
     public int Limit { get; set; }
-    /// <summary>Liczba aktualnie zawartych paktów obronnych.</summary>
+    /// <summary>Liczba aktualnie zawartych paktów (wszystkich typów).</summary>
     public int UsedSlots { get; set; }
     public bool HasAmbasada { get; set; }
     public List<PactMemberDto> Members { get; set; } = new();
@@ -80,12 +80,16 @@ public class PactMemberDto
     public string Name { get; set; } = string.Empty;
     public string Race { get; set; } = string.Empty;
     public int Land { get; set; }
-    /// <summary>Handlowy (domyślny) | Magiczny | Wojskowy | Zlodziejski</summary>
-    public string PactType { get; set; } = "Handlowy";
+    /// <summary>Aktywne typy paktów z tym księstwem: Handlowy | Magiczny | Wojskowy | Zlodziejski.
+    /// Z każdym księstwem można mieć po jednym pakcie każdego typu (do 4 łącznie).</summary>
+    public List<string> ActivePacts { get; set; } = new();
 }
 
 public class SetPactDto
 {
     public int TargetKingdomId { get; set; }
+    /// <summary>Typ paktu: Handlowy | Magiczny | Wojskowy | Zlodziejski.</summary>
     public string PactType { get; set; } = "Handlowy";
+    /// <summary>true = zawrzyj pakt tego typu, false = zerwij.</summary>
+    public bool Active { get; set; }
 }

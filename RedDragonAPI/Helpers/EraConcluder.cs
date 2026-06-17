@@ -51,7 +51,6 @@ public static class EraConcluder
 
         ctx.QueuedActions.RemoveRange(ctx.QueuedActions.Where(q => ids.Contains(q.KingdomId)
             || (q.TargetKingdomId != null && ids.Contains(q.TargetKingdomId.Value))));
-        ctx.LabyrinthExpeditions.RemoveRange(ctx.LabyrinthExpeditions.Where(e => ids.Contains(e.KingdomId)));
         ctx.MarketOrders.RemoveRange(ctx.MarketOrders.Where(o => ids.Contains(o.KingdomId)));
         ctx.Generals.RemoveRange(ctx.Generals.Where(g => ids.Contains(g.KingdomId)));
         ctx.Pacts.RemoveRange(ctx.Pacts.Where(p => ids.Contains(p.ProposerKingdomId) || ids.Contains(p.TargetKingdomId)));
@@ -73,7 +72,7 @@ public static class EraConcluder
             k.Gold = 50000; k.Food = 10000; k.Stone = 2000;
             k.Budulec = 0; k.BudulecStored = 0; k.Weapons = 0; k.Mana = 0;
             k.Population = 1000; k.Popularity = 100; k.Wages = 50; k.Education = 0;
-            k.SciencePoints = 0; k.CurrentResearchTech = null; k.LabyrinthDice = 0;
+            k.SciencePoints = 0; k.CurrentResearchTech = null; k.LabyrinthActionsUsed = 0;
             k.TurnsPerDay = tpd; k.TurnsAvailable = tpd; k.TurnsCapacity = tpd; k.MaxTurns = tpd * 3 + 4;
             k.TurnNumber = 0; k.Age = 0;
             k.CurrentSpecialBuilding = null; k.SpecialBuildingProgress = 0; k.SpecialBuildingCost = 0;

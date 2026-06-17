@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RedDragonAPI.Data;
+using RedDragonAPI.Helpers;
 using RedDragonAPI.Models.DTOs;
 using RedDragonAPI.Models.Entities;
 
@@ -8,361 +9,362 @@ namespace RedDragonAPI.Services;
 public interface ILabyrinthService
 {
     Task<LabyrinthStatusDto> GetStatusAsync(int userId);
-    Task<ServiceResult<LabyrinthStatusDto>> EnterAsync(int userId, int generalId);
-    Task<ServiceResult<LabyrinthStatusDto>> AdvanceAsync(int userId);
-    Task<ServiceResult<LabyrinthStatusDto>> RetreatAsync(int userId);
-    Task<ServiceResult<LabyrinthStatusDto>> SpendDiceAsync(int userId, string rewardType);
+    Task<ServiceResult<LabyrinthStatusDto>> TakeTreasureAsync(int userId, int generalId, string treasureType);
+    Task<ServiceResult<LabyrinthStatusDto>> SearchGeneralAsync(int userId, int generalId);
+    Task<ServiceResult<LabyrinthStatusDto>> ChangeAbilityAsync(int userId, int generalId);
 }
 
 /// <summary>
-/// Labirynt (docs/MECHANIKA.md §13) — minigra „push your luck".
-/// Generał schodzi głębiej (1 tura/poziom), gromadząc łup; każdy poziom niesie ryzyko
-/// pułapki (rana, koniec wyprawy — łup zachowany) lub potwora (test przeżycia: porażka =
-/// śmierć generała i utrata łupu). Gracz może w każdej chwili się wycofać i zdeponować łup.
-/// Elf zbiera 1,5× łupów materialnych.
+/// Labirynt wg oryginału Red Dragon (docs/MECHANIKA.md §13, docs/zrodla/manual-pl/labyrint.txt).
+/// Każde przeliczenie daje budżet akcji (2 pkt, 4 z Sanktuarium Stwórcy). Akcje:
+///   • Weź skarb (2 pkt) — jeden z 7 typów łupu; możliwe zranienie/śmierć generała
+///     albo klątwa (oprócz złota, które jest zawsze bezpieczne). Skarb wynosisz dopiero
+///     po 5. turze danego przeliczenia.
+///   • Szukaj generała / Zmień zdolność na Ołtarzu (po 1 pkt) — nigdy nie ranią ani nie zabijają.
+/// Im wyższy poziom generała i silniejsze zaklęcie „Szczęście" (Fortuna), tym większy łup
+/// i mniejsze ryzyko. Generałowie powyżej 20. poziomu nie giną — z wyjątkiem brania
+/// Doświadczenia. Akcje nie kosztują tur.
 /// </summary>
 public class LabyrinthService : ILabyrinthService
 {
     private readonly ApplicationDbContext _context;
+    private readonly IGeneralService _generalService;
 
-    /// <summary>Nagrody do kupienia za zebrane kości (docs/MECHANIKA.md §13).</summary>
-    public static readonly (string Type, string Name, string Description, int DiceCost)[] RewardCatalog =
+    private const int TreasureCost = 2;
+    private const int GeneralActionCost = 1;
+    private const int TurnsRequiredForTreasure = 5;
+
+    /// <summary>Katalog skarbów (Type, Name, Description, RiskyForGeneral).</summary>
+    public static readonly (string Type, string Name, string Description, bool Risky)[] TreasureCatalog =
     {
-        ("Zloto", "Sakwa złota", "Złoto skalowane obszarem (akry × 200)", 5),
-        ("Surowce", "Skrzynia surowców", "Kamień, jedzenie i broń (skalowane obszarem)", 5),
-        ("Mana", "Kryształ many", "Mana (akry × 25)", 3),
-        ("Doswiadczenie", "Eliksir doświadczenia", "+50 000 doświadczenia najlepszemu generałowi", 8),
-        ("Tura", "Klepsydra", "+1 tura (do limitu)", 6)
+        ("Zloto", "Sakwa złota", "Złoto skalowane obszarem i poziomem generała — zawsze się udaje, bez ryzyka.", false),
+        ("Surowce", "Skrzynia surowców", "Losowy surowiec: kamień, jedzenie, broń albo mana.", true),
+        ("Doswiadczenie", "Eliksir doświadczenia", "~20% doświadczenia do awansu dla wysłanego generała (ryzyko śmierci niezależne od poziomu).", true),
+        ("Portal", "Portal smoczy", "Otwiera portal — do 5 smoków (mniej, gdy masz ich już dużo).", true),
+        ("Infrastruktura", "Budulec", "Materiał budowlany — 1/6 wartości znalezionego kamienia.", true),
+        ("Nauka", "Kryształ wiedzy", "Punkty nauki w ilości obszar × 5.", true),
+        ("Ludnosc", "Pielgrzymi", "Nowi mieszkańcy (obszar/12 – obszar/6); może przekroczyć limit zaludnienia.", true)
     };
 
-    public LabyrinthService(ApplicationDbContext context)
+    public LabyrinthService(ApplicationDbContext context, IGeneralService generalService)
     {
         _context = context;
+        _generalService = generalService;
     }
 
-    /// <summary>Poziom wiedzy o smokach — zwiększa łupy i kości w labiryncie.</summary>
+    private async Task<Kingdom?> GetKingdomAsync(int userId) =>
+        await _context.Kingdoms
+            .Include(k => k.Buildings)
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+
+    /// <summary>
+    /// Zajazd u Czerwonego Smoka pozwala wejść do labiryntu dwa razy na przeliczenie
+    /// (podwaja budżet akcji). Bez niego można wejść tylko raz.
+    /// </summary>
+    private static bool HasDoubleEntry(Kingdom k) =>
+        k.Buildings.Any(b => b.BuildingType == "ZajazdCzerwonego" && b.Quantity > 0 && !b.IsUnderConstruction);
+
+    private static int MaxActionPoints(Kingdom k) => HasDoubleEntry(k) ? 4 : 2;
+
+    private static int TurnsUsed(Kingdom k) => Math.Max(0, k.TurnsCapacity - k.TurnsAvailable);
+
+    /// <summary>
+    /// Fortuna efektywna: zaklęcie „Szczęście" + poziom generała-Odkrywcy (docs/zrodla manual:
+    /// Explorer dodaje swój poziom do wpływu Fortuny — większy łup, mniejsze ryzyko). Cap 80.
+    /// </summary>
+    private static int EffectiveFortune(int baseFortune, General general)
+    {
+        int explorer = general.SecondaryTrait == "Odkrywca" ? general.Level : 0;
+        return Math.Min(80, baseFortune + explorer);
+    }
+
     private async Task<int> DragonLoreAsync(int kingdomId) =>
         await _context.Researches.CountAsync(r =>
             r.KingdomId == kingdomId && r.IsCompleted && r.TechType.StartsWith("Smoko"));
 
-    private async Task<Kingdom?> GetKingdomAsync(int userId) =>
-        await _context.Kingdoms.FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
-
-    private async Task<LabyrinthExpedition?> GetActiveExpeditionAsync(int kingdomId) =>
-        await _context.LabyrinthExpeditions
-            .Include(e => e.General)
-            .FirstOrDefaultAsync(e => e.KingdomId == kingdomId && e.Status == "Active");
+    /// <summary>Siła zaklęcia „Szczęście" (fart w labiryncie), w procentach, max 49.</summary>
+    private async Task<int> FortuneAsync(int kingdomId)
+    {
+        int power = await _context.ActiveSpells
+            .Where(s => s.KingdomId == kingdomId && s.SpellType == "Szczescie"
+                        && (s.ExpiresAt == null || s.ExpiresAt > DateTime.UtcNow))
+            .Select(s => (int?)s.Power)
+            .MaxAsync() ?? 0;
+        return Math.Clamp(power, 0, 49);
+    }
 
     public async Task<LabyrinthStatusDto> GetStatusAsync(int userId)
     {
         var kingdom = await GetKingdomAsync(userId);
-        if (kingdom == null)
-            return new LabyrinthStatusDto();
-
-        return await BuildStatusAsync(kingdom);
+        if (kingdom == null) return new LabyrinthStatusDto();
+        return await BuildStatusAsync(kingdom, null);
     }
 
-    private async Task<LabyrinthStatusDto> BuildStatusAsync(Kingdom kingdom)
+    private async Task<LabyrinthStatusDto> BuildStatusAsync(Kingdom kingdom, string? lastEvent)
     {
-        var active = await GetActiveExpeditionAsync(kingdom.Id);
-
-        var available = await _context.Generals
+        var generals = await _context.Generals
             .Where(g => g.KingdomId == kingdom.Id && !g.IsOutside && !g.IsImprisoned && !g.IsPending
                         && (g.WoundedUntil == null || g.WoundedUntil <= DateTime.UtcNow))
             .OrderByDescending(g => g.Experience)
             .ToListAsync();
 
+        int max = MaxActionPoints(kingdom);
+        int remaining = Math.Max(0, max - kingdom.LabyrinthActionsUsed);
+        int turnsUsed = TurnsUsed(kingdom);
+
         return new LabyrinthStatusDto
         {
-            HasActiveExpedition = active != null,
-            Expedition = active == null ? null : new LabyrinthExpeditionDto
-            {
-                GeneralId = active.GeneralId ?? 0,
-                GeneralName = active.General!.Name,
-                GeneralLevel = active.General!.Level,
-                Depth = active.Depth,
-                PendingGold = active.PendingGold,
-                PendingFood = active.PendingFood,
-                PendingStone = active.PendingStone,
-                PendingWeapons = active.PendingWeapons,
-                PendingMana = active.PendingMana,
-                PendingDice = active.PendingDice,
-                LastEvent = active.LastEvent
-            },
-            AvailableGenerals = available.Select(g => new LabyrinthGeneralDto
+            ActionPoints = remaining,
+            MaxActionPoints = max,
+            TreasureCost = TreasureCost,
+            GeneralActionCost = GeneralActionCost,
+            HasDoubleEntry = HasDoubleEntry(kingdom),
+            TurnsUsedThisRecount = turnsUsed,
+            TurnsRequiredForTreasure = TurnsRequiredForTreasure,
+            CanTakeTreasure = remaining >= TreasureCost && turnsUsed >= TurnsRequiredForTreasure,
+            FortuneLevel = await FortuneAsync(kingdom.Id),
+            AvailableGenerals = generals.Select(g => new LabyrinthGeneralDto
             {
                 Id = g.Id,
                 Name = g.Name,
                 Level = g.Level,
-                PrimaryTrait = g.PrimaryTrait
+                PrimaryTrait = g.PrimaryTrait,
+                SecondaryTrait = g.SecondaryTrait
             }).ToList(),
-            BankedDice = kingdom.LabyrinthDice,
-            TurnsAvailable = kingdom.TurnsAvailable,
-            DragonLore = await DragonLoreAsync(kingdom.Id),
-            Rewards = RewardCatalog.Select(r => new LabyrinthRewardDto
+            Treasures = TreasureCatalog.Select(t => new LabyrinthTreasureDto
             {
-                Type = r.Type,
-                Name = r.Name,
-                Description = r.Description,
-                DiceCost = r.DiceCost,
-                CanAfford = kingdom.LabyrinthDice >= r.DiceCost
-            }).ToList()
+                Type = t.Type, Name = t.Name, Description = t.Description, RiskyForGeneral = t.Risky
+            }).ToList(),
+            LastEvent = lastEvent
         };
     }
 
-    public async Task<ServiceResult<LabyrinthStatusDto>> EnterAsync(int userId, int generalId)
+    // ---- Walidacja wspólna -------------------------------------------------
+
+    private async Task<(Kingdom? kingdom, General? general, string? error)> LoadForActionAsync(int userId, int generalId)
     {
         var kingdom = await GetKingdomAsync(userId);
-        if (kingdom == null)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Nie znaleziono księstwa.");
-        if (kingdom.IsFrozen)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Księstwo jest zamrożone — odmróź je, aby działać.");
-
-        if (await GetActiveExpeditionAsync(kingdom.Id) != null)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Inny generał jest już w labiryncie.");
+        if (kingdom == null) return (null, null, "Nie znaleziono księstwa.");
+        if (kingdom.IsFrozen) return (null, null, "Księstwo jest zamrożone — odmróź je, aby działać.");
 
         var general = await _context.Generals
             .FirstOrDefaultAsync(g => g.Id == generalId && g.KingdomId == kingdom.Id);
-        if (general == null)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Nie znaleziono generała.");
-        if (general.IsOutside)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Generał jest poza księstwem.");
-        if (general.IsImprisoned)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Generał jest uwięziony.");
+        if (general == null) return (kingdom, null, "Nie znaleziono generała.");
+        if (general.IsPending) return (kingdom, null, "Ten generał czeka jeszcze na decyzję.");
+        if (general.IsOutside) return (kingdom, null, "Generał jest poza księstwem.");
+        if (general.IsImprisoned) return (kingdom, null, "Generał jest uwięziony.");
         if (general.WoundedUntil.HasValue && general.WoundedUntil > DateTime.UtcNow)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Generał jest ranny.");
+            return (kingdom, null, "Generał jest ranny.");
 
-        general.IsOutside = true; // zajęty w labiryncie
-
-        _context.LabyrinthExpeditions.Add(new LabyrinthExpedition
-        {
-            KingdomId = kingdom.Id,
-            GeneralId = general.Id,
-            Depth = 0,
-            Status = "Active",
-            LastEvent = $"{general.Name} wkracza do labiryntu. Mrok pochłania światło pochodni..."
-        });
-        await _context.SaveChangesAsync();
-
-        var status = await BuildStatusAsync(kingdom);
-        return ServiceResult<LabyrinthStatusDto>.Ok(status, $"{general.Name} wkroczył do labiryntu.");
+        return (kingdom, general, null);
     }
 
-    public async Task<ServiceResult<LabyrinthStatusDto>> AdvanceAsync(int userId)
+    // ---- Branie skarbu -----------------------------------------------------
+
+    public async Task<ServiceResult<LabyrinthStatusDto>> TakeTreasureAsync(int userId, int generalId, string treasureType)
     {
-        var kingdom = await GetKingdomAsync(userId);
-        if (kingdom == null)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Nie znaleziono księstwa.");
-        if (kingdom.IsFrozen)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Księstwo jest zamrożone — odmróź je, aby działać.");
-        if (kingdom.TurnsAvailable <= 0)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Brak dostępnych tur.");
+        var (kingdom, general, error) = await LoadForActionAsync(userId, generalId);
+        if (error != null) return ServiceResult<LabyrinthStatusDto>.Fail(error);
 
-        var exp = await GetActiveExpeditionAsync(kingdom.Id);
-        if (exp == null)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Żaden generał nie jest w labiryncie.");
+        var treasure = TreasureCatalog.FirstOrDefault(t => t.Type == treasureType);
+        if (treasure.Type == null)
+            return ServiceResult<LabyrinthStatusDto>.Fail("Nieznany typ skarbu.");
 
-        kingdom.TurnsAvailable--;
-        exp.Depth++;
-        int d = exp.Depth;
+        int remaining = MaxActionPoints(kingdom!) - kingdom!.LabyrinthActionsUsed;
+        if (remaining < TreasureCost)
+            return ServiceResult<LabyrinthStatusDto>.Fail($"Za mało punktów akcji (potrzeba {TreasureCost}).");
+        if (TurnsUsed(kingdom) < TurnsRequiredForTreasure)
+            return ServiceResult<LabyrinthStatusDto>.Fail($"Skarb można wynieść dopiero po {TurnsRequiredForTreasure}. turze tego przeliczenia.");
+
+        kingdom.LabyrinthActionsUsed += TreasureCost;
+
+        int lvl = general!.Level;
+        int fortune = EffectiveFortune(await FortuneAsync(kingdom.Id), general);
         var rng = Random.Shared;
-        bool elf = kingdom.Race == "Elf";
-        int dragonLore = await DragonLoreAsync(kingdom.Id);
-        // Elf zbiera 1,5×; wiedza o smokach +15% łupów/kości za poziom (manual)
-        decimal lootMult = (elf ? 1.5m : 1.0m) * (1m + dragonLore * 0.15m);
-        var general = exp.General!;
 
-        // Łup materialny skalowany głębią
-        long Loot(int lo, int hi) => (long)(d * rng.Next(lo, hi) * lootMult);
+        // Złoto jest zawsze bezpieczne; pozostałe skarby niosą ryzyko.
+        if (treasure.Risky)
+        {
+            double luck = fortune / 100.0;
+            double levelFactor = Math.Min(0.85, lvl * 0.03);
+            double badChance = 0.30 * (1 - luck) * (1 - levelFactor);
 
-        // Szanse rosną z głębią
-        int monsterChance = Math.Min(35, 8 + d);
-        int trapChance = Math.Min(30, 12 + d / 2);
-        int diceChance = 12;
-        int emptyChance = 10;
+            if (rng.NextDouble() < badChance)
+            {
+                string bad = ResolveBadEvent(kingdom, general, lvl, treasureType == "Doswiadczenie", rng);
+                await _context.SaveChangesAsync();
+                var st = await BuildStatusAsync(kingdom, bad);
+                return ServiceResult<LabyrinthStatusDto>.Ok(st, bad);
+            }
+        }
+
+        string message = await ApplyTreasureAsync(kingdom, general, treasureType, lvl, fortune, rng);
+        await _context.SaveChangesAsync();
+
+        var status = await BuildStatusAsync(kingdom, message);
+        return ServiceResult<LabyrinthStatusDto>.Ok(status, message);
+    }
+
+    /// <summary>Złe zdarzenie przy braniu skarbu: rana, klątwa lub śmierć generała.</summary>
+    private string ResolveBadEvent(Kingdom kingdom, General general, int lvl, bool experienceTreasure, Random rng)
+    {
+        // Generałowie powyżej 20. poziomu nie giną — chyba że brali Doświadczenie.
+        bool canDie = lvl <= 20 || experienceTreasure;
         int roll = rng.Next(100);
 
-        string message;
-
-        if (roll < monsterChance)
+        if (roll < 45)
         {
-            // Potwór — test przeżycia (zależny od poziomu i głębi)
-            int lvl = general.Level;
-            double survive = (double)(lvl * 8) / (lvl * 8 + d);
-            if (rng.NextDouble() <= survive)
-            {
-                // Przeżył — pokonany potwór strzeże skarbu (podwójny łup), wyprawa trwa
-                exp.PendingGold += Loot(120, 240);
-                exp.PendingWeapons += Loot(60, 140);
-                exp.PendingDice += 1 + dragonLore + (rng.Next(2) == 0 ? 1 : 0);
-                general.Experience += d * 90;
-                message = $"Poziom {d}: {general.Name} pokonał strażnika labiryntu i splądrował jego skarbiec!";
-                exp.LastEvent = message;
-            }
-            else
-            {
-                // Generał nie ginie — ledwo uchodzi z życiem, wraca ciężko ranny na kilka dni,
-                // a zgromadzony łup przepada (kara za zbyt głębokie ryzyko).
-                int woundDays = Math.Min(7, 2 + d / 3);
-                general.WoundedUntil = DateTime.UtcNow.AddDays(woundDays);
-                general.IsOutside = false;
-                general.Experience += d * 30;
-                exp.Status = "Ended";
-                message = $"Poziom {d}: {general.Name} ledwo uszedł z życiem ze starcia ze strażnikiem labiryntu — wraca ciężko ranny na {woundDays} dni, a zgromadzony łup przepadł.";
-                exp.LastEvent = message;
-                await _context.SaveChangesAsync();
-                var woundedStatus = await BuildStatusAsync(kingdom);
-                return ServiceResult<LabyrinthStatusDto>.Ok(woundedStatus, message);
-            }
-        }
-        else if (roll < monsterChance + trapChance)
-        {
-            // Pułapka — generał ranny, wyprawa kończy się, łup zdeponowany
             general.WoundedUntil = DateTime.UtcNow.AddHours(12);
-            general.IsOutside = false;
-            general.Experience += d * 30;
-            BankLoot(kingdom, exp);
-            message = $"Poziom {d}: {general.Name} wpadł w pułapkę i wraca ranny, ale z łupem.";
-            exp.Status = "Ended";
-            exp.LastEvent = message;
-            await _context.SaveChangesAsync();
-            var trapStatus = await BuildStatusAsync(kingdom);
-            return ServiceResult<LabyrinthStatusDto>.Ok(trapStatus, message);
+            return $"{general.Name} wpadł w pułapkę i wraca ranny z pustymi rękami.";
         }
-        else if (roll < monsterChance + trapChance + diceChance)
+        if (roll < 70 || !canDie)
         {
-            int dice = rng.Next(1, 4) + dragonLore;
-            exp.PendingDice += dice;
-            general.Experience += d * 20;
-            message = $"Poziom {d}: {general.Name} znalazł {dice} magicznych kości.";
-            exp.LastEvent = message;
-        }
-        else if (roll < monsterChance + trapChance + diceChance + emptyChance)
-        {
-            general.Experience += d * 10;
-            message = $"Poziom {d}: pusta, zakurzona komnata. Nic ciekawego.";
-            exp.LastEvent = message;
-        }
-        else if (rng.Next(7) == 0)
-        {
-            // Bogata komnata skarbów (jackpot) — duży łup i garść kości
-            exp.PendingGold += Loot(300, 600);
-            exp.PendingWeapons += Loot(80, 200);
-            int dice = 2 + dragonLore + rng.Next(3);
-            exp.PendingDice += dice;
-            general.Experience += d * 70;
-            message = $"Poziom {d}: {general.Name} natrafił na bogatą komnatę skarbów! ({dice} kości)";
-            exp.LastEvent = message;
-        }
-        else
-        {
-            // Skarb — losowy zestaw surowców
-            exp.PendingGold += Loot(80, 160);
-            switch (rng.Next(4))
-            {
-                case 0: exp.PendingStone += Loot(40, 100); break;
-                case 1: exp.PendingFood += Loot(40, 100); break;
-                case 2: exp.PendingWeapons += Loot(30, 80); break;
-                default: exp.PendingMana += Loot(20, 60); break;
-            }
-            general.Experience += d * 50;
-            message = $"Poziom {d}: {general.Name} odnalazł skrytkę ze skarbem.";
-            exp.LastEvent = message;
+            // Klątwa rzucona na księstwo (negatywne zdarzenie zamiast pełnego zaklęcia)
+            int popLoss = rng.Next(5, 11);
+            kingdom.Popularity = Math.Max(0, kingdom.Popularity - popLoss);
+            return $"Strażnik labiryntu rzucił klątwę na księstwo — popularność spada o {popLoss}. Skarb przepadł.";
         }
 
-        await _context.SaveChangesAsync();
-        var status = await BuildStatusAsync(kingdom);
-        return ServiceResult<LabyrinthStatusDto>.Ok(status, message);
+        // Śmierć generała
+        _context.Generals.Remove(general);
+        return $"{general.Name} zginął w mroku labiryntu. Skarb przepadł wraz z nim.";
     }
 
-    public async Task<ServiceResult<LabyrinthStatusDto>> RetreatAsync(int userId)
+    /// <summary>Nakłada wybrany skarb na księstwo i zwraca komunikat.</summary>
+    private async Task<string> ApplyTreasureAsync(Kingdom kingdom, General general, string type, int lvl, int fortune, Random rng)
     {
-        var kingdom = await GetKingdomAsync(userId);
-        if (kingdom == null)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Nie znaleziono księstwa.");
+        decimal luckMult = 1m + fortune / 100m;
+        double rand = 0.8 + rng.NextDouble() * 0.4; // 0,8–1,2
 
-        var exp = await GetActiveExpeditionAsync(kingdom.Id);
-        if (exp == null)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Żaden generał nie jest w labiryncie.");
-
-        BankLoot(kingdom, exp);
-        exp.General!.IsOutside = false;
-        exp.Status = "Ended";
-        string message = $"{exp.General.Name} wycofał się z labiryntu (głębokość {exp.Depth}) i zdeponował łup.";
-        exp.LastEvent = message;
-        await _context.SaveChangesAsync();
-
-        var status = await BuildStatusAsync(kingdom);
-        return ServiceResult<LabyrinthStatusDto>.Ok(status, message);
-    }
-
-    public async Task<ServiceResult<LabyrinthStatusDto>> SpendDiceAsync(int userId, string rewardType)
-    {
-        var kingdom = await GetKingdomAsync(userId);
-        if (kingdom == null)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Nie znaleziono księstwa.");
-
-        var reward = RewardCatalog.FirstOrDefault(r => r.Type == rewardType);
-        if (reward.Type == null)
-            return ServiceResult<LabyrinthStatusDto>.Fail("Nieznana nagroda.");
-        if (kingdom.LabyrinthDice < reward.DiceCost)
-            return ServiceResult<LabyrinthStatusDto>.Fail($"Za mało kości (potrzeba {reward.DiceCost}).");
-
-        string message;
-        switch (rewardType)
+        switch (type)
         {
             case "Zloto":
-                long gold = kingdom.Land * 200L;
+            {
+                long gold = (long)(kingdom.Land * (40 + lvl * 8) * luckMult * (decimal)rand);
                 kingdom.Gold += gold;
-                message = $"Wymieniono kości na {gold:N0} złota.";
-                break;
+                return $"{general.Name} wyniósł z labiryntu {gold:N0} złota.";
+            }
             case "Surowce":
-                long stone = kingdom.Land * 60L, food = kingdom.Land * 60L, weapons = kingdom.Land * 40L;
-                kingdom.Stone += stone; kingdom.Food += food; kingdom.Weapons += weapons;
-                message = $"Wymieniono kości na surowce ({stone:N0} kamienia, {food:N0} jedzenia, {weapons:N0} broni).";
-                break;
-            case "Mana":
-                long mana = kingdom.Land * 25L;
-                kingdom.Mana += mana;
-                message = $"Wymieniono kości na {mana:N0} many.";
-                break;
+            {
+                long amount = (long)(kingdom.Land * (20 + lvl * 5) * luckMult * (decimal)rand);
+                switch (rng.Next(4))
+                {
+                    case 0: kingdom.Stone += amount; return $"{general.Name} odnalazł {amount:N0} kamienia.";
+                    case 1: kingdom.Food += amount; return $"{general.Name} odnalazł {amount:N0} jedzenia.";
+                    case 2: kingdom.Weapons += amount; return $"{general.Name} odnalazł {amount:N0} broni.";
+                    default: kingdom.Mana += amount; return $"{general.Name} odnalazł {amount:N0} many.";
+                }
+            }
             case "Doswiadczenie":
-                var gen = await _context.Generals
-                    .Where(g => g.KingdomId == kingdom.Id)
-                    .OrderByDescending(g => g.Experience)
-                    .FirstOrDefaultAsync();
-                if (gen == null)
-                    return ServiceResult<LabyrinthStatusDto>.Fail("Nie masz generała, który mógłby zdobyć doświadczenie.");
-                gen.Experience += 50_000;
-                message = $"Generał {gen.Name} zdobył 50 000 doświadczenia.";
-                break;
-            case "Tura":
-                if (kingdom.TurnsAvailable >= kingdom.MaxTurns)
-                    return ServiceResult<LabyrinthStatusDto>.Fail("Masz już maksymalną liczbę tur.");
-                kingdom.TurnsAvailable = Math.Min(kingdom.MaxTurns, kingdom.TurnsAvailable + 1);
-                // Bonusowa tura zwiększa przydział cyklu, by licznik 0→max nie zszedł poniżej zera
-                kingdom.TurnsCapacity = Math.Max(kingdom.TurnsCapacity, kingdom.TurnsAvailable);
-                message = "Klepsydra dodała 1 turę.";
-                break;
+            {
+                long gain = Math.Max(1, (long)(general.ExperienceToNextLevel * 0.2 * rand));
+                general.Experience += gain;
+                return $"{general.Name} zdobył {gain:N0} doświadczenia.";
+            }
+            case "Portal":
+                return await ApplyPortalAsync(kingdom);
+            case "Infrastruktura":
+            {
+                long stoneEquiv = (long)(kingdom.Land * (20 + lvl * 5) * luckMult * (decimal)rand);
+                long budulec = stoneEquiv / 6;
+                kingdom.BudulecStored += budulec;
+                return $"{general.Name} wyniósł {budulec:N0} budulca.";
+            }
+            case "Nauka":
+            {
+                long science = kingdom.Land * 5L;
+                kingdom.SciencePoints += science;
+                return $"{general.Name} odnalazł kryształ wiedzy: +{science:N0} punktów nauki.";
+            }
+            case "Ludnosc":
+            {
+                int people = rng.Next(Math.Max(1, kingdom.Land / 12), Math.Max(2, kingdom.Land / 6) + 1);
+                kingdom.Population += people;
+                return $"Do księstwa przybyło {people:N0} pielgrzymów (mieszkańców).";
+            }
             default:
-                return ServiceResult<LabyrinthStatusDto>.Fail("Nieznana nagroda.");
+                return "Pusta komnata — nic nie znaleziono.";
         }
+    }
 
-        kingdom.LabyrinthDice -= reward.DiceCost;
+    /// <summary>Portal smoczy — do 5 smoków, mniej gdy masz ich już dużo; respektuje limit.</summary>
+    private async Task<string> ApplyPortalAsync(Kingdom kingdom)
+    {
+        long dragons = await _context.MilitaryUnits
+            .Where(m => m.KingdomId == kingdom.Id && m.UnitType.EndsWith("_Smok"))
+            .SumAsync(m => (long)m.Quantity);
+
+        int draco = await DragonLoreAsync(kingdom.Id);
+        long cap = DragonHelper.ComputeCap(kingdom, draco);
+
+        // Maks. z labiryntu: 5 do 150 smoków, liniowo do 1 przy 240+.
+        int maxFromLab = dragons >= 240 ? 1
+            : dragons >= 150 ? Math.Max(1, 5 - (int)((dragons - 150) * 4 / 90))
+            : 5;
+
+        long canAdd = Math.Min(maxFromLab, cap - dragons);
+        if (canAdd <= 0)
+            return "Portal się otworzył, ale osiągnąłeś już limit smoków — żaden nie przeszedł.";
+
+        var dragonDef = await _context.UnitDefinitions
+            .FirstOrDefaultAsync(u => u.Race == kingdom.Race && u.UnitType.EndsWith("_Smok"));
+        if (dragonDef == null)
+            return "Portal się otworzył, lecz żaden smok nie nadszedł.";
+
+        var unit = await _context.MilitaryUnits
+            .FirstOrDefaultAsync(m => m.KingdomId == kingdom.Id && m.UnitType == dragonDef.UnitType);
+        if (unit == null)
+            _context.MilitaryUnits.Add(new MilitaryUnit
+            {
+                KingdomId = kingdom.Id, UnitType = dragonDef.UnitType, Quantity = (int)canAdd
+            });
+        else
+            unit.Quantity += (int)canAdd;
+
+        return $"Przez portal przeszło {canAdd} smoków!";
+    }
+
+    // ---- Akcje generała (po 1 pkt, bez ryzyka) -----------------------------
+
+    public async Task<ServiceResult<LabyrinthStatusDto>> SearchGeneralAsync(int userId, int generalId)
+    {
+        var (kingdom, general, error) = await LoadForActionAsync(userId, generalId);
+        if (error != null) return ServiceResult<LabyrinthStatusDto>.Fail(error);
+
+        int remaining = MaxActionPoints(kingdom!) - kingdom!.LabyrinthActionsUsed;
+        if (remaining < GeneralActionCost)
+            return ServiceResult<LabyrinthStatusDto>.Fail("Za mało punktów akcji.");
+
+        kingdom.LabyrinthActionsUsed += GeneralActionCost;
+
+        int fortune = EffectiveFortune(await FortuneAsync(kingdom.Id), general!);
+        bool found = await _generalService.TryLabyrinthFindGeneralAsync(kingdom, general!.Level, fortune);
+
+        string message = found
+            ? $"{general.Name} odnalazł w labiryncie nowego generała — czeka na Twoją decyzję."
+            : $"{general.Name} przeszukał korytarze, ale nie znalazł żadnego generała.";
+
         await _context.SaveChangesAsync();
-
-        var status = await BuildStatusAsync(kingdom);
+        var status = await BuildStatusAsync(kingdom, message);
         return ServiceResult<LabyrinthStatusDto>.Ok(status, message);
     }
 
-    /// <summary>Przenosi zgromadzony łup wyprawy do skarbca księstwa.</summary>
-    private static void BankLoot(Kingdom kingdom, LabyrinthExpedition exp)
+    public async Task<ServiceResult<LabyrinthStatusDto>> ChangeAbilityAsync(int userId, int generalId)
     {
-        kingdom.Gold += exp.PendingGold;
-        kingdom.Food += exp.PendingFood;
-        kingdom.Stone += exp.PendingStone;
-        kingdom.Weapons += exp.PendingWeapons;
-        kingdom.Mana += exp.PendingMana;
-        kingdom.LabyrinthDice += exp.PendingDice;
+        var (kingdom, general, error) = await LoadForActionAsync(userId, generalId);
+        if (error != null) return ServiceResult<LabyrinthStatusDto>.Fail(error);
+
+        int remaining = MaxActionPoints(kingdom!) - kingdom!.LabyrinthActionsUsed;
+        if (remaining < GeneralActionCost)
+            return ServiceResult<LabyrinthStatusDto>.Fail("Za mało punktów akcji.");
+
+        kingdom.LabyrinthActionsUsed += GeneralActionCost;
+
+        string newTrait = _generalService.ChangeSecondaryFromAltar(general!);
+        string message = $"Ołtarz przemienił {general!.Name}: nowa cecha drugorzędna to {newTrait} (kosztem połowy doświadczenia).";
+
+        await _context.SaveChangesAsync();
+        var status = await BuildStatusAsync(kingdom, message);
+        return ServiceResult<LabyrinthStatusDto>.Ok(status, message);
     }
 }

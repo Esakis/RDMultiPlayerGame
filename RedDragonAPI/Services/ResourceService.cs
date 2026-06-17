@@ -13,10 +13,11 @@ public class ResourceService : IResourceService
 {
     private readonly ApplicationDbContext _context;
 
-    // Bazowa produkcja na pracownika za turę (wartości przybliżone — oryginalne
-    // bazy nie są udokumentowane; relacje między profesjami zachowane).
-    private const long AlchemistGoldBase = 10;
-    private const long FarmerFoodBase = 5;
+    // Bazowa produkcja na pracownika za turę.
+    // Wg manuala (profese.txt): alchemik przy 100% produkuje 100 złota,
+    // chłop 10 jedzenia. Pozostałe bazy przybliżone (relacje zachowane).
+    private const long AlchemistGoldBase = 100;
+    private const long FarmerFoodBase = 10;
     private const long DruidManaBase = 1;
     private const long StonemasonStoneBase = 5;
     private const long ArmorerWeaponsBase = 3;
@@ -135,27 +136,27 @@ public class ResourceService : IResourceService
                     break;
                 case "Kupcy":
                     // Oryginalny wzór: złoto na kupca = 500·z/(z + ob·10),
-                    // z — obszar własny + obszar partnerów paktów handlowych.
-                    // Pakt handlowy jest domyślny dla KAŻDEGO współczłonka koalicji
-                    // (poza tymi, z którymi zawarto pakt obronny — ci nie liczą się do handlu).
+                    // z — obszar własny + obszar partnerów paktu HANDLOWEGO.
+                    // Pakt handlowy jest jednym z 4 typów paktu (urza-pakt.txt) — aby
+                    // doliczyć obszar sojusznika do handlu, trzeba mieć z nim aktywny pakt handlowy.
                     if (prof.WorkerCount > 0)
                     {
                         long tradeLand = kingdom.Land;
                         if (kingdom.CoalitionId != null)
                         {
-                            var defensePartnerIds = await _context.Pacts
-                                .Where(p => p.Status == "Active"
+                            var tradePartnerIds = await _context.Pacts
+                                .Where(p => p.Status == "Active" && p.PactType == "Handlowy"
                                             && (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id))
                                 .Select(p => p.ProposerKingdomId == kingdom.Id
                                     ? p.TargetKingdomId
                                     : p.ProposerKingdomId)
+                                .Distinct()
                                 .ToListAsync();
 
-                            tradeLand += await _context.Kingdoms
-                                .Where(k => k.CoalitionId == kingdom.CoalitionId
-                                            && k.Id != kingdom.Id
-                                            && !defensePartnerIds.Contains(k.Id))
-                                .SumAsync(k => (long)k.Land);
+                            if (tradePartnerIds.Count > 0)
+                                tradeLand += await _context.Kingdoms
+                                    .Where(k => tradePartnerIds.Contains(k.Id))
+                                    .SumAsync(k => (long)k.Land);
                         }
                         decimal goldPerMerchant = 500m * tradeLand / (tradeLand + prof.WorkerCount * 10m);
                         production = (long)(prof.WorkerCount * goldPerMerchant * Productivity(prof, race.BonusMerchants));
@@ -393,6 +394,12 @@ public class ResourceService : IResourceService
             }
         }
 
+        // === 8b. Uzgodnienie zatrudnienia z ludnością ===
+        // Suma pracowników we wszystkich profesjach (z bezrobotnymi) musi równać się
+        // ludności. Gdy ludność spadła (głód/emigracja), proporcjonalnie ucinamy
+        // pracowników w zawodach (odpływ). Gdy wzrosła — nadwyżka zasila bezrobotnych.
+        ReconcileWorkforceWithPopulation(kingdom);
+
         // === 9. Szkolenie nowicjuszy ===
         // p% = 100/(6 − 500·s/(z + 100·s + 99)) — s: liczba szkół
         var schools = kingdom.Buildings.FirstOrDefault(b => b.BuildingType == "Szkoly" && !b.IsUnderConstruction);
@@ -495,6 +502,62 @@ public class ResourceService : IResourceService
     {
         return kingdom.Professions
             .FirstOrDefault(p => p.ProfessionType == "Bezrobotni")?.WorkerCount ?? 0;
+    }
+
+    /// <summary>
+    /// Utrzymuje niezmiennik: Σ pracowników (wraz z bezrobotnymi) = ludność.
+    /// Spadek ludności → proporcjonalne ucięcie pracowników (i nowicjuszy) we wszystkich
+    /// zawodach. Wzrost → nadwyżka trafia do bezrobotnych.
+    /// </summary>
+    private static void ReconcileWorkforceWithPopulation(Kingdom kingdom)
+    {
+        long totalWorkers = kingdom.Professions.Sum(p => (long)p.WorkerCount);
+        long population = kingdom.Population;
+
+        if (totalWorkers == population) return;
+
+        if (population > totalWorkers)
+        {
+            // Nowi mieszkańcy zasilają bezrobotnych.
+            var unemployed = kingdom.Professions.FirstOrDefault(p => p.ProfessionType == "Bezrobotni");
+            if (unemployed != null)
+                unemployed.WorkerCount += (int)(population - totalWorkers);
+            return;
+        }
+
+        // Ludność spadła — proporcjonalny odpływ z każdego zawodu.
+        long toRemove = totalWorkers - population;
+        long removed = 0;
+        foreach (var prof in kingdom.Professions)
+        {
+            if (prof.WorkerCount <= 0) continue;
+            int cut = (int)((long)prof.WorkerCount * toRemove / totalWorkers);
+            cut = Math.Min(cut, prof.WorkerCount);
+            prof.WorkerCount -= cut;
+            removed += cut;
+            // Nowicjusze nie mogą przewyższać liczby pracowników.
+            if (prof.NoviceCount > prof.WorkerCount) prof.NoviceCount = prof.WorkerCount;
+        }
+
+        // Reszta z zaokrągleń — ucinamy od najliczniejszych zawodów.
+        long remainder = toRemove - removed;
+        while (remainder > 0)
+        {
+            var biggest = kingdom.Professions
+                .Where(p => p.WorkerCount > 0)
+                .OrderByDescending(p => p.WorkerCount)
+                .FirstOrDefault();
+            if (biggest == null) break;
+            biggest.WorkerCount--;
+            if (biggest.NoviceCount > biggest.WorkerCount) biggest.NoviceCount = biggest.WorkerCount;
+            remainder--;
+        }
+
+        // Odśwież % nowicjuszy.
+        foreach (var prof in kingdom.Professions)
+            prof.NovicePercent = prof.WorkerCount > 0
+                ? (decimal)prof.NoviceCount / prof.WorkerCount * 100
+                : 0;
     }
 
     public async Task GenerateResourcesForAllAsync()

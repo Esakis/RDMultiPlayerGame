@@ -84,6 +84,15 @@ public class KingdomController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
+    public record SetWagesRequest(int Wages);
+
+    [HttpPost("wages")]
+    public async Task<ActionResult> SetWages([FromBody] SetWagesRequest req)
+    {
+        var result = await _kingdomService.SetWagesAsync(GetUserId(), req.Wages);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
     [HttpPost("metamagic")]
     public async Task<ActionResult> SetMetamagic([FromBody] SetMetamagicDto dto)
     {

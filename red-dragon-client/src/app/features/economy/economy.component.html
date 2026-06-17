@@ -2,6 +2,26 @@
   <h2>{{ 'menu.employment' | translate }}</h2>
   <app-notify-relay [message]="message"></app-notify-relay>
 
+  <!-- Pensje pracowników -->
+  <div class="card wages-card">
+    <h3>{{ 'eco.wagesTitle' | translate }}</h3>
+    <p class="info">{{ 'eco.wagesHint' | translate }}</p>
+    <div class="wages-controls">
+      <label>{{ 'eco.wagesLabel' | translate }}:</label>
+      <input type="range" min="0" max="50" step="1" [(ngModel)]="wagesInput" />
+      <input type="number" min="0" max="50" [(ngModel)]="wagesInput" class="wages-num" />
+      <span class="wages-gold">{{ 'eco.wagesPerWorker' | translate }}</span>
+      <button class="btn-sm btn-assign" (click)="setWages()">{{ 'eco.wagesApply' | translate }}</button>
+    </div>
+    <p class="wages-effect">
+      {{ 'eco.wagesTarget' | translate }}:
+      <strong [class.good]="wageTargetPopularity >= 80" [class.bad]="wageTargetPopularity < 50">
+        {{ wageTargetPopularity }}%
+      </strong>
+      <span class="muted"> | {{ 'eco.wagesCurrent' | translate }}: {{ kingdom.popularity }}%</span>
+    </p>
+  </div>
+
   <!-- Zawody -->
   <div class="card">
     <h3>{{ 'eco.manageTitle' | translate }}</h3>

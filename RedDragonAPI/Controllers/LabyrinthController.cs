@@ -26,31 +26,24 @@ public class LabyrinthController : ControllerBase
         return Ok(await _labyrinthService.GetStatusAsync(UserId));
     }
 
-    [HttpPost("enter")]
-    public async Task<IActionResult> Enter([FromBody] EnterLabyrinthDto dto)
+    [HttpPost("treasure")]
+    public async Task<IActionResult> TakeTreasure([FromBody] TakeTreasureDto dto)
     {
-        var result = await _labyrinthService.EnterAsync(UserId, dto.GeneralId);
+        var result = await _labyrinthService.TakeTreasureAsync(UserId, dto.GeneralId, dto.TreasureType);
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
-    [HttpPost("advance")]
-    public async Task<IActionResult> Advance()
+    [HttpPost("search-general")]
+    public async Task<IActionResult> SearchGeneral([FromBody] GeneralActionDto dto)
     {
-        var result = await _labyrinthService.AdvanceAsync(UserId);
+        var result = await _labyrinthService.SearchGeneralAsync(UserId, dto.GeneralId);
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
-    [HttpPost("retreat")]
-    public async Task<IActionResult> Retreat()
+    [HttpPost("change-ability")]
+    public async Task<IActionResult> ChangeAbility([FromBody] GeneralActionDto dto)
     {
-        var result = await _labyrinthService.RetreatAsync(UserId);
-        return result.Success ? Ok(result) : BadRequest(result.Message);
-    }
-
-    [HttpPost("spend")]
-    public async Task<IActionResult> SpendDice([FromBody] SpendDiceDto dto)
-    {
-        var result = await _labyrinthService.SpendDiceAsync(UserId, dto.RewardType);
+        var result = await _labyrinthService.ChangeAbilityAsync(UserId, dto.GeneralId);
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 }

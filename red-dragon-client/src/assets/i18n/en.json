@@ -87,26 +87,23 @@
     "loadingKingdom": "Loading duchy..."
   },
   "lab": {
-    "lead": "Send a general deep into the labyrinth. Each level (1 turn) is new loot, but also rising risk: a trap wounds and ends the expedition, and a guardian may kill the general — then the gathered loot is lost. Retreat in time to bank your haul.",
-    "turnsAvailable": "Turns available",
-    "bankedDice": "Banked dice",
-    "dragonLore": "Dragon lore",
+    "lead": "Send a general into the labyrinth. Each recalculation gives you an action budget: 2 points (4 with the Inn at the Red Dragon — then you enter twice). Taking a treasure costs 2 points (the general may be wounded or killed — except for gold), while a general action (searching / changing an ability) costs 1 point and never harms. A higher general level, the 'Fortune' spell and the Explorer trait increase loot and lower the risk. You can carry out a treasure only after the 5th turn of the recalculation. Actions do not cost turns.",
+    "actionPoints": "Action points",
+    "doubleEntryActive": "Inn at the Red Dragon — entry ×2",
+    "turnsUsed": "Turns used this recalculation",
+    "fortune": "Fortune (luck)",
     "lvl": "lvl",
-    "loot": "loot",
-    "diceVault": "Dice vault",
-    "diceVaultHint": "Exchange banked dice for rewards. Labyrinth loot grows with dragon research.",
-    "reward": "Reward",
-    "diceCount": "{{n}} dice",
-    "exchange": "Exchange",
-    "expeditionInProgress": "Expedition in progress",
-    "depth": "Depth",
-    "dice": "Dice",
-    "lootHint": "The loot above will be banked only after a safe end of the expedition.",
-    "noTurns": "No turns",
-    "goDeeper": "Go deeper (1 turn)",
-    "retreat": "Retreat and bank the loot",
-    "sendGeneral": "Send a general",
-    "enter": "Enter the labyrinth",
+    "sendGeneral": "Choose a general",
+    "takeTreasure": "Take a treasure",
+    "cost": "cost {{n}} pts",
+    "treasureLocked": "A treasure can be carried out only after turn {{turns}} of this recalculation (and you need 2 action points).",
+    "reward": "Treasure",
+    "take": "Take",
+    "risky": "Risk: the general may be wounded or killed.",
+    "generalActions": "General actions",
+    "searchGeneral": "Search for a general",
+    "changeAbility": "Altar — change ability",
+    "generalActionsHint": "Searching for a general and the Altar never wound or kill. The Altar changes the chosen general's secondary trait at the cost of half his experience.",
     "noGenerals": "No available generals (a healthy general at home is required)."
   },
   "drg": {
@@ -169,7 +166,8 @@
       "MaskowanieISzpiegostwo": "Disguise and espionage",
       "CzarnaMagia": "Black magic",
       "MagiaCzasu": "Time magic",
-      "BialaMagia": "White magic"
+      "BialaMagia": "White magic",
+      "Odkrywca": "Explorer"
     }
   },
   "thf": {
@@ -223,7 +221,8 @@
     "errPact": "Error changing the pact.",
     "pactsTitle": "Alliance pacts",
     "pactsNoCoalition": "You can only make pacts with members of your coalition. Join a coalition to make pacts.",
-    "pactsIntro": "With each ally you have a <strong>trade pact</strong> by default. You can change it to a defensive pact (military, magic or thief) — then that ally's land no longer counts toward trade, but its units help defend your duchy.",
+    "pactsIntro": "With each ally you can sign <strong>any combination of 4 pacts</strong> (one of each type). The trade pact adds the ally's land to your merchants' efficiency; the military, magic and thief pacts help defend your duchy. Check the pacts you want to sign.",
+    "pactsCount": "Signed pacts",
     "defensivePacts": "Defensive pacts",
     "ambasadaHas": "The Embassy increased your limit by 1.",
     "ambasadaBuild": "Build the special Embassy building to increase the limit by 1.",
@@ -237,7 +236,7 @@
       "Mana": "Mana"
     },
     "pact": {
-      "Handlowy": "Trade (default)",
+      "Handlowy": "Trade",
       "Wojskowy": "Military",
       "Magiczny": "Magic",
       "Zlodziejski": "Thief"
@@ -383,6 +382,13 @@
   "eco": {
     "manageTitle": "Profession Management",
     "assignHint": "Assign workers to professions",
+    "wagesTitle": "Worker wages",
+    "wagesHint": "Wages are the gold paid to each worker every turn (0–50). Higher wages mean more popularity but also higher cost. Target popularity = wages × 2 (max 100%). Wages of 50 give the full 100% popularity.",
+    "wagesLabel": "Wages",
+    "wagesPerWorker": "gold / worker / turn",
+    "wagesApply": "Set",
+    "wagesTarget": "Target popularity",
+    "wagesCurrent": "current",
     "profession": "Profession",
     "workers": "Workers",
     "perTurn": "Production/turn",

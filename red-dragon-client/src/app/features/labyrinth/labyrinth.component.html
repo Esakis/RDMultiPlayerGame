@@ -9,82 +9,70 @@
 
   <ng-container *ngIf="!loading && status">
     <div class="stats-bar">
-      <span>{{ 'lab.turnsAvailable' | translate }}: <strong>{{ status.turnsAvailable }}</strong></span>
-      <span>{{ 'lab.bankedDice' | translate }}: <strong class="dice">{{ status.bankedDice }}</strong></span>
-      <span *ngIf="status.dragonLore > 0">{{ 'lab.dragonLore' | translate }}: <strong class="dice">{{ 'lab.lvl' | translate }} {{ status.dragonLore }}</strong> (+{{ status.dragonLore * 15 }}% {{ 'lab.loot' | translate }})</span>
+      <span>{{ 'lab.actionPoints' | translate }}: <strong class="points">{{ status.actionPoints }}</strong> / {{ status.maxActionPoints }}</span>
+      <span *ngIf="status.hasDoubleEntry" class="sanctuary">{{ 'lab.doubleEntryActive' | translate }}</span>
+      <span>{{ 'lab.turnsUsed' | translate }}: <strong>{{ status.turnsUsedThisRecount }}</strong></span>
+      <span *ngIf="status.fortuneLevel > 0" class="fortune">{{ 'lab.fortune' | translate }}: <strong>+{{ status.fortuneLevel }}%</strong></span>
     </div>
 
-    <!-- Skarbiec kości -->
-    <div class="dice-shop" *ngIf="status.rewards.length > 0">
-      <h3>{{ 'lab.diceVault' | translate }}</h3>
-      <p class="hint">{{ 'lab.diceVaultHint' | translate }}</p>
-      <table class="rd-table">
-        <thead>
-          <tr><th>{{ 'lab.reward' | translate }}</th><th>{{ 'mag.desc' | translate }}</th><th>{{ 'bld.cost' | translate }}</th><th></th></tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let r of status.rewards">
-            <td class="reward-name">{{ r.name }}</td>
-            <td class="reward-desc">{{ r.description }}</td>
-            <td class="num dice">{{ 'lab.diceCount' | translate:{ n: r.diceCost } }}</td>
-            <td>
-              <button class="btn-cast" (click)="spendDice(r.type)" [disabled]="busy || !r.canAfford">{{ 'lab.exchange' | translate }}</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Aktywna wyprawa -->
-    <div class="expedition" *ngIf="status.hasActiveExpedition && status.expedition as e">
-      <h3>{{ 'lab.expeditionInProgress' | translate }}</h3>
-      <div class="depth-banner">
-        <span class="general">{{ e.generalName }} ({{ 'lab.lvl' | translate }} {{ e.generalLevel }})</span>
-        <span class="depth">{{ 'lab.depth' | translate }}: <strong>{{ e.depth }}</strong></span>
-      </div>
-
-      <p class="event" *ngIf="e.lastEvent">{{ e.lastEvent }}</p>
-
-      <table class="rd-table loot">
-        <tbody>
-          <tr><th>{{ 'res.gold' | translate }}</th><td class="num gold">{{ e.pendingGold | number }}</td></tr>
-          <tr><th>{{ 'mkt.res.Food' | translate }}</th><td class="num">{{ e.pendingFood | number }}</td></tr>
-          <tr><th>{{ 'mkt.res.Stone' | translate }}</th><td class="num">{{ e.pendingStone | number }}</td></tr>
-          <tr><th>{{ 'mkt.res.Weapons' | translate }}</th><td class="num">{{ e.pendingWeapons | number }}</td></tr>
-          <tr><th>{{ 'res.mana' | translate }}</th><td class="num">{{ e.pendingMana | number }}</td></tr>
-          <tr><th>{{ 'lab.dice' | translate }}</th><td class="num dice">{{ e.pendingDice }}</td></tr>
-        </tbody>
-      </table>
-      <p class="hint">{{ 'lab.lootHint' | translate }}</p>
-
-      <div class="actions">
-        <button class="btn-cast" (click)="advance()"
-                [disabled]="busy || status.turnsAvailable <= 0"
-                [title]="status.turnsAvailable <= 0 ? ('lab.noTurns' | translate) : ''">
-          {{ 'lab.goDeeper' | translate }}
-        </button>
-        <button class="btn-cancel" (click)="retreat()" [disabled]="busy">
-          {{ 'lab.retreat' | translate }}
-        </button>
-      </div>
-    </div>
-
-    <!-- Brak wyprawy: wybór generała -->
-    <div class="enter" *ngIf="!status.hasActiveExpedition">
-      <h3>{{ 'lab.sendGeneral' | translate }}</h3>
-      <ng-container *ngIf="status.availableGenerals.length > 0; else noGenerals">
+    <ng-container *ngIf="status.availableGenerals.length > 0; else noGenerals">
+      <!-- Wybór generała -->
+      <div class="enter">
+        <h3>{{ 'lab.sendGeneral' | translate }}</h3>
         <div class="form-row">
           <select [(ngModel)]="selectedGeneralId">
             <option *ngFor="let g of status.availableGenerals" [ngValue]="g.id">
-              {{ g.name }} — {{ 'lab.lvl' | translate }} {{ g.level }} ({{ g.primaryTrait }})
+              {{ g.name }} — {{ 'lab.lvl' | translate }} {{ g.level }} ({{ g.primaryTrait }} / {{ g.secondaryTrait }})
             </option>
           </select>
-          <button class="btn-cast" (click)="enter()" [disabled]="busy">{{ 'lab.enter' | translate }}</button>
         </div>
-      </ng-container>
-      <ng-template #noGenerals>
-        <p class="hint">{{ 'lab.noGenerals' | translate }}</p>
-      </ng-template>
-    </div>
+      </div>
+
+      <!-- Skarby (2 pkt) -->
+      <div class="treasures">
+        <h3>{{ 'lab.takeTreasure' | translate }} <span class="cost">({{ 'lab.cost' | translate:{ n: status.treasureCost } }})</span></h3>
+        <p class="hint" *ngIf="!status.canTakeTreasure">
+          {{ 'lab.treasureLocked' | translate:{ turns: status.turnsRequiredForTreasure } }}
+        </p>
+        <table class="rd-table">
+          <thead>
+            <tr><th>{{ 'lab.reward' | translate }}</th><th>{{ 'mag.desc' | translate }}</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of status.treasures">
+              <td class="reward-name">
+                {{ t.name }}
+                <span class="risk" *ngIf="t.riskyForGeneral" [title]="'lab.risky' | translate">⚠</span>
+              </td>
+              <td class="reward-desc">{{ t.description }}</td>
+              <td>
+                <button class="btn-cast" (click)="takeTreasure(t.type)"
+                        [disabled]="busy || !status.canTakeTreasure">{{ 'lab.take' | translate }}</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Akcje generała (1 pkt) -->
+      <div class="general-actions">
+        <h3>{{ 'lab.generalActions' | translate }} <span class="cost">({{ 'lab.cost' | translate:{ n: status.generalActionCost } }})</span></h3>
+        <div class="actions">
+          <button class="btn-cast" (click)="searchGeneral()"
+                  [disabled]="busy || status.actionPoints < status.generalActionCost">
+            {{ 'lab.searchGeneral' | translate }}
+          </button>
+          <button class="btn-cast" (click)="changeAbility()"
+                  [disabled]="busy || status.actionPoints < status.generalActionCost">
+            {{ 'lab.changeAbility' | translate }}
+          </button>
+        </div>
+        <p class="hint">{{ 'lab.generalActionsHint' | translate }}</p>
+      </div>
+    </ng-container>
+
+    <ng-template #noGenerals>
+      <p class="hint">{{ 'lab.noGenerals' | translate }}</p>
+    </ng-template>
   </ng-container>
 </div>

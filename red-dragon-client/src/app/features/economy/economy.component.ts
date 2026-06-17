@@ -14,14 +14,29 @@ export class EconomyComponent implements OnInit {
   message = '';
   assignAmounts: { [key: string]: number } = {};
 
+  // Pensja pracowników (0–50 złota/turę). Steruje popularnością: cel = pensja × 2 (maks. 100%).
+  wagesInput = 50;
+
   constructor(private kingdomService: KingdomService, private translate: TranslateService) {}
 
   ngOnInit(): void { this.load(); }
 
   load(): void {
     this.kingdomService.getMyKingdom().subscribe({
-      next: (k) => { this.kingdom = k; this.loading = false; },
+      next: (k) => { this.kingdom = k; this.wagesInput = k.wages; this.loading = false; },
       error: () => { this.loading = false; }
+    });
+  }
+
+  /** Docelowa popularność dla podanej pensji (cel = pensja × 2, maks. 100%). */
+  get wageTargetPopularity(): number {
+    return Math.min(100, (this.wagesInput || 0) * 2);
+  }
+
+  setWages(): void {
+    this.kingdomService.setWages(this.wagesInput).subscribe({
+      next: (res) => { this.message = res.message || 'OK'; this.load(); this.clearMsg(); },
+      error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
     });
   }
 

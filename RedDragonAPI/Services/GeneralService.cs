@@ -13,6 +13,19 @@ public interface IGeneralService
     Task<ServiceResult> DismissGeneralAsync(int userId, int generalId);
     Task ProcessGeneralArrivalsAsync();
     Task<bool> TryGeneralArrivalAsync(Kingdom kingdom);
+
+    /// <summary>
+    /// Labirynt — próba znalezienia generała (akcja „szukaj generała", docs/MECHANIKA.md §13).
+    /// Dodaje oczekującego generała do wspólnego DbContext (bez zapisu) i zwraca, czy się udało.
+    /// Szansa rośnie z poziomem wysłanego generała i siłą Szczęścia. Respektuje limit i poczekalnię.
+    /// </summary>
+    Task<bool> TryLabyrinthFindGeneralAsync(Kingdom kingdom, int searchLevel, int fortunePct);
+
+    /// <summary>
+    /// Labirynt — Ołtarz: zmienia cechę drugorzędną wybranego generała na nową losową,
+    /// kosztem połowy doświadczenia (docs/MECHANIKA.md §13). Nie zapisuje zmian.
+    /// </summary>
+    string ChangeSecondaryFromAltar(General general);
 }
 
 /// <summary>
@@ -64,12 +77,12 @@ public class GeneralService : IGeneralService
         ["Kupiec"] = new[]
         {
             "PorwanieGenerala", "ZabojstwoGenerala", "ZranienieGenerala", "Smokobojstwo",
-            "Uzdrawianie", "BialaMagia"
+            "Uzdrawianie", "BialaMagia", "Odkrywca"
         },
         ["Profesor"] = new[]
         {
             "PorwanieGenerala", "ZabojstwoGenerala", "ZranienieGenerala", "Smokobojstwo",
-            "Uzdrawianie", "BialaMagia"
+            "Uzdrawianie", "BialaMagia", "Odkrywca"
         }
     };
 
@@ -89,12 +102,6 @@ public class GeneralService : IGeneralService
             .OrderByDescending(g => g.Experience)
             .ToListAsync();
 
-        // Generałowie aktualnie w labiryncie (mają IsOutside=true, ale to nie atak)
-        var inLabyrinth = await _context.LabyrinthExpeditions
-            .Where(e => e.KingdomId == kingdom.Id && e.Status == "Active" && e.GeneralId != null)
-            .Select(e => e.GeneralId!.Value)
-            .ToListAsync();
-
         return generals.Select(g => new GeneralDto
         {
             Id = g.Id,
@@ -108,7 +115,6 @@ public class GeneralService : IGeneralService
             SecondaryRerollsLeft = Math.Max(0, 2 - g.SecondaryRerollsUsed),
             Status = g.IsPending ? "Oczekuje na decyzję"
                 : g.IsImprisoned ? "Więziony"
-                : inLabyrinth.Contains(g.Id) ? "W labiryncie"
                 : g.IsOutside ? "Poza księstwem"
                 : g.WoundedUntil.HasValue && g.WoundedUntil > DateTime.UtcNow ? "Ranny"
                 : "W domu"
@@ -226,6 +232,48 @@ public class GeneralService : IGeneralService
         bool arrived = TryArrival(kingdom, activeCount, hasPending, limit);
         if (arrived) await _context.SaveChangesAsync();
         return arrived;
+    }
+
+    public async Task<bool> TryLabyrinthFindGeneralAsync(Kingdom kingdom, int searchLevel, int fortunePct)
+    {
+        int limit = await GetGeneralsLimitAsync(kingdom);
+        int activeCount = await _context.Generals
+            .CountAsync(g => g.KingdomId == kingdom.Id && !g.IsPending);
+        bool hasPending = await _context.Generals
+            .AnyAsync(g => g.KingdomId == kingdom.Id && g.IsPending);
+
+        if (hasPending || activeCount >= limit) return false;
+
+        // Szansa bazowa 45% + poziom wysłanego generała i fart (Szczęście) zwiększają trafienie.
+        double chance = 0.45 + Math.Min(0.35, searchLevel * 0.015) + fortunePct / 200.0;
+        if (Random.Shared.NextDouble() >= Math.Min(0.95, chance)) return false;
+
+        string primary = PrimaryTraits[Random.Shared.Next(PrimaryTraits.Length)];
+        var secondaries = AllowedSecondary[primary];
+        string secondary = secondaries[Random.Shared.Next(secondaries.Length)];
+
+        _context.Generals.Add(new General
+        {
+            KingdomId = kingdom.Id,
+            Name = Names[Random.Shared.Next(Names.Length)],
+            PrimaryTrait = primary,
+            SecondaryTrait = secondary,
+            Experience = 0,
+            IsPending = true,
+            ArrivedAt = DateTime.UtcNow
+        });
+        return true;
+    }
+
+    public string ChangeSecondaryFromAltar(General general)
+    {
+        var options = AllowedSecondary[general.PrimaryTrait]
+            .Where(s => s != general.SecondaryTrait).ToArray();
+        if (options.Length == 0) options = AllowedSecondary[general.PrimaryTrait];
+
+        general.SecondaryTrait = options[Random.Shared.Next(options.Length)];
+        general.Experience /= 2; // Ołtarz pobiera połowę doświadczenia za przemianę
+        return general.SecondaryTrait;
     }
 
     /// <summary>Limit aktywnych generałów: bazowy z rasy, +Pałac do 8.</summary>
