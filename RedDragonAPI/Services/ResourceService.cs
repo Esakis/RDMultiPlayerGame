@@ -51,6 +51,16 @@ public class ResourceService : IResourceService
                 .LoadAsync();
         }
 
+        // Aktywne czary (m.in. Dobry/Zły humor) — potrzebne do kroków (b)/(c) popularności
+        if (kingdom.ActiveSpells == null || !kingdom.ActiveSpells.Any())
+        {
+            await _context.Entry(kingdom)
+                .Collection(k => k.ActiveSpells)
+                .Query()
+                .Include(s => s.Spell)
+                .LoadAsync();
+        }
+
         var race = await _context.RaceDefinitions
             .AsNoTracking()
             .FirstOrDefaultAsync(r => r.Name == kingdom.Race)
@@ -242,11 +252,17 @@ public class ResourceService : IResourceService
                           + (armyEats ? totalSoldiers : 0);
         kingdom.Food -= foodNeeded;
 
+        // Krok (d) popularności: kara za niedobór jedzenia, −1…−15 wg skali niedoboru.
+        // Wartość wyliczona tu, ale zastosowana niżej w sekcji 6 (zgodnie z kolejnością manuala).
+        int foodShortagePenalty = 0;
         if (kingdom.Food < 0)
         {
+            long deficit = -kingdom.Food;
+            decimal severity = foodNeeded > 0 ? Math.Min(1m, (decimal)deficit / foodNeeded) : 1m;
+            foodShortagePenalty = Math.Clamp((int)Math.Ceiling(severity * 15m), 1, 15);
+
             kingdom.Food = 0;
-            // Głód: popularność −1…−15 (wg skali niedoboru), ludzie umierają/uciekają
-            kingdom.Popularity = Math.Max(0, kingdom.Popularity - 10);
+            // Głód: ludzie umierają/uciekają (kara popularności w sekcji 6)
             int starving = (int)(kingdom.Population * 0.05);
             kingdom.Population = Math.Max(100, kingdom.Population - starving);
             // armia umiera w głodzie (chyba że rasa zwolniona)
@@ -283,16 +299,26 @@ public class ResourceService : IResourceService
         kingdom.BudulecStored = Math.Min(kingdom.BudulecStored + kingdom.Budulec, budulecLimit);
         kingdom.Budulec = 0;
 
-        // === 6. Popularność (oryginalny algorytm: cel = 2 × płace) ===
+        // === 6. Popularność (oryginalny algorytm z manuala, kolejno a→f; bazowo cel = 2 × płace) ===
         int popularity = kingdom.Popularity;
 
-        // a) +1 za każdy stojący budynek specjalny
+        // a) +1 za każdy stojący budynek specjalny (bez limitu — zgodnie z manualem)
         int specialsStanding = kingdom.Buildings
             .Count(b => b.Definition != null && b.Definition.IsSpecial && b.Quantity > 0 && !b.IsUnderConstruction);
-        popularity += Math.Min(specialsStanding, 5); // ograniczenie, by nie eksplodowało
+        popularity += specialsStanding;
 
-        // e) zbliżanie do dwukrotności płac: ±(1 + |2·płace − pop|/10)
-        int target = Math.Min(100, kingdom.Wages * 2);
+        // b) Dobry humor: +1 za każdy aktywny czar; c) Zły humor: −1 za każdy aktywny czar
+        popularity += kingdom.ActiveSpells.Count(s => s.Spell != null && s.Spell.EffectType == "PopularityBuff");
+        popularity -= kingdom.ActiveSpells.Count(s => s.Spell != null && s.Spell.EffectType == "PopularityDebuff");
+
+        // d) niedobór jedzenia: −1…−15 wg skali (policzone w sekcji 4)
+        popularity -= foodShortagePenalty;
+
+        // e) zbliżanie do celu: ±(1 + |cel − pop|/10).
+        //    Cel to 2× płace; Zajazd u Czerwonego Smoka obniża próg — płaca 42 daje 100%.
+        int target = Has("ZajazdCzerwonego")
+            ? Math.Min(100, (int)Math.Round(kingdom.Wages * 100m / 42m))
+            : Math.Min(100, kingdom.Wages * 2);
         if (popularity < target)
             popularity += 1 + (target - popularity) / 10;
         else if (popularity > target)

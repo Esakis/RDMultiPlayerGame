@@ -26,9 +26,21 @@ public class BuildingService : IBuildingService
 
         var definitions = await _context.BuildingDefinitions.ToListAsync();
 
+        // Rabat badań Inżynieria — wspólny dla wyceny i sprawdzenia możliwości budowy.
+        decimal ecoDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "EcoBuildingCostReduction");
+
         return definitions.Select(d =>
         {
-            var (canBuild, reason) = CheckCanBuild(kingdom, d);
+            var (canBuild, reason) = CheckCanBuild(kingdom, d, ecoDiscount);
+
+            // Budynki gospodarcze: koszt skalowany ziemią (manual „Cena infrabudov").
+            int costBudulec = d.CostBudulec;
+            int costGold = d.CostGold;
+            if (!d.IsSpecial)
+            {
+                (costBudulec, costGold) = ComputeEconomicCost(kingdom, ecoDiscount);
+            }
+
             return new BuildingDefinitionDto
             {
                 Id = d.Id,
@@ -36,8 +48,8 @@ public class BuildingService : IBuildingService
                 Category = d.Category,
                 DisplayName = d.DisplayName,
                 Description = d.Description,
-                CostGold = d.CostGold,
-                CostBudulec = d.CostBudulec,
+                CostGold = costGold,
+                CostBudulec = costBudulec,
                 CostLand = d.CostLand,
                 Row = d.Row,
                 Col = d.Col,
@@ -94,7 +106,8 @@ public class BuildingService : IBuildingService
         if (definition == null)
             return ServiceResult.Fail("Nieznany typ budynku.");
 
-        var (canBuild, reason) = CheckCanBuild(kingdom, definition);
+        decimal ecoDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "EcoBuildingCostReduction");
+        var (canBuild, reason) = CheckCanBuild(kingdom, definition, ecoDiscount);
         if (!canBuild)
             return ServiceResult.Fail(reason!);
 
@@ -138,11 +151,11 @@ public class BuildingService : IBuildingService
 
         int quantity = dto.Quantity;
 
-        // Red Dragon: economic buildings cost gold + 1 budulec per building + land
-        // Rabat badań: Inżynieria obniża koszt budynków gospodarczych.
-        decimal buildDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "EcoBuildingCostReduction");
-        long totalCostGold = (long)(definition.CostGold * quantity * (1m - buildDiscount));
-        int totalCostBudulec = quantity; // 1 budulec per economic building
+        // Red Dragon: koszt budynku gospodarczego (budulec + złoto) skaluje się z rozległością
+        // królestwa wg wzoru z manuala; rabat badań Inżynieria (ecoDiscount) obniża koszt.
+        var (budulecPerBuilding, goldPerBuilding) = ComputeEconomicCost(kingdom, ecoDiscount);
+        long totalCostGold = (long)goldPerBuilding * quantity;
+        int totalCostBudulec = budulecPerBuilding * quantity;
         int totalCostLand = definition.CostLand * quantity;
 
         if (kingdom.Gold < totalCostGold)
@@ -204,7 +217,34 @@ public class BuildingService : IBuildingService
         return ServiceResult.Ok(msg);
     }
 
-    private (bool canBuild, string? reason) CheckCanBuild(Kingdom kingdom, BuildingDefinition definition)
+    /// <summary>
+    /// Koszt jednego budynku gospodarczego wg oryginalnego wzoru (manual „Cena infrabudov"):
+    /// infrabody = int((149·ziemia/15000 + 1)·(1 − rabat)); dla ziemi > 20000 wariant rasowy
+    /// (Olbrzym ÷2000, Człowiek ×1,5, pozostali ÷1000). Złoto = infrabody · 200.
+    /// W startowym protektoracie obowiązuje 50% zniżki.
+    /// </summary>
+    public static (int budulec, int gold) ComputeEconomicCost(Kingdom kingdom, decimal ecoDiscount)
+    {
+        long land = kingdom.Land;
+        decimal raw;
+        if (land <= 20000)
+            raw = 149m * land / 15000m + 1m;
+        else if (kingdom.Race == "Olbrzym")
+            raw = 181m + land / 2000m;
+        else if (kingdom.Race == "Człowiek")
+            raw = 1.5m * (181m + land / 1000m);
+        else
+            raw = 181m + land / 1000m;
+
+        raw *= (1m - ecoDiscount);
+        if (kingdom.IsProtected) raw *= 0.5m; // zniżka protektoratu startowego
+
+        int budulec = Math.Max(1, (int)raw);
+        int gold = budulec * 200;
+        return (budulec, gold);
+    }
+
+    private (bool canBuild, string? reason) CheckCanBuild(Kingdom kingdom, BuildingDefinition definition, decimal ecoDiscount)
     {
         // Sprawdź wymagany budynek
         if (!string.IsNullOrEmpty(definition.RequiredBuildingType))
@@ -227,9 +267,18 @@ public class BuildingService : IBuildingService
         }
 
         // Sprawdź zasoby
-        if (kingdom.Gold < definition.CostGold) return (false, "Za mało złota");
-        if (kingdom.BudulecStored < 1 && !definition.IsSpecial) return (false, "Za mało budulca");
-        if (kingdom.Land < definition.CostLand) return (false, "Za mało ziemi");
+        if (definition.IsSpecial)
+        {
+            // Budynek specjalny: budulec gromadzony co turę, koszt złota = 0 — liczy się tylko ziemia.
+            if (kingdom.Land < definition.CostLand) return (false, "Za mało ziemi");
+        }
+        else
+        {
+            var (budulec, gold) = ComputeEconomicCost(kingdom, ecoDiscount);
+            if (kingdom.Gold < gold) return (false, "Za mało złota");
+            if (kingdom.BudulecStored < budulec) return (false, "Za mało budulca");
+            if (kingdom.Land < definition.CostLand) return (false, "Za mało ziemi");
+        }
 
         return (true, null);
     }
