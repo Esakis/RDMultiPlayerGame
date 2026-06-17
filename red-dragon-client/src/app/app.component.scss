@@ -1,12 +1,16 @@
 main {
   &.with-layout {
-    margin-top: 130px;
+    // --header-h jest mierzona w runtime przez HeaderComponent (uwzględnia
+    // zawijanie paska zasobów). Fallback 160px pokrywa pełny, 3-paskowy header.
+    margin-top: var(--header-h, 160px);
     margin-left: 140px;
-    min-height: calc(100vh - 130px);
+    min-height: calc(100vh - var(--header-h, 160px));
     background: linear-gradient(180deg, #2a0a0a 0%, #1a0505 100%);
-    // Treść ponad panelem bocznym (z-index 90), by dymki/tooltipy nie chowały się za nim.
+    // position:relative bez z-index NIE tworzy kontekstu stackingu — dzięki temu
+    // modale wewnątrz treści (np. popup nauki, z-index 1000) potrafią przykryć
+    // header. Treść maluje się nad panelem bocznym dzięki kolejności w DOM
+    // (<app-sidebar> występuje przed <main>), więc dymki/tooltipy nie chowają się za nim.
     position: relative;
-    z-index: 95;
   }
 }
 
