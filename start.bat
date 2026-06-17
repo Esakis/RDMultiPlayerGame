@@ -5,6 +5,9 @@ echo    Red Dragon - Uruchamianie serwera
 echo ========================================
 echo.
 
+echo [0/2] Ubijam stary proces API (zwalniam zablokowany .exe)...
+taskkill /F /IM RedDragonAPI.exe >nul 2>&1
+
 echo [1/2] Uruchamiam API (.NET 8)...
 start "RedDragon API" cmd /k "cd /d %~dp0RedDragonAPI && dotnet run"
 
