@@ -2,17 +2,6 @@
   <h2>Zatrudnienie</h2>
   <div class="toast" *ngIf="message">{{ message }}</div>
 
-  <!-- Kupno ziemi -->
-  <div class="card">
-    <h3>Kupno Ziemi</h3>
-    <p class="info">Aktualna ziemia: <strong>{{ kingdom.land }} akrów</strong> | Cena: 500 złota/akr</p>
-    <div class="buy-controls">
-      <input type="number" [(ngModel)]="landAmount" min="1" max="1000" />
-      <span class="cost">Koszt: {{ landAmount * 500 | numberFormat }} złota</span>
-      <button class="btn-action" (click)="buyLand()">Kup ziemię</button>
-    </div>
-  </div>
-
   <!-- Zawody -->
   <div class="card">
     <h3>Zarządzanie Zawodami</h3>

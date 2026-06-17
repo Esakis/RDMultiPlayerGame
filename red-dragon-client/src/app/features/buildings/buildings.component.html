@@ -2,87 +2,121 @@
   <h2>Budowa</h2>
   <div class="toast" *ngIf="message">{{ message }}</div>
 
-  <div *ngIf="!loading; else loadingTpl">
+  <!-- ===== Zakładki sekcji Budowa ===== -->
+  <div class="build-tabs">
+    <button class="build-tab" [class.active]="activeTab === 'gospodarcze'"
+            (click)="setTab('gospodarcze')">Budynki gospodarcze</button>
+    <button class="build-tab" [class.active]="activeTab === 'specjalne'"
+            (click)="setTab('specjalne')">Budynki specjalne</button>
+    <button class="build-tab" [class.active]="activeTab === 'ziemia'"
+            (click)="setTab('ziemia')">Ziemia</button>
+    <button class="build-tab" [class.active]="activeTab === 'nauka'"
+            (click)="setTab('nauka')">Nauka</button>
+  </div>
 
-    <!-- ===== Budynki specjalne — drzewko zależności ===== -->
-    <ng-container *ngIf="hasSpecial">
-      <h3>✨ Budynki specjalne</h3>
-
-      <p class="legend">
-        <span class="lg lg-av">dostępny</span>
-        <span class="lg lg-cur">w budowie</span>
-        <span class="lg lg-lock">niedostępny</span>
-        <span class="lg lg-done">wybudowany</span>
-      </p>
-
-      <div class="spec-tree">
-        <div class="chain" *ngFor="let chain of specialChains">
-          <ng-container *ngFor="let d of chain; let i = index">
-            <span class="arrow" *ngIf="isDependent(chain, i)">▼</span>
-            <span class="vgap" *ngIf="i > 0 && !isDependent(chain, i)"></span>
-
-            <div class="node"
-                 [class.owned]="specialState(d) === 'owned'"
-                 [class.current]="specialState(d) === 'current'"
-                 [class.available]="specialState(d) === 'available'"
-                 [class.locked]="specialState(d) === 'locked'"
-                 (click)="onSpecialClick(d)">
-              <span class="node-name">{{ d.displayName }}</span>
-
-              <!-- dymek hover: opis, koszt, stan -->
-              <div class="tip">
-                <strong class="tip-name">{{ d.displayName }}</strong>
-                <div class="tip-effect" *ngIf="d.description">{{ d.description }}</div>
-                <div class="tip-cost">Koszt: {{ d.baseCost | number }} • czas: {{ d.buildTime }}t</div>
-                <div class="tip-done" *ngIf="specialState(d) === 'owned'">Wybudowany ✓</div>
-                <div class="tip-prog" *ngIf="specialState(d) === 'current'">W budowie…</div>
-                <div class="tip-lock" *ngIf="specialState(d) === 'locked'">
-                  {{ specialLockReason(d) }}
-                </div>
-                <div class="tip-go" *ngIf="specialState(d) === 'available'">Kliknij, aby zbudować</div>
-              </div>
+  <!-- ===== Budynki gospodarcze (karty) ===== -->
+  <div *ngIf="activeTab === 'gospodarcze'">
+    <div *ngIf="!loading; else loadingTpl">
+      <div *ngFor="let cat of normalCategories" class="category-section">
+        <h3>{{ getCategoryName(cat) }}</h3>
+        <div class="buildings-grid">
+          <div class="building-card" *ngFor="let def of getByCategory(cat)"
+               [class.cannot-build]="!def.canBuild">
+            <div class="building-header">
+              <strong>{{ def.displayName }}</strong>
+              <span class="owned" *ngIf="getOwned(def.buildingType) as owned">
+                Posiadasz: {{ owned.quantity }}
+              </span>
             </div>
-          </ng-container>
-        </div>
-      </div>
-    </ng-container>
-
-    <!-- ===== Pozostałe budynki — karty ===== -->
-    <div *ngFor="let cat of normalCategories" class="category-section">
-      <h3>{{ getCategoryName(cat) }}</h3>
-      <div class="buildings-grid">
-        <div class="building-card" *ngFor="let def of getByCategory(cat)"
-             [class.cannot-build]="!def.canBuild">
-          <div class="building-header">
-            <strong>{{ def.displayName }}</strong>
-            <span class="owned" *ngIf="getOwned(def.buildingType) as owned">
-              Posiadasz: {{ owned.quantity }}
-            </span>
-          </div>
-          <p class="desc">{{ def.description }}</p>
-          <div class="costs">
-            <span *ngIf="def.costGold">złoto: {{ def.costGold }}</span>
-            <span *ngIf="def.costBudulec">budulec: {{ def.costBudulec }}</span>
-            <span *ngIf="def.costLand">ziemia: {{ def.costLand }}</span>
-            <span *ngIf="def.baseCost">koszt bazowy: {{ def.baseCost }}</span>
-            <span>czas: {{ def.buildTime }}t</span>
-          </div>
-          <div class="bonuses" *ngIf="def.productionBonus || def.defenseBonus || def.populationCapacity || def.bonusTurnsPerDay">
-            <span *ngIf="def.productionBonus">+{{ def.productionBonus * 100 }}% produkcji</span>
-            <span *ngIf="def.defenseBonus">+{{ def.defenseBonus * 100 }}% obrony</span>
-            <span *ngIf="def.populationCapacity">+{{ def.populationCapacity }} ludności</span>
-            <span *ngIf="def.bonusTurnsPerDay">+{{ def.bonusTurnsPerDay }} tur/dzień</span>
-          </div>
-          <div class="build-controls" *ngIf="def.canBuild">
-            <input type="number" [(ngModel)]="quantities[def.buildingType]" min="1" max="100" />
-            <button class="btn-build" (click)="construct(def)">Buduj</button>
-          </div>
-          <div class="cannot-reason" *ngIf="!def.canBuild">
-            {{ def.cannotBuildReason }}
+            <p class="desc">{{ def.description }}</p>
+            <div class="costs">
+              <span *ngIf="def.costGold">złoto: {{ def.costGold }}</span>
+              <span *ngIf="def.costBudulec">budulec: {{ def.costBudulec }}</span>
+              <span *ngIf="def.costLand">ziemia: {{ def.costLand }}</span>
+              <span *ngIf="def.baseCost">koszt bazowy: {{ def.baseCost }}</span>
+              <span>czas: {{ def.buildTime }}t</span>
+            </div>
+            <div class="bonuses" *ngIf="def.productionBonus || def.defenseBonus || def.populationCapacity || def.bonusTurnsPerDay">
+              <span *ngIf="def.productionBonus">+{{ def.productionBonus * 100 }}% produkcji</span>
+              <span *ngIf="def.defenseBonus">+{{ def.defenseBonus * 100 }}% obrony</span>
+              <span *ngIf="def.populationCapacity">+{{ def.populationCapacity }} ludności</span>
+              <span *ngIf="def.bonusTurnsPerDay">+{{ def.bonusTurnsPerDay }} tur/dzień</span>
+            </div>
+            <div class="build-controls" *ngIf="def.canBuild">
+              <input type="number" [(ngModel)]="quantities[def.buildingType]" min="1" max="100" />
+              <button class="btn-build" (click)="construct(def)">Buduj</button>
+            </div>
+            <div class="cannot-reason" *ngIf="!def.canBuild">
+              {{ def.cannotBuildReason }}
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- ===== Budynki specjalne — drzewko zależności ===== -->
+  <div *ngIf="activeTab === 'specjalne'">
+    <div *ngIf="!loading; else loadingTpl">
+      <ng-container *ngIf="hasSpecial; else noSpecial">
+        <p class="legend">
+          <span class="lg lg-av">dostępny</span>
+          <span class="lg lg-cur">w budowie</span>
+          <span class="lg lg-lock">niedostępny</span>
+          <span class="lg lg-done">wybudowany</span>
+        </p>
+
+        <div class="spec-tree">
+          <div class="chain" *ngFor="let chain of specialChains">
+            <ng-container *ngFor="let d of chain; let i = index">
+              <span class="arrow" *ngIf="isDependent(chain, i)">▼</span>
+              <span class="vgap" *ngIf="i > 0 && !isDependent(chain, i)"></span>
+
+              <div class="node"
+                   [class.owned]="specialState(d) === 'owned'"
+                   [class.current]="specialState(d) === 'current'"
+                   [class.available]="specialState(d) === 'available'"
+                   [class.locked]="specialState(d) === 'locked'"
+                   (click)="onSpecialClick(d)">
+                <span class="node-name">{{ d.displayName }}</span>
+
+                <!-- dymek hover: opis, koszt, stan -->
+                <div class="tip">
+                  <strong class="tip-name">{{ d.displayName }}</strong>
+                  <div class="tip-effect" *ngIf="d.description">{{ d.description }}</div>
+                  <div class="tip-cost">Koszt: {{ d.baseCost | number }} • czas: {{ d.buildTime }}t</div>
+                  <div class="tip-done" *ngIf="specialState(d) === 'owned'">Wybudowany ✓</div>
+                  <div class="tip-prog" *ngIf="specialState(d) === 'current'">W budowie…</div>
+                  <div class="tip-lock" *ngIf="specialState(d) === 'locked'">
+                    {{ specialLockReason(d) }}
+                  </div>
+                  <div class="tip-go" *ngIf="specialState(d) === 'available'">Kliknij, aby zbudować</div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noSpecial><p class="empty">Brak dostępnych budynków specjalnych.</p></ng-template>
+    </div>
+  </div>
+
+  <!-- ===== Ziemia (kupno ziemi, przeniesione z Zatrudnienia) ===== -->
+  <div *ngIf="activeTab === 'ziemia'">
+    <div class="card" *ngIf="kingdom; else loadingTpl">
+      <h3>Kupno Ziemi</h3>
+      <p class="info">Aktualna ziemia: <strong>{{ kingdom.land }} akrów</strong> | Cena: 500 złota/akr</p>
+      <div class="buy-controls">
+        <input type="number" [(ngModel)]="landAmount" min="1" max="1000" />
+        <span class="cost">Koszt: {{ landAmount * 500 | number }} złota</span>
+        <button class="btn-build" (click)="buyLand()">Kup ziemię</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Nauka (drzewko badań, przeniesione z lewego panelu) ===== -->
+  <div *ngIf="activeTab === 'nauka'">
+    <app-research></app-research>
   </div>
 
   <ng-template #loadingTpl><div class="loading">Ładowanie...</div></ng-template>

@@ -15,6 +15,67 @@ h3 {
   padding-bottom: 6px;
 }
 
+/* === Zakładki sekcji Budowa === */
+.build-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #5a2020;
+}
+
+.build-tab {
+  padding: 8px 16px;
+  background: linear-gradient(180deg, #2a0a0a, #1a0606);
+  border: 1px solid #5a2020;
+  border-bottom: none;
+  color: #c9b58a;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover { color: #ffd700; }
+
+  &.active {
+    background: linear-gradient(180deg, #6a1010, #3a0808);
+    border-color: #d4af37;
+    color: #ffd700;
+  }
+}
+
+.empty { color: #888; font-style: italic; padding: 10px 0; }
+
+/* === Panel kupna ziemi === */
+.card {
+  background: linear-gradient(180deg, #4a1818 0%, #2a0a0a 100%);
+  border: 2px solid #8b0000;
+  padding: 14px;
+  max-width: 520px;
+
+  .info { color: #c9b58a; font-size: 13px; margin: 0 0 10px 0; strong { color: #ffd700; } }
+
+  .buy-controls {
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+    input {
+      width: 90px; padding: 6px 8px;
+      background: #fff; border: 2px solid #8b7355;
+      color: #000; font-size: 13px; text-align: center;
+    }
+    .cost { color: #d4af37; font-size: 13px; }
+    .btn-build {
+      padding: 6px 14px;
+      background: linear-gradient(180deg, #4a0808, #2a0808);
+      border: 2px solid #8b0000;
+      color: #ffd700; cursor: pointer; font-size: 13px; font-weight: bold;
+      &:hover {
+        background: linear-gradient(180deg, #6a0808, #4a0808);
+        border-color: #ffd700; color: #fff;
+      }
+    }
+  }
+}
+
 .buildings-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { BuildingService } from '../../core/services/building.service';
-import { BuildingDefinition, Building } from '../../core/models/kingdom.model';
+import { KingdomService } from '../../core/services/kingdom.service';
+import { BuildingDefinition, Building, Kingdom } from '../../core/models/kingdom.model';
 
 type SpecialState = 'owned' | 'current' | 'available' | 'locked';
+type BuildTab = 'gospodarcze' | 'specjalne' | 'ziemia' | 'nauka';
 
 @Component({
   selector: 'app-buildings',
@@ -16,6 +18,13 @@ export class BuildingsComponent implements OnInit {
   message = '';
   quantities: { [key: string]: number } = {};
 
+  // Aktywna zakładka u góry sekcji Budowa.
+  activeTab: BuildTab = 'gospodarcze';
+
+  // Dane do panelu „Ziemia" (kupno ziemi przeniesione z Zatrudnienia).
+  kingdom: Kingdom | null = null;
+  landAmount = 1;
+
   // Etykiety polskich kategorii (zgodne z danymi z backendu)
   private categoryLabels: { [k: string]: string } = {
     Gospodarcze: '🏠 Gospodarcze', Warsztaty: '🔨 Warsztaty', Cechy: '⭐ Cechy',
@@ -23,7 +32,10 @@ export class BuildingsComponent implements OnInit {
     Wojskowe: '⚔️ Wojskowe', Specjalne: '✨ Specjalne'
   };
 
-  constructor(private buildingService: BuildingService) {}
+  constructor(
+    private buildingService: BuildingService,
+    private kingdomService: KingdomService
+  ) {}
 
   ngOnInit(): void {
     this.load();
@@ -37,6 +49,26 @@ export class BuildingsComponent implements OnInit {
     this.buildingService.getMyBuildings().subscribe(b => {
       this.myBuildings = b;
       this.loading = false;
+    });
+    this.kingdomService.getMyKingdom().subscribe(k => this.kingdom = k);
+  }
+
+  setTab(tab: BuildTab): void {
+    this.activeTab = tab;
+  }
+
+  buyLand(): void {
+    if (this.landAmount <= 0) return;
+    this.kingdomService.buyLand(this.landAmount).subscribe({
+      next: (res) => {
+        this.message = res.message || 'Zakupiono ziemię.';
+        this.kingdomService.getMyKingdom().subscribe(k => this.kingdom = k);
+        setTimeout(() => this.message = '', 4000);
+      },
+      error: (err) => {
+        this.message = err.error?.message || err.error || 'Błąd zakupu ziemi.';
+        setTimeout(() => this.message = '', 4000);
+      }
     });
   }
 

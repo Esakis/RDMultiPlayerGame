@@ -15,8 +15,7 @@ export class SidebarComponent {
     { label: 'Budowa', route: '/buildings' },
     { label: 'Zatrudnienie', route: '/economy' },
     { label: 'Wojsko', route: '/military' },
-    { label: 'Ataki', route: '/attack' },
-    { label: 'Walka', route: '/reports' },
+    { label: 'Walka', route: '/attack' },
     { label: 'Magia', route: '/magic' },
     { label: 'Złodzieje', route: '/thieves' },
     { label: 'Generałowie', route: '/generals' },
@@ -24,7 +23,6 @@ export class SidebarComponent {
     { label: 'Rynek', route: '/market' },
     { label: 'Smoki', route: '/dragons' },
     { label: 'Statystyki', route: '/ranking' },
-    { label: 'Nauka', route: '/research' },
   ];
 
   constructor(private auth: AuthService, private router: Router) {}

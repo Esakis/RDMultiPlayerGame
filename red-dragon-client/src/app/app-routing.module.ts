@@ -10,7 +10,6 @@ import { EconomyComponent } from './features/economy/economy.component';
 import { MilitaryComponent } from './features/military/military.component';
 import { ResearchComponent } from './features/research/research.component';
 import { CoalitionComponent } from './features/coalition/coalition.component';
-import { ReportsComponent } from './features/reports/reports.component';
 import { MessagesComponent } from './features/messages/messages.component';
 import { RankingComponent } from './features/ranking/ranking.component';
 import { ForumComponent } from './features/forum/forum.component';
@@ -32,7 +31,6 @@ const routes: Routes = [
   { path: 'military', component: MilitaryComponent, canActivate: [AuthGuard] },
   { path: 'research', component: ResearchComponent, canActivate: [AuthGuard] },
   { path: 'coalition', component: CoalitionComponent, canActivate: [AuthGuard] },
-  { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard] },
   { path: 'messages', component: MessagesComponent, canActivate: [AuthGuard] },
   { path: 'ranking', component: RankingComponent, canActivate: [AuthGuard] },
   { path: 'forum', component: ForumComponent, canActivate: [AuthGuard] },

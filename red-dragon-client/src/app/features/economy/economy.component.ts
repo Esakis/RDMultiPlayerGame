@@ -12,7 +12,6 @@ export class EconomyComponent implements OnInit {
   loading = true;
   message = '';
   assignAmounts: { [key: string]: number } = {};
-  landAmount = 1;
 
   constructor(private kingdomService: KingdomService) {}
 
@@ -34,14 +33,6 @@ export class EconomyComponent implements OnInit {
 
   unassign(profType: string, amount: number): void {
     this.assign(profType, -amount);
-  }
-
-  buyLand(): void {
-    if (this.landAmount <= 0) return;
-    this.kingdomService.buyLand(this.landAmount).subscribe({
-      next: (res) => { this.message = res.message || 'OK'; this.load(); this.clearMsg(); },
-      error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
-    });
   }
 
   getProductionInfo(profType: string): string {
