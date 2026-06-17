@@ -21,29 +21,15 @@ public class PactController : ControllerBase
     private int UserId => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
 
     [HttpGet]
-    public async Task<IActionResult> GetPacts()
+    public async Task<IActionResult> GetStatus()
     {
-        return Ok(await _pactService.GetPactsAsync(UserId));
+        return Ok(await _pactService.GetPactStatusAsync(UserId));
     }
 
-    [HttpPost("propose")]
-    public async Task<IActionResult> Propose([FromBody] ProposePactDto dto)
+    [HttpPost("set")]
+    public async Task<IActionResult> Set([FromBody] SetPactDto dto)
     {
-        var result = await _pactService.ProposePactAsync(UserId, dto);
-        return result.Success ? Ok(result) : BadRequest(result.Message);
-    }
-
-    [HttpPost("{id}/respond")]
-    public async Task<IActionResult> Respond(int id, [FromQuery] bool accept)
-    {
-        var result = await _pactService.RespondPactAsync(UserId, id, accept);
-        return result.Success ? Ok(result) : BadRequest(result.Message);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Cancel(int id)
-    {
-        var result = await _pactService.CancelPactAsync(UserId, id);
+        var result = await _pactService.SetPactAsync(UserId, dto);
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 }

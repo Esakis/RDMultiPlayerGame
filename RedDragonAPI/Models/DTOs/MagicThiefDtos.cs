@@ -61,19 +61,31 @@ public class GeneralDto
     public int SecondaryRerollsLeft { get; set; }
 }
 
-public class PactDto
+/// <summary>Stan paktów księstwa: lista współczłonków koalicji z aktualnym typem paktu
+/// oraz informacja o limicie paktów obronnych.</summary>
+public class PactStatusDto
 {
-    public int Id { get; set; }
-    public string PactType { get; set; } = string.Empty;
-    public string Status { get; set; } = string.Empty;
-    public int PartnerKingdomId { get; set; }
-    public string PartnerName { get; set; } = string.Empty;
-    public bool IsProposer { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public bool InCoalition { get; set; }
+    /// <summary>Maks. liczba paktów obronnych (baza 5 + Ambasada).</summary>
+    public int Limit { get; set; }
+    /// <summary>Liczba aktualnie zawartych paktów obronnych.</summary>
+    public int UsedSlots { get; set; }
+    public bool HasAmbasada { get; set; }
+    public List<PactMemberDto> Members { get; set; } = new();
 }
 
-public class ProposePactDto
+public class PactMemberDto
 {
-    public string PactType { get; set; } = string.Empty;
+    public int KingdomId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Race { get; set; } = string.Empty;
+    public int Land { get; set; }
+    /// <summary>Handlowy (domyślny) | Magiczny | Wojskowy | Zlodziejski</summary>
+    public string PactType { get; set; } = "Handlowy";
+}
+
+public class SetPactDto
+{
     public int TargetKingdomId { get; set; }
+    public string PactType { get; set; } = "Handlowy";
 }

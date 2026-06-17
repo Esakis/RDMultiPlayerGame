@@ -132,3 +132,65 @@
     <ng-template #noHistory><p class="hint">Brak transakcji.</p></ng-template>
   </ng-container>
 </div>
+
+<!-- Pakty sojusznicze -->
+<div class="game-panel pact-panel" *ngIf="pacts">
+  <h2 class="panel-title">Pakty sojusznicze</h2>
+
+  <div class="info-msg" *ngIf="pactMessage">{{ pactMessage }}</div>
+  <div class="error-msg" *ngIf="pactError">{{ pactError }}</div>
+
+  <p class="hint no-access" *ngIf="!pacts.inCoalition">
+    Pakty zawierasz wyłącznie z członkami swojej koalicji. Dołącz do koalicji, aby paktować.
+  </p>
+
+  <ng-container *ngIf="pacts.inCoalition">
+    <p class="hint">
+      Z każdym sojusznikiem masz domyślnie <strong>pakt handlowy</strong>. Możesz zmienić go na
+      pakt obronny (wojskowy, magiczny lub złodziejski) — wtedy ziemia tego sojusznika przestaje
+      liczyć się do handlu, ale jego jednostki pomagają w obronie Twojego księstwa.
+    </p>
+    <p class="hint slots">
+      Pakty obronne: <strong>{{ pacts.usedSlots }} / {{ pacts.limit }}</strong>.
+      {{ pacts.hasAmbasada
+          ? 'Ambasada zwiększyła Twój limit o 1.'
+          : 'Zbuduj budynek specjalny Ambasada, aby zwiększyć limit o 1.' }}
+    </p>
+
+    <table class="rd-table" *ngIf="pacts.members.length > 0; else noMembers">
+      <thead>
+        <tr>
+          <th>Księstwo</th>
+          <th>Rasa</th>
+          <th>Ziemia</th>
+          <th>Aktualny pakt</th>
+          <th>Zmień typ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of pacts.members">
+          <td>{{ m.name }}</td>
+          <td>{{ m.race }}</td>
+          <td class="num">{{ m.land | number }}</td>
+          <td><span class="pact-badge" [ngClass]="pactClass(m.pactType)">{{ pactLabel(m.pactType) }}</span></td>
+          <td>
+            <select [ngModel]="m.pactType" (ngModelChange)="changePact(m, $event)">
+              <option *ngFor="let t of pactTypes" [value]="t.value"
+                      [disabled]="t.value !== 'Handlowy' && t.value !== m.pactType && pactDisabled(m)">
+                {{ t.label }}
+              </option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noMembers><p class="hint">Brak innych księstw w Twojej koalicji.</p></ng-template>
+
+    <ul class="pact-legend">
+      <li *ngFor="let t of pactTypes">
+        <span class="pact-badge" [ngClass]="pactClass(t.value)">{{ t.label }}</span>
+        <span>{{ pactDescriptions[t.value] }}</span>
+      </li>
+    </ul>
+  </ng-container>
+</div>

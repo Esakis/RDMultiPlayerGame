@@ -100,3 +100,50 @@
 .error-msg { color: #ff7b6b; margin: 8px 0; }
 .hint { font-style: italic; color: #a08a60; }
 .no-access { color: #d9a86a; }
+
+// === Pakty sojusznicze ===
+.pact-panel {
+  margin-top: 12px;
+  border-top: 2px solid #5a3a1a;
+
+  .slots strong { color: #e8c350; }
+
+  .rd-table select {
+    background: #2a1208;
+    color: #e8d5b0;
+    border: 1px solid #5a3a1a;
+    padding: 2px 4px;
+  }
+}
+
+.pact-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+// Kolory wg oryginału: handlowy=biały, wojskowy=zielony, magiczny=niebieski, złodziejski=szary
+.pact-handlowy   { background: #e8e0d0; color: #2a1208; }
+.pact-wojskowy   { background: #2e7d32; color: #f0f0e0; }
+.pact-magiczny   { background: #2a4d8f; color: #f0f0e0; }
+.pact-zlodziejski { background: #6b6b6b; color: #f0f0e0; }
+
+.pact-legend {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  font-size: 12px;
+  color: #a08a60;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+
+  .pact-badge { flex-shrink: 0; min-width: 130px; text-align: center; }
+}

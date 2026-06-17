@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MarketService, MarketOrder, CreateMarketOrder, MarketTransaction } from '../../core/services/market.service';
+import { PactService, PactStatus, PactMember } from '../../core/services/pact.service';
 
 @Component({
   selector: 'app-market',
@@ -33,10 +34,30 @@ export class MarketComponent implements OnInit {
   // Ilość do zrealizowania per oferta
   fillQty: { [orderId: number]: number } = {};
 
-  constructor(private market: MarketService) {}
+  // === Pakty sojusznicze ===
+  pacts: PactStatus | null = null;
+  pactMessage = '';
+  pactError = '';
+
+  pactTypes = [
+    { value: 'Handlowy', label: 'Handlowy (domyślny)' },
+    { value: 'Wojskowy', label: 'Wojskowy' },
+    { value: 'Magiczny', label: 'Magiczny' },
+    { value: 'Zlodziejski', label: 'Złodziejski' }
+  ];
+
+  pactDescriptions: { [key: string]: string } = {
+    Handlowy: 'Ziemia sojusznika dolicza się do efektywności Twoich kupców (100%, bez limitu).',
+    Wojskowy: 'Armia sojusznika pozostawiona w domu pomaga bronić Twojego księstwa.',
+    Magiczny: 'Magowie sojusznika pomagają bronić przed wrogą magią.',
+    Zlodziejski: 'Złodzieje sojusznika pomagają bronić przed atakami złodziejskimi.'
+  };
+
+  constructor(private market: MarketService, private pactService: PactService) {}
 
   ngOnInit(): void {
     this.load();
+    this.loadPacts();
   }
 
   load(): void {
@@ -93,6 +114,37 @@ export class MarketComponent implements OnInit {
     this.market.cancelOrder(order.id).subscribe({
       next: r => { this.message = r.message ?? ''; this.load(); },
       error: e => { this.error = e.error || 'Błąd wycofywania oferty.'; }
+    });
+  }
+
+  // === Pakty sojusznicze ===
+  loadPacts(): void {
+    this.pactService.getStatus().subscribe({
+      next: p => this.pacts = p,
+      error: () => this.pacts = null
+    });
+  }
+
+  pactLabel(type: string): string {
+    return this.pactTypes.find(t => t.value === type)?.label ?? type;
+  }
+
+  pactClass(type: string): string {
+    return 'pact-' + type.toLowerCase();
+  }
+
+  /** Czy zmiana typu paktu dla danego sojusznika spowodowałaby przekroczenie limitu. */
+  pactDisabled(member: PactMember): boolean {
+    return !!this.pacts && member.pactType === 'Handlowy' && this.pacts.usedSlots >= this.pacts.limit;
+  }
+
+  changePact(member: PactMember, newType: string): void {
+    if (newType === member.pactType) return;
+    this.pactMessage = '';
+    this.pactError = '';
+    this.pactService.setPact(member.kingdomId, newType).subscribe({
+      next: r => { this.pactMessage = r.message ?? ''; this.loadPacts(); },
+      error: e => { this.pactError = e.error || 'Błąd zmiany paktu.'; this.loadPacts(); }
     });
   }
 }

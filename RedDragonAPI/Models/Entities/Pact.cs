@@ -4,9 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace RedDragonAPI.Models.Entities;
 
 /// <summary>
-/// Pakt między księstwami tej samej koalicji (oryginalne 4 typy, docs/MECHANIKA.md §12).
-/// Limit 5 paktów na księstwo (+1 z Ambasadą); z jednym księstwem tylko jeden pakt
-/// danego typu; obie strony muszą potwierdzić.
+/// Pakt OBRONNY między księstwami tej samej koalicji (Magiczny | Wojskowy | Zlodziejski).
+/// Pakt handlowy jest domyślny dla każdego współczłonka i NIE ma tu rekordu — istnienie
+/// rekordu oznacza, że domyślny handlowy zastąpiono paktem obronnym. Jeden rekord na parę
+/// księstw (wspólny dla obu stron), tworzony natychmiast (Status="Active", bez akceptacji).
+/// Limit paktów obronnych: 5 na księstwo (+1 z Ambasadą). Szczegóły: docs/zrodla/urza-pakt.txt.
 /// Skuteczność obronna: 1 pakt = 50%, 2 = 45%, 3+ = 40% (na typ).
 /// </summary>
 [Table("Pacts")]

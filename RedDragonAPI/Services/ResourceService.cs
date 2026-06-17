@@ -125,16 +125,28 @@ public class ResourceService : IResourceService
                     break;
                 case "Kupcy":
                     // Oryginalny wzór: złoto na kupca = 500·z/(z + ob·10),
-                    // z — obszar własny + obszar partnerów paktów handlowych
+                    // z — obszar własny + obszar partnerów paktów handlowych.
+                    // Pakt handlowy jest domyślny dla KAŻDEGO współczłonka koalicji
+                    // (poza tymi, z którymi zawarto pakt obronny — ci nie liczą się do handlu).
                     if (prof.WorkerCount > 0)
                     {
-                        long tradeLand = kingdom.Land + await _context.Pacts
-                            .Where(p => p.PactType == "Handlowy" && p.Status == "Active"
-                                        && (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id))
-                            .Select(p => p.ProposerKingdomId == kingdom.Id
-                                ? p.TargetKingdom.Land
-                                : p.ProposerKingdom.Land)
-                            .SumAsync(l => (long)l);
+                        long tradeLand = kingdom.Land;
+                        if (kingdom.CoalitionId != null)
+                        {
+                            var defensePartnerIds = await _context.Pacts
+                                .Where(p => p.Status == "Active"
+                                            && (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id))
+                                .Select(p => p.ProposerKingdomId == kingdom.Id
+                                    ? p.TargetKingdomId
+                                    : p.ProposerKingdomId)
+                                .ToListAsync();
+
+                            tradeLand += await _context.Kingdoms
+                                .Where(k => k.CoalitionId == kingdom.CoalitionId
+                                            && k.Id != kingdom.Id
+                                            && !defensePartnerIds.Contains(k.Id))
+                                .SumAsync(k => (long)k.Land);
+                        }
                         decimal goldPerMerchant = 500m * tradeLand / (tradeLand + prof.WorkerCount * 10m);
                         production = (long)(prof.WorkerCount * goldPerMerchant * Productivity(prof, race.BonusMerchants));
                         merchantGold = production;

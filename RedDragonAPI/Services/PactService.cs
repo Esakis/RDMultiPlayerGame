@@ -7,23 +7,28 @@ namespace RedDragonAPI.Services;
 
 public interface IPactService
 {
-    Task<List<PactDto>> GetPactsAsync(int userId);
-    Task<ServiceResult> ProposePactAsync(int userId, ProposePactDto dto);
-    Task<ServiceResult> RespondPactAsync(int userId, int pactId, bool accept);
-    Task<ServiceResult> CancelPactAsync(int userId, int pactId);
+    Task<PactStatusDto> GetPactStatusAsync(int userId);
+    Task<ServiceResult> SetPactAsync(int userId, SetPactDto dto);
 }
 
 /// <summary>
-/// Pakty wg oryginału (docs/MECHANIKA.md §12): 4 typy, tylko w obrębie koalicji,
-/// limit 5 na księstwo, jeden pakt danego typu z jednym księstwem,
-/// obustronne potwierdzenie.
+/// Pakty wewnątrz koalicji wg modelu gry (docs/zrodla/urza-pakt.txt):
+/// z KAŻDYM współczłonkiem masz domyślnie pakt handlowy (bez rekordu w bazie).
+/// Zmiana typu na obronny (Magiczny/Wojskowy/Zlodziejski) tworzy rekord, który
+/// zastępuje handlowy dla tego sojusznika i zajmuje slot. Powrót na handlowy =
+/// usunięcie rekordu. Pakty są natychmiastowe (jednostronne), rekord jest wspólny
+/// dla obu stron (symetryczny efekt obronny i zajmuje slot u obu).
+/// Limit paktów obronnych: baza 5 + Ambasada (+1).
+/// Skuteczność obronna wg liczby paktów danego typu: 50%/45%/40%.
 /// </summary>
 public class PactService : IPactService
 {
-    public const int PactLimit = 5; // +1 z Ambasadą (budynek do dodania)
+    public const int BasePactLimit = 5; // +1 z Ambasadą
+    public const string TradePactType = "Handlowy";
 
-    public static readonly string[] PactTypes =
-        { "Handlowy", "Magiczny", "Wojskowy", "Zlodziejski" };
+    /// <summary>Typy paktów obronnych (handlowy jest stanem domyślnym, nie obronnym).</summary>
+    public static readonly string[] DefensePactTypes =
+        { "Magiczny", "Wojskowy", "Zlodziejski" };
 
     /// <summary>Skuteczność paktu obronnego wg liczby paktów danego typu: 50%/45%/40%.</summary>
     public static decimal PactEfficiency(int pactCountOfType) => pactCountOfType switch
@@ -41,36 +46,60 @@ public class PactService : IPactService
     }
 
     private async Task<Kingdom?> GetKingdomAsync(int userId) =>
-        await _context.Kingdoms.FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        await _context.Kingdoms
+            .Include(k => k.Buildings)
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
 
-    public async Task<List<PactDto>> GetPactsAsync(int userId)
+    private static bool HasAmbasada(Kingdom k) =>
+        k.Buildings.Any(b => b.BuildingType == "Ambasada" && b.Quantity > 0 && !b.IsUnderConstruction);
+
+    private static int LimitFor(Kingdom k) => BasePactLimit + (HasAmbasada(k) ? 1 : 0);
+
+    public async Task<PactStatusDto> GetPactStatusAsync(int userId)
     {
         var kingdom = await GetKingdomAsync(userId);
-        if (kingdom == null) return new List<PactDto>();
+        if (kingdom == null) return new PactStatusDto();
 
-        return await _context.Pacts
-            .Where(p => (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id)
-                        && p.Status != "Cancelled")
-            .Include(p => p.ProposerKingdom)
-            .Include(p => p.TargetKingdom)
-            .Select(p => new PactDto
-            {
-                Id = p.Id,
-                PactType = p.PactType,
-                Status = p.Status,
-                PartnerKingdomId = p.ProposerKingdomId == kingdom.Id ? p.TargetKingdomId : p.ProposerKingdomId,
-                PartnerName = p.ProposerKingdomId == kingdom.Id ? p.TargetKingdom.Name : p.ProposerKingdom.Name,
-                IsProposer = p.ProposerKingdomId == kingdom.Id,
-                CreatedAt = p.CreatedAt
-            })
+        var dto = new PactStatusDto
+        {
+            HasAmbasada = HasAmbasada(kingdom),
+            Limit = LimitFor(kingdom),
+            InCoalition = kingdom.CoalitionId != null
+        };
+        if (kingdom.CoalitionId == null) return dto;
+
+        var pacts = await _context.Pacts
+            .Where(p => p.Status == "Active"
+                        && (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id))
             .ToListAsync();
+
+        var typeByPartner = pacts.ToDictionary(
+            p => p.ProposerKingdomId == kingdom.Id ? p.TargetKingdomId : p.ProposerKingdomId,
+            p => p.PactType);
+        dto.UsedSlots = pacts.Count;
+
+        var members = await _context.Kingdoms
+            .Where(k => k.CoalitionId == kingdom.CoalitionId && k.Id != kingdom.Id)
+            .Select(k => new { k.Id, k.Name, k.Race, k.Land })
+            .ToListAsync();
+
+        dto.Members = members
+            .Select(m => new PactMemberDto
+            {
+                KingdomId = m.Id,
+                Name = m.Name,
+                Race = m.Race,
+                Land = m.Land,
+                PactType = typeByPartner.TryGetValue(m.Id, out var t) ? t : TradePactType
+            })
+            .OrderBy(m => m.Name)
+            .ToList();
+
+        return dto;
     }
 
-    public async Task<ServiceResult> ProposePactAsync(int userId, ProposePactDto dto)
+    public async Task<ServiceResult> SetPactAsync(int userId, SetPactDto dto)
     {
-        if (!PactTypes.Contains(dto.PactType))
-            return ServiceResult.Fail("Nieznany typ paktu.");
-
         var kingdom = await GetKingdomAsync(userId);
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
@@ -85,76 +114,57 @@ public class PactService : IPactService
         if (target.CoalitionId != kingdom.CoalitionId)
             return ServiceResult.Fail("Partner musi należeć do Twojej koalicji.");
 
-        int myPacts = await _context.Pacts.CountAsync(p =>
-            (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id) && p.Status == "Active");
-        if (myPacts >= PactLimit)
-            return ServiceResult.Fail($"Osiągnięto limit {PactLimit} paktów.");
+        bool isTrade = dto.PactType == TradePactType;
+        if (!isTrade && !DefensePactTypes.Contains(dto.PactType))
+            return ServiceResult.Fail("Nieznany typ paktu.");
 
-        bool duplicate = await _context.Pacts.AnyAsync(p =>
-            p.PactType == dto.PactType && p.Status != "Cancelled" &&
+        // Istniejący pakt obronny z tym partnerem (rekord jest wspólny, w obu kierunkach).
+        var existing = await _context.Pacts.FirstOrDefaultAsync(p => p.Status == "Active" &&
             ((p.ProposerKingdomId == kingdom.Id && p.TargetKingdomId == target.Id) ||
              (p.ProposerKingdomId == target.Id && p.TargetKingdomId == kingdom.Id)));
-        if (duplicate)
-            return ServiceResult.Fail("Taki pakt z tym księstwem już istnieje lub czeka na potwierdzenie.");
+
+        if (isTrade)
+        {
+            // Powrót do domyślnego paktu handlowego = usunięcie paktu obronnego.
+            if (existing == null)
+                return ServiceResult.Ok($"Z księstwem {target.Name} masz już pakt handlowy.");
+            _context.Pacts.Remove(existing);
+            await _context.SaveChangesAsync();
+            return ServiceResult.Ok($"Przywrócono domyślny pakt handlowy z księstwem {target.Name}.");
+        }
+
+        if (existing != null)
+        {
+            if (existing.PactType == dto.PactType)
+                return ServiceResult.Ok($"Pakt {dto.PactType.ToLower()} z księstwem {target.Name} już obowiązuje.");
+            // Zmiana typu istniejącego paktu obronnego nie zajmuje nowego slotu.
+            existing.PactType = dto.PactType;
+            existing.ConfirmedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+            return ServiceResult.Ok($"Zmieniono pakt z księstwem {target.Name} na {dto.PactType.ToLower()}.");
+        }
+
+        // Nowy pakt obronny — sprawdź limit.
+        int used = await _context.Pacts.CountAsync(p => p.Status == "Active" &&
+            (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id));
+        int limit = LimitFor(kingdom);
+        if (used >= limit)
+            return ServiceResult.Fail(
+                $"Osiągnięto limit {limit} paktów obronnych. Zbuduj Ambasadę, aby zwiększyć limit.");
 
         _context.Pacts.Add(new Pact
         {
             ProposerKingdomId = kingdom.Id,
             TargetKingdomId = target.Id,
             PactType = dto.PactType,
-            Status = "Proposed"
+            Status = "Active",
+            ConfirmedAt = DateTime.UtcNow
         });
         await _context.SaveChangesAsync();
-        return ServiceResult.Ok($"Zaproponowano pakt {dto.PactType.ToLower()} księstwu {target.Name}.");
+        return ServiceResult.Ok($"Zawarto pakt {dto.PactType.ToLower()} z księstwem {target.Name}.");
     }
 
-    public async Task<ServiceResult> RespondPactAsync(int userId, int pactId, bool accept)
-    {
-        var kingdom = await GetKingdomAsync(userId);
-        if (kingdom == null)
-            return ServiceResult.Fail("Nie znaleziono księstwa.");
-
-        var pact = await _context.Pacts
-            .FirstOrDefaultAsync(p => p.Id == pactId && p.TargetKingdomId == kingdom.Id && p.Status == "Proposed");
-        if (pact == null)
-            return ServiceResult.Fail("Nie znaleziono oczekującej propozycji paktu.");
-
-        if (!accept)
-        {
-            pact.Status = "Cancelled";
-            await _context.SaveChangesAsync();
-            return ServiceResult.Ok("Propozycja paktu odrzucona.");
-        }
-
-        int myPacts = await _context.Pacts.CountAsync(p =>
-            (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id) && p.Status == "Active");
-        if (myPacts >= PactLimit)
-            return ServiceResult.Fail($"Osiągnięto limit {PactLimit} paktów.");
-
-        pact.Status = "Active";
-        pact.ConfirmedAt = DateTime.UtcNow;
-        await _context.SaveChangesAsync();
-        return ServiceResult.Ok("Pakt zawarty.");
-    }
-
-    public async Task<ServiceResult> CancelPactAsync(int userId, int pactId)
-    {
-        var kingdom = await GetKingdomAsync(userId);
-        if (kingdom == null)
-            return ServiceResult.Fail("Nie znaleziono księstwa.");
-
-        var pact = await _context.Pacts.FirstOrDefaultAsync(p => p.Id == pactId
-            && (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id)
-            && p.Status != "Cancelled");
-        if (pact == null)
-            return ServiceResult.Fail("Nie znaleziono paktu.");
-
-        pact.Status = "Cancelled";
-        await _context.SaveChangesAsync();
-        return ServiceResult.Ok("Pakt wypowiedziany.");
-    }
-
-    /// <summary>Aktywni partnerzy paktów danego typu dla księstwa.</summary>
+    /// <summary>Aktywni partnerzy paktów obronnych danego typu dla księstwa.</summary>
     public static async Task<List<Kingdom>> GetActivePactPartnersAsync(
         ApplicationDbContext context, int kingdomId, string pactType)
     {
