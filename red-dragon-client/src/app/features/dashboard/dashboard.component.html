@@ -1,5 +1,5 @@
 <div class="stolica-page" *ngIf="kingdom; else loadingTpl">
-  <div class="toast" *ngIf="message">{{ message }}</div>
+  <app-notify-relay [message]="message"></app-notify-relay>
 
   <div class="status-bar">
     <span class="status novice" *ngIf="kingdom.isProtected">

@@ -21,7 +21,6 @@ export class SidebarComponent {
     { label: 'Generałowie', route: '/generals' },
     { label: 'Polityka', route: '/coalition' },
     { label: 'Rynek', route: '/market' },
-    { label: 'Smoki', route: '/dragons' },
     { label: 'Statystyki', route: '/ranking' },
   ];
 

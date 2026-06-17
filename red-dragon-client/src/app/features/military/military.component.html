@@ -1,6 +1,6 @@
 <div class="page-content">
   <h2>Wojsko</h2>
-  <div class="toast" *ngIf="message">{{ message }}</div>
+  <app-notify-relay [message]="message"></app-notify-relay>
 
   <div *ngIf="!loading; else loadingTpl">
     <!-- Rekrutacja -->

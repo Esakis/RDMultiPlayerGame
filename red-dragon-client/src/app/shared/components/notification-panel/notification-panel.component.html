@@ -1,0 +1,22 @@
+<div class="notify-panel" [class.collapsed]="collapsed">
+  <!-- Uchwyt: zwijanie/rozwijanie z prawej strony -->
+  <button class="notify-handle" (click)="toggle()"
+          [title]="collapsed ? 'Pokaż powiadomienia' : 'Ukryj powiadomienia'">
+    <span class="chevron">{{ collapsed ? '◀' : '▶' }}</span>
+    <span class="badge" *ngIf="items.length > 0">{{ items.length }}</span>
+  </button>
+
+  <div class="notify-body">
+    <div class="notify-header">
+      <span class="title">Powiadomienia</span>
+      <button class="clear-btn" *ngIf="items.length > 0" (click)="clearAll()" title="Wyczyść">✕</button>
+    </div>
+
+    <div class="notify-list">
+      <div class="notify-item" *ngFor="let n of items" [ngClass]="n.type" (click)="dismiss(n.id)">
+        {{ n.text }}
+      </div>
+      <p class="empty" *ngIf="items.length === 0">Brak nowych powiadomień.</p>
+    </div>
+  </div>
+</div>

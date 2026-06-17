@@ -13,6 +13,8 @@ import { RaceImagePipe } from './shared/pipes/race-image.pipe';
 
 import { HeaderComponent } from './shared/components/header/header.component';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { NotificationPanelComponent } from './shared/components/notification-panel/notification-panel.component';
+import { NotifyRelayComponent } from './shared/components/notify-relay/notify-relay.component';
 
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
@@ -40,6 +42,8 @@ import { AttackComponent } from './features/attack/attack.component';
     RaceImagePipe,
     HeaderComponent,
     SidebarComponent,
+    NotificationPanelComponent,
+    NotifyRelayComponent,
     LoginComponent,
     RegisterComponent,
     DashboardComponent,

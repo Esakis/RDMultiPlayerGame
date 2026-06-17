@@ -1,6 +1,75 @@
 <div class="page-content">
   <h2>Statystyki</h2>
   <div *ngIf="!loading; else loadingTpl">
+
+    <!-- Statystyki własnej koalicji -->
+    <div class="coalition-stats" *ngIf="coalitionMembers.length > 0">
+      <h3>Twoja koalicja<span *ngIf="coalitionName">: {{ coalitionName }}</span></h3>
+      <div class="stats-scroll">
+        <table class="coalition-stats-table">
+          <thead>
+            <tr>
+              <th>Księstwo</th>
+              <th>Rasa</th>
+              <th class="num">Ziemia</th>
+              <th class="num">Populacja</th>
+              <th class="num">Złoto</th>
+              <th class="num">Wojsko</th>
+              <th class="num">Atak</th>
+              <th class="num">Obrona</th>
+              <th class="num">Mana</th>
+              <th class="num">Złodzieje</th>
+              <th class="num">Zabudowa</th>
+              <th class="num">% zabud.</th>
+              <th class="num">Wolne</th>
+              <th>Rola</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let member of coalitionMembers" [ngClass]="getMemberRoleClass(member.coalitionRole)">
+              <td class="member-name">{{ member.name }}</td>
+              <td class="race-cell">
+                <img class="race-mini" [src]="member.race | raceImage" [alt]="member.race" [title]="member.race">
+                {{ member.race }}
+              </td>
+              <td class="num">{{ member.land | number }}</td>
+              <td class="num">{{ member.population | number }}</td>
+              <td class="num">{{ member.gold | number }}</td>
+              <td class="num">{{ member.military | number }}</td>
+              <td class="num atk">{{ member.attackPower | number }}</td>
+              <td class="num def">{{ member.defensePower | number }}</td>
+              <td class="num">{{ member.magic | number }}</td>
+              <td class="num">{{ member.thiefPower | number }}</td>
+              <td class="num">{{ member.buildingCount | number }}</td>
+              <td class="num">{{ member.builtPercent | number:'1.0-1' }}%</td>
+              <td class="num">{{ member.freeLand | number }}</td>
+              <td class="role-cell">{{ member.coalitionRole !== 'Member' ? getRoleDisplay(member.coalitionRole) : '—' }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>RAZEM ({{ coalitionMembers.length }})</td>
+              <td></td>
+              <td class="num">{{ totalLand | number }}</td>
+              <td class="num">{{ totalPopulation | number }}</td>
+              <td class="num">{{ totalGold | number }}</td>
+              <td class="num">{{ totalMilitary | number }}</td>
+              <td class="num atk">{{ totalAttack | number }}</td>
+              <td class="num def">{{ totalDefense | number }}</td>
+              <td class="num">{{ totalMagic | number }}</td>
+              <td class="num">{{ totalThief | number }}</td>
+              <td class="num">{{ totalBuildings | number }}</td>
+              <td class="num">{{ totalBuiltPercent | number:'1.0-1' }}%</td>
+              <td class="num">{{ totalFreeLand | number }}</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Ranking wszystkich księstw -->
+    <h3 class="ranking-title">Ranking księstw</h3>
     <div class="ranking-table">
       <div class="rank-row header">
         <span>#</span><span>Księstwo</span><span>Rasa</span><span>Ziemia</span><span>Populacja</span><span>Koalicja</span>

@@ -10,7 +10,6 @@ D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\obj\Debug\net8.0\RedDragonAPI.source
 D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\bin\Debug\net8.0\appsettings.Development.json
 D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\bin\Debug\net8.0\appsettings.json
 D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\bin\Debug\net8.0\RedDragonAPI.staticwebassets.endpoints.json
-D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\bin\Debug\net8.0\RedDragonAPI.exe
 D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\bin\Debug\net8.0\RedDragonAPI.deps.json
 D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\bin\Debug\net8.0\RedDragonAPI.runtimeconfig.json
 D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\bin\Debug\net8.0\RedDragonAPI.dll
@@ -143,3 +142,4 @@ D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\obj\Debug\net8.0\refint\RedDragonAPI
 D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\obj\Debug\net8.0\RedDragonAPI.pdb
 D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\obj\Debug\net8.0\RedDragonAPI.genruntimeconfig.cache
 D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\obj\Debug\net8.0\ref\RedDragonAPI.dll
+D:\GryWebowe\RDMultiPlayerGame\RedDragonAPI\bin\Debug\net8.0\RedDragonAPI.exe

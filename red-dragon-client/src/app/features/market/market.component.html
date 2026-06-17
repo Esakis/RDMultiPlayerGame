@@ -1,8 +1,8 @@
 <div class="game-panel">
   <h2 class="panel-title">Rynek surowców</h2>
 
-  <div class="info-msg" *ngIf="message">{{ message }}</div>
-  <div class="error-msg" *ngIf="error">{{ error }}</div>
+  <app-notify-relay [message]="message"></app-notify-relay>
+  <app-notify-relay [message]="error" type="error"></app-notify-relay>
   <div class="loading" *ngIf="loading">Wczytywanie rynku...</div>
 
   <p class="hint no-access" *ngIf="!loading && !hasAccess">{{ noAccessReason }}</p>

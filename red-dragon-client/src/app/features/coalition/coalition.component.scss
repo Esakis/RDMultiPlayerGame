@@ -1,5 +1,4 @@
 :host { display: block; padding: 10px 15px; }
-.race-mini { width: 22px; height: 22px; object-fit: cover; border: 1px solid #5a2020; vertical-align: middle; margin-right: 6px; }
 
 .treasury-section {
   border: 1px solid #b8860b;
@@ -84,13 +83,36 @@ h2 { color: #ffd700; margin: 0 0 15px 0; font-size: 20px; text-shadow: 1px 1px 3
 
 .coalition-list { display: flex; flex-direction: column; gap: 2px; }
 .coalition-row {
-  display: grid; grid-template-columns: 2fr 80px 1fr 100px 80px 80px; align-items: center;
+  display: grid; grid-template-columns: 36px 2fr 80px 1fr 110px 90px 70px 80px; align-items: center;
   padding: 8px 10px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(90,32,32,0.3);
   &.header { background: rgba(42,8,8,0.8); color: #d4af37; font-size: 12px; font-weight: bold; }
+  &.mine { background: rgba(74,8,8,0.5); border-left: 3px solid #ffd700; }
+  .rank { color: #d4af37; font-weight: bold; text-align: center; }
   .name { color: #ffd700; font-weight: bold; }
   .tag { color: #66ff66; }
+  .land { color: #d4af37; font-weight: bold; text-align: right; }
   .pso { color: #66ff66; }
+  &.clickable { cursor: pointer; transition: background 0.15s; }
+  &.clickable:hover { background: rgba(74,8,8,0.45); }
+  &.expanded { background: rgba(74,8,8,0.55); }
 }
+
+.coalition-details {
+  padding: 12px 14px; background: rgba(0,0,0,0.45);
+  border-bottom: 1px solid rgba(90,32,32,0.3); border-left: 3px solid #8b0000;
+  .member-count { margin: 0 0 10px; color: #ccc; font-size: 13px; strong { color: #ffd700; } }
+}
+.member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; }
+.member-card {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 6px 10px; background: rgba(0,0,0,0.35); border: 1px solid rgba(90,32,32,0.4);
+  .member-name { color: #ffd700; font-weight: bold; }
+  .member-role { font-size: 12px; font-weight: bold; }
+  .member-race { margin-left: auto; color: #9bb; font-size: 12px; font-style: italic; }
+}
+.role-imperator { color: #ffd700; }
+.role-gd { color: #ff8c42; }
+.role-member { color: #88bbff; }
 
 .btn-action {
   padding: 6px 16px; background: linear-gradient(180deg, #4a0808, #2a0808);
@@ -109,53 +131,7 @@ h2 { color: #ffd700; margin: 0 0 15px 0; font-size: 20px; text-shadow: 1px 1px 3
 }
 
 .empty { color: #888; font-style: italic; }
-.toast { background: rgba(0,0,0,0.4); border: 1px solid #66ff66; color: #66ff66; padding: 8px 14px; margin-bottom: 10px; font-size: 13px; }
 .loading { color: #888; text-align: center; padding: 40px 0; font-size: 14px; }
-
-// Members section
-.members-section {
-  margin: 15px 0;
-  h4 { color: #ffd700; font-size: 14px; margin-bottom: 8px; }
-}
-
-.member-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.member-item {
-  padding: 6px 10px;
-  background: rgba(42, 8, 8, 0.5);
-  border: 1px solid #8b0000;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  &.imperator {
-    background: rgba(0, 80, 0, 0.6);
-    border: 1px solid #004d00;
-  }
-
-  &.main-commander {
-    background: rgba(0, 0, 80, 0.6);
-    border: 1px solid #003366;
-  }
-
-  .member-name {
-    color: #ffd700;
-    font-weight: bold;
-    font-size: 13px;
-  }
-
-  .member-role {
-    color: #ffd700;
-    font-size: 11px;
-    padding: 2px 6px;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 3px;
-  }
-}
 
 // Commander management
 .commander-management {

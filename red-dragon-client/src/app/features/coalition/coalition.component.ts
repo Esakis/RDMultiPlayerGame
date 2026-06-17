@@ -27,8 +27,31 @@ export class CoalitionComponent implements OnInit {
   depGold = 0; depBudulec = 0;
   wdrGold = 0; wdrBudulec = 0;
   fundPpsAmount = 0;
+  expandedCoalitionId: number | null = null;
 
   constructor(private coalitionService: CoalitionService, private kingdomService: KingdomService) {}
+
+  toggleCoalition(id: number): void {
+    this.expandedCoalitionId = this.expandedCoalitionId === id ? null : id;
+  }
+
+  /** Etykieta roli członka koalicji. */
+  roleLabel(role: string | undefined): string {
+    switch (role) {
+      case 'Imperator': return 'Imperator';
+      case 'MainCommander': return 'Głównodowodzący';
+      default: return 'Członek';
+    }
+  }
+
+  /** Klasa CSS koloru roli. */
+  roleClass(role: string | undefined): string {
+    switch (role) {
+      case 'Imperator': return 'role-imperator';
+      case 'MainCommander': return 'role-gd';
+      default: return 'role-member';
+    }
+  }
 
   ngOnInit(): void { this.load(); }
 
@@ -176,22 +199,6 @@ export class CoalitionComponent implements OnInit {
       },
       error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
     });
-  }
-
-  getMemberRoleClass(role?: string): string {
-    switch (role) {
-      case 'Imperator': return 'imperator';
-      case 'MainCommander': return 'main-commander';
-      default: return '';
-    }
-  }
-
-  getRoleDisplay(role?: string): string {
-    switch (role) {
-      case 'Imperator': return '[Imperator]';
-      case 'MainCommander': return '[Głównodowodzący]';
-      default: return '';
-    }
   }
 
   private clearMsg(): void { setTimeout(() => this.message = '', 4000); }

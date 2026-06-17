@@ -10,6 +10,7 @@ public class CoalitionDto
     public int MemberCount { get; set; }
     public int MaxMembers { get; set; }
     public decimal PSOProgress { get; set; }
+    public long TotalLand { get; set; }
     public List<KingdomSummaryDto> Members { get; set; } = new();
 }
 

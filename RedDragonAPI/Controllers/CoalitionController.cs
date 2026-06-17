@@ -29,7 +29,25 @@ public class CoalitionController : ControllerBase
             .Where(c => c.EraId == era)
             .Include(c => c.Members)
             .Include(c => c.Leader)
-            .Select(c => new CoalitionDto
+            .ToListAsync();
+
+        // Pełne dane każdego członka — potrzebne do sił bojowych, many i zabudowy.
+        var memberIds = coalitions.SelectMany(c => c.Members.Select(m => m.Id)).ToHashSet();
+        var fullKingdoms = await _context.Kingdoms
+            .Where(k => memberIds.Contains(k.Id))
+            .Include(k => k.MilitaryUnits).ThenInclude(u => u.Definition)
+            .Include(k => k.Buildings).ThenInclude(b => b.Definition)
+            .Include(k => k.Professions)
+            .ToDictionaryAsync(k => k.Id);
+
+        var races = await _context.RaceDefinitions.ToDictionaryAsync(r => r.Name);
+
+        var result = coalitions.Select(c =>
+        {
+            var members = c.Members
+                .Select(m => BuildMemberSummary(fullKingdoms.GetValueOrDefault(m.Id) ?? m, races))
+                .ToList();
+            return new CoalitionDto
             {
                 Id = c.Id,
                 Name = c.Name,
@@ -39,19 +57,61 @@ public class CoalitionController : ControllerBase
                 MemberCount = c.Members.Count,
                 MaxMembers = c.MaxMembers,
                 PSOProgress = c.PSOProgress,
-                Members = c.Members.Select(m => new KingdomSummaryDto
-                {
-                    Id = m.Id,
-                    Name = m.Name,
-                    Race = m.Race,
-                    Land = m.Land,
-                    Population = m.Population,
-                    CoalitionRole = m.CoalitionRole
-                }).ToList()
-            })
-            .ToListAsync();
+                TotalLand = members.Sum(m => (long)m.Land),
+                Members = members
+            };
+        })
+        // Wykaz wszystkich koalicji posortowany malejąco po łącznym obszarze ziemi.
+        .OrderByDescending(c => c.TotalLand)
+        .ThenBy(c => c.Name)
+        .ToList();
 
-        return Ok(coalitions);
+        return Ok(result);
+    }
+
+    /// <summary>Buduje wiersz statystyk członka koalicji (siły wg wzorów BattleCalculator).</summary>
+    private static KingdomSummaryDto BuildMemberSummary(Kingdom k, Dictionary<string, RaceDefinition> races)
+    {
+        races.TryGetValue(k.Race, out var race);
+
+        // Zabudowa: zajęta ziemia = Σ ilość × koszt ziemi z definicji budynku.
+        int buildingCount = k.Buildings?.Sum(b => b.Quantity) ?? 0;
+        int usedLand = k.Buildings?.Sum(b => b.Quantity * (b.Definition?.CostLand ?? 0)) ?? 0;
+        int freeLand = Math.Max(0, k.Land - usedLand);
+        decimal builtPercent = k.Land > 0 ? Math.Round((decimal)usedLand / k.Land * 100m, 1) : 0m;
+
+        // Siła złodziejska: liczba złodziei × (1 + modyfikator skuteczności rasy).
+        long thieves = k.MilitaryUnits?.Where(u => u.UnitType.EndsWith("_Zlodziej")).Sum(u => (long)u.Quantity) ?? 0;
+        long thiefPower = (long)Math.Round(thieves * (1m + (race?.ThiefPowerModifier ?? 0m)));
+
+        // Siły bojowe — wymagają definicji jednostek/budynków i rasy.
+        long attack = 0, defense = 0;
+        if (race != null && k.MilitaryUnits != null && k.MilitaryUnits.All(u => u.Definition != null))
+        {
+            var allUnits = k.MilitaryUnits.ToDictionary(u => u.UnitType, u => u.Quantity);
+            attack = BattleCalculator.CalculateAttackPower(k, allUnits, race);
+            defense = BattleCalculator.CalculateDefensePower(k, race);
+        }
+
+        return new KingdomSummaryDto
+        {
+            Id = k.Id,
+            Name = k.Name,
+            Race = k.Race,
+            Land = k.Land,
+            Population = k.Population,
+            Gold = k.Gold,
+            Military = k.MilitaryUnits?.Sum(u => u.Quantity + u.InTraining) ?? 0,
+            AttackPower = attack,
+            DefensePower = defense,
+            Magic = k.Mana,
+            ThiefPower = thiefPower,
+            BuildingCount = buildingCount,
+            UsedLand = usedLand,
+            FreeLand = freeLand,
+            BuiltPercent = builtPercent,
+            CoalitionRole = k.CoalitionRole
+        };
     }
 
     [HttpPost("create")]

@@ -1,6 +1,6 @@
 <div class="page-content" *ngIf="kingdom; else loadingTpl">
   <h2>Zatrudnienie</h2>
-  <div class="toast" *ngIf="message">{{ message }}</div>
+  <app-notify-relay [message]="message"></app-notify-relay>
 
   <!-- Zawody -->
   <div class="card">

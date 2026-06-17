@@ -72,6 +72,16 @@ export interface KingdomSummary {
   race: string;
   land: number;
   population: number;
+  gold?: number;
+  military?: number;
+  attackPower?: number;
+  defensePower?: number;
+  magic?: number;
+  thiefPower?: number;
+  buildingCount?: number;
+  usedLand?: number;
+  freeLand?: number;
+  builtPercent?: number;
   coalitionId?: number | null;
   coalitionTag: string | null;
   coalitionRole?: string;
@@ -228,6 +238,7 @@ export interface Coalition {
   memberCount: number;
   maxMembers: number;
   psoProgress: number;
+  totalLand: number;
   members: KingdomSummary[];
 }
 

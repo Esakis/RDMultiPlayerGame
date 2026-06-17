@@ -104,6 +104,20 @@ public class KingdomSummaryDto
     public string Race { get; set; } = string.Empty;
     public int Land { get; set; }
     public int Population { get; set; }
+    public long Gold { get; set; }
+    public int Military { get; set; }
+    // Siła bojowa (wzory Dracopedii/manuala — BattleCalculator)
+    public long AttackPower { get; set; }
+    public long DefensePower { get; set; }
+    // Siła magiczna = zgromadzona mana
+    public long Magic { get; set; }
+    // Siła złodziejska = liczba złodziei skorygowana o modyfikator rasy
+    public long ThiefPower { get; set; }
+    // Zabudowa
+    public int BuildingCount { get; set; }
+    public int UsedLand { get; set; }
+    public int FreeLand { get; set; }
+    public decimal BuiltPercent { get; set; }
     public int? CoalitionId { get; set; }
     public string? CoalitionTag { get; set; }
     public string? CoalitionRole { get; set; }
