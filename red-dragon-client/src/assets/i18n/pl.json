@@ -431,6 +431,13 @@
     "baseCost": "koszt bazowy",
     "cost": "Koszt",
     "time": "czas",
+    "col": {
+      "name": "Budynek",
+      "description": "Opis",
+      "cost": "Koszt",
+      "bonuses": "Bonusy",
+      "action": "Akcja"
+    },
     "bonusProduction": "+{{val}}% produkcji",
     "bonusDefense": "+{{val}}% obrony",
     "bonusPopulation": "+{{val}} ludności",
@@ -498,7 +505,18 @@
   },
   "opt": {
     "coalition": "Koalicja",
-    "belongTo": "Należysz do koalicji"
+    "belongTo": "Należysz do koalicji",
+    "freeze": {
+      "title": "Zamrożenie księstwa",
+      "desc": "Zamrożenie wstrzymuje przeliczenia i chroni przed atakami na czas Twojej nieobecności. Nie można zamrozić, gdy masz zaplanowane ataki wymierzone w Ciebie.",
+      "frozenInfo": "Księstwo jest zamrożone — przeliczenia i ataki są wstrzymane do odmrożenia."
+    },
+    "protection": {
+      "title": "Ochrona przed atakami",
+      "desc": "Jako nowicjusz jesteś chroniony przed atakami, ale sam też nie możesz atakować. Możesz zrzec się ochrony wcześniej.",
+      "dropBtn": "Zdejmij ochronę",
+      "none": "Twoje księstwo nie jest objęte ochroną nowicjusza."
+    }
   },
   "reg": {
     "title": "Rejestracja",

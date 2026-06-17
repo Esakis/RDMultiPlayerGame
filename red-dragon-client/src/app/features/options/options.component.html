@@ -13,6 +13,27 @@
         <p class="info">{{ 'pol.needCoalition' | translate }}</p>
       </ng-template>
     </div>
+
+    <div class="card">
+      <h3>{{ 'opt.freeze.title' | translate }}</h3>
+      <p class="info" *ngIf="kingdom?.isFrozen">❄ {{ 'opt.freeze.frozenInfo' | translate }}</p>
+      <p class="info" *ngIf="!kingdom?.isFrozen">{{ 'opt.freeze.desc' | translate }}</p>
+      <button class="btn-danger" (click)="toggleFreeze()">
+        {{ (kingdom?.isFrozen ? 'dash.unfreeze' : 'dash.freeze') | translate }}
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>{{ 'opt.protection.title' | translate }}</h3>
+      <ng-container *ngIf="kingdom?.isProtected; else noProtection">
+        <p class="info">🛡 {{ 'dash.protected' | translate:{ days: kingdom?.protectionDaysLeft } }}</p>
+        <p class="info">{{ 'opt.protection.desc' | translate }}</p>
+        <button class="btn-danger" (click)="dropProtection()">{{ 'opt.protection.dropBtn' | translate }}</button>
+      </ng-container>
+      <ng-template #noProtection>
+        <p class="info">{{ 'opt.protection.none' | translate }}</p>
+      </ng-template>
+    </div>
   </div>
 
   <ng-template #loadingTpl><div class="loading">{{ 'common.loading' | translate }}</div></ng-template>

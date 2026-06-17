@@ -431,6 +431,13 @@
     "baseCost": "base cost",
     "cost": "Cost",
     "time": "time",
+    "col": {
+      "name": "Building",
+      "description": "Description",
+      "cost": "Cost",
+      "bonuses": "Bonuses",
+      "action": "Action"
+    },
     "bonusProduction": "+{{val}}% production",
     "bonusDefense": "+{{val}}% defense",
     "bonusPopulation": "+{{val}} population",
@@ -498,7 +505,18 @@
   },
   "opt": {
     "coalition": "Coalition",
-    "belongTo": "You belong to the coalition"
+    "belongTo": "You belong to the coalition",
+    "freeze": {
+      "title": "Freeze kingdom",
+      "desc": "Freezing suspends turn processing and protects you from attacks while you are away. You cannot freeze while there are attacks queued against you.",
+      "frozenInfo": "The kingdom is frozen — turn processing and attacks are suspended until you unfreeze."
+    },
+    "protection": {
+      "title": "Attack protection",
+      "desc": "As a novice you are protected from attacks, but you also cannot attack. You may give up protection early.",
+      "dropBtn": "Drop protection",
+      "none": "Your kingdom is not under novice protection."
+    }
   },
   "reg": {
     "title": "Registration",

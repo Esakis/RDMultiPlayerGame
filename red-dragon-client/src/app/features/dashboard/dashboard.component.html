@@ -8,9 +8,6 @@
     <span class="status frozen" *ngIf="kingdom.isFrozen">
       ❄ {{ 'dash.frozen' | translate }}
     </span>
-    <button class="btn-freeze" (click)="toggleFreeze()">
-      {{ (kingdom.isFrozen ? 'dash.unfreeze' : 'dash.freeze') | translate }}
-    </button>
     <span class="status bodies" *ngIf="kingdom.race === 'Nekromant'">
       💀 {{ 'dash.bodies' | translate }}: {{ kingdom.bodies | number }}
     </span>

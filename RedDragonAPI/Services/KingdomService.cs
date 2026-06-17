@@ -272,6 +272,19 @@ public class KingdomService : IKingdomService
         return ServiceResult.Ok("Księstwo odmrożone — możesz znów działać.");
     }
 
+    public async Task<ServiceResult> DropProtectionAsync(int userId)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (!kingdom.IsProtected) return ServiceResult.Fail("Twoje księstwo nie jest objęte ochroną.");
+
+        kingdom.IsProtected = false;
+        kingdom.ProtectionDaysLeft = 0;
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok("Ochrona zdjęta — Twoje księstwo może teraz atakować i być atakowane.");
+    }
+
     public async Task<ServiceResult> SetMetamagicAsync(int userId, string mode)
     {
         if (mode is not ("None" or "Strengthened" or "Accelerated"))

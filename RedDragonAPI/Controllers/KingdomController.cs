@@ -77,6 +77,13 @@ public class KingdomController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
+    [HttpPost("drop-protection")]
+    public async Task<ActionResult> DropProtection()
+    {
+        var result = await _kingdomService.DropProtectionAsync(GetUserId());
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
     [HttpPost("metamagic")]
     public async Task<ActionResult> SetMetamagic([FromBody] SetMetamagicDto dto)
     {

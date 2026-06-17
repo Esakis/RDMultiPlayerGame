@@ -13,6 +13,7 @@ public interface IKingdomService
     Task<List<KingdomSummaryDto>> GetAllKingdomsAsync(int eraId);
     Task<ServiceResult> FreezeAsync(int userId);
     Task<ServiceResult> UnfreezeAsync(int userId);
+    Task<ServiceResult> DropProtectionAsync(int userId);
     Task<ServiceResult> SetMetamagicAsync(int userId, string mode);
     Task<ServiceResult> ChargeTotemAsync(int userId, string totem);
     Task<ServiceResult> SetAppliedScienceAsync(int userId, string school);

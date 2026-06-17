@@ -14,43 +14,53 @@
             (click)="setTab('nauka')">{{ 'bld.tab.science' | translate }}</button>
   </div>
 
-  <!-- ===== Budynki gospodarcze (karty) ===== -->
+  <!-- ===== Budynki gospodarcze (tabela) ===== -->
   <div *ngIf="activeTab === 'gospodarcze'">
     <div *ngIf="!loading; else loadingTpl">
       <div *ngFor="let cat of normalCategories" class="category-section">
         <h3>{{ getCategoryName(cat) }}</h3>
-        <div class="buildings-grid">
-          <div class="building-card" *ngFor="let def of getByCategory(cat)"
-               [class.cannot-build]="!def.canBuild">
-            <div class="building-header">
-              <strong>{{ def.displayName }}</strong>
-              <span class="owned" *ngIf="getOwned(def.buildingType) as owned">
-                {{ 'bld.owned' | translate }}: {{ owned.quantity }}
-              </span>
-            </div>
-            <p class="desc">{{ def.description }}</p>
-            <div class="costs">
-              <span *ngIf="def.costGold">{{ 'res.gold' | translate }}: {{ def.costGold }}</span>
-              <span *ngIf="def.costBudulec">{{ 'res.budulec' | translate }}: {{ def.costBudulec }}</span>
-              <span *ngIf="def.costLand">{{ 'bld.landCost' | translate }}: {{ def.costLand }}</span>
-              <span *ngIf="def.baseCost">{{ 'bld.baseCost' | translate }}: {{ def.baseCost }}</span>
-              <span>{{ 'bld.time' | translate }}: {{ def.buildTime }}t</span>
-            </div>
-            <div class="bonuses" *ngIf="def.productionBonus || def.defenseBonus || def.populationCapacity || def.bonusTurnsPerDay">
-              <span *ngIf="def.productionBonus">{{ 'bld.bonusProduction' | translate:{ val: def.productionBonus * 100 } }}</span>
-              <span *ngIf="def.defenseBonus">{{ 'bld.bonusDefense' | translate:{ val: def.defenseBonus * 100 } }}</span>
-              <span *ngIf="def.populationCapacity">{{ 'bld.bonusPopulation' | translate:{ val: def.populationCapacity } }}</span>
-              <span *ngIf="def.bonusTurnsPerDay">{{ 'bld.bonusTurns' | translate:{ val: def.bonusTurnsPerDay } }}</span>
-            </div>
-            <div class="build-controls" *ngIf="def.canBuild">
-              <input type="number" [(ngModel)]="quantities[def.buildingType]" min="1" max="100" />
-              <button class="btn-build" (click)="construct(def)">{{ 'bld.buildBtn' | translate }}</button>
-            </div>
-            <div class="cannot-reason" *ngIf="!def.canBuild">
-              {{ def.cannotBuildReason }}
-            </div>
-          </div>
-        </div>
+        <table class="buildings-table">
+          <thead>
+            <tr>
+              <th>{{ 'bld.col.name' | translate }}</th>
+              <th>{{ 'bld.col.description' | translate }}</th>
+              <th class="num">{{ 'bld.owned' | translate }}</th>
+              <th>{{ 'bld.col.cost' | translate }}</th>
+              <th class="num">{{ 'bld.time' | translate }}</th>
+              <th>{{ 'bld.col.bonuses' | translate }}</th>
+              <th class="action-col">{{ 'bld.col.action' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let def of getByCategory(cat)" [class.cannot-build]="!def.canBuild">
+              <td class="name">{{ def.displayName }}</td>
+              <td class="desc">{{ def.description }}</td>
+              <td class="num owned">{{ getOwned(def.buildingType)?.quantity || 0 }}</td>
+              <td class="costs">
+                <span *ngIf="def.costGold">{{ 'res.gold' | translate }}: {{ def.costGold }}</span>
+                <span *ngIf="def.costBudulec">{{ 'res.budulec' | translate }}: {{ def.costBudulec }}</span>
+                <span *ngIf="def.costLand">{{ 'bld.landCost' | translate }}: {{ def.costLand }}</span>
+                <span *ngIf="def.baseCost">{{ 'bld.baseCost' | translate }}: {{ def.baseCost }}</span>
+              </td>
+              <td class="num">{{ def.buildTime }}t</td>
+              <td class="bonuses">
+                <span *ngIf="def.productionBonus">{{ 'bld.bonusProduction' | translate:{ val: def.productionBonus * 100 } }}</span>
+                <span *ngIf="def.defenseBonus">{{ 'bld.bonusDefense' | translate:{ val: def.defenseBonus * 100 } }}</span>
+                <span *ngIf="def.populationCapacity">{{ 'bld.bonusPopulation' | translate:{ val: def.populationCapacity } }}</span>
+                <span *ngIf="def.bonusTurnsPerDay">{{ 'bld.bonusTurns' | translate:{ val: def.bonusTurnsPerDay } }}</span>
+              </td>
+              <td class="action-col">
+                <div class="build-controls" *ngIf="def.canBuild">
+                  <input type="number" [(ngModel)]="quantities[def.buildingType]" min="1" max="100" />
+                  <button class="btn-build" (click)="construct(def)">{{ 'bld.buildBtn' | translate }}</button>
+                </div>
+                <div class="cannot-reason" *ngIf="!def.canBuild">
+                  {{ def.cannotBuildReason }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

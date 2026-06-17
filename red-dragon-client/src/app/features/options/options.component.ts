@@ -28,5 +28,24 @@ export class OptionsComponent implements OnInit {
     });
   }
 
+  toggleFreeze(): void {
+    if (!this.kingdom) return;
+    const op = this.kingdom.isFrozen
+      ? this.kingdomService.unfreeze()
+      : this.kingdomService.freeze();
+    op.subscribe({
+      next: (res) => { this.message = res.message || ''; this.load(); this.clearMsg(); },
+      error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
+  }
+
+  dropProtection(): void {
+    if (!this.kingdom) return;
+    this.kingdomService.dropProtection().subscribe({
+      next: (res) => { this.message = res.message || ''; this.load(); this.clearMsg(); },
+      error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
+  }
+
   private clearMsg(): void { setTimeout(() => this.message = '', 4000); }
 }

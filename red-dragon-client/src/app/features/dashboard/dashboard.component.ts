@@ -102,17 +102,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleFreeze(): void {
-    if (!this.kingdom) return;
-    const op = this.kingdom.isFrozen
-      ? this.kingdomService.unfreeze()
-      : this.kingdomService.freeze();
-    op.subscribe({
-      next: (res) => { this.message = res.message || ''; this.loadKingdom(); setTimeout(() => this.message = '', 5000); },
-      error: (err) => { this.message = err.error?.message || err.error || 'Błąd.'; setTimeout(() => this.message = '', 5000); }
-    });
-  }
-
   /** Grafika aktualnie rozwijanej dziedziny nauki (kafelek z drzewka). */
   get researchIcon(): string {
     return techIconPath(this.kingdom?.currentResearchTech);

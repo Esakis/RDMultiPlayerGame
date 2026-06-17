@@ -76,58 +76,77 @@ h3 {
   }
 }
 
-.buildings-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 10px;
-}
-
-.building-card {
-  background: linear-gradient(180deg, #4a1818 0%, #2a0a0a 100%);
+/* === Tabela budynków gospodarczych === */
+.buildings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: linear-gradient(180deg, #2a0a0a 0%, #1a0606 100%);
   border: 2px solid #8b0000;
-  padding: 12px;
-  transition: border-color 0.2s;
 
-  &:hover { border-color: #d4af37; }
-  &.cannot-build { opacity: 0.5; }
+  thead th {
+    background: linear-gradient(180deg, #6a1010, #3a0808);
+    color: #ffd700;
+    text-align: left;
+    font-size: 12px;
+    padding: 7px 10px;
+    border-bottom: 2px solid #8b0000;
+    white-space: nowrap;
 
-  .building-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-    strong { color: #ffd700; font-size: 15px; }
-    .owned { color: #66ff66; font-size: 12px; }
+    &.num { text-align: center; }
+    &.action-col { text-align: center; }
   }
 
-  .desc { color: #aaa; font-size: 13px; margin: 0 0 8px 0; }
+  tbody tr {
+    border-bottom: 1px solid #5a2020;
+    transition: background 0.15s;
+
+    &:hover { background: rgba(106, 16, 16, 0.35); }
+    &.cannot-build { opacity: 0.55; }
+  }
+
+  td {
+    padding: 8px 10px;
+    color: #c9b58a;
+    vertical-align: middle;
+
+    &.num { text-align: center; white-space: nowrap; }
+    &.name { color: #ffd700; font-weight: bold; }
+    &.owned { color: #66ff66; }
+    &.desc { color: #aaa; font-size: 12px; max-width: 280px; }
+  }
 
   .costs {
-    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;
     span {
+      display: inline-block;
       color: #d4af37; font-size: 12px;
       background: rgba(0,0,0,0.4); padding: 2px 6px;
       border: 1px solid #5a2020;
+      margin: 1px 3px 1px 0;
+      white-space: nowrap;
     }
   }
 
-  .bonuses {
-    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;
-    span { color: #66ff66; font-size: 12px; }
+  .bonuses span {
+    display: block;
+    color: #66ff66; font-size: 12px;
   }
 
+  .action-col { text-align: center; }
+
   .build-controls {
-    display: flex; gap: 6px; align-items: center;
+    display: flex; gap: 6px; align-items: center; justify-content: center;
     input {
       width: 50px; padding: 4px 6px;
       background: #fff; border: 2px solid #8b7355;
       color: #000; font-size: 13px; text-align: center;
     }
     .btn-build {
-      flex: 1; padding: 6px 12px;
+      padding: 6px 12px;
       background: linear-gradient(180deg, #4a0808, #2a0808);
       border: 2px solid #8b0000;
       color: #ffd700; cursor: pointer; font-size: 13px; font-weight: bold;
+      white-space: nowrap;
       &:hover {
         background: linear-gradient(180deg, #6a0808, #4a0808);
         border-color: #ffd700; color: #fff;
