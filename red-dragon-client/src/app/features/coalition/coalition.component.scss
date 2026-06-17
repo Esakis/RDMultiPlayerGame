@@ -135,6 +135,31 @@ h2 { color: #ffd700; margin: 0 0 15px 0; font-size: 20px; text-shadow: 1px 1px 3
     .m-race { color: #9bb; font-style: italic; }
   }
 }
+/* === Pełny widok pojedynczej koalicji === */
+.coalition-detail {
+  .detail-head {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+  }
+  h3 {
+    font-size: 20px;
+    &.mine { text-shadow: 0 0 6px rgba(255, 215, 0, 0.5); }
+    .tag { color: #66ff66; font-size: 16px; }
+  }
+  .detail-stats {
+    display: flex; flex-wrap: wrap; gap: 22px; font-size: 14px; margin-bottom: 10px;
+    color: #c9b58a;
+    strong { color: #e8d5b0; }
+    strong.land { color: #d4af37; } strong.pso { color: #66ff66; }
+    strong.mil { color: #ff9a6b; } strong.mag { color: #9bb6ff; } strong.thf { color: #c8a6ff; }
+  }
+  .member-table { margin-top: 12px; }
+}
+.btn-back {
+  padding: 6px 14px; background: linear-gradient(180deg, #2a0a0a, #1a0606);
+  border: 1px solid #5a2020; color: #c9b58a; cursor: pointer; font-size: 13px; font-weight: bold;
+  &:hover { border-color: #ffd700; color: #ffd700; }
+}
+
 .role-imperator { color: #ffd700; }
 .role-gd { color: #ff8c42; }
 .role-member { color: #88bbff; }

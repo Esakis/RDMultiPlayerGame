@@ -177,9 +177,11 @@
       </div>
     </div>
 
-    <!-- ===== Zakładka: Koalicje (tabela wszystkich koalicji) ===== -->
+    <!-- ===== Zakładka: Koalicje ===== -->
     <div *ngIf="activeTab === 'koalicje'">
-      <div class="card">
+
+      <!-- Lista wszystkich koalicji (gdy żadna nie jest otwarta) -->
+      <div class="card" *ngIf="!selectedCoalition">
         <h3>Wszystkie koalicje</h3>
         <table class="coalition-table">
           <thead>
@@ -191,57 +193,71 @@
             </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let c of coalitions; let i = index">
-              <tr class="coalition-row clickable"
-                  [class.mine]="c.id === kingdom?.coalitionId"
-                  [class.selected]="selectedCoalitionId === c.id"
-                  (click)="selectCoalition(c.id)">
-                <td class="rank">{{ i + 1 }}</td>
-                <td class="name">{{ selectedCoalitionId === c.id ? '▾' : '▸' }} {{ c.name }}</td>
-                <td class="tag">[{{ c.tag }}]</td>
-                <td>{{ c.leaderName || '-' }}</td>
-                <td class="num land">{{ c.totalLand | number }}</td>
-                <td class="num">{{ c.memberCount }}/{{ c.maxMembers }}</td>
-                <td class="num mil">{{ coalitionMilitary(c) | number }}</td>
-                <td class="num mag">{{ coalitionMagic(c) | number }}</td>
-                <td class="num thf">{{ coalitionThief(c) | number }}</td>
-                <td class="num pso">{{ c.psoProgress }}%</td>
-                <td>
-                  <button class="btn-sm" *ngIf="!kingdom?.coalitionId && c.memberCount < c.maxMembers"
-                          (click)="$event.stopPropagation(); joinCoalition(c.id)">Dołącz</button>
-                </td>
-              </tr>
-
-              <!-- Rozwinięcie: członkowie z tym samym podziałem sił -->
-              <tr class="member-head-row" *ngIf="selectedCoalitionId === c.id">
-                <td></td>
-                <th class="m-name">Członek</th>
-                <th class="m-role">Rola</th>
-                <th class="m-race">Rasa</th>
-                <th class="num">Obszar</th>
-                <th></th>
-                <th class="num">Siła wojskowa</th>
-                <th class="num">Siła magiczna</th>
-                <th class="num">Siła złodziejska</th>
-                <th colspan="2"></th>
-              </tr>
-              <tr class="member-row" *ngFor="let m of c.members"
-                  [class.mine]="m.id === kingdom?.id">
-                <td></td>
-                <td class="m-name">{{ m.name }}</td>
-                <td class="m-role" [ngClass]="roleClass(m.coalitionRole)">{{ roleLabel(m.coalitionRole) }}</td>
-                <td class="m-race">{{ m.race }}</td>
-                <td class="num">{{ m.land | number }}</td>
-                <td></td>
-                <td class="num mil">{{ memberMilitary(m) | number }}</td>
-                <td class="num mag">{{ m.magic | number }}</td>
-                <td class="num thf">{{ m.thiefPower | number }}</td>
-                <td colspan="2"></td>
-              </tr>
-            </ng-container>
+            <tr class="coalition-row clickable" *ngFor="let c of coalitions; let i = index"
+                [class.mine]="c.id === kingdom?.coalitionId"
+                (click)="selectCoalition(c.id)">
+              <td class="rank">{{ i + 1 }}</td>
+              <td class="name">{{ c.name }}</td>
+              <td class="tag">[{{ c.tag }}]</td>
+              <td>{{ c.leaderName || '-' }}</td>
+              <td class="num land">{{ c.totalLand | number }}</td>
+              <td class="num">{{ c.memberCount }}/{{ c.maxMembers }}</td>
+              <td class="num mil">{{ coalitionMilitary(c) | number }}</td>
+              <td class="num mag">{{ coalitionMagic(c) | number }}</td>
+              <td class="num thf">{{ coalitionThief(c) | number }}</td>
+              <td class="num pso">{{ c.psoProgress }}%</td>
+              <td>
+                <button class="btn-sm" *ngIf="!kingdom?.coalitionId && c.memberCount < c.maxMembers"
+                        (click)="$event.stopPropagation(); joinCoalition(c.id)">Dołącz</button>
+              </td>
+            </tr>
           </tbody>
         </table>
         <p *ngIf="coalitions.length === 0" class="empty">Brak koalicji.</p>
+      </div>
+
+      <!-- Pełny widok wybranej koalicji -->
+      <div class="card coalition-detail" *ngIf="selectedCoalition as c">
+        <div class="detail-head">
+          <button class="btn-back" (click)="clearSelection()">‹ Wróć do listy</button>
+          <button class="btn-sm" *ngIf="!kingdom?.coalitionId && c.memberCount < c.maxMembers"
+                  (click)="joinCoalition(c.id)">Dołącz</button>
+        </div>
+
+        <h3 [class.mine]="c.id === kingdom?.coalitionId">{{ c.name }} <span class="tag">[{{ c.tag }}]</span></h3>
+
+        <div class="detail-stats">
+          <span>Lider: <strong>{{ c.leaderName || '-' }}</strong></span>
+          <span>Obszar: <strong class="land">{{ c.totalLand | number }}</strong></span>
+          <span>Członkowie: <strong>{{ c.memberCount }}/{{ c.maxMembers }}</strong></span>
+          <span>PSO: <strong class="pso">{{ c.psoProgress }}%</strong></span>
+        </div>
+        <div class="detail-stats">
+          <span>Siła wojskowa: <strong class="mil">{{ coalitionMilitary(c) | number }}</strong></span>
+          <span>Siła magiczna: <strong class="mag">{{ coalitionMagic(c) | number }}</strong></span>
+          <span>Siła złodziejska: <strong class="thf">{{ coalitionThief(c) | number }}</strong></span>
+        </div>
+
+        <table class="coalition-table member-table">
+          <thead>
+            <tr>
+              <th>Członek</th><th>Rola</th><th>Rasa</th>
+              <th class="num">Obszar</th>
+              <th class="num">Siła wojskowa</th><th class="num">Siła magiczna</th><th class="num">Siła złodziejska</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="member-row" *ngFor="let m of c.members" [class.mine]="m.id === kingdom?.id">
+              <td class="m-name">{{ m.name }}</td>
+              <td class="m-role" [ngClass]="roleClass(m.coalitionRole)">{{ roleLabel(m.coalitionRole) }}</td>
+              <td class="m-race">{{ m.race }}</td>
+              <td class="num">{{ m.land | number }}</td>
+              <td class="num mil">{{ memberMilitary(m) | number }}</td>
+              <td class="num mag">{{ m.magic | number }}</td>
+              <td class="num thf">{{ m.thiefPower | number }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 

@@ -38,7 +38,17 @@ export class CoalitionComponent implements OnInit {
   setTab(tab: PolTab): void { this.activeTab = tab; }
 
   selectCoalition(id: number): void {
-    this.selectedCoalitionId = this.selectedCoalitionId === id ? null : id;
+    this.selectedCoalitionId = id;
+  }
+
+  /** Powrót z widoku pojedynczej koalicji do listy. */
+  clearSelection(): void {
+    this.selectedCoalitionId = null;
+  }
+
+  /** Aktualnie wybrana (otwarta na pełny widok) koalicja. */
+  get selectedCoalition(): Coalition | null {
+    return this.coalitions.find(c => c.id === this.selectedCoalitionId) || null;
   }
 
   /** Siła wojskowa = suma ataku i obrony. */
