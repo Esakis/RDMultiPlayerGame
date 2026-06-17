@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { CoalitionService } from '../../core/services/coalition.service';
 import { Kingdom, KingdomSummary } from '../../core/models/kingdom.model';
@@ -19,7 +20,8 @@ export class RankingComponent implements OnInit {
 
   constructor(
     private kingdomService: KingdomService,
-    private coalitionService: CoalitionService
+    private coalitionService: CoalitionService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -56,8 +58,8 @@ export class RankingComponent implements OnInit {
 
   getRoleDisplay(role?: string): string {
     switch (role) {
-      case 'Imperator': return '[Imperator]';
-      case 'MainCommander': return '[Głównodowodzący]';
+      case 'Imperator': return `[${this.translate.instant('pol.role.imperator')}]`;
+      case 'MainCommander': return `[${this.translate.instant('pol.role.commander')}]`;
       default: return '';
     }
   }

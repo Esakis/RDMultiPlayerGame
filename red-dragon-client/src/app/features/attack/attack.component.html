@@ -1,34 +1,30 @@
 <div class="game-panel">
   <h2 class="panel-title">
-    <img src="assets/img/role/napastnik.png" alt="Napastnik" class="title-icon">
-    Ataki — wyprawy wojenne
+    <img src="assets/img/role/napastnik.png" [alt]="'atk.attacker' | translate" class="title-icon">
+    {{ 'atk.title' | translate }}
   </h2>
 
-  <p class="lead">
-    Atak wykonywany jest podczas najbliższego przeliczenia (przepad). Możesz zaatakować
-    państwo nie większe niż 4× i nie mniejsze niż ¼ Twojego obszaru, nie pod ochroną i nie zamrożone.
-    Członków obcej koalicji zaatakujesz tylko w stanie wojny.
-  </p>
+  <p class="lead">{{ 'atk.lead' | translate }}</p>
 
   <app-notify-relay [message]="message"></app-notify-relay>
   <app-notify-relay [message]="error" type="error"></app-notify-relay>
-  <div class="loading" *ngIf="loading">Wczytywanie...</div>
+  <div class="loading" *ngIf="loading">{{ 'res2.loading' | translate }}</div>
 
   <div class="enemies" *ngIf="enemyCoalitionNames.length > 0">
-    Wrogie koalicje (stan wojny): <strong>{{ enemyCoalitionNames.join(', ') }}</strong>
+    {{ 'atk.enemyCoalitions' | translate }}: <strong>{{ enemyCoalitionNames.join(', ') }}</strong>
   </div>
 
   <ng-container *ngIf="!loading">
     <div class="filters">
-      <label>Pokaż:
+      <label>{{ 'atk.show' | translate }}:
         <select [(ngModel)]="filterMode">
-          <option value="attackable">tylko atakowalne</option>
-          <option value="all">wszystkie</option>
+          <option value="attackable">{{ 'atk.onlyAttackable' | translate }}</option>
+          <option value="all">{{ 'atk.all' | translate }}</option>
         </select>
       </label>
-      <label>Koalicja:
+      <label>{{ 'pol.tab.coalitions' | translate }}:
         <select [(ngModel)]="coalitionFilter">
-          <option value="all">wszystkie</option>
+          <option value="all">{{ 'atk.all' | translate }}</option>
           <option *ngFor="let t of coalitionTags" [value]="t">{{ t }}</option>
         </select>
       </label>
@@ -36,7 +32,7 @@
 
     <table class="rd-table">
       <thead>
-        <tr><th>Państwo</th><th>Rasa</th><th>Obszar</th><th>Koalicja</th><th>Status</th><th></th></tr>
+        <tr><th>{{ 'atk.country' | translate }}</th><th>{{ 'pol.member.race' | translate }}</th><th>{{ 'pol.col.land' | translate }}</th><th>{{ 'pol.tab.coalitions' | translate }}</th><th>{{ 'atk.status' | translate }}</th><th></th></tr>
       </thead>
       <tbody>
         <tr *ngFor="let r of targets" [class.selected]="selectedTarget?.id === r.k.id" [class.blocked]="!r.attackable">
@@ -46,18 +42,18 @@
           <td>{{ r.k.coalitionTag ? '[' + r.k.coalitionTag + ']' : '—' }}</td>
           <td><span class="badge" [class.ok]="r.attackable">{{ r.reason }}</span></td>
           <td>
-            <button class="btn-cast" (click)="selectTarget(r.k)" [disabled]="!r.attackable">Wybierz</button>
+            <button class="btn-cast" (click)="selectTarget(r.k)" [disabled]="!r.attackable">{{ 'atk.select' | translate }}</button>
           </td>
         </tr>
       </tbody>
     </table>
-    <p class="hint" *ngIf="targets.length === 0">Brak celów spełniających kryteria.</p>
+    <p class="hint" *ngIf="targets.length === 0">{{ 'atk.noTargets' | translate }}</p>
 
     <!-- Wybór jednostek -->
     <div class="attack-form" *ngIf="selectedTarget as t">
-      <h3>Atak na: {{ t.name }} ({{ t.land | number }} akrów)</h3>
+      <h3>{{ 'atk.attackOn' | translate }}: {{ t.name }} ({{ 'bld.acres' | translate:{ n: (t.land | number) } }})</h3>
       <table class="rd-table units">
-        <thead><tr><th>Jednostka</th><th>Atak</th><th>Dostępne</th><th>Wyślij</th></tr></thead>
+        <thead><tr><th>{{ 'atk.unit' | translate }}</th><th>{{ 'mil.attack' | translate }}</th><th>{{ 'atk.available' | translate }}</th><th>{{ 'atk.send' | translate }}</th></tr></thead>
         <tbody>
           <tr *ngFor="let u of myUnits">
             <td>{{ u.displayName }}</td>
@@ -69,12 +65,12 @@
           </tr>
         </tbody>
       </table>
-      <p class="hint" *ngIf="myUnits.length === 0">Nie masz jednostek do ataku — zwerbuj wojsko.</p>
+      <p class="hint" *ngIf="myUnits.length === 0">{{ 'atk.noUnits' | translate }}</p>
       <div class="actions">
         <button class="btn-attack" (click)="launchAttack()" [disabled]="totalSelected <= 0">
-          Atakuj ({{ totalSelected | number }} jedn.)
+          {{ 'atk.attackBtn' | translate:{ n: (totalSelected | number) } }}
         </button>
-        <button class="btn-cancel" (click)="selectedTarget = null">Anuluj</button>
+        <button class="btn-cancel" (click)="selectedTarget = null">{{ 'common.cancel' | translate }}</button>
       </div>
     </div>
   </ng-container>

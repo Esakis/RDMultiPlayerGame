@@ -1,27 +1,27 @@
 <div class="page-content">
-  <h2>Forum</h2>
+  <h2>{{ 'menu.forum' | translate }}</h2>
   <app-notify-relay [message]="message"></app-notify-relay>
 
   <div class="forum-tabs">
-    <button class="tab-btn" [class.active]="activeTab === 'general'" (click)="switchTab('general')">Forum Ogólne</button>
-    <button class="tab-btn" [class.active]="activeTab === 'coalition'" (click)="switchTab('coalition')">Forum Koalicji</button>
+    <button class="tab-btn" [class.active]="activeTab === 'general'" (click)="switchTab('general')">{{ 'forum.general' | translate }}</button>
+    <button class="tab-btn" [class.active]="activeTab === 'coalition'" (click)="switchTab('coalition')">{{ 'forum.coalition' | translate }}</button>
   </div>
 
   <!-- Subforum tabs for coalition -->
   <div class="subforum-tabs" *ngIf="activeTab === 'coalition'">
-    <button class="subforum-btn" [class.active]="activeSubForum === 'Ważne'" (click)="switchSubForum('Ważne')">Ważne</button>
-    <button class="subforum-btn" [class.active]="activeSubForum === 'Pogawędki'" (click)="switchSubForum('Pogawędki')">Pogawędki</button>
+    <button class="subforum-btn" [class.active]="activeSubForum === 'Ważne'" (click)="switchSubForum('Ważne')">{{ 'forum.important' | translate }}</button>
+    <button class="subforum-btn" [class.active]="activeSubForum === 'Pogawędki'" (click)="switchSubForum('Pogawędki')">{{ 'forum.chatter' | translate }}</button>
   </div>
 
   <div *ngIf="!loading; else loadingTpl">
     <!-- New post form -->
     <div class="card new-post-card">
-      <h3>Nowa wiadomość</h3>
+      <h3>{{ 'forum.newMessage' | translate }}</h3>
       <div class="form-row">
-        <label>Treść:</label>
-        <textarea [(ngModel)]="newBody" rows="4" placeholder="Napisz wiadomość..."></textarea>
+        <label>{{ 'forum.body' | translate }}:</label>
+        <textarea [(ngModel)]="newBody" rows="4" [placeholder]="'forum.writeMessage' | translate"></textarea>
       </div>
-      <button class="btn-action" (click)="submitPost()">Wyślij</button>
+      <button class="btn-action" (click)="submitPost()">{{ 'forum.send' | translate }}</button>
     </div>
 
     <!-- Posts list -->
@@ -36,16 +36,16 @@
         </div>
         <div class="post-body">{{ post.body }}</div>
         <div class="post-actions">
-          <button class="btn-sm btn-reply" (click)="startReply(post)">Odpowiedz</button>
-          <span class="reply-count" *ngIf="post.replyCount > 0">Odpowiedzi: {{ post.replyCount }}</span>
+          <button class="btn-sm btn-reply" (click)="startReply(post)">{{ 'forum.reply' | translate }}</button>
+          <span class="reply-count" *ngIf="post.replyCount > 0">{{ 'forum.replies' | translate }}: {{ post.replyCount }}</span>
         </div>
 
         <!-- Reply form -->
         <div class="reply-form" *ngIf="replyingTo?.id === post.id">
-          <textarea [(ngModel)]="replyBody" rows="3" placeholder="Twoja odpowiedź..."></textarea>
+          <textarea [(ngModel)]="replyBody" rows="3" [placeholder]="'forum.yourReply' | translate"></textarea>
           <div class="reply-actions">
-            <button class="btn-sm btn-action" (click)="submitReply()">Wyślij</button>
-            <button class="btn-sm btn-cancel" (click)="cancelReply()">Anuluj</button>
+            <button class="btn-sm btn-action" (click)="submitReply()">{{ 'forum.send' | translate }}</button>
+            <button class="btn-sm btn-cancel" (click)="cancelReply()">{{ 'common.cancel' | translate }}</button>
           </div>
         </div>
 
@@ -64,9 +64,9 @@
         </div>
       </div>
 
-      <div class="no-posts" *ngIf="posts.length === 0">Brak wiadomości na forum.</div>
+      <div class="no-posts" *ngIf="posts.length === 0">{{ 'forum.noPosts' | translate }}</div>
     </div>
   </div>
 
-  <ng-template #loadingTpl><div class="loading">Ładowanie forum...</div></ng-template>
+  <ng-template #loadingTpl><div class="loading">{{ 'forum.loading' | translate }}</div></ng-template>
 </div>

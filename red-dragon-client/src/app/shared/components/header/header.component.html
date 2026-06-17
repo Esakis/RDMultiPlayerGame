@@ -1,4 +1,28 @@
 <div class="game-header-wrap" #headerWrap>
+  <!-- Przełącznik języka (prawy górny róg) -->
+  <div class="lang-switch">
+    <button type="button" class="flag-btn" [class.active]="language.current === 'pl'"
+            (click)="setLang('pl')" title="Polski" aria-label="Polski">
+      <svg viewBox="0 0 20 14" width="22" height="15">
+        <rect width="20" height="7" y="0" fill="#fff"/>
+        <rect width="20" height="7" y="7" fill="#dc143c"/>
+      </svg>
+    </button>
+    <button type="button" class="flag-btn" [class.active]="language.current === 'en'"
+            (click)="setLang('en')" title="English" aria-label="English">
+      <svg viewBox="0 0 60 30" width="22" height="15">
+        <clipPath id="ukclip"><rect width="60" height="30"/></clipPath>
+        <g clip-path="url(#ukclip)">
+          <rect width="60" height="30" fill="#012169"/>
+          <path d="M0,0 60,30 M60,0 0,30" stroke="#fff" stroke-width="6"/>
+          <path d="M0,0 60,30 M60,0 0,30" stroke="#c8102e" stroke-width="4"/>
+          <path d="M30,0 V30 M0,15 H60" stroke="#fff" stroke-width="10"/>
+          <path d="M30,0 V30 M0,15 H60" stroke="#c8102e" stroke-width="6"/>
+        </g>
+      </svg>
+    </button>
+  </div>
+
   <div class="header-banner">
     <h1 class="logo-text" routerLink="/dashboard">
       <img class="logo-img" src="assets/img/logo-rd.png" alt="Red Dragon">
@@ -7,50 +31,50 @@
   </div>
 
   <nav class="top-game-menu">
-    <a routerLink="/dashboard">Szczegóły</a>
-    <a href="javascript:void(0)">Wieści</a>
-    <a routerLink="/forum">Forum</a>
-    <a routerLink="/messages">Poczta</a>
-    <a routerLink="/labyrinth" routerLinkActive="active">Labirynt</a>
-    <a href="javascript:void(0)">Doradcy</a>
-    <a href="javascript:void(0)">Chat</a>
+    <a routerLink="/dashboard">{{ 'nav.details' | translate }}</a>
+    <a href="javascript:void(0)">{{ 'nav.news' | translate }}</a>
+    <a routerLink="/forum">{{ 'nav.forum' | translate }}</a>
+    <a routerLink="/messages">{{ 'nav.mail' | translate }}</a>
+    <a routerLink="/labyrinth" routerLinkActive="active">{{ 'nav.labyrinth' | translate }}</a>
+    <a href="javascript:void(0)">{{ 'nav.advisors' | translate }}</a>
+    <a href="javascript:void(0)">{{ 'nav.chat' | translate }}</a>
   </nav>
 
   <div class="resources-bar" *ngIf="kingdom">
     <div class="res-item">
-      <span class="res-label">ludność</span>
+      <span class="res-label">{{ 'res.population' | translate }}</span>
       <span class="res-value">{{ kingdom.population | numberFormat }}</span>
     </div>
     <div class="res-item">
-      <span class="res-label">akry</span>
+      <span class="res-label">{{ 'res.land' | translate }}</span>
       <span class="res-value">{{ kingdom.land | numberFormat }}</span>
     </div>
     <div class="res-item">
-      <span class="res-label">złoto</span>
+      <span class="res-label">{{ 'res.gold' | translate }}</span>
       <span class="res-value gold">{{ kingdom.gold | numberFormat }}</span>
     </div>
     <div class="res-item">
-      <span class="res-label">jedzenie</span>
+      <span class="res-label">{{ 'res.food' | translate }}</span>
       <span class="res-value">{{ kingdom.food | numberFormat }}</span>
     </div>
     <div class="res-item">
-      <span class="res-label">kamienie</span>
+      <span class="res-label">{{ 'res.stone' | translate }}</span>
       <span class="res-value">{{ kingdom.stone | numberFormat }}</span>
     </div>
     <div class="res-item">
-      <span class="res-label">budulec</span>
+      <span class="res-label">{{ 'res.budulec' | translate }}</span>
       <span class="res-value">{{ kingdom.budulecStored | numberFormat }}</span>
     </div>
     <div class="res-item">
-      <span class="res-label">bronie</span>
+      <span class="res-label">{{ 'res.weapons' | translate }}</span>
       <span class="res-value">{{ kingdom.weapons | numberFormat }}</span>
     </div>
     <div class="res-item">
-      <span class="res-label">mana</span>
+      <span class="res-label">{{ 'res.mana' | translate }}</span>
       <span class="res-value mana">{{ kingdom.mana | numberFormat }}</span>
     </div>
     <div class="res-item">
-      <span class="res-label">popularność</span>
+      <span class="res-label">{{ 'res.popularity' | translate }}</span>
       <span class="res-value">{{ kingdom.popularity }}%</span>
     </div>
   </div>

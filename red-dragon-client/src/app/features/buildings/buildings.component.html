@@ -1,17 +1,17 @@
 <div class="page-content">
-  <h2>Budowa</h2>
+  <h2>{{ 'menu.buildings' | translate }}</h2>
   <app-notify-relay [message]="message"></app-notify-relay>
 
   <!-- ===== Zakładki sekcji Budowa ===== -->
   <div class="build-tabs">
     <button class="build-tab" [class.active]="activeTab === 'gospodarcze'"
-            (click)="setTab('gospodarcze')">Budynki gospodarcze</button>
+            (click)="setTab('gospodarcze')">{{ 'bld.tab.economic' | translate }}</button>
     <button class="build-tab" [class.active]="activeTab === 'specjalne'"
-            (click)="setTab('specjalne')">Budynki specjalne</button>
+            (click)="setTab('specjalne')">{{ 'bld.tab.special' | translate }}</button>
     <button class="build-tab" [class.active]="activeTab === 'ziemia'"
-            (click)="setTab('ziemia')">Ziemia</button>
+            (click)="setTab('ziemia')">{{ 'bld.tab.land' | translate }}</button>
     <button class="build-tab" [class.active]="activeTab === 'nauka'"
-            (click)="setTab('nauka')">Nauka</button>
+            (click)="setTab('nauka')">{{ 'bld.tab.science' | translate }}</button>
   </div>
 
   <!-- ===== Budynki gospodarcze (karty) ===== -->
@@ -25,26 +25,26 @@
             <div class="building-header">
               <strong>{{ def.displayName }}</strong>
               <span class="owned" *ngIf="getOwned(def.buildingType) as owned">
-                Posiadasz: {{ owned.quantity }}
+                {{ 'bld.owned' | translate }}: {{ owned.quantity }}
               </span>
             </div>
             <p class="desc">{{ def.description }}</p>
             <div class="costs">
-              <span *ngIf="def.costGold">złoto: {{ def.costGold }}</span>
-              <span *ngIf="def.costBudulec">budulec: {{ def.costBudulec }}</span>
-              <span *ngIf="def.costLand">ziemia: {{ def.costLand }}</span>
-              <span *ngIf="def.baseCost">koszt bazowy: {{ def.baseCost }}</span>
-              <span>czas: {{ def.buildTime }}t</span>
+              <span *ngIf="def.costGold">{{ 'res.gold' | translate }}: {{ def.costGold }}</span>
+              <span *ngIf="def.costBudulec">{{ 'res.budulec' | translate }}: {{ def.costBudulec }}</span>
+              <span *ngIf="def.costLand">{{ 'bld.landCost' | translate }}: {{ def.costLand }}</span>
+              <span *ngIf="def.baseCost">{{ 'bld.baseCost' | translate }}: {{ def.baseCost }}</span>
+              <span>{{ 'bld.time' | translate }}: {{ def.buildTime }}t</span>
             </div>
             <div class="bonuses" *ngIf="def.productionBonus || def.defenseBonus || def.populationCapacity || def.bonusTurnsPerDay">
-              <span *ngIf="def.productionBonus">+{{ def.productionBonus * 100 }}% produkcji</span>
-              <span *ngIf="def.defenseBonus">+{{ def.defenseBonus * 100 }}% obrony</span>
-              <span *ngIf="def.populationCapacity">+{{ def.populationCapacity }} ludności</span>
-              <span *ngIf="def.bonusTurnsPerDay">+{{ def.bonusTurnsPerDay }} tur/dzień</span>
+              <span *ngIf="def.productionBonus">{{ 'bld.bonusProduction' | translate:{ val: def.productionBonus * 100 } }}</span>
+              <span *ngIf="def.defenseBonus">{{ 'bld.bonusDefense' | translate:{ val: def.defenseBonus * 100 } }}</span>
+              <span *ngIf="def.populationCapacity">{{ 'bld.bonusPopulation' | translate:{ val: def.populationCapacity } }}</span>
+              <span *ngIf="def.bonusTurnsPerDay">{{ 'bld.bonusTurns' | translate:{ val: def.bonusTurnsPerDay } }}</span>
             </div>
             <div class="build-controls" *ngIf="def.canBuild">
               <input type="number" [(ngModel)]="quantities[def.buildingType]" min="1" max="100" />
-              <button class="btn-build" (click)="construct(def)">Buduj</button>
+              <button class="btn-build" (click)="construct(def)">{{ 'bld.buildBtn' | translate }}</button>
             </div>
             <div class="cannot-reason" *ngIf="!def.canBuild">
               {{ def.cannotBuildReason }}
@@ -60,10 +60,10 @@
     <div *ngIf="!loading; else loadingTpl">
       <ng-container *ngIf="hasSpecial; else noSpecial">
         <p class="legend">
-          <span class="lg lg-av">dostępny</span>
-          <span class="lg lg-cur">w budowie</span>
-          <span class="lg lg-lock">niedostępny</span>
-          <span class="lg lg-done">wybudowany</span>
+          <span class="lg lg-av">{{ 'bld.legend.available' | translate }}</span>
+          <span class="lg lg-cur">{{ 'bld.legend.building' | translate }}</span>
+          <span class="lg lg-lock">{{ 'bld.legend.locked' | translate }}</span>
+          <span class="lg lg-done">{{ 'bld.legend.done' | translate }}</span>
         </p>
 
         <div class="spec-tree">
@@ -84,32 +84,32 @@
                 <div class="tip">
                   <strong class="tip-name">{{ d.displayName }}</strong>
                   <div class="tip-effect" *ngIf="d.description">{{ d.description }}</div>
-                  <div class="tip-cost">Koszt: {{ d.baseCost | number }} • czas: {{ d.buildTime }}t</div>
-                  <div class="tip-done" *ngIf="specialState(d) === 'owned'">Wybudowany ✓</div>
-                  <div class="tip-prog" *ngIf="specialState(d) === 'current'">W budowie…</div>
+                  <div class="tip-cost">{{ 'bld.cost' | translate }}: {{ d.baseCost | number }} • {{ 'bld.time' | translate }}: {{ d.buildTime }}t</div>
+                  <div class="tip-done" *ngIf="specialState(d) === 'owned'">{{ 'bld.builtMark' | translate }}</div>
+                  <div class="tip-prog" *ngIf="specialState(d) === 'current'">{{ 'bld.inProgress' | translate }}</div>
                   <div class="tip-lock" *ngIf="specialState(d) === 'locked'">
                     {{ specialLockReason(d) }}
                   </div>
-                  <div class="tip-go" *ngIf="specialState(d) === 'available'">Kliknij, aby zbudować</div>
+                  <div class="tip-go" *ngIf="specialState(d) === 'available'">{{ 'bld.clickToBuild' | translate }}</div>
                 </div>
               </div>
             </ng-container>
           </div>
         </div>
       </ng-container>
-      <ng-template #noSpecial><p class="empty">Brak dostępnych budynków specjalnych.</p></ng-template>
+      <ng-template #noSpecial><p class="empty">{{ 'bld.noSpecial' | translate }}</p></ng-template>
     </div>
   </div>
 
   <!-- ===== Ziemia (kupno ziemi, przeniesione z Zatrudnienia) ===== -->
   <div *ngIf="activeTab === 'ziemia'">
     <div class="card" *ngIf="kingdom; else loadingTpl">
-      <h3>Kupno Ziemi</h3>
-      <p class="info">Aktualna ziemia: <strong>{{ kingdom.land }} akrów</strong> | Cena: 500 złota/akr</p>
+      <h3>{{ 'bld.buyLandTitle' | translate }}</h3>
+      <p class="info">{{ 'bld.currentLand' | translate }}: <strong>{{ 'bld.acres' | translate:{ n: kingdom.land } }}</strong> | {{ 'bld.landPrice' | translate }}</p>
       <div class="buy-controls">
         <input type="number" [(ngModel)]="landAmount" min="1" max="1000" />
-        <span class="cost">Koszt: {{ landAmount * 500 | number }} złota</span>
-        <button class="btn-build" (click)="buyLand()">Kup ziemię</button>
+        <span class="cost">{{ 'bld.cost' | translate }}: {{ 'bld.goldAmount' | translate:{ n: (landAmount * 500 | number) } }}</span>
+        <button class="btn-build" (click)="buyLand()">{{ 'bld.buyLandBtn' | translate }}</button>
       </div>
     </div>
   </div>
@@ -119,5 +119,5 @@
     <app-research></app-research>
   </div>
 
-  <ng-template #loadingTpl><div class="loading">Ładowanie...</div></ng-template>
+  <ng-template #loadingTpl><div class="loading">{{ 'common.loading' | translate }}</div></ng-template>
 </div>

@@ -3,30 +3,30 @@
 
   <div class="status-bar">
     <span class="status novice" *ngIf="kingdom.isProtected">
-      🛡 Nowicjusz — ochrona przed atakami ({{ kingdom.protectionDaysLeft }} dni / do 2000 akrów)
+      🛡 {{ 'dash.protected' | translate:{ days: kingdom.protectionDaysLeft } }}
     </span>
     <span class="status frozen" *ngIf="kingdom.isFrozen">
-      ❄ Księstwo zamrożone — przeliczenia i ataki wstrzymane
+      ❄ {{ 'dash.frozen' | translate }}
     </span>
     <button class="btn-freeze" (click)="toggleFreeze()">
-      {{ kingdom.isFrozen ? 'Odmróź księstwo' : 'Zamroź księstwo' }}
+      {{ (kingdom.isFrozen ? 'dash.unfreeze' : 'dash.freeze') | translate }}
     </button>
     <span class="status bodies" *ngIf="kingdom.race === 'Nekromant'">
-      💀 Ciała na cmentarzu: {{ kingdom.bodies | number }}
+      💀 {{ 'dash.bodies' | translate }}: {{ kingdom.bodies | number }}
     </span>
     <span class="status wrath" *ngIf="kingdom.entWrathActive">
-      🌳 Gniew Enta — następny atak +100%
+      🌳 {{ 'dash.entWrath' | translate }}
     </span>
   </div>
 
   <div class="change-race" *ngIf="canChangeRace">
-    <span>🏛 Pałac Zmian:</span>
+    <span>🏛 {{ 'dash.palaceOfChange' | translate }}:</span>
     <select [(ngModel)]="selectedRace">
-      <option value="">— zmień rasę —</option>
+      <option value="">{{ 'dash.changeRaceOpt' | translate }}</option>
       <option *ngFor="let r of races" [value]="r" [disabled]="r === kingdom.race">{{ r }}</option>
     </select>
-    <button class="btn-freeze" (click)="changeRace()" [disabled]="!selectedRace">Zmień rasę (1 tura)</button>
-    <span class="warn">Uwaga: armia obecnej rasy zostanie rozwiązana.</span>
+    <button class="btn-freeze" (click)="changeRace()" [disabled]="!selectedRace">{{ 'dash.changeRaceBtn' | translate }}</button>
+    <span class="warn">{{ 'dash.changeRaceWarn' | translate }}</span>
   </div>
 
   <div class="kingdom-title-bar">
@@ -51,66 +51,66 @@
       <table class="stats-table">
         <tr>
           <th colspan="3">
-            Ostatnie zgłoszenie: {{ kingdom.age }} dni temu
+            {{ 'dash.lastReport' | translate:{ days: kingdom.age } }}
           </th>
         </tr>
         <tr class="table-header-row">
           <td></td>
-          <td class="col-value">Liczba</td>
-          <td class="col-change">Zmiana</td>
+          <td class="col-value">{{ 'dash.count' | translate }}</td>
+          <td class="col-change">{{ 'dash.change' | translate }}</td>
         </tr>
         <tr>
-          <td class="stat-label">ludność</td>
+          <td class="stat-label">{{ 'res.population' | translate }}</td>
           <td class="stat-value">{{ kingdom.population | numberFormat }}</td>
           <td class="stat-change" [ngClass]="getDeltaClass('population')">{{ getDelta('population') }}</td>
         </tr>
         <tr>
-          <td class="stat-label">popularność</td>
+          <td class="stat-label">{{ 'res.popularity' | translate }}</td>
           <td class="stat-value">{{ kingdom.popularity }}%</td>
           <td class="stat-change" [ngClass]="getDeltaClass('popularity')">{{ getDelta('popularity') }}</td>
         </tr>
         <tr>
-          <td class="stat-label">akry</td>
+          <td class="stat-label">{{ 'res.land' | translate }}</td>
           <td class="stat-value">{{ kingdom.land | numberFormat }}</td>
           <td class="stat-change"></td>
         </tr>
         <tr>
-          <td class="stat-label">pensje</td>
+          <td class="stat-label">{{ 'dash.wages' | translate }}</td>
           <td class="stat-value">{{ kingdom.wages }}</td>
           <td class="stat-change"></td>
         </tr>
         <tr>
-          <td class="stat-label">złoto</td>
+          <td class="stat-label">{{ 'res.gold' | translate }}</td>
           <td class="stat-value">{{ kingdom.gold | numberFormat }}</td>
           <td class="stat-change" [ngClass]="getDeltaClass('gold')">{{ getDelta('gold') }}</td>
         </tr>
         <tr>
-          <td class="stat-label">jedzenie</td>
+          <td class="stat-label">{{ 'res.food' | translate }}</td>
           <td class="stat-value">{{ kingdom.food | numberFormat }}</td>
           <td class="stat-change" [ngClass]="getDeltaClass('food')">{{ getDelta('food') }}</td>
         </tr>
         <tr>
-          <td class="stat-label">kamienie</td>
+          <td class="stat-label">{{ 'res.stone' | translate }}</td>
           <td class="stat-value">{{ kingdom.stone | numberFormat }}</td>
           <td class="stat-change" [ngClass]="getDeltaClass('stone')">{{ getDelta('stone') }}</td>
         </tr>
         <tr>
-          <td class="stat-label">budulec</td>
+          <td class="stat-label">{{ 'res.budulec' | translate }}</td>
           <td class="stat-value">{{ kingdom.budulecStored | numberFormat }}</td>
           <td class="stat-change" [ngClass]="getDeltaClass('budulecStored')">{{ getDelta('budulecStored') }}</td>
         </tr>
         <tr>
-          <td class="stat-label">bronie</td>
+          <td class="stat-label">{{ 'res.weapons' | translate }}</td>
           <td class="stat-value">{{ kingdom.weapons | numberFormat }}</td>
           <td class="stat-change" [ngClass]="getDeltaClass('weapons')">{{ getDelta('weapons') }}</td>
         </tr>
         <tr>
-          <td class="stat-label">mana</td>
+          <td class="stat-label">{{ 'res.mana' | translate }}</td>
           <td class="stat-value">{{ kingdom.mana | numberFormat }}</td>
           <td class="stat-change" [ngClass]="getDeltaClass('mana')">{{ getDelta('mana') }}</td>
         </tr>
         <tr>
-          <td class="stat-label">edukacja</td>
+          <td class="stat-label">{{ 'dash.education' | translate }}</td>
           <td class="stat-value">{{ kingdom.education }}%</td>
           <td class="stat-change"></td>
         </tr>
@@ -119,54 +119,54 @@
 
     <div class="right-panels">
       <div class="events-panel">
-        <div class="events-header">Wydarzenia i status</div>
+        <div class="events-header">{{ 'dash.eventsTitle' | translate }}</div>
         <div class="events-body">
           <div class="event-row pending-general" *ngIf="kingdom.pendingGeneralCount > 0">
-            🎖 {{ kingdom.pendingGeneralCount === 1 ? 'Nowy generał czeka' : kingdom.pendingGeneralCount + ' generałów czeka' }}
-            na decyzję — przejdź do zakładki <a routerLink="/generals">Generałowie</a>.
+            🎖 {{ (kingdom.pendingGeneralCount === 1 ? 'dash.generalWaiting' : 'dash.generalsWaiting') | translate:{ count: kingdom.pendingGeneralCount } }}
+            <a routerLink="/generals">{{ 'menu.generals' | translate }}</a>.
           </div>
 
           <div class="event-section" *ngIf="constructionEvents.length">
-            <div class="event-subhead">🏗 Ukończone budowy</div>
+            <div class="event-subhead">🏗 {{ 'dash.completedBuildings' | translate }}</div>
             <div class="event-row done" *ngFor="let e of constructionEvents">
               {{ e.message }}
             </div>
           </div>
 
           <div class="event-section" *ngIf="trainingEvents.length">
-            <div class="event-subhead">⚔ Wyszkolone jednostki</div>
+            <div class="event-subhead">⚔ {{ 'dash.trainedUnits' | translate }}</div>
             <div class="event-row done" *ngFor="let e of trainingEvents">
               {{ e.message }}
             </div>
           </div>
 
           <div class="event-section" *ngIf="kingdom.activeSpells?.length">
-            <div class="event-subhead">✨ Nałożone czary</div>
+            <div class="event-subhead">✨ {{ 'dash.activeSpells' | translate }}</div>
             <div class="event-row spell" *ngFor="let s of kingdom.activeSpells"
                  [ngClass]="s.isPositive ? 'positive' : 'negative'">
               <span class="spell-name">{{ s.displayName }}</span>
-              <span class="spell-power">siła {{ s.power | number }}</span>
+              <span class="spell-power">{{ 'dash.power' | translate }} {{ s.power | number }}</span>
             </div>
           </div>
 
           <div class="event-row empty" *ngIf="!hasAnyEvent">
-            Brak nowych wydarzeń.
+            {{ 'dash.noEvents' | translate }}
           </div>
         </div>
       </div>
 
       <div class="advisor-panel">
-        <div class="advisor-header">Doradca Sekretarz: Tutorial</div>
+        <div class="advisor-header">{{ 'dash.advisorTitle' | translate }}</div>
         <div class="advisor-body">
-          <p>Obok nazwy Twojego księstwa i nazwy <em>koalicji</em> - o ile już do jakiejś przystąpiłeś - znajduje się informacja o ilości <strong>tur</strong>, jaką masz do wykorzystania w danym dniu.</p>
-          <p>Uwaga - <em>dzień</em> w krainie Red Dragona zaczyna się po <em>przeliczeniu</em> o godzinie 5 rano i kończy następnego dnia o tej samej godzinie, kolejnym <em>przeliczeniem</em>.</p>
+          <p>{{ 'dash.advisorP1' | translate }}</p>
+          <p>{{ 'dash.advisorP2' | translate }}</p>
         </div>
       </div>
 
       <div class="preview-cards">
         <div class="preview-card">
           <div class="preview-image special-building-img">
-            <span *ngIf="!kingdom.currentSpecialBuilding">Brak</span>
+            <span *ngIf="!kingdom.currentSpecialBuilding">{{ 'dash.none' | translate }}</span>
             <span *ngIf="kingdom.currentSpecialBuilding">{{ kingdom.currentSpecialBuilding }}</span>
           </div>
           <div class="preview-label" *ngIf="kingdom.currentSpecialBuilding">
@@ -175,14 +175,14 @@
             <span class="progress-gain" *ngIf="specialBuildingPercentDelta > 0">+{{ specialBuildingPercentDelta }}%</span>
           </div>
           <div class="preview-label" *ngIf="!kingdom.currentSpecialBuilding">
-            Nic [0%]
+            {{ 'dash.nothing' | translate }} [0%]
           </div>
         </div>
 
         <div class="preview-card">
           <div class="preview-image research-img">
             <img *ngIf="kingdom.currentResearch" class="research-icon" [src]="researchIcon" [alt]="kingdom.currentResearch">
-            <span *ngIf="!kingdom.currentResearch">📚 Nauka</span>
+            <span *ngIf="!kingdom.currentResearch">📚 {{ 'dash.science' | translate }}</span>
           </div>
           <div class="preview-label" *ngIf="kingdom.currentResearch">
             {{ kingdom.currentResearch }}
@@ -190,7 +190,7 @@
             <span class="progress-gain" *ngIf="researchPercentDelta > 0">+{{ researchPercentDelta }}%</span>
           </div>
           <div class="preview-label" *ngIf="!kingdom.currentResearch">
-            Nic nie badane — zapas: {{ kingdom.sciencePoints | numberFormat }} PN
+            {{ 'dash.noResearch' | translate:{ points: (kingdom.sciencePoints | numberFormat) } }}
           </div>
         </div>
       </div>
@@ -199,5 +199,5 @@
 </div>
 
 <ng-template #loadingTpl>
-  <div class="loading">Ładowanie księstwa...</div>
+  <div class="loading">{{ 'dash.loadingKingdom' | translate }}</div>
 </ng-template>

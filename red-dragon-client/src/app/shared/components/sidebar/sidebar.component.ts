@@ -11,18 +11,18 @@ export class SidebarComponent {
   @Output() turnUsed = new EventEmitter<void>();
 
   menuItems = [
-    { label: 'Stolica', route: '/dashboard' },
-    { label: 'Budowa', route: '/buildings' },
-    { label: 'Zatrudnienie', route: '/economy' },
-    { label: 'Wojsko', route: '/military' },
-    { label: 'Walka', route: '/attack' },
-    { label: 'Magia', route: '/magic' },
-    { label: 'Złodzieje', route: '/thieves' },
-    { label: 'Generałowie', route: '/generals' },
-    { label: 'Polityka', route: '/coalition' },
-    { label: 'Rynek', route: '/market' },
-    { label: 'Statystyki', route: '/ranking' },
-    { label: 'Opcje', route: '/options' },
+    { label: 'menu.capital', route: '/dashboard' },
+    { label: 'menu.buildings', route: '/buildings' },
+    { label: 'menu.employment', route: '/economy' },
+    { label: 'menu.military', route: '/military' },
+    { label: 'menu.combat', route: '/attack' },
+    { label: 'menu.magic', route: '/magic' },
+    { label: 'menu.thieves', route: '/thieves' },
+    { label: 'menu.generals', route: '/generals' },
+    { label: 'menu.politics', route: '/coalition' },
+    { label: 'menu.market', route: '/market' },
+    { label: 'menu.stats', route: '/ranking' },
+    { label: 'menu.options', route: '/options' },
   ];
 
   constructor(private auth: AuthService, private router: Router) {}

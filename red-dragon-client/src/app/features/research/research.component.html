@@ -1,28 +1,24 @@
 <div class="game-panel">
-  <h2 class="panel-title">Nauka</h2>
+  <h2 class="panel-title">{{ 'bld.tab.science' | translate }}</h2>
 
-  <p class="lead">
-    Naukowcy produkują <strong>Punkty Nauki (SP)</strong>, które inwestujesz w wybraną
-    dziedzinę. Najedź na ikonę, by zobaczyć efekt i koszt; kliknij dostępną dziedzinę,
-    by rozpocząć badanie. Zmiana niedokończonej dziedziny kosztuje 1/3 zainwestowanych SP.
-  </p>
+  <p class="lead" [innerHTML]="'res2.lead' | translate"></p>
 
   <app-notify-relay [message]="message"></app-notify-relay>
   <app-notify-relay [message]="error" type="error"></app-notify-relay>
-  <div class="loading" *ngIf="loading">Wczytywanie...</div>
+  <div class="loading" *ngIf="loading">{{ 'res2.loading' | translate }}</div>
 
   <div class="stats-bar" *ngIf="status">
-    <span>Limit SP / turę: <strong>{{ status.sciencePerTurnCap | number }}</strong></span>
-    <span>Zapas SP: <strong class="sp">{{ status.sciencePoints | number }}</strong></span>
-    <span *ngIf="status.currentResearchTech">Rozwijane: <strong>{{ status.currentResearchTech }}</strong></span>
-    <span *ngIf="!status.currentResearchTech" class="idle">Brak wybranej dziedziny</span>
+    <span>{{ 'res2.spCap' | translate }}: <strong>{{ status.sciencePerTurnCap | number }}</strong></span>
+    <span>{{ 'res2.spStock' | translate }}: <strong class="sp">{{ status.sciencePoints | number }}</strong></span>
+    <span *ngIf="status.currentResearchTech">{{ 'res2.researching' | translate }}: <strong>{{ status.currentResearchTech }}</strong></span>
+    <span *ngIf="!status.currentResearchTech" class="idle">{{ 'res2.noField' | translate }}</span>
   </div>
 
   <p class="legend">
-    <span class="lg lg-av">dostępne</span>
-    <span class="lg lg-cur">w trakcie</span>
-    <span class="lg lg-lock">niedostępne</span>
-    <span class="lg lg-done">zbadane</span>
+    <span class="lg lg-av">{{ 'res2.legend.available' | translate }}</span>
+    <span class="lg lg-cur">{{ 'res2.legend.current' | translate }}</span>
+    <span class="lg lg-lock">{{ 'res2.legend.locked' | translate }}</span>
+    <span class="lg lg-done">{{ 'res2.legend.done' | translate }}</span>
   </p>
 
   <ng-container *ngIf="!loading">
@@ -50,7 +46,7 @@
 
             <!-- nakładki stanów -->
             <span class="xmark" *ngIf="!t.isCompleted && !t.isCurrent && !t.canResearch">✕</span>
-            <img class="flask" *ngIf="t.isCurrent" src="assets/img/nauka/flask.png" alt="w trakcie">
+            <img class="flask" *ngIf="t.isCurrent" src="assets/img/nauka/flask.png" [alt]="'res2.legend.current' | translate">
             <span class="done-tick" *ngIf="t.isCompleted">✓</span>
 
             <!-- pasek postępu dla rozwijanej dziedziny -->
@@ -62,14 +58,14 @@
             <div class="tip">
               <strong class="tip-name">{{ t.displayName }}</strong>
               <div class="tip-effect">{{ t.description }}</div>
-              <div class="tip-cost">Koszt: {{ t.costScience | number }} SP</div>
-              <div class="tip-prog" *ngIf="t.isCurrent">W trakcie — {{ progress(t) }}%</div>
-              <div class="tip-done" *ngIf="t.isCompleted">Zbadane ✓</div>
+              <div class="tip-cost">{{ 'bld.cost' | translate }}: {{ t.costScience | number }} SP</div>
+              <div class="tip-prog" *ngIf="t.isCurrent">{{ 'res2.inProgress' | translate }} — {{ progress(t) }}%</div>
+              <div class="tip-done" *ngIf="t.isCompleted">{{ 'res2.researched' | translate }}</div>
               <div class="tip-lock" *ngIf="!t.canResearch && !t.isCompleted && !t.isCurrent">
-                {{ t.cannotResearchReason || 'Wymaga wcześniejszych dziedzin' }}
+                {{ t.cannotResearchReason || ('res2.requiresPrevious' | translate) }}
               </div>
               <div class="tip-go" *ngIf="t.canResearch && !t.isCompleted && !t.isCurrent">
-                Kliknij, aby rozpocząć
+                {{ 'res2.clickToStart' | translate }}
               </div>
             </div>
           </div>
@@ -85,11 +81,11 @@
     <img class="modal-img" [src]="techIcon(confirmTech)" [alt]="confirmTech.displayName">
     <h3>{{ confirmTech.displayName }}</h3>
     <p class="modal-effect">{{ confirmTech.description }}</p>
-    <p class="modal-cost">Koszt: <strong>{{ confirmTech.costScience | number }} SP</strong></p>
-    <p class="modal-q">Czy chcesz rozpocząć to badanie?</p>
+    <p class="modal-cost">{{ 'bld.cost' | translate }}: <strong>{{ confirmTech.costScience | number }} SP</strong></p>
+    <p class="modal-q">{{ 'res2.confirmQ' | translate }}</p>
     <div class="modal-actions">
-      <button class="btn-yes" (click)="confirmStart()">Uruchom</button>
-      <button class="btn-no" (click)="cancelConfirm()">Anuluj</button>
+      <button class="btn-yes" (click)="confirmStart()">{{ 'res2.start' | translate }}</button>
+      <button class="btn-no" (click)="cancelConfirm()">{{ 'common.cancel' | translate }}</button>
     </div>
   </div>
 </div>

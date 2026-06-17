@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { MilitaryService } from '../../core/services/military.service';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { CoalitionService, War } from '../../core/services/coalition.service';
@@ -35,7 +36,8 @@ export class AttackComponent implements OnInit {
   constructor(
     private military: MilitaryService,
     private kingdomService: KingdomService,
-    private coalitionService: CoalitionService
+    private coalitionService: CoalitionService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -50,21 +52,21 @@ export class AttackComponent implements OnInit {
     });
     this.kingdomService.getAllKingdoms().subscribe({
       next: k => { this.allKingdoms = k; this.loading = false; },
-      error: () => { this.loading = false; this.error = 'Błąd wczytywania państw.'; }
+      error: () => { this.loading = false; this.error = this.translate.instant('atk.errLoad'); }
     });
   }
 
   private evaluate(k: KingdomSummary): TargetRow {
     const my = this.myKingdom;
     let attackable = true;
-    let reason = 'Atakowalne';
-    if (k.isProtected) { attackable = false; reason = 'Nowicjusz (chroniony)'; }
-    else if (k.isFrozen) { attackable = false; reason = 'Zamrożony'; }
-    else if (my && k.land > my.land * 4) { attackable = false; reason = 'Zbyt duży (>4×)'; }
-    else if (my && k.land * 4 < my.land) { attackable = false; reason = 'Zbyt mały (<¼)'; }
-    else if (k.coalitionId && my && k.coalitionId === my.coalitionId) { attackable = false; reason = 'Sojusznik'; }
-    else if (k.coalitionId && !this.enemyCoalitionIds.has(k.coalitionId)) { attackable = false; reason = 'Brak wojny'; }
-    return { k, attackable, reason };
+    let reason = 'atk.reason.attackable';
+    if (k.isProtected) { attackable = false; reason = 'atk.reason.protected'; }
+    else if (k.isFrozen) { attackable = false; reason = 'atk.reason.frozen'; }
+    else if (my && k.land > my.land * 4) { attackable = false; reason = 'atk.reason.tooBig'; }
+    else if (my && k.land * 4 < my.land) { attackable = false; reason = 'atk.reason.tooSmall'; }
+    else if (k.coalitionId && my && k.coalitionId === my.coalitionId) { attackable = false; reason = 'atk.reason.ally'; }
+    else if (k.coalitionId && !this.enemyCoalitionIds.has(k.coalitionId)) { attackable = false; reason = 'atk.reason.noWar'; }
+    return { k, attackable, reason: this.translate.instant(reason) };
   }
 
   get coalitionTags(): string[] {

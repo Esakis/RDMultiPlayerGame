@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { ForumService } from '../../core/services/forum.service';
 import { ForumPost } from '../../core/models/kingdom.model';
 
@@ -18,7 +19,7 @@ export class ForumComponent implements OnInit {
   replyingTo: ForumPost | null = null;
   replyBody = '';
 
-  constructor(private forumService: ForumService) {}
+  constructor(private forumService: ForumService, private translate: TranslateService) {}
 
   ngOnInit(): void {
     this.loadPosts();
@@ -48,7 +49,7 @@ export class ForumComponent implements OnInit {
     obs.subscribe({
       next: (posts) => { this.posts = posts; this.loading = false; },
       error: (err) => {
-        this.message = err.error?.message || err.error || 'Nie udało się załadować forum.';
+        this.message = err.error?.message || err.error || this.translate.instant('forum.errLoad');
         this.loading = false;
       }
     });
@@ -56,7 +57,7 @@ export class ForumComponent implements OnInit {
 
   submitPost(): void {
     if (!this.newBody.trim()) {
-      this.message = 'Wpisz treść wiadomości.';
+      this.message = this.translate.instant('forum.enterBody');
       return;
     }
     const dto = { 
@@ -71,12 +72,12 @@ export class ForumComponent implements OnInit {
     obs.subscribe({
       next: () => {
         this.newBody = '';
-        this.message = 'Post dodany.';
+        this.message = this.translate.instant('forum.postAdded');
         this.loadPosts();
         this.clearMsg();
       },
       error: (err) => {
-        this.message = err.error?.message || err.error || 'Błąd.';
+        this.message = err.error?.message || err.error || this.translate.instant('common.error');
         this.clearMsg();
       }
     });
@@ -107,12 +108,12 @@ export class ForumComponent implements OnInit {
       next: () => {
         this.replyingTo = null;
         this.replyBody = '';
-        this.message = 'Odpowiedź dodana.';
+        this.message = this.translate.instant('forum.replyAdded');
         this.loadPosts();
         this.clearMsg();
       },
       error: (err) => {
-        this.message = err.error?.message || err.error || 'Błąd.';
+        this.message = err.error?.message || err.error || this.translate.instant('common.error');
         this.clearMsg();
       }
     });
@@ -128,8 +129,8 @@ export class ForumComponent implements OnInit {
 
   getRoleDisplay(role: string): string {
     switch (role) {
-      case 'Imperator': return '[Imperator]';
-      case 'MainCommander': return '[Głównodowodzący]';
+      case 'Imperator': return `[${this.translate.instant('pol.role.imperator')}]`;
+      case 'MainCommander': return `[${this.translate.instant('pol.role.commander')}]`;
       default: return '';
     }
   }

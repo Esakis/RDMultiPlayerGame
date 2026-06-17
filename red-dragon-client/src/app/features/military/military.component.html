@@ -1,19 +1,19 @@
 <div class="page-content">
-  <h2>Wojsko</h2>
+  <h2>{{ 'menu.military' | translate }}</h2>
   <app-notify-relay [message]="message"></app-notify-relay>
 
   <div *ngIf="!loading; else loadingTpl">
     <!-- Rekrutacja -->
     <div class="card">
-      <h3>Rekrutacja jednostek</h3>
+      <h3>{{ 'mil.recruitTitle' | translate }}</h3>
       <div class="units-grid">
         <div class="unit-card" *ngFor="let def of unitDefs" [class.cannot]="!def.canRecruit"
              [title]="def.description || ''">
           <div class="uc-header">
             <span class="uc-name">{{ unitName(def) }}</span>
             <span class="uc-stats">
-              <span class="stat atk" title="Atak">{{ def.attackPower }}</span>
-              <span class="stat def" title="Obrona">{{ def.defensePower }}</span>
+              <span class="stat atk" [title]="'mil.attack' | translate">{{ def.attackPower }}</span>
+              <span class="stat def" [title]="'mil.defense' | translate">{{ def.defensePower }}</span>
             </span>
           </div>
 
@@ -22,9 +22,9 @@
           </div>
 
           <div class="uc-cost">
-            <span *ngIf="def.costGold">{{ def.costGold | number }} złota</span>
-            <span *ngIf="def.costWeapons">{{ def.costWeapons | number }} broni</span>
-            <span *ngIf="def.costFood">{{ def.costFood | number }} jedzenia</span>
+            <span *ngIf="def.costGold">{{ 'mil.costGold' | translate:{ n: (def.costGold | number) } }}</span>
+            <span *ngIf="def.costWeapons">{{ 'mil.costWeapons' | translate:{ n: (def.costWeapons | number) } }}</span>
+            <span *ngIf="def.costFood">{{ 'mil.costFood' | translate:{ n: (def.costFood | number) } }}</span>
             <span *ngIf="!def.costGold && !def.costWeapons && !def.costFood">—</span>
           </div>
 
@@ -38,7 +38,7 @@
                    placeholder="0" [class.locked]="!def.canRecruit" />
           </div>
           <ng-template #dragonNote>
-            <div class="uc-note">Pojawiają się same lub z czarów</div>
+            <div class="uc-note">{{ 'mil.dragonNote' | translate }}</div>
           </ng-template>
           <div class="uc-cannot" *ngIf="slotKey(def) !== 'smok' && !def.canRecruit">{{ def.cannotRecruitReason }}</div>
         </div>
@@ -48,26 +48,26 @@
       <div class="army-actions">
         <div class="train-row">
           <label class="train-opt" [class.disabled]="!training.canTrainSoldiers"
-                 title="Awans żołnierzy (Hoplita → Elita 1) co turę. Wymaga Ołtarza Inicjacji.">
+                 [title]="'mil.trainSoldiersTip' | translate">
             <input type="checkbox" [(ngModel)]="training.trainSoldiers"
                    [disabled]="!training.canTrainSoldiers" (change)="toggleTraining()" />
-            <span>Szkolić żołnierzy ({{ training.soldierPromotePct }}%)</span>
+            <span>{{ 'mil.trainSoldiers' | translate }} ({{ training.soldierPromotePct }}%)</span>
           </label>
           <label class="train-opt" [class.disabled]="!training.canTrainElite"
-                 title="Awans elity (Elita 1 → Elita 2) co turę. Wymaga Koszar Specjalnych.">
+                 [title]="'mil.trainEliteTip' | translate">
             <input type="checkbox" [(ngModel)]="training.trainElite"
                    [disabled]="!training.canTrainElite" (change)="toggleTraining()" />
-            <span>Szkolić elitę ({{ training.elitePromotePct }}%)</span>
+            <span>{{ 'mil.trainElite' | translate }} ({{ training.elitePromotePct }}%)</span>
           </label>
         </div>
         <div class="action-buttons">
-          <button class="img-btn" (click)="recruitAll()" title="Rekrutuj wpisane jednostki">
-            <img src="assets/img/wojsko/btn-rekrutuj.png" alt="Rekrutuj" />
-            <span>Rekrutuj</span>
+          <button class="img-btn" (click)="recruitAll()" [title]="'mil.recruitTip' | translate">
+            <img src="assets/img/wojsko/btn-rekrutuj.png" [alt]="'mil.recruit' | translate" />
+            <span>{{ 'mil.recruit' | translate }}</span>
           </button>
-          <button class="img-btn" (click)="disbandAll()" title="Zwolnij wpisane jednostki">
-            <img src="assets/img/wojsko/btn-zwolnij.png" alt="Zwolnij" />
-            <span>Zwolnij</span>
+          <button class="img-btn" (click)="disbandAll()" [title]="'mil.disbandTip' | translate">
+            <img src="assets/img/wojsko/btn-zwolnij.png" [alt]="'mil.disband' | translate" />
+            <span>{{ 'mil.disband' | translate }}</span>
           </button>
         </div>
       </div>
@@ -75,14 +75,14 @@
 
     <!-- Atak -->
     <div class="card">
-      <h3>Planowanie Ataku</h3>
-      <p class="info">Ataki wykonywane są podczas codziennego przeliczenia o 5:00.</p>
+      <h3>{{ 'mil.attackPlanTitle' | translate }}</h3>
+      <p class="info">{{ 'mil.attackPlanInfo' | translate }}</p>
       <div class="attack-form">
         <div class="form-group">
-          <label>Cel ataku:</label>
+          <label>{{ 'mil.attackTarget' | translate }}:</label>
           <select [(ngModel)]="attackTarget">
-            <option [ngValue]="0">-- Wybierz cel --</option>
-            <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }} ({{ k.race }}, {{ k.land }} akrów)</option>
+            <option [ngValue]="0">{{ 'mil.chooseTarget' | translate }}</option>
+            <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }} ({{ k.race }}, {{ 'bld.acres' | translate:{ n: k.land } }})</option>
           </select>
         </div>
         <div class="attack-units">
@@ -91,10 +91,10 @@
             <input type="number" [(ngModel)]="attackUnits[u.unitType]" min="0" [max]="u.quantity" placeholder="0" />
           </div>
         </div>
-        <button class="btn-attack" (click)="sendAttack()">Zakolejkuj Atak</button>
+        <button class="btn-attack" (click)="sendAttack()">{{ 'mil.queueAttack' | translate }}</button>
       </div>
     </div>
   </div>
 
-  <ng-template #loadingTpl><div class="loading">Ładowanie...</div></ng-template>
+  <ng-template #loadingTpl><div class="loading">{{ 'common.loading' | translate }}</div></ng-template>
 </div>

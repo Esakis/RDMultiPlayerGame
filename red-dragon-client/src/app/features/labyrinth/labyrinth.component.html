@@ -1,38 +1,34 @@
 <div class="game-panel">
-  <h2 class="panel-title">Labirynt</h2>
+  <h2 class="panel-title">{{ 'nav.labyrinth' | translate }}</h2>
 
-  <p class="lead">
-    Wyślij generała w głąb labiryntu. Każdy poziom (1 tura) to nowy łup, ale i rosnące
-    ryzyko: pułapka rani i kończy wyprawę, a strażnik może generała zabić — wtedy
-    zgromadzony łup przepada. Wycofaj się w porę, by zdeponować zdobycz.
-  </p>
+  <p class="lead">{{ 'lab.lead' | translate }}</p>
 
   <app-notify-relay [message]="message"></app-notify-relay>
   <app-notify-relay [message]="error" type="error"></app-notify-relay>
-  <div class="loading" *ngIf="loading">Wczytywanie...</div>
+  <div class="loading" *ngIf="loading">{{ 'common.loading' | translate }}</div>
 
   <ng-container *ngIf="!loading && status">
     <div class="stats-bar">
-      <span>Dostępne tury: <strong>{{ status.turnsAvailable }}</strong></span>
-      <span>Zebrane kości: <strong class="dice">{{ status.bankedDice }}</strong></span>
-      <span *ngIf="status.dragonLore > 0">Wiedza o smokach: <strong class="dice">poz. {{ status.dragonLore }}</strong> (+{{ status.dragonLore * 15 }}% łupów)</span>
+      <span>{{ 'lab.turnsAvailable' | translate }}: <strong>{{ status.turnsAvailable }}</strong></span>
+      <span>{{ 'lab.bankedDice' | translate }}: <strong class="dice">{{ status.bankedDice }}</strong></span>
+      <span *ngIf="status.dragonLore > 0">{{ 'lab.dragonLore' | translate }}: <strong class="dice">{{ 'lab.lvl' | translate }} {{ status.dragonLore }}</strong> (+{{ status.dragonLore * 15 }}% {{ 'lab.loot' | translate }})</span>
     </div>
 
     <!-- Skarbiec kości -->
     <div class="dice-shop" *ngIf="status.rewards.length > 0">
-      <h3>Skarbiec kości</h3>
-      <p class="hint">Wymień zebrane kości na nagrody. Łup z labiryntu rośnie z badaniami o smokach.</p>
+      <h3>{{ 'lab.diceVault' | translate }}</h3>
+      <p class="hint">{{ 'lab.diceVaultHint' | translate }}</p>
       <table class="rd-table">
         <thead>
-          <tr><th>Nagroda</th><th>Opis</th><th>Koszt</th><th></th></tr>
+          <tr><th>{{ 'lab.reward' | translate }}</th><th>{{ 'mag.desc' | translate }}</th><th>{{ 'bld.cost' | translate }}</th><th></th></tr>
         </thead>
         <tbody>
           <tr *ngFor="let r of status.rewards">
             <td class="reward-name">{{ r.name }}</td>
             <td class="reward-desc">{{ r.description }}</td>
-            <td class="num dice">{{ r.diceCost }} kości</td>
+            <td class="num dice">{{ 'lab.diceCount' | translate:{ n: r.diceCost } }}</td>
             <td>
-              <button class="btn-cast" (click)="spendDice(r.type)" [disabled]="busy || !r.canAfford">Wymień</button>
+              <button class="btn-cast" (click)="spendDice(r.type)" [disabled]="busy || !r.canAfford">{{ 'lab.exchange' | translate }}</button>
             </td>
           </tr>
         </tbody>
@@ -41,53 +37,53 @@
 
     <!-- Aktywna wyprawa -->
     <div class="expedition" *ngIf="status.hasActiveExpedition && status.expedition as e">
-      <h3>Wyprawa w toku</h3>
+      <h3>{{ 'lab.expeditionInProgress' | translate }}</h3>
       <div class="depth-banner">
-        <span class="general">{{ e.generalName }} (poz. {{ e.generalLevel }})</span>
-        <span class="depth">Głębokość: <strong>{{ e.depth }}</strong></span>
+        <span class="general">{{ e.generalName }} ({{ 'lab.lvl' | translate }} {{ e.generalLevel }})</span>
+        <span class="depth">{{ 'lab.depth' | translate }}: <strong>{{ e.depth }}</strong></span>
       </div>
 
       <p class="event" *ngIf="e.lastEvent">{{ e.lastEvent }}</p>
 
       <table class="rd-table loot">
         <tbody>
-          <tr><th>Złoto</th><td class="num gold">{{ e.pendingGold | number }}</td></tr>
-          <tr><th>Jedzenie</th><td class="num">{{ e.pendingFood | number }}</td></tr>
-          <tr><th>Kamień</th><td class="num">{{ e.pendingStone | number }}</td></tr>
-          <tr><th>Broń</th><td class="num">{{ e.pendingWeapons | number }}</td></tr>
-          <tr><th>Mana</th><td class="num">{{ e.pendingMana | number }}</td></tr>
-          <tr><th>Kości</th><td class="num dice">{{ e.pendingDice }}</td></tr>
+          <tr><th>{{ 'res.gold' | translate }}</th><td class="num gold">{{ e.pendingGold | number }}</td></tr>
+          <tr><th>{{ 'mkt.res.Food' | translate }}</th><td class="num">{{ e.pendingFood | number }}</td></tr>
+          <tr><th>{{ 'mkt.res.Stone' | translate }}</th><td class="num">{{ e.pendingStone | number }}</td></tr>
+          <tr><th>{{ 'mkt.res.Weapons' | translate }}</th><td class="num">{{ e.pendingWeapons | number }}</td></tr>
+          <tr><th>{{ 'res.mana' | translate }}</th><td class="num">{{ e.pendingMana | number }}</td></tr>
+          <tr><th>{{ 'lab.dice' | translate }}</th><td class="num dice">{{ e.pendingDice }}</td></tr>
         </tbody>
       </table>
-      <p class="hint">Łup powyżej trafi do skarbca dopiero po bezpiecznym zakończeniu wyprawy.</p>
+      <p class="hint">{{ 'lab.lootHint' | translate }}</p>
 
       <div class="actions">
         <button class="btn-cast" (click)="advance()"
                 [disabled]="busy || status.turnsAvailable <= 0"
-                [title]="status.turnsAvailable <= 0 ? 'Brak tur' : ''">
-          Zejdź głębiej (1 tura)
+                [title]="status.turnsAvailable <= 0 ? ('lab.noTurns' | translate) : ''">
+          {{ 'lab.goDeeper' | translate }}
         </button>
         <button class="btn-cancel" (click)="retreat()" [disabled]="busy">
-          Wycofaj się i zdeponuj łup
+          {{ 'lab.retreat' | translate }}
         </button>
       </div>
     </div>
 
     <!-- Brak wyprawy: wybór generała -->
     <div class="enter" *ngIf="!status.hasActiveExpedition">
-      <h3>Wyślij generała</h3>
+      <h3>{{ 'lab.sendGeneral' | translate }}</h3>
       <ng-container *ngIf="status.availableGenerals.length > 0; else noGenerals">
         <div class="form-row">
           <select [(ngModel)]="selectedGeneralId">
             <option *ngFor="let g of status.availableGenerals" [ngValue]="g.id">
-              {{ g.name }} — poz. {{ g.level }} ({{ g.primaryTrait }})
+              {{ g.name }} — {{ 'lab.lvl' | translate }} {{ g.level }} ({{ g.primaryTrait }})
             </option>
           </select>
-          <button class="btn-cast" (click)="enter()" [disabled]="busy">Wejdź do labiryntu</button>
+          <button class="btn-cast" (click)="enter()" [disabled]="busy">{{ 'lab.enter' | translate }}</button>
         </div>
       </ng-container>
       <ng-template #noGenerals>
-        <p class="hint">Brak dostępnych generałów (potrzebny zdrowy generał w domu).</p>
+        <p class="hint">{{ 'lab.noGenerals' | translate }}</p>
       </ng-template>
     </div>
   </ng-container>

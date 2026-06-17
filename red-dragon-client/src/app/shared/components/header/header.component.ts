@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { LanguageService, AppLang } from '../../../core/services/language.service';
 import { Kingdom } from '../../../core/models/kingdom.model';
 
 @Component({
@@ -14,7 +15,9 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   @ViewChild('headerWrap') headerWrap?: ElementRef<HTMLElement>;
   private resizeObserver?: ResizeObserver;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, public language: LanguageService, private router: Router) {}
+
+  setLang(lang: AppLang): void { this.language.use(lang); }
 
   ngAfterViewInit(): void {
     const el = this.headerWrap?.nativeElement;

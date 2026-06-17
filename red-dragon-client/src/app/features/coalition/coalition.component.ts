@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { CoalitionService, PpsStatus, War, Election, Treasury } from '../../core/services/coalition.service';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { Coalition, Kingdom, KingdomSummary } from '../../core/models/kingdom.model';
@@ -33,7 +34,8 @@ export class CoalitionComponent implements OnInit {
   fundPpsAmount = 0;
   selectedCoalitionId: number | null = null;
 
-  constructor(private coalitionService: CoalitionService, private kingdomService: KingdomService) {}
+  constructor(private coalitionService: CoalitionService, private kingdomService: KingdomService,
+              private translate: TranslateService) {}
 
   setTab(tab: PolTab): void { this.activeTab = tab; }
 
@@ -71,12 +73,12 @@ export class CoalitionComponent implements OnInit {
     return c.members.reduce((s, m) => s + (m.thiefPower ?? 0), 0);
   }
 
-  /** Etykieta roli członka koalicji. */
-  roleLabel(role: string | undefined): string {
+  /** Etykieta roli członka koalicji (tłumaczona). */
+  roleLabel(role: string | null | undefined): string {
     switch (role) {
-      case 'Imperator': return 'Imperator';
-      case 'MainCommander': return 'Głównodowodzący';
-      default: return 'Członek';
+      case 'Imperator': return this.translate.instant('pol.role.imperator');
+      case 'MainCommander': return this.translate.instant('pol.role.commander');
+      default: return this.translate.instant('pol.role.member');
     }
   }
 
@@ -198,9 +200,21 @@ export class CoalitionComponent implements OnInit {
 
   joinCoalition(id: number): void {
     this.coalitionService.join(id).subscribe({
-      next: (res) => { this.message = res.message || 'Dołączono!'; this.load(); this.clearMsg(); },
+      next: (res) => { this.message = res.message || 'Dołączono!'; this.selectedCoalitionId = null; this.load(); this.clearMsg(); },
       error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
     });
+  }
+
+  leaveCoalition(): void {
+    this.coalitionService.leave().subscribe({
+      next: (res) => { this.message = res.message || 'Opuszczono koalicję.'; this.load(); this.clearMsg(); },
+      error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
+  }
+
+  /** Koalicje, do których można dołączyć (inne niż moja, z wolnym miejscem). */
+  get joinableCoalitions(): Coalition[] {
+    return this.coalitions.filter(c => c.id !== this.kingdom?.coalitionId && c.memberCount < c.maxMembers);
   }
 
   appointMainCommander(): void {

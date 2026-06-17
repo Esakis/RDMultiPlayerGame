@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { GeneralService, General } from '../../core/services/general.service';
 
 @Component({
@@ -12,27 +13,6 @@ export class GeneralsComponent implements OnInit {
   error = '';
   loading = true;
 
-  traitNames: { [key: string]: string } = {
-    'Wodz': 'Wódz',
-    'Obronca': 'Obrońca',
-    'Mag': 'Mag',
-    'Zlodziej': 'Złodziej',
-    'Kupiec': 'Kupiec',
-    'Profesor': 'Profesor',
-    'PorwanieGenerala': 'Porwanie generała',
-    'ZabojstwoGenerala': 'Zabójstwo generała',
-    'ZranienieGenerala': 'Zranienie generała',
-    'Smokobojstwo': 'Smokobójstwo',
-    'Uzdrawianie': 'Uzdrawianie',
-    'Sabotaz': 'Sabotaż',
-    'Krwiozerczonsc': 'Krwiożerczość',
-    'Rabunek': 'Rabunek',
-    'MaskowanieISzpiegostwo': 'Maskowanie i szpiegostwo',
-    'CzarnaMagia': 'Czarna magia',
-    'MagiaCzasu': 'Magia czasu',
-    'BialaMagia': 'Biała magia'
-  };
-
   // Portrety wg cechy głównej (grafiki wycięte z oryginalnego Red Dragon — generalowie/doradcy).
   private traitPortraits: { [key: string]: string } = {
     'Wodz': 'wodz',
@@ -43,7 +23,7 @@ export class GeneralsComponent implements OnInit {
     'Profesor': 'profesor'
   };
 
-  constructor(private generalService: GeneralService) {}
+  constructor(private generalService: GeneralService, private translate: TranslateService) {}
 
   ngOnInit(): void {
     this.load();
@@ -70,40 +50,55 @@ export class GeneralsComponent implements OnInit {
   }
 
   trait(key: string): string {
-    return this.traitNames[key] ?? key;
+    const k = `gen.trait.${key}`;
+    const t = this.translate.instant(k);
+    return t === k ? key : t;
+  }
+
+  /** Status generała — tłumaczony, z fallbackiem do wartości z backendu. */
+  statusLabel(status: string): string {
+    const map: { [k: string]: string } = {
+      'W domu': 'gen.status.home',
+      'Na wyprawie': 'gen.status.expedition',
+      'Ranny': 'gen.status.wounded'
+    };
+    const k = map[status];
+    if (!k) return status;
+    const t = this.translate.instant(k);
+    return t === k ? status : t;
   }
 
   accept(general: General): void {
     this.generalService.accept(general.id).subscribe({
       next: r => { this.message = r.message ?? ''; this.error = ''; this.load(); },
-      error: e => { this.error = e.error || 'Błąd przyjmowania generała.'; }
+      error: e => { this.error = e.error || this.translate.instant('gen.errAccept'); }
     });
   }
 
   rerollSecondary(general: General): void {
     this.generalService.rerollSecondary(general.id).subscribe({
       next: r => { this.message = r.message ?? ''; this.error = ''; this.load(); },
-      error: e => { this.error = e.error || 'Błąd zmiany cechy drugorzędnej.'; }
+      error: e => { this.error = e.error || this.translate.instant('gen.errReroll'); }
     });
   }
 
   reject(general: General): void {
-    if (!confirm(`Odrzucić generała ${this.trait(general.primaryTrait)} ${general.name}? Pojawi się szansa na innego.`)) {
+    if (!confirm(this.translate.instant('gen.confirmReject', { trait: this.trait(general.primaryTrait), name: general.name }))) {
       return;
     }
     this.generalService.dismiss(general.id).subscribe({
-      next: r => { this.message = 'Generał został odrzucony.'; this.error = ''; this.load(); },
-      error: e => { this.error = e.error || 'Błąd odrzucania generała.'; }
+      next: r => { this.message = this.translate.instant('gen.rejected'); this.error = ''; this.load(); },
+      error: e => { this.error = e.error || this.translate.instant('gen.errReject'); }
     });
   }
 
   dismiss(general: General): void {
-    if (!confirm(`Czy na pewno zwolnić generała ${general.name} (poziom ${general.level})? Tego nie można cofnąć.`)) {
+    if (!confirm(this.translate.instant('gen.confirmDismiss', { name: general.name, level: general.level }))) {
       return;
     }
     this.generalService.dismiss(general.id).subscribe({
       next: r => { this.message = r.message ?? ''; this.load(); },
-      error: e => { this.error = e.error || 'Błąd zwalniania generała.'; }
+      error: e => { this.error = e.error || this.translate.instant('gen.errDismiss'); }
     });
   }
 }

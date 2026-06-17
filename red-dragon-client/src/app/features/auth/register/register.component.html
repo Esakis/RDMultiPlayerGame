@@ -6,70 +6,67 @@
     <div class="panel-corner corner-br"></div>
 
     <div class="panel-header">
-      <h1>Rejestracja <span class="version">(wersja 1.0 beta)</span></h1>
+      <h1>{{ 'reg.title' | translate }} <span class="version">{{ 'reg.version' | translate }}</span></h1>
     </div>
 
     <div class="panel-body">
-      <div class="intro-text">
-        Ten formularz założy dla Ciebie <strong>nowe konto</strong>, oraz Twoje pierwsze księstwo.<br>
-        Jeżeli masz już konto - nie zakładaj kolejnego - <a routerLink="/login">zaloguj się na nie</a>
-      </div>
+      <div class="intro-text" [innerHTML]="'reg.intro' | translate"></div>
 
       <div class="error-msg" *ngIf="error">{{ error }}</div>
 
       <form class="registration-form" (ngSubmit)="onSubmit()">
         <div class="form-row">
-          <label class="form-label">Nazwa konta</label>
+          <label class="form-label">{{ 'reg.accountName' | translate }}</label>
           <input type="text" class="form-input" [(ngModel)]="username" name="username" required>
-          <span class="validation-text">Pod nią będziesz widniany np. na forum.</span>
+          <span class="validation-text">{{ 'reg.accountNameHint' | translate }}</span>
         </div>
 
         <div class="form-row">
-          <label class="form-label">Hasło</label>
+          <label class="form-label">{{ 'auth.password' | translate }}</label>
           <input type="password" class="form-input" [(ngModel)]="password" name="password" required>
           <span class="validation-text" [ngClass]="passwordStrengthClass">{{ passwordStrength }}</span>
         </div>
 
         <div class="form-row">
-          <label class="form-label">Powtórz hasło</label>
+          <label class="form-label">{{ 'reg.repeatPassword' | translate }}</label>
           <input type="password" class="form-input" [(ngModel)]="passwordConfirm" name="passwordConfirm" required>
           <span class="validation-text" [ngClass]="passwordMatchClass">{{ passwordMatch }}</span>
         </div>
 
         <div class="form-row">
-          <label class="form-label">Email</label>
+          <label class="form-label">{{ 'reg.email' | translate }}</label>
           <input type="email" class="form-input" [(ngModel)]="email" name="email" required>
-          <span class="validation-text">Nie będzie potwierdzany, ale podając nieprawidłowy nie będziesz w stanie np. odzyskać hasła.</span>
+          <span class="validation-text">{{ 'reg.emailHint' | translate }}</span>
         </div>
 
         <div class="form-row">
-          <label class="form-label">Nazwa księstwa</label>
+          <label class="form-label">{{ 'reg.kingdomName' | translate }}</label>
           <input type="text" class="form-input" [(ngModel)]="kingdomName" name="kingdomName" required>
-          <span class="validation-text">Nazwa Twojego pierwszego księstwa w grze.</span>
+          <span class="validation-text">{{ 'reg.kingdomNameHint' | translate }}</span>
         </div>
 
         <div class="form-row">
-          <label class="form-label">Rasa</label>
+          <label class="form-label">{{ 'reg.race' | translate }}</label>
           <select class="form-input" [(ngModel)]="race" name="race">
             <option *ngFor="let r of races" [value]="r.name">{{ r.name }}</option>
           </select>
           <span class="validation-text">
-            Rasa określa cechy Twojego księstwa.
-            <span *ngIf="selectedRace.books > 0" class="magic-tag">Księgi magii: {{ selectedRace.books }}</span>
-            <span *ngIf="selectedRace.books === 0" class="goblin-tag">Rasa niemagiczna</span>
-            <span *ngIf="race === 'Goblin'" class="goblin-tag">+2 tury dziennie (17)</span>
-            <span *ngIf="race === 'Ent'" class="goblin-tag">-2 tury dziennie (13)</span>
+            {{ 'reg.raceHint' | translate }}
+            <span *ngIf="selectedRace.books > 0" class="magic-tag">{{ 'reg.magicBooks' | translate }}: {{ selectedRace.books }}</span>
+            <span *ngIf="selectedRace.books === 0" class="goblin-tag">{{ 'reg.nonMagic' | translate }}</span>
+            <span *ngIf="race === 'Goblin'" class="goblin-tag">{{ 'reg.goblinTurns' | translate }}</span>
+            <span *ngIf="race === 'Ent'" class="goblin-tag">{{ 'reg.entTurns' | translate }}</span>
           </span>
         </div>
 
         <div class="race-info">
           <div class="race-header">
             <img class="race-img" [src]="selectedRace.img" [alt]="selectedRace.name">
-            <p class="race-desc">{{ selectedRace.desc }}</p>
+            <p class="race-desc">{{ raceDesc(selectedRace.name) }}</p>
           </div>
           <div class="race-stats">
             <div class="race-stat" *ngFor="let label of statLabels; let i = index">
-              <span class="stat-label">{{ label }}</span>
+              <span class="stat-label">{{ label | translate }}</span>
               <div class="stat-bar">
                 <div class="stat-fill" [style.width.%]="selectedRace.stats[i]"></div>
               </div>
@@ -80,25 +77,21 @@
 
         <div class="checkbox-row">
           <input type="checkbox" id="accept_rules" [(ngModel)]="acceptRules" name="acceptRules">
-          <label for="accept_rules">
-            Akceptuję <a href="javascript:void(0)">Regulamin</a>
-          </label>
+          <label for="accept_rules" [innerHTML]="'reg.acceptRules' | translate"></label>
         </div>
 
         <div class="submit-button-wrapper">
           <button type="submit" class="btn-submit" [disabled]="loading">
-            {{ loading ? 'Rejestracja...' : 'Zarejestruj się' }}
+            {{ (loading ? 'reg.registering' : 'reg.submit') | translate }}
           </button>
         </div>
       </form>
     </div>
 
     <div class="panel-footer">
-      <div class="footer-help">
-        Problemy z rejestracją? <a href="javascript:void(0)">Pomoc</a>
-      </div>
+      <div class="footer-help" [innerHTML]="'reg.footerHelp' | translate"></div>
     </div>
   </div>
 
-  <a routerLink="/login" class="back-link">do strony głównej</a>
+  <a routerLink="/login" class="back-link">{{ 'reg.backHome' | translate }}</a>
 </div>

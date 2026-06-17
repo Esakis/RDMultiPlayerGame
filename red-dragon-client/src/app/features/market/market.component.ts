@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { MarketService, MarketOrder, CreateMarketOrder, MarketTransaction } from '../../core/services/market.service';
 import { PactService, PactStatus, PactMember } from '../../core/services/pact.service';
 
@@ -17,16 +18,12 @@ export class MarketComponent implements OnInit {
   error = '';
   loading = true;
 
-  resources = [
-    { value: 'Food', label: 'Jedzenie' },
-    { value: 'Stone', label: 'Kamień' },
-    { value: 'Weapons', label: 'Broń' },
-    { value: 'Mana', label: 'Mana' }
-  ];
+  private readonly resourceKeys = ['Food', 'Stone', 'Weapons', 'Mana'];
 
-  resourceLabels: { [key: string]: string } = {
-    Food: 'Jedzenie', Stone: 'Kamień', Weapons: 'Broń', Mana: 'Mana'
-  };
+  // Etykiety surowców tłumaczone na bieżąco wg wybranego języka.
+  get resources(): { value: string; label: string }[] {
+    return this.resourceKeys.map(v => ({ value: v, label: this.resourceLabel(v) }));
+  }
 
   // Formularz nowej oferty
   form: CreateMarketOrder = { orderType: 'Sell', resource: 'Food', quantity: 0, pricePerUnit: 0 };
@@ -39,21 +36,14 @@ export class MarketComponent implements OnInit {
   pactMessage = '';
   pactError = '';
 
-  pactTypes = [
-    { value: 'Handlowy', label: 'Handlowy (domyślny)' },
-    { value: 'Wojskowy', label: 'Wojskowy' },
-    { value: 'Magiczny', label: 'Magiczny' },
-    { value: 'Zlodziejski', label: 'Złodziejski' }
-  ];
+  private readonly pactKeys = ['Handlowy', 'Wojskowy', 'Magiczny', 'Zlodziejski'];
 
-  pactDescriptions: { [key: string]: string } = {
-    Handlowy: 'Ziemia sojusznika dolicza się do efektywności Twoich kupców (100%, bez limitu).',
-    Wojskowy: 'Armia sojusznika pozostawiona w domu pomaga bronić Twojego księstwa.',
-    Magiczny: 'Magowie sojusznika pomagają bronić przed wrogą magią.',
-    Zlodziejski: 'Złodzieje sojusznika pomagają bronić przed atakami złodziejskimi.'
-  };
+  get pactTypes(): { value: string; label: string }[] {
+    return this.pactKeys.map(v => ({ value: v, label: this.pactLabel(v) }));
+  }
 
-  constructor(private market: MarketService, private pactService: PactService) {}
+  constructor(private market: MarketService, private pactService: PactService,
+              private translate: TranslateService) {}
 
   ngOnInit(): void {
     this.load();
@@ -70,20 +60,22 @@ export class MarketComponent implements OnInit {
         this.myOrders = v.myOrders;
         this.loading = false;
       },
-      error: () => { this.loading = false; this.error = 'Błąd wczytywania rynku.'; }
+      error: () => { this.loading = false; this.error = this.translate.instant('mkt.errLoad'); }
     });
     this.market.getHistory().subscribe({ next: h => this.history = h, error: () => this.history = [] });
   }
 
   resourceLabel(r: string): string {
-    return this.resourceLabels[r] ?? r;
+    const key = `mkt.res.${r}`;
+    const t = this.translate.instant(key);
+    return t === key ? r : t;
   }
 
   createOrder(): void {
     this.message = '';
     this.error = '';
     if (this.form.quantity <= 0 || this.form.pricePerUnit <= 0) {
-      this.error = 'Podaj dodatnią ilość i cenę.';
+      this.error = this.translate.instant('mkt.errPositive');
       return;
     }
     this.market.createOrder(this.form).subscribe({
@@ -93,7 +85,7 @@ export class MarketComponent implements OnInit {
         this.form.pricePerUnit = 0;
         this.load();
       },
-      error: e => { this.error = e.error || 'Błąd wystawiania oferty.'; }
+      error: e => { this.error = e.error || this.translate.instant('mkt.errCreate'); }
     });
   }
 
@@ -103,17 +95,17 @@ export class MarketComponent implements OnInit {
     const qty = this.fillQty[order.id] || order.remainingQuantity;
     this.market.fillOrder(order.id, qty).subscribe({
       next: r => { this.message = r.message ?? ''; this.fillQty[order.id] = 0; this.load(); },
-      error: e => { this.error = e.error || 'Błąd realizacji oferty.'; }
+      error: e => { this.error = e.error || this.translate.instant('mkt.errFill'); }
     });
   }
 
   cancel(order: MarketOrder): void {
-    if (!confirm('Wycofać ofertę? Depozyt zostanie zwrócony.')) return;
+    if (!confirm(this.translate.instant('mkt.confirmCancel'))) return;
     this.message = '';
     this.error = '';
     this.market.cancelOrder(order.id).subscribe({
       next: r => { this.message = r.message ?? ''; this.load(); },
-      error: e => { this.error = e.error || 'Błąd wycofywania oferty.'; }
+      error: e => { this.error = e.error || this.translate.instant('mkt.errCancel'); }
     });
   }
 
@@ -126,7 +118,15 @@ export class MarketComponent implements OnInit {
   }
 
   pactLabel(type: string): string {
-    return this.pactTypes.find(t => t.value === type)?.label ?? type;
+    const key = `mkt.pact.${type}`;
+    const t = this.translate.instant(key);
+    return t === key ? type : t;
+  }
+
+  pactDescription(type: string): string {
+    const key = `mkt.pactDesc.${type}`;
+    const t = this.translate.instant(key);
+    return t === key ? '' : t;
   }
 
   pactClass(type: string): string {
@@ -144,7 +144,7 @@ export class MarketComponent implements OnInit {
     this.pactError = '';
     this.pactService.setPact(member.kingdomId, newType).subscribe({
       next: r => { this.pactMessage = r.message ?? ''; this.loadPacts(); },
-      error: e => { this.pactError = e.error || 'Błąd zmiany paktu.'; this.loadPacts(); }
+      error: e => { this.pactError = e.error || this.translate.instant('mkt.errPact'); this.loadPacts(); }
     });
   }
 }

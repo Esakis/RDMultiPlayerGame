@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { BuildingService } from '../../core/services/building.service';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { BuildingDefinition, Building, Kingdom } from '../../core/models/kingdom.model';
@@ -26,15 +27,17 @@ export class BuildingsComponent implements OnInit {
   landAmount = 1;
 
   // Etykiety polskich kategorii (zgodne z danymi z backendu)
-  private categoryLabels: { [k: string]: string } = {
-    Gospodarcze: '🏠 Gospodarcze', Warsztaty: '🔨 Warsztaty', Cechy: '⭐ Cechy',
-    Manufaktury: '🏭 Manufaktury', Pozostale: '📦 Pozostałe', Obrona: '🛡️ Obrona',
-    Wojskowe: '⚔️ Wojskowe', Specjalne: '✨ Specjalne'
+  // Ikony kategorii (etykieta tekstowa pochodzi z tłumaczeń bld.cat.*).
+  private categoryIcons: { [k: string]: string } = {
+    Gospodarcze: '🏠', Warsztaty: '🔨', Cechy: '⭐',
+    Manufaktury: '🏭', Pozostale: '📦', Obrona: '🛡️',
+    Wojskowe: '⚔️', Specjalne: '✨'
   };
 
   constructor(
     private buildingService: BuildingService,
-    private kingdomService: KingdomService
+    private kingdomService: KingdomService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -101,7 +104,11 @@ export class BuildingsComponent implements OnInit {
   }
 
   getCategoryName(cat: string): string {
-    return this.categoryLabels[cat] || cat;
+    const icon = this.categoryIcons[cat];
+    const key = `bld.cat.${cat}`;
+    const label = this.translate.instant(key);
+    const text = label === key ? cat : label;
+    return icon ? `${icon} ${text}` : text;
   }
 
   // ===== Drzewko budynków specjalnych =====
@@ -145,8 +152,8 @@ export class BuildingsComponent implements OnInit {
   specialLockReason(def: BuildingDefinition): string {
     const inProgress = this.specialUnderConstruction;
     if (inProgress && inProgress !== def.buildingType)
-      return 'Najpierw dokończ obecnie wznoszony budynek specjalny.';
-    return def.cannotBuildReason || 'Wymaga wcześniejszego budynku';
+      return this.translate.instant('bld.finishCurrentFirst');
+    return def.cannotBuildReason || this.translate.instant('bld.requiresPrevious');
   }
 
   /** Czy między kafelkiem a poprzednim w kolumnie istnieje realna zależność (strzałka). */

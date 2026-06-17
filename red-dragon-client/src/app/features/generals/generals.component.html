@@ -1,25 +1,20 @@
 <div class="game-panel">
   <h2 class="panel-title">
-    <img src="assets/img/role/napastnik.png" alt="Generał" class="title-icon">
-    Generałowie
+    <img src="assets/img/role/napastnik.png" [alt]="'gen.general' | translate" class="title-icon">
+    {{ 'menu.generals' | translate }}
   </h2>
 
-  <div class="banner">Sztab wojskowy</div>
+  <div class="banner">{{ 'gen.staff' | translate }}</div>
 
   <app-notify-relay [message]="message"></app-notify-relay>
   <app-notify-relay [message]="error" type="error"></app-notify-relay>
-  <div class="loading" *ngIf="loading">Wczytywanie generałów...</div>
+  <div class="loading" *ngIf="loading">{{ 'gen.loading' | translate }}</div>
 
-  <p class="hint">
-    Generałowie przychodzą losowo przy wykorzystywaniu tur — im więcej ich masz, tym
-    rzadziej zjawiają się nowi (gdy nie masz żadnego, kolejny przyjdzie na pewno).
-    Każdego nowego generała musisz przyjąć lub odrzucić. Wódz zwiększa siłę ataku o swój
-    poziom w procentach, Obrońca tak samo wzmacnia obronę. Generał prowadzący atak wraca po przeliczeniu.
-  </p>
+  <p class="hint">{{ 'gen.hint' | translate }}</p>
 
   <!-- Poczekalnia: nowi generałowie czekający na decyzję -->
   <div class="pending-box" *ngIf="pending.length > 0">
-    <h3 class="pending-title">Nowy generał zgłosił się do służby</h3>
+    <h3 class="pending-title">{{ 'gen.newGeneral' | translate }}</h3>
     <div class="general-grid">
       <div class="general-card pending" *ngFor="let g of pending">
         <div class="g-name">{{ g.name }}</div>
@@ -31,13 +26,13 @@
           {{ trait(g.secondaryTrait) }}
           <button type="button" class="btn-reroll" (click)="rerollSecondary(g)"
                   [disabled]="g.secondaryRerollsLeft <= 0"
-                  [title]="g.secondaryRerollsLeft > 0 ? 'Przelosuj cechę drugorzędną' : 'Brak prób'">
-            🎲 Zmień ({{ g.secondaryRerollsLeft }})
+                  [title]="(g.secondaryRerollsLeft > 0 ? 'gen.rerollTip' : 'gen.noRerolls') | translate">
+            🎲 {{ 'gen.change' | translate }} ({{ g.secondaryRerollsLeft }})
           </button>
         </div>
         <div class="g-actions">
-          <button type="button" class="btn-accept" (click)="accept(g)">Przyjmij</button>
-          <button type="button" class="btn-dismiss" (click)="reject(g)">Odrzuć</button>
+          <button type="button" class="btn-accept" (click)="accept(g)">{{ 'gen.accept' | translate }}</button>
+          <button type="button" class="btn-dismiss" (click)="reject(g)">{{ 'gen.reject' | translate }}</button>
         </div>
       </div>
     </div>
@@ -54,22 +49,20 @@
       <div class="g-trait-secondary">{{ trait(g.secondaryTrait) }}</div>
 
       <div class="g-stats">
-        <div class="stat-label">Poziom:</div>
+        <div class="stat-label">{{ 'gen.level' | translate }}:</div>
         <div class="stat-value">{{ g.level }}</div>
-        <div class="stat-label">Doświadczenie:</div>
+        <div class="stat-label">{{ 'gen.experience' | translate }}:</div>
         <div class="stat-value">{{ g.experience | number }}</div>
-        <div class="stat-status">{{ g.status }}</div>
-        <div class="stat-label">Do awansu:</div>
+        <div class="stat-status">{{ statusLabel(g.status) }}</div>
+        <div class="stat-label">{{ 'gen.toPromotion' | translate }}:</div>
         <div class="stat-value">{{ g.experienceToNextLevel | number }}</div>
       </div>
 
       <button class="btn-dismiss" (click)="dismiss(g)" [disabled]="g.status !== 'W domu'">
-        Zwolnij
+        {{ 'gen.dismiss' | translate }}
       </button>
     </div>
   </div>
 
-  <p class="hint" *ngIf="!loading && active.length === 0 && pending.length === 0">
-    Nie masz jeszcze żadnych generałów — wykorzystaj turę, a któryś na pewno się zgłosi.
-  </p>
+  <p class="hint" *ngIf="!loading && active.length === 0 && pending.length === 0">{{ 'gen.none' | translate }}</p>
 </div>

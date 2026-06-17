@@ -1,56 +1,56 @@
 <div class="game-panel">
   <h2 class="panel-title">
-    <img src="assets/img/role/mag.png" alt="Mag" class="title-icon">
-    Magia
+    <img src="assets/img/role/mag.png" [alt]="'mag.mage' | translate" class="title-icon">
+    {{ 'menu.magic' | translate }}
   </h2>
 
   <div class="metamagic" *ngIf="myKingdom?.race === 'Dżin'">
-    <span class="mm-label">Metamagia:</span>
-    <button class="mm-btn" [class.active]="myKingdom?.metamagicMode === 'None'" (click)="setMetamagic('None')">Wyłączona</button>
-    <button class="mm-btn" [class.active]="myKingdom?.metamagicMode === 'Strengthened'" (click)="setMetamagic('Strengthened')" title="+10% siły, +25% ceny">Wzmocniona</button>
-    <button class="mm-btn" [class.active]="myKingdom?.metamagicMode === 'Accelerated'" (click)="setMetamagic('Accelerated')" title="−25% siły, −10% ceny">Przyspieszona</button>
+    <span class="mm-label">{{ 'mag.metamagic' | translate }}:</span>
+    <button class="mm-btn" [class.active]="myKingdom?.metamagicMode === 'None'" (click)="setMetamagic('None')">{{ 'mag.mmOff' | translate }}</button>
+    <button class="mm-btn" [class.active]="myKingdom?.metamagicMode === 'Strengthened'" (click)="setMetamagic('Strengthened')" [title]="'mag.mmStrongTip' | translate">{{ 'mag.mmStrong' | translate }}</button>
+    <button class="mm-btn" [class.active]="myKingdom?.metamagicMode === 'Accelerated'" (click)="setMetamagic('Accelerated')" [title]="'mag.mmFastTip' | translate">{{ 'mag.mmFast' | translate }}</button>
   </div>
 
   <div class="blood-magic" *ngIf="myKingdom?.race === 'Olbrzym'">
-    <h3>Szamanizm — ładowanie totemów (koszt: obszar × 20 many)</h3>
+    <h3>{{ 'mag.shamanism' | translate }}</h3>
     <div class="elixirs">
       <div class="elixir">
-        <span>Totem Grabieży (+5%/lvl łupów): <strong>{{ myKingdom?.totemPlunder }}/10</strong></span>
-        <button class="mm-btn" (click)="chargeTotem('Plunder')" [disabled]="(myKingdom?.totemPlunder || 0) >= 10">Naładuj</button>
+        <span>{{ 'mag.totemPlunder' | translate }}: <strong>{{ myKingdom?.totemPlunder }}/10</strong></span>
+        <button class="mm-btn" (click)="chargeTotem('Plunder')" [disabled]="(myKingdom?.totemPlunder || 0) >= 10">{{ 'mag.charge' | translate }}</button>
       </div>
       <div class="elixir">
-        <span>Totem Niszczycielstwa (+5%/lvl ziemi): <strong>{{ myKingdom?.totemDestruction }}/10</strong></span>
-        <button class="mm-btn" (click)="chargeTotem('Destruction')" [disabled]="(myKingdom?.totemDestruction || 0) >= 10">Naładuj</button>
+        <span>{{ 'mag.totemDestruction' | translate }}: <strong>{{ myKingdom?.totemDestruction }}/10</strong></span>
+        <button class="mm-btn" (click)="chargeTotem('Destruction')" [disabled]="(myKingdom?.totemDestruction || 0) >= 10">{{ 'mag.charge' | translate }}</button>
       </div>
       <div class="elixir">
-        <span>Totem Smokobójstwa (zabija %/lvl smoków): <strong>{{ myKingdom?.totemDragonSlay }}/10</strong></span>
-        <button class="mm-btn" (click)="chargeTotem('DragonSlay')" [disabled]="(myKingdom?.totemDragonSlay || 0) >= 10">Naładuj</button>
+        <span>{{ 'mag.totemDragonSlay' | translate }}: <strong>{{ myKingdom?.totemDragonSlay }}/10</strong></span>
+        <button class="mm-btn" (click)="chargeTotem('DragonSlay')" [disabled]="(myKingdom?.totemDragonSlay || 0) >= 10">{{ 'mag.charge' | translate }}</button>
       </div>
     </div>
   </div>
 
   <div class="metamagic" *ngIf="myKingdom?.race === 'Człowiek'">
-    <span class="mm-label">Nauka stosowana (szkoła):</span>
-    <button class="mm-btn" [class.active]="myKingdom?.appliedScienceSchool === 'None'" (click)="setSchool('None')">Brak</button>
-    <button class="mm-btn" [class.active]="myKingdom?.appliedScienceSchool === 'Thief'" (click)="setSchool('Thief')" title="+10% siły złodziei">Złodziejska</button>
-    <button class="mm-btn" [class.active]="myKingdom?.appliedScienceSchool === 'Magic'" (click)="setSchool('Magic')" title="+10% siły zaklęć">Magiczna</button>
-    <button class="mm-btn" [class.active]="myKingdom?.appliedScienceSchool === 'Military'" (click)="setSchool('Military')" title="+10% ataku">Wojskowa</button>
+    <span class="mm-label">{{ 'mag.appliedScience' | translate }}:</span>
+    <button class="mm-btn" [class.active]="myKingdom?.appliedScienceSchool === 'None'" (click)="setSchool('None')">{{ 'mag.schoolNone' | translate }}</button>
+    <button class="mm-btn" [class.active]="myKingdom?.appliedScienceSchool === 'Thief'" (click)="setSchool('Thief')" [title]="'mag.schoolThiefTip' | translate">{{ 'mag.schoolThief' | translate }}</button>
+    <button class="mm-btn" [class.active]="myKingdom?.appliedScienceSchool === 'Magic'" (click)="setSchool('Magic')" [title]="'mag.schoolMagicTip' | translate">{{ 'mag.schoolMagic' | translate }}</button>
+    <button class="mm-btn" [class.active]="myKingdom?.appliedScienceSchool === 'Military'" (click)="setSchool('Military')" [title]="'mag.schoolMilitaryTip' | translate">{{ 'mag.schoolMilitary' | translate }}</button>
   </div>
 
   <app-notify-relay [message]="message"></app-notify-relay>
   <app-notify-relay [message]="error" type="error"></app-notify-relay>
-  <div class="loading" *ngIf="loading">Wczytywanie zaklęć...</div>
+  <div class="loading" *ngIf="loading">{{ 'mag.loading' | translate }}</div>
 
   <ng-container *ngFor="let cat of categories">
     <div class="spell-category" *ngIf="spellsInCategory(cat).length > 0">
-      <h3>Magia: {{ cat }}</h3>
+      <h3>{{ 'menu.magic' | translate }}: {{ cat }}</h3>
       <table class="rd-table">
         <thead>
           <tr>
-            <th>Zaklęcie</th>
-            <th>Opis</th>
-            <th>Koszt many</th>
-            <th>Cel</th>
+            <th>{{ 'mag.spell' | translate }}</th>
+            <th>{{ 'mag.desc' | translate }}</th>
+            <th>{{ 'mag.manaCost' | translate }}</th>
+            <th>{{ 'mag.target' | translate }}</th>
             <th></th>
           </tr>
         </thead>
@@ -58,22 +58,22 @@
           <tr *ngFor="let s of spellsInCategory(cat)">
             <td class="spell-name">
               {{ s.displayName }}
-              <span class="limited-tag" *ngIf="s.isLimited" title="Zaklęcie limitowane — max 2 na cel za przeliczenie">⚡</span>
+              <span class="limited-tag" *ngIf="s.isLimited" [title]="'mag.limitedTip' | translate">⚡</span>
             </td>
             <td class="spell-desc">{{ s.description }}</td>
             <td class="spell-cost">{{ s.currentCost }}</td>
             <td>
               <ng-container *ngIf="s.targetType === 'Enemy'; else selfTarget">
                 <select [(ngModel)]="targetId[s.spellType]">
-                  <option [ngValue]="undefined">— wybierz cel —</option>
-                  <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }} ({{ k.land }} akrów)</option>
+                  <option [ngValue]="undefined">{{ 'mag.chooseTarget' | translate }}</option>
+                  <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }} ({{ 'bld.acres' | translate:{ n: k.land } }})</option>
                 </select>
               </ng-container>
-              <ng-template #selfTarget>własne księstwo</ng-template>
+              <ng-template #selfTarget>{{ 'mag.ownKingdom' | translate }}</ng-template>
             </td>
             <td>
               <button class="btn-cast" (click)="cast(s)" [disabled]="!s.canCast"
-                      [title]="s.cannotCastReason || ''">Rzuć</button>
+                      [title]="s.cannotCastReason || ''">{{ 'mag.cast' | translate }}</button>
             </td>
           </tr>
         </tbody>
@@ -81,7 +81,5 @@
     </div>
   </ng-container>
 
-  <p class="hint" *ngIf="!loading && spells.length === 0">
-    Twoja rasa nie włada magią (0 ksiąg magii).
-  </p>
+  <p class="hint" *ngIf="!loading && spells.length === 0">{{ 'mag.noMagic' | translate }}</p>
 </div>

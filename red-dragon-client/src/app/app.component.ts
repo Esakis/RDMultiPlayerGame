@@ -4,6 +4,7 @@ import { filter } from 'rxjs/operators';
 import { AuthService } from './core/services/auth.service';
 import { KingdomService } from './core/services/kingdom.service';
 import { TurnService } from './core/services/turn.service';
+import { LanguageService } from './core/services/language.service';
 import { Kingdom } from './core/models/kingdom.model';
 
 @Component({
@@ -19,10 +20,12 @@ export class AppComponent implements OnInit {
     private auth: AuthService,
     private kingdomService: KingdomService,
     private turnService: TurnService,
+    private language: LanguageService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.language.init();
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd)
     ).subscribe((e) => {

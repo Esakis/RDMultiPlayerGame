@@ -156,9 +156,6 @@ public class CoalitionController : ControllerBase
         if (kingdom == null)
             return NotFound("Nie znaleziono księstwa.");
 
-        if (kingdom.CoalitionId.HasValue)
-            return BadRequest("Już należysz do koalicji.");
-
         var coalition = await _context.Coalitions
             .Include(c => c.Members)
             .FirstOrDefaultAsync(c => c.Id == dto.CoalitionId);
@@ -166,8 +163,15 @@ public class CoalitionController : ControllerBase
         if (coalition == null)
             return NotFound("Nie znaleziono koalicji.");
 
+        if (kingdom.CoalitionId == coalition.Id)
+            return BadRequest("Już należysz do tej koalicji.");
+
         if (coalition.Members.Count >= coalition.MaxMembers)
             return BadRequest("Koalicja jest pełna.");
+
+        // Swobodne przeskakiwanie: jeśli należysz już do innej koalicji, najpierw ją opuść.
+        if (kingdom.CoalitionId.HasValue)
+            await DetachFromCoalitionAsync(kingdom);
 
         kingdom.CoalitionId = coalition.Id;
         kingdom.CoalitionRole = "Member";
@@ -189,6 +193,18 @@ public class CoalitionController : ControllerBase
         if (!kingdom.CoalitionId.HasValue)
             return BadRequest("Nie należysz do żadnej koalicji.");
 
+        await DetachFromCoalitionAsync(kingdom);
+        await _context.SaveChangesAsync();
+
+        return Ok(new ServiceResult { Success = true, Message = "Opuszczono koalicję." });
+    }
+
+    /// <summary>
+    /// Odłącza księstwo od jego obecnej koalicji: przekazuje przywództwo lub rozwiązuje
+    /// pustą koalicję oraz czyści powiązane głosy wyborcze. Nie wywołuje SaveChanges.
+    /// </summary>
+    private async Task DetachFromCoalitionAsync(Kingdom kingdom)
+    {
         var coalition = await _context.Coalitions
             .FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
 
@@ -218,9 +234,6 @@ public class CoalitionController : ControllerBase
 
         kingdom.CoalitionId = null;
         kingdom.CoalitionRole = null;
-        await _context.SaveChangesAsync();
-
-        return Ok(new ServiceResult { Success = true, Message = "Opuszczono koalicję." });
     }
 
     [HttpPost("appoint-main-commander")]

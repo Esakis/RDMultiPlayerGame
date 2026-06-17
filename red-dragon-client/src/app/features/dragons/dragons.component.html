@@ -1,20 +1,15 @@
 <div class="game-panel">
-  <h2 class="panel-title">Smoki</h2>
+  <h2 class="panel-title">{{ 'drg.title' | translate }}</h2>
 
-  <p class="lead">
-    Smoki to potężne bestie wzmacniające armię. Zdobywasz je zaklęciem
-    <strong>Przywołanie Smoka</strong> (zakładka Magia) — koszt many rośnie stromo z każdym
-    kolejnym smokiem — oraz biernie, wabiąc je <strong>Portalem</strong> podczas przeliczenia.
-    Limit zwiększają budynki (Smokodrap → Portal → Ministerstwo smoków) i badania o smokach.
-  </p>
+  <p class="lead" [innerHTML]="'drg.lead' | translate"></p>
 
   <div class="error-msg" *ngIf="error">{{ error }}</div>
-  <div class="loading" *ngIf="loading">Wczytywanie...</div>
+  <div class="loading" *ngIf="loading">{{ 'common.loading' | translate }}</div>
 
   <ng-container *ngIf="!loading && status as s">
     <div class="dragon-count">
       <span class="big">{{ s.dragons | number }}</span>
-      <span class="cap">/ {{ s.cap | number }} smoków</span>
+      <span class="cap">/ {{ s.cap | number }} {{ 'drg.dragons' | translate }}</span>
     </div>
     <div class="bar">
       <div class="fill" [style.width.%]="fillPct"></div>
@@ -23,23 +18,23 @@
     <table class="rd-table">
       <tbody>
         <tr>
-          <th>Źródło limitu</th>
+          <th>{{ 'drg.capSource' | translate }}</th>
           <td>{{ s.capSource }} ({{ s.cap | number }})</td>
         </tr>
         <tr>
-          <th>Bonus z badań o smokach</th>
-          <td>poziom {{ s.dracoLevel }} / 3 → +{{ s.dracoBonusPct }}%</td>
+          <th>{{ 'drg.dracoBonus' | translate }}</th>
+          <td>{{ 'drg.level' | translate }} {{ s.dracoLevel }} / 3 → +{{ s.dracoBonusPct }}%</td>
         </tr>
         <tr>
-          <th>Portal (wabienie)</th>
-          <td>{{ s.hasPortal ? 'aktywne — szansa na smoka co przeliczenie' : 'brak — wybuduj Portal' }}</td>
+          <th>{{ 'drg.portal' | translate }}</th>
+          <td>{{ (s.hasPortal ? 'drg.portalActive' : 'drg.portalNone') | translate }}</td>
         </tr>
         <tr>
-          <th>Mnożnik siły armii</th>
+          <th>{{ 'drg.powerMultiplier' | translate }}</th>
           <td class="bonus">×{{ s.powerMultiplier }}</td>
         </tr>
         <tr>
-          <th>Dodatkowy atak smoków</th>
+          <th>{{ 'drg.flatAttack' | translate }}</th>
           <td class="bonus">+{{ s.flatAttackBonus | number }}</td>
         </tr>
       </tbody>
@@ -48,7 +43,7 @@
     <div class="actions">
       <button class="btn-cast" (click)="goToMagic()" [disabled]="!s.canSummon"
               [title]="s.cannotSummonReason || ''">
-        Przywołaj smoka (Magia)
+        {{ 'drg.summon' | translate }}
       </button>
       <span class="hint" *ngIf="s.cannotSummonReason">{{ s.cannotSummonReason }}</span>
     </div>

@@ -1,66 +1,64 @@
 <div class="game-panel">
-  <h2 class="panel-title">Rynek surowców</h2>
+  <h2 class="panel-title">{{ 'mkt.title' | translate }}</h2>
 
   <app-notify-relay [message]="message"></app-notify-relay>
   <app-notify-relay [message]="error" type="error"></app-notify-relay>
-  <div class="loading" *ngIf="loading">Wczytywanie rynku...</div>
+  <div class="loading" *ngIf="loading">{{ 'mkt.loading' | translate }}</div>
 
   <p class="hint no-access" *ngIf="!loading && !hasAccess">{{ noAccessReason }}</p>
 
   <ng-container *ngIf="!loading && hasAccess">
     <!-- Wystawienie nowej oferty -->
     <div class="order-form">
-      <h3>Wystaw ofertę</h3>
+      <h3>{{ 'mkt.placeOrder' | translate }}</h3>
       <div class="form-row">
         <label>
-          Typ
+          {{ 'mkt.type' | translate }}
           <select [(ngModel)]="form.orderType">
-            <option value="Sell">Sprzedaż</option>
-            <option value="Buy">Kupno</option>
+            <option value="Sell">{{ 'mkt.sell' | translate }}</option>
+            <option value="Buy">{{ 'mkt.buy' | translate }}</option>
           </select>
         </label>
         <label>
-          Surowiec
+          {{ 'mkt.resource' | translate }}
           <select [(ngModel)]="form.resource">
             <option *ngFor="let r of resources" [value]="r.value">{{ r.label }}</option>
           </select>
         </label>
         <label>
-          Ilość
+          {{ 'mkt.quantity' | translate }}
           <input type="number" min="1" [(ngModel)]="form.quantity">
         </label>
         <label>
-          Cena / szt. (złoto)
+          {{ 'mkt.pricePerUnit' | translate }}
           <input type="number" min="1" [(ngModel)]="form.pricePerUnit">
         </label>
-        <button class="btn-cast" (click)="createOrder()">Wystaw</button>
+        <button class="btn-cast" (click)="createOrder()">{{ 'mkt.place' | translate }}</button>
       </div>
       <p class="hint" *ngIf="form.quantity > 0 && form.pricePerUnit > 0">
-        {{ form.orderType === 'Sell'
-            ? 'Zdeponujesz ' + form.quantity + ' szt. surowca; otrzymasz '
-            : 'Zdeponujesz ' }}
-        {{ (form.quantity * form.pricePerUnit) | number }} złota{{ form.orderType === 'Sell' ? ' po sprzedaży.' : ' na poczet zakupu.' }}
+        {{ (form.orderType === 'Sell' ? 'mkt.sellSummary' : 'mkt.buySummary')
+            | translate:{ qty: form.quantity, gold: (form.quantity * form.pricePerUnit | number) } }}
       </p>
     </div>
 
     <!-- Oferty innych graczy -->
-    <h3>Oferty na rynku</h3>
+    <h3>{{ 'mkt.marketOrders' | translate }}</h3>
     <table class="rd-table" *ngIf="orders.length > 0; else noOrders">
       <thead>
         <tr>
-          <th>Typ</th>
-          <th>Surowiec</th>
-          <th>Dostępne</th>
-          <th>Cena / szt.</th>
-          <th>Wartość</th>
-          <th>Księstwo</th>
-          <th>Ilość</th>
+          <th>{{ 'mkt.type' | translate }}</th>
+          <th>{{ 'mkt.resource' | translate }}</th>
+          <th>{{ 'mkt.availableCol' | translate }}</th>
+          <th>{{ 'mkt.pricePerUnitShort' | translate }}</th>
+          <th>{{ 'mkt.value' | translate }}</th>
+          <th>{{ 'rank.duchy' | translate }}</th>
+          <th>{{ 'mkt.quantity' | translate }}</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let o of orders">
-          <td>{{ o.orderType === 'Sell' ? 'Sprzedaje' : 'Kupuje' }}</td>
+          <td>{{ (o.orderType === 'Sell' ? 'mkt.selling' : 'mkt.buying') | translate }}</td>
           <td>{{ resourceLabel(o.resource) }}</td>
           <td class="num">{{ o.remainingQuantity | number }}</td>
           <td class="num gold">{{ o.pricePerUnit | number }}</td>
@@ -72,54 +70,54 @@
           </td>
           <td>
             <button class="btn-cast" (click)="fill(o)">
-              {{ o.orderType === 'Sell' ? 'Kup' : 'Sprzedaj' }}
+              {{ (o.orderType === 'Sell' ? 'mkt.buy' : 'mkt.sell') | translate }}
             </button>
           </td>
         </tr>
       </tbody>
     </table>
-    <ng-template #noOrders><p class="hint">Brak ofert innych graczy.</p></ng-template>
+    <ng-template #noOrders><p class="hint">{{ 'mkt.noOrders' | translate }}</p></ng-template>
 
     <!-- Moje oferty -->
-    <h3>Moje oferty</h3>
+    <h3>{{ 'mkt.myOrders' | translate }}</h3>
     <table class="rd-table" *ngIf="myOrders.length > 0; else noMine">
       <thead>
         <tr>
-          <th>Typ</th>
-          <th>Surowiec</th>
-          <th>Pozostało / Wystawiono</th>
-          <th>Cena / szt.</th>
-          <th>Depozyt</th>
+          <th>{{ 'mkt.type' | translate }}</th>
+          <th>{{ 'mkt.resource' | translate }}</th>
+          <th>{{ 'mkt.remainingOfPosted' | translate }}</th>
+          <th>{{ 'mkt.pricePerUnitShort' | translate }}</th>
+          <th>{{ 'mkt.deposit' | translate }}</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let o of myOrders">
-          <td>{{ o.orderType === 'Sell' ? 'Sprzedaż' : 'Kupno' }}</td>
+          <td>{{ (o.orderType === 'Sell' ? 'mkt.sell' : 'mkt.buy') | translate }}</td>
           <td>{{ resourceLabel(o.resource) }}</td>
           <td class="num">{{ o.remainingQuantity | number }} / {{ o.quantity | number }}</td>
           <td class="num gold">{{ o.pricePerUnit | number }}</td>
           <td class="num gold">
             {{ (o.orderType === 'Sell' ? o.remainingQuantity : o.totalPrice) | number }}
-            {{ o.orderType === 'Sell' ? 'szt.' : 'zł' }}
+            {{ (o.orderType === 'Sell' ? 'mkt.unitsShort' : 'mkt.goldShort') | translate }}
           </td>
-          <td><button class="btn-cancel" (click)="cancel(o)">Wycofaj</button></td>
+          <td><button class="btn-cancel" (click)="cancel(o)">{{ 'mkt.withdraw' | translate }}</button></td>
         </tr>
       </tbody>
     </table>
-    <ng-template #noMine><p class="hint">Nie masz wystawionych ofert.</p></ng-template>
+    <ng-template #noMine><p class="hint">{{ 'mkt.noMine' | translate }}</p></ng-template>
 
-    <p class="hint">Podatek rynkowy: 15% (badania Rachunkowość obniżają do 12/8/5%) — płaci go odbiorca złota.</p>
+    <p class="hint">{{ 'mkt.taxNote' | translate }}</p>
 
     <!-- Historia transakcji -->
-    <h3>Historia transakcji</h3>
+    <h3>{{ 'mkt.history' | translate }}</h3>
     <table class="rd-table" *ngIf="history.length > 0; else noHistory">
       <thead>
-        <tr><th>Typ</th><th>Surowiec</th><th>Ilość</th><th>Cena/szt.</th><th>Wartość</th><th>Podatek</th><th>Kontrahent</th></tr>
+        <tr><th>{{ 'mkt.type' | translate }}</th><th>{{ 'mkt.resource' | translate }}</th><th>{{ 'mkt.quantity' | translate }}</th><th>{{ 'mkt.pricePerUnitShort' | translate }}</th><th>{{ 'mkt.value' | translate }}</th><th>{{ 'mkt.tax' | translate }}</th><th>{{ 'mkt.counterparty' | translate }}</th></tr>
       </thead>
       <tbody>
         <tr *ngFor="let t of history">
-          <td>{{ t.iAmBuyer ? 'Kupno' : 'Sprzedaż' }}</td>
+          <td>{{ (t.iAmBuyer ? 'mkt.buy' : 'mkt.sell') | translate }}</td>
           <td>{{ resourceLabel(t.resource) }}</td>
           <td class="num">{{ t.quantity | number }}</td>
           <td class="num gold">{{ t.pricePerUnit | number }}</td>
@@ -129,42 +127,34 @@
         </tr>
       </tbody>
     </table>
-    <ng-template #noHistory><p class="hint">Brak transakcji.</p></ng-template>
+    <ng-template #noHistory><p class="hint">{{ 'mkt.noHistory' | translate }}</p></ng-template>
   </ng-container>
 </div>
 
 <!-- Pakty sojusznicze -->
 <div class="game-panel pact-panel" *ngIf="pacts">
-  <h2 class="panel-title">Pakty sojusznicze</h2>
+  <h2 class="panel-title">{{ 'mkt.pactsTitle' | translate }}</h2>
 
   <div class="info-msg" *ngIf="pactMessage">{{ pactMessage }}</div>
   <div class="error-msg" *ngIf="pactError">{{ pactError }}</div>
 
-  <p class="hint no-access" *ngIf="!pacts.inCoalition">
-    Pakty zawierasz wyłącznie z członkami swojej koalicji. Dołącz do koalicji, aby paktować.
-  </p>
+  <p class="hint no-access" *ngIf="!pacts.inCoalition">{{ 'mkt.pactsNoCoalition' | translate }}</p>
 
   <ng-container *ngIf="pacts.inCoalition">
-    <p class="hint">
-      Z każdym sojusznikiem masz domyślnie <strong>pakt handlowy</strong>. Możesz zmienić go na
-      pakt obronny (wojskowy, magiczny lub złodziejski) — wtedy ziemia tego sojusznika przestaje
-      liczyć się do handlu, ale jego jednostki pomagają w obronie Twojego księstwa.
-    </p>
+    <p class="hint" [innerHTML]="'mkt.pactsIntro' | translate"></p>
     <p class="hint slots">
-      Pakty obronne: <strong>{{ pacts.usedSlots }} / {{ pacts.limit }}</strong>.
-      {{ pacts.hasAmbasada
-          ? 'Ambasada zwiększyła Twój limit o 1.'
-          : 'Zbuduj budynek specjalny Ambasada, aby zwiększyć limit o 1.' }}
+      {{ 'mkt.defensivePacts' | translate }}: <strong>{{ pacts.usedSlots }} / {{ pacts.limit }}</strong>.
+      {{ (pacts.hasAmbasada ? 'mkt.ambasadaHas' : 'mkt.ambasadaBuild') | translate }}
     </p>
 
     <table class="rd-table" *ngIf="pacts.members.length > 0; else noMembers">
       <thead>
         <tr>
-          <th>Księstwo</th>
-          <th>Rasa</th>
-          <th>Ziemia</th>
-          <th>Aktualny pakt</th>
-          <th>Zmień typ</th>
+          <th>{{ 'rank.duchy' | translate }}</th>
+          <th>{{ 'pol.member.race' | translate }}</th>
+          <th>{{ 'rank.land' | translate }}</th>
+          <th>{{ 'mkt.currentPact' | translate }}</th>
+          <th>{{ 'mkt.changeType' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -184,12 +174,12 @@
         </tr>
       </tbody>
     </table>
-    <ng-template #noMembers><p class="hint">Brak innych księstw w Twojej koalicji.</p></ng-template>
+    <ng-template #noMembers><p class="hint">{{ 'mkt.noMembers' | translate }}</p></ng-template>
 
     <ul class="pact-legend">
       <li *ngFor="let t of pactTypes">
         <span class="pact-badge" [ngClass]="pactClass(t.value)">{{ t.label }}</span>
-        <span>{{ pactDescriptions[t.value] }}</span>
+        <span>{{ pactDescription(t.value) }}</span>
       </li>
     </ul>
   </ng-container>

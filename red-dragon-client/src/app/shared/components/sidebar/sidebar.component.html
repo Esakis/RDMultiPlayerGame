@@ -4,13 +4,13 @@
        [routerLink]="item.route"
        routerLinkActive="active"
        class="menu-btn">
-      {{ item.label }}
+      {{ item.label | translate }}
     </a>
-    <button type="button" class="menu-btn logout-btn" (click)="logout()">Wyloguj się</button>
+    <button type="button" class="menu-btn logout-btn" (click)="logout()">{{ 'menu.logout' | translate }}</button>
   </div>
 
   <div class="turn-button-container">
-    <button type="button" class="turn-btn" (click)="onTurnClick()" title="Użyj tury">
+    <button type="button" class="turn-btn" (click)="onTurnClick()" [title]="'menu.useTurn' | translate">
       <div class="turn-circle-outer">
         <div class="turn-circle-inner"></div>
       </div>

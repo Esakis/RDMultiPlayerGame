@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth.service';
 
 export interface RaceInfo {
@@ -53,32 +54,41 @@ export class RegisterComponent {
       desc: 'Płodna rasa z polskiego serwera RD — +4 mieszkańców na akr i najpotężniejsze machiny (8 ataku), ale drogie budowanie.' }
   ];
 
-  statLabels = ['Łatwość', 'Magia', 'Złodzieje', 'Obrona', 'Ekonomia', 'Atak'];
+  statLabels = ['reg.stat.ease', 'reg.stat.magic', 'reg.stat.thieves', 'reg.stat.defense', 'reg.stat.economy', 'reg.stat.attack'];
 
   get selectedRace(): RaceInfo {
     return this.races.find(r => r.name === this.race) ?? this.races[0];
   }
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router, private translate: TranslateService) {}
+
+  /** Przetłumaczony opis rasy (fallback do polskiego opisu z danych). */
+  raceDesc(name: string): string {
+    const key = `reg.raceDesc.${name}`;
+    const t = this.translate.instant(key);
+    if (t !== key) return t;
+    return this.races.find(r => r.name === name)?.desc ?? '';
+  }
 
   get passwordStrength(): string {
     if (!this.password) return '';
-    if (this.password.length < 6) return 'Słabe';
-    if (this.password.length < 10) return 'Średnie';
-    return 'Silne';
+    if (this.password.length < 6) return this.translate.instant('reg.pwWeak');
+    if (this.password.length < 10) return this.translate.instant('reg.pwMedium');
+    return this.translate.instant('reg.pwStrong');
   }
 
   get passwordStrengthClass(): string {
-    const s = this.passwordStrength;
-    if (s === 'Słabe') return 'weak';
-    if (s === 'Średnie') return 'medium';
-    if (s === 'Silne') return 'strong';
-    return '';
+    if (!this.password) return '';
+    if (this.password.length < 6) return 'weak';
+    if (this.password.length < 10) return 'medium';
+    return 'strong';
   }
 
   get passwordMatch(): string {
     if (!this.passwordConfirm) return '';
-    return this.passwordConfirm === this.password ? 'OK' : 'Hasła nie pasują';
+    return this.passwordConfirm === this.password
+      ? this.translate.instant('reg.pwOk')
+      : this.translate.instant('reg.pwMismatch');
   }
 
   get passwordMatchClass(): string {
@@ -88,19 +98,19 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (!this.acceptRules) {
-      this.error = 'Musisz zaakceptować regulamin!';
+      this.error = this.translate.instant('reg.errAcceptRules');
       return;
     }
     if (!this.email || !this.username || !this.password || !this.kingdomName) {
-      this.error = 'Wypełnij wszystkie pola.';
+      this.error = this.translate.instant('reg.errFillAll');
       return;
     }
     if (this.password.length < 6) {
-      this.error = 'Hasło musi mieć minimum 6 znaków!';
+      this.error = this.translate.instant('reg.errPwMin');
       return;
     }
     if (this.password !== this.passwordConfirm) {
-      this.error = 'Hasła nie są identyczne!';
+      this.error = this.translate.instant('reg.errPwMismatch');
       return;
     }
     this.loading = true;
@@ -110,7 +120,7 @@ export class RegisterComponent {
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        this.error = err.error || 'Błąd rejestracji.';
+        this.error = err.error || this.translate.instant('reg.errGeneric');
         this.loading = false;
       }
     });

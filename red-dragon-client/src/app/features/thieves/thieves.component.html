@@ -1,21 +1,18 @@
 <div class="game-panel">
   <h2 class="panel-title">
-    <img src="assets/img/role/zlodziej.png" alt="Złodziej" class="title-icon">
-    Złodzieje
+    <img src="assets/img/role/zlodziej.png" [alt]="'thf.thief' | translate" class="title-icon">
+    {{ 'menu.thieves' | translate }}
   </h2>
 
   <app-notify-relay [message]="message"></app-notify-relay>
   <app-notify-relay [message]="error" type="error"></app-notify-relay>
-  <div class="loading" *ngIf="loading">Wczytywanie akcji...</div>
+  <div class="loading" *ngIf="loading">{{ 'thf.loading' | translate }}</div>
 
-  <p class="hint">
-    Akcje złodziejskie wykonują się podczas przeliczenia (5:00). Szansa powodzenia
-    zależy od stosunku Twoich złodziei do złodziei broniących cel.
-  </p>
+  <p class="hint">{{ 'thf.hint' | translate }}</p>
 
   <table class="rd-table">
     <thead>
-      <tr><th></th><th>Akcja</th><th>Opis</th><th>Min. złodziei</th></tr>
+      <tr><th></th><th>{{ 'thf.action' | translate }}</th><th>{{ 'mag.desc' | translate }}</th><th>{{ 'thf.minThieves' | translate }}</th></tr>
     </thead>
     <tbody>
       <tr *ngFor="let a of actions" [class.selected]="a === selectedAction" (click)="select(a)">
@@ -29,18 +26,18 @@
 
   <div class="send-form">
     <label>
-      Cel:
+      {{ 'mag.target' | translate }}:
       <select [(ngModel)]="targetId">
-        <option [ngValue]="undefined">— wybierz księstwo —</option>
-        <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }} ({{ k.land }} akrów)</option>
+        <option [ngValue]="undefined">{{ 'thf.chooseKingdom' | translate }}</option>
+        <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }} ({{ 'bld.acres' | translate:{ n: k.land } }})</option>
       </select>
     </label>
     <label>
-      Liczba złodziei:
+      {{ 'thf.thievesCount' | translate }}:
       <input type="number" [(ngModel)]="thieves" min="1">
     </label>
     <button class="btn-send" (click)="send()" [disabled]="!selectedAction || !targetId">
-      Wyślij złodziei
+      {{ 'thf.sendThieves' | translate }}
     </button>
   </div>
 </div>

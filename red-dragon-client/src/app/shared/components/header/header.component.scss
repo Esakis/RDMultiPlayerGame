@@ -6,6 +6,30 @@
   z-index: 100;
 }
 
+.lang-switch {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 110;
+  display: flex;
+  gap: 6px;
+
+  .flag-btn {
+    padding: 2px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid #5a2020;
+    border-radius: 3px;
+    cursor: pointer;
+    line-height: 0;
+    opacity: 0.55;
+    transition: opacity 0.15s, border-color 0.15s;
+
+    svg { display: block; border: 1px solid rgba(0, 0, 0, 0.4); }
+    &:hover { opacity: 0.9; }
+    &.active { opacity: 1; border-color: #ffd700; box-shadow: 0 0 4px rgba(255, 215, 0, 0.5); }
+  }
+}
+
 .header-banner {
   position: relative;
   background: linear-gradient(180deg, #4a1010 0%, #2a0808 100%);

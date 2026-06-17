@@ -6,15 +6,15 @@
     <div class="login-box">
       <form (ngSubmit)="onSubmit()">
         <div class="login-field">
-          <label>Login:</label>
+          <label>{{ 'auth.login' | translate }}:</label>
           <input type="email" [(ngModel)]="email" name="email">
         </div>
         <div class="login-field">
-          <label>Hasło:</label>
+          <label>{{ 'auth.password' | translate }}:</label>
           <input type="password" [(ngModel)]="password" name="password">
         </div>
         <button type="submit" class="btn-login" [disabled]="loading">
-          {{ loading ? 'Logowanie...' : 'Zaloguj się' }}
+          {{ (loading ? 'auth.loggingIn' : 'auth.loginBtn') | translate }}
         </button>
       </form>
       <div class="error-msg" *ngIf="error">{{ error }}</div>
@@ -22,30 +22,30 @@
   </div>
 
   <div class="top-menu">
-    <a href="javascript:void(0)">Gra</a>
-    <a href="javascript:void(0)">Społeczność</a>
-    <a href="javascript:void(0)">Pomoc</a>
-    <a href="javascript:void(0)">Twoje Konto</a>
+    <a href="javascript:void(0)">{{ 'auth.menuGame' | translate }}</a>
+    <a href="javascript:void(0)">{{ 'auth.menuCommunity' | translate }}</a>
+    <a href="javascript:void(0)">{{ 'auth.menuHelp' | translate }}</a>
+    <a href="javascript:void(0)">{{ 'auth.menuAccount' | translate }}</a>
   </div>
 
   <div class="content-wrapper">
     <div class="left-sidebar">
       <div class="sidebar-section">
-        <h3>Statystyki:</h3>
-        <p>Dzień ery 1 / ~105</p>
-        <h4>Koalicje:</h4>
-        <p>Aktywnych: 0<br>Wszystkich: 0</p>
+        <h3>{{ 'auth.statsTitle' | translate }}:</h3>
+        <p>{{ 'auth.eraDay' | translate }}</p>
+        <h4>{{ 'menu.politics' | translate }}:</h4>
+        <p>{{ 'auth.active' | translate }}: 0<br>{{ 'auth.total' | translate }}: 0</p>
       </div>
     </div>
 
     <div class="main-content">
-      <h2>RedDragon jako gra oferuje:</h2>
+      <h2>{{ 'auth.offers' | translate }}</h2>
       <ul class="features">
-        <li><strong>Bezpłatność i uczciwość</strong> - gra jest w pełni darmowa.</li>
-        <li><strong>Rozbudowaną mechanikę</strong> - budynki, wojsko, magia, złodzieje.</li>
-        <li><strong>Koalicje</strong> - graj z innymi graczami, buduj sojusze.</li>
-        <li><strong>System turowy</strong> - planuj strategicznie swoje ruchy.</li>
-        <li><strong>Codzienne przeliczenie</strong> - codziennie o 5:00 rano.</li>
+        <li><strong>{{ 'auth.feat1Title' | translate }}</strong> - {{ 'auth.feat1Desc' | translate }}</li>
+        <li><strong>{{ 'auth.feat2Title' | translate }}</strong> - {{ 'auth.feat2Desc' | translate }}</li>
+        <li><strong>{{ 'auth.feat3Title' | translate }}</strong> - {{ 'auth.feat3Desc' | translate }}</li>
+        <li><strong>{{ 'auth.feat4Title' | translate }}</strong> - {{ 'auth.feat4Desc' | translate }}</li>
+        <li><strong>{{ 'auth.feat5Title' | translate }}</strong> - {{ 'auth.feat5Desc' | translate }}</li>
       </ul>
 
       <div class="about-gallery">
@@ -56,19 +56,19 @@
       </div>
 
       <div class="register-cta">
-        <h3>Dołącz i graj!</h3>
-        <p>Rejestracja to pół minuty, a potem rządzisz własnym księstwem!</p>
-        <a routerLink="/register" class="btn-register-cta">Załóż księstwo</a>
+        <h3>{{ 'auth.ctaTitle' | translate }}</h3>
+        <p>{{ 'auth.ctaDesc' | translate }}</p>
+        <a routerLink="/register" class="btn-register-cta">{{ 'auth.ctaBtn' | translate }}</a>
       </div>
     </div>
 
     <div class="right-sidebar">
-      <h3>Informacje:</h3>
-      <p>Red Dragon to turowa gra strategiczna MMO osadzona w świecie fantasy.</p>
+      <h3>{{ 'auth.infoTitle' | translate }}:</h3>
+      <p>{{ 'auth.infoDesc' | translate }}</p>
     </div>
   </div>
 
   <div class="page-footer">
-    <p>Red Dragon &copy; 2024 - Strategiczna gra turowa MMO</p>
+    <p>{{ 'auth.footer' | translate }}</p>
   </div>
 </div>

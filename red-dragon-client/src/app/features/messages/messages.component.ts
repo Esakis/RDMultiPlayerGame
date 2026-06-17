@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from '../../core/services/message.service';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { GameMessage, KingdomSummary } from '../../core/models/kingdom.model';
@@ -19,7 +20,8 @@ export class MessagesComponent implements OnInit {
   newSubject = '';
   newBody = '';
 
-  constructor(private messageService: MessageService, private kingdomService: KingdomService) {}
+  constructor(private messageService: MessageService, private kingdomService: KingdomService,
+              private translate: TranslateService) {}
 
   ngOnInit(): void { this.load(); }
 
@@ -30,15 +32,15 @@ export class MessagesComponent implements OnInit {
   }
 
   sendMessage(): void {
-    if (!this.newTo || !this.newBody) { this.message = 'Wypełnij pola.'; return; }
+    if (!this.newTo || !this.newBody) { this.message = this.translate.instant('msg.fillFields'); return; }
     this.messageService.send(this.newTo, this.newSubject, this.newBody).subscribe({
       next: (res) => {
-        this.message = res.message || 'Wysłano!';
+        this.message = res.message || this.translate.instant('msg.sentOk');
         this.newSubject = ''; this.newBody = ''; this.newTo = 0;
         this.tab = 'sent'; this.load();
         setTimeout(() => this.message = '', 4000);
       },
-      error: (err) => { this.message = err.error?.message || 'Błąd'; setTimeout(() => this.message = '', 4000); }
+      error: (err) => { this.message = err.error?.message || this.translate.instant('common.error'); setTimeout(() => this.message = '', 4000); }
     });
   }
 

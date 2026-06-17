@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { Kingdom } from '../../core/models/kingdom.model';
 
@@ -13,7 +14,7 @@ export class EconomyComponent implements OnInit {
   message = '';
   assignAmounts: { [key: string]: number } = {};
 
-  constructor(private kingdomService: KingdomService) {}
+  constructor(private kingdomService: KingdomService, private translate: TranslateService) {}
 
   ngOnInit(): void { this.load(); }
 
@@ -36,18 +37,9 @@ export class EconomyComponent implements OnInit {
   }
 
   getProductionInfo(profType: string): string {
-    const map: {[k:string]:string} = {
-      'Bezrobotni': '-',
-      'Alchemicy': '+10 złota/turę',
-      'Chłopi': '+5 jedzenia/turę',
-      'Druidzi': '+1 many/turę',
-      'Kamieniarze': '+5 kamienia/turę',
-      'Murarze': 'kamień → budulec',
-      'Płatnerze': '+3 broni/turę',
-      'Kupcy': '+1000 złota/turę',
-      'Naukowcy': '+edukacja'
-    };
-    return map[profType] || '-';
+    const key = `eco.prod.${profType}`;
+    const t = this.translate.instant(key);
+    return t === key ? '-' : t;
   }
 
   private clearMsg(): void { setTimeout(() => this.message = '', 4000); }
