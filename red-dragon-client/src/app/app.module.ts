@@ -34,6 +34,7 @@ import { MarketComponent } from './features/market/market.component';
 import { LabyrinthComponent } from './features/labyrinth/labyrinth.component';
 import { DragonsComponent } from './features/dragons/dragons.component';
 import { AttackComponent } from './features/attack/attack.component';
+import { OptionsComponent } from './features/options/options.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { AttackComponent } from './features/attack/attack.component';
     MarketComponent,
     LabyrinthComponent,
     DragonsComponent,
-    AttackComponent
+    AttackComponent,
+    OptionsComponent
   ],
   imports: [
     BrowserModule,

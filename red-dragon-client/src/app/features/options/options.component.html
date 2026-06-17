@@ -1,0 +1,19 @@
+<div class="page-content">
+  <h2>Opcje</h2>
+  <app-notify-relay [message]="message"></app-notify-relay>
+
+  <div *ngIf="!loading; else loadingTpl">
+    <div class="card">
+      <h3>Koalicja</h3>
+      <ng-container *ngIf="kingdom?.coalitionId; else noCoalition">
+        <p class="info">Należysz do koalicji: <strong>{{ kingdom?.coalitionName }}</strong></p>
+        <button class="btn-danger" (click)="leaveCoalition()">Opuść koalicję</button>
+      </ng-container>
+      <ng-template #noCoalition>
+        <p class="info">Nie należysz do żadnej koalicji.</p>
+      </ng-template>
+    </div>
+  </div>
+
+  <ng-template #loadingTpl><div class="loading">Ładowanie...</div></ng-template>
+</div>

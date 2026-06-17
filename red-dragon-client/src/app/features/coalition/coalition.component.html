@@ -2,197 +2,254 @@
   <h2>Polityka</h2>
   <app-notify-relay [message]="message"></app-notify-relay>
 
+  <!-- ===== Zakładki sekcji Polityka ===== -->
+  <div class="build-tabs">
+    <button class="build-tab" [class.active]="activeTab === 'twoja'"
+            (click)="setTab('twoja')">Twoja koalicja</button>
+    <button class="build-tab" [class.active]="activeTab === 'wojny'"
+            (click)="setTab('wojny')">Wojny</button>
+    <button class="build-tab" [class.active]="activeTab === 'pps'"
+            (click)="setTab('pps')">Pałac Sądu Ostatecznego</button>
+    <button class="build-tab" [class.active]="activeTab === 'koalicje'"
+            (click)="setTab('koalicje')">Koalicje</button>
+  </div>
+
   <div *ngIf="!loading; else loadingTpl">
-    <!-- Twoja koalicja -->
-    <div class="card" *ngIf="kingdom?.coalitionId">
-      <h3>Twoja Koalicja: {{ kingdom?.coalitionName }}</h3>
-      <p>Rola: <strong>{{ kingdom?.coalitionRole || 'Member' }}</strong></p>
-      
 
-      <!-- Zarządzanie Głównodowodzącym (dla Imperatora) -->
-      <div class="commander-management" *ngIf="kingdom?.coalitionRole === 'Imperator'">
-        <h4>Zarządzanie Głównodowodzącym</h4>
-        <div class="form-row">
-          <label>Mianuj Głównodowodzącego:</label>
-          <select [(ngModel)]="selectedCommanderId">
-            <option [value]="null">Wybierz księstwo...</option>
-            <option *ngFor="let member of coalitionMembers"
-                    [value]="member.id"
-                    [disabled]="member.id === kingdom?.id || member.coalitionRole === 'MainCommander'">
-              {{ member.name }} {{ member.coalitionRole === 'MainCommander' ? '(Głównodowodzący)' : '' }}
-            </option>
-          </select>
-          <button class="btn-action" (click)="appointMainCommander()"
-                  [disabled]="!selectedCommanderId">Mianuj</button>
-        </div>
-        <div *ngIf="currentMainCommander" class="current-commander">
-          <p>Obecny Głównodowodzący: <strong>{{ currentMainCommander.name }}</strong></p>
-          <button class="btn-danger" (click)="removeMainCommander()">Usuń z funkcji</button>
-        </div>
-      </div>
+    <!-- ===== Zakładka: Twoja koalicja ===== -->
+    <div *ngIf="activeTab === 'twoja'">
+      <div class="card" *ngIf="kingdom?.coalitionId">
+        <h3>Twoja Koalicja: {{ kingdom?.coalitionName }}</h3>
+        <p>Rola: <strong>{{ kingdom?.coalitionRole || 'Member' }}</strong></p>
 
-      <!-- Kasa koalicji -->
-      <div class="treasury-section" *ngIf="treasury?.hasCoalition as _t">
-        <h4>Kasa koalicji</h4>
-        <div class="treasury-stats">
-          <span>Złoto: <strong class="gold">{{ treasury?.treasuryGold | number }}</strong></span>
-          <span>Budulec: <strong>{{ treasury?.treasuryBudulec | number }}</strong></span>
-        </div>
-        <div class="form-row">
-          <label>Wpłać:</label>
-          <input type="number" min="0" [(ngModel)]="depGold" placeholder="złoto">
-          <input type="number" min="0" [(ngModel)]="depBudulec" placeholder="budulec">
-          <button class="btn-action" (click)="deposit()">Wpłać do kasy</button>
-        </div>
-        <div class="form-row" *ngIf="treasury?.isLeader">
-          <label>Wypłać:</label>
-          <input type="number" min="0" [(ngModel)]="wdrGold" placeholder="złoto">
-          <input type="number" min="0" [(ngModel)]="wdrBudulec" placeholder="budulec">
-          <button class="btn-action" (click)="withdraw()">Wypłać (Imperator)</button>
-        </div>
-        <div class="form-row" *ngIf="treasury?.isLeader && treasury?.isBuildingPps">
-          <label>Na PPS z kasy:</label>
-          <input type="number" min="0" [(ngModel)]="fundPpsAmount" placeholder="budulec">
-          <button class="btn-action" (click)="fundPps()">Finansuj PPS</button>
-        </div>
-      </div>
-
-      <!-- Wybory Imperatora -->
-      <div class="election-section" *ngIf="election?.hasCoalition">
-        <h4>Wybory Imperatora</h4>
-        <p class="election-current">
-          Obecny Imperator: <strong>{{ election?.currentImperatorName || '—' }}</strong>
-          <span class="muted"> · członków: {{ election?.totalMembers }}</span>
-        </p>
-        <table class="vote-table">
-          <thead><tr><th>Kandydat</th><th>Głosy</th><th></th></tr></thead>
-          <tbody>
-            <tr *ngFor="let c of election?.candidates" [class.imperator]="c.isImperator">
-              <td>{{ c.name }} <span class="imp-tag" *ngIf="c.isImperator">[Imperator]</span></td>
-              <td class="votes">{{ c.votes }}</td>
-              <td>
-                <button class="btn-sm" (click)="vote(c.kingdomId)" [disabled]="c.isMyVote">
-                  {{ c.isMyVote ? 'Twój głos' : 'Głosuj' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="hint">Kandydat z największą liczbą głosów zostaje Imperatorem. Remis — władza bez zmian.</p>
-      </div>
-
-      <!-- Wojny -->
-      <div class="wars-section">
-        <h4>Wojny</h4>
-        <div class="war-list" *ngIf="wars.length > 0; else noWars">
-          <div class="war-row" *ngFor="let w of wars">
-            <span class="war-vs">{{ w.declaringName }} ⚔ {{ w.targetName }}</span>
-            <span class="war-tag" *ngIf="w.opponentName">
-              {{ w.isMyDeclaration ? 'wypowiedziana przez nas' : 'przeciw nam' }}
-            </span>
-            <button class="btn-sm" *ngIf="kingdom?.coalitionRole === 'Imperator' && w.opponentCoalitionId"
-                    (click)="endWar(w)">Zawrzyj pokój</button>
+        <!-- Zarządzanie Głównodowodzącym (dla Imperatora) -->
+        <div class="commander-management" *ngIf="kingdom?.coalitionRole === 'Imperator'">
+          <h4>Zarządzanie Głównodowodzącym</h4>
+          <div class="form-row">
+            <label>Mianuj Głównodowodzącego:</label>
+            <select [(ngModel)]="selectedCommanderId">
+              <option [value]="null">Wybierz księstwo...</option>
+              <option *ngFor="let member of coalitionMembers"
+                      [value]="member.id"
+                      [disabled]="member.id === kingdom?.id || member.coalitionRole === 'MainCommander'">
+                {{ member.name }} {{ member.coalitionRole === 'MainCommander' ? '(Głównodowodzący)' : '' }}
+              </option>
+            </select>
+            <button class="btn-action" (click)="appointMainCommander()"
+                    [disabled]="!selectedCommanderId">Mianuj</button>
+          </div>
+          <div *ngIf="currentMainCommander" class="current-commander">
+            <p>Obecny Głównodowodzący: <strong>{{ currentMainCommander.name }}</strong></p>
+            <button class="btn-danger" (click)="removeMainCommander()">Usuń z funkcji</button>
           </div>
         </div>
-        <ng-template #noWars><p class="empty">Brak aktywnych wojen.</p></ng-template>
 
-        <div class="form-row" *ngIf="kingdom?.coalitionRole === 'Imperator'">
-          <label>Wypowiedz wojnę:</label>
-          <select [(ngModel)]="declareTargetId">
-            <option [ngValue]="null">Wybierz koalicję...</option>
-            <option *ngFor="let c of otherCoalitions" [ngValue]="c.id">{{ c.name }}</option>
-          </select>
-          <button class="btn-danger" (click)="declareWar()" [disabled]="!declareTargetId">Wypowiedz</button>
-        </div>
-      </div>
-
-      <!-- Pałac Sądu Ostatecznego -->
-      <div class="pps-section" *ngIf="pps as p">
-        <h4>Pałac Sądu Ostatecznego</h4>
-        <p class="pps-desc">
-          Wspólna budowa kończąca erę. Wymaga {{ p.cost | number }} budulca i co najmniej
-          {{ p.requiredLand | number }} akrów koalicji. Udany atak na członka resetuje budowę do zera!
-        </p>
-
-        <div class="pps-stats">
-          <span>Obszar koalicji:
-            <strong [class.ok]="p.landThresholdMet" [class.bad]="!p.landThresholdMet">
-              {{ p.coalitionLand | number }} / {{ p.requiredLand | number }}
-            </strong>
-          </span>
-          <span>Twój budulec w magazynie: <strong>{{ p.myBudulecStored | number }}</strong></span>
-        </div>
-
-        <ng-container *ngIf="p.isBuilding; else notBuilding">
-          <div class="pps-bar">
-            <div class="fill" [style.width.%]="p.percent"></div>
-            <span class="pct">{{ p.percent }}% ({{ p.investedBudulec | number }} / {{ p.cost | number }})</span>
+        <!-- Kasa koalicji -->
+        <div class="treasury-section" *ngIf="treasury?.hasCoalition as _t">
+          <h4>Kasa koalicji</h4>
+          <div class="treasury-stats">
+            <span>Złoto: <strong class="gold">{{ treasury?.treasuryGold | number }}</strong></span>
+            <span>Budulec: <strong>{{ treasury?.treasuryBudulec | number }}</strong></span>
           </div>
           <div class="form-row">
-            <input type="number" min="1" [(ngModel)]="contributeAmount" placeholder="Budulec do wpłaty">
-            <button class="btn-action" (click)="contributePps()">Wpłać budulec</button>
+            <label>Wpłać:</label>
+            <input type="number" min="0" [(ngModel)]="depGold" placeholder="złoto">
+            <input type="number" min="0" [(ngModel)]="depBudulec" placeholder="budulec">
+            <button class="btn-action" (click)="deposit()">Wpłać do kasy</button>
           </div>
-        </ng-container>
-        <ng-template #notBuilding>
-          <button class="btn-action" *ngIf="p.isLeader" (click)="startPps()"
-                  [disabled]="!p.landThresholdMet"
-                  [title]="p.landThresholdMet ? '' : 'Za mało akrów koalicji'">
-            Rozpocznij budowę PPS
-          </button>
-          <p class="pps-hint" *ngIf="!p.isLeader">Budowę może rozpocząć tylko Imperator.</p>
-        </ng-template>
-      </div>
-
-      <button class="btn-danger" (click)="leaveCoalition()">Opuść koalicję</button>
-    </div>
-
-    <!-- Utwórz koalicję -->
-    <div class="card" *ngIf="!kingdom?.coalitionId">
-      <h3>Utwórz nową koalicję</h3>
-      <div class="create-form">
-        <input type="text" [(ngModel)]="newName" placeholder="Nazwa koalicji" />
-        <input type="text" [(ngModel)]="newTag" placeholder="Tag (max 10 znaków)" maxlength="10" />
-        <button class="btn-action" (click)="createCoalition()">Utwórz</button>
-      </div>
-    </div>
-
-    <!-- Wykaz wszystkich koalicji (malejąco wg obszaru ziemi) -->
-    <div class="card">
-      <h3>Wszystkie koalicje</h3>
-      <div class="coalition-list">
-        <div class="coalition-row header">
-          <span>#</span><span>Nazwa</span><span>Tag</span><span>Lider</span><span>Obszar</span><span>Członkowie</span><span>PSO</span><span></span>
+          <div class="form-row" *ngIf="treasury?.isLeader">
+            <label>Wypłać:</label>
+            <input type="number" min="0" [(ngModel)]="wdrGold" placeholder="złoto">
+            <input type="number" min="0" [(ngModel)]="wdrBudulec" placeholder="budulec">
+            <button class="btn-action" (click)="withdraw()">Wypłać (Imperator)</button>
+          </div>
+          <div class="form-row" *ngIf="treasury?.isLeader && treasury?.isBuildingPps">
+            <label>Na PPS z kasy:</label>
+            <input type="number" min="0" [(ngModel)]="fundPpsAmount" placeholder="budulec">
+            <button class="btn-action" (click)="fundPps()">Finansuj PPS</button>
+          </div>
         </div>
-        <ng-container *ngFor="let c of coalitions; let i = index">
-          <div class="coalition-row clickable" [class.mine]="c.id === kingdom?.coalitionId"
-               [class.expanded]="expandedCoalitionId === c.id"
-               (click)="toggleCoalition(c.id)">
-            <span class="rank">{{ i + 1 }}</span>
-            <span class="name">{{ expandedCoalitionId === c.id ? '▾' : '▸' }} {{ c.name }}</span>
-            <span class="tag">[{{ c.tag }}]</span>
-            <span>{{ c.leaderName || '-' }}</span>
-            <span class="land">{{ c.totalLand | number }}</span>
-            <span>{{ c.memberCount }}/{{ c.maxMembers }}</span>
-            <span class="pso">{{ c.psoProgress }}%</span>
-            <button class="btn-sm" *ngIf="!kingdom?.coalitionId && c.memberCount < c.maxMembers"
-                    (click)="$event.stopPropagation(); joinCoalition(c.id)">Dołącz</button>
-          </div>
 
-          <div class="coalition-details" *ngIf="expandedCoalitionId === c.id">
-            <p class="member-count">Liczba członków: <strong>{{ c.memberCount }}/{{ c.maxMembers }}</strong></p>
-            <div class="member-grid">
-              <div class="member-card" *ngFor="let m of c.members">
-                <span class="member-name">{{ m.name }}</span>
-                <span class="member-role" [ngClass]="roleClass(m.coalitionRole)">{{ roleLabel(m.coalitionRole) }}</span>
-                <span class="member-race">{{ m.race }}</span>
-              </div>
+        <!-- Wybory Imperatora -->
+        <div class="election-section" *ngIf="election?.hasCoalition">
+          <h4>Wybory Imperatora</h4>
+          <p class="election-current">
+            Obecny Imperator: <strong>{{ election?.currentImperatorName || '—' }}</strong>
+            <span class="muted"> · członków: {{ election?.totalMembers }}</span>
+          </p>
+          <table class="vote-table">
+            <thead><tr><th>Kandydat</th><th>Głosy</th><th></th></tr></thead>
+            <tbody>
+              <tr *ngFor="let c of election?.candidates" [class.imperator]="c.isImperator">
+                <td>{{ c.name }} <span class="imp-tag" *ngIf="c.isImperator">[Imperator]</span></td>
+                <td class="votes">{{ c.votes }}</td>
+                <td>
+                  <button class="btn-sm" (click)="vote(c.kingdomId)" [disabled]="c.isMyVote">
+                    {{ c.isMyVote ? 'Twój głos' : 'Głosuj' }}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="hint">Kandydat z największą liczbą głosów zostaje Imperatorem. Remis — władza bez zmian.</p>
+        </div>
+      </div>
+
+      <!-- Utwórz koalicję -->
+      <div class="card" *ngIf="!kingdom?.coalitionId">
+        <h3>Utwórz nową koalicję</h3>
+        <div class="create-form">
+          <input type="text" [(ngModel)]="newName" placeholder="Nazwa koalicji" />
+          <input type="text" [(ngModel)]="newTag" placeholder="Tag (max 10 znaków)" maxlength="10" />
+          <button class="btn-action" (click)="createCoalition()">Utwórz</button>
+        </div>
+        <p class="hint">Nie należysz do żadnej koalicji. Utwórz własną lub dołącz do istniejącej w zakładce „Koalicje".</p>
+      </div>
+    </div>
+
+    <!-- ===== Zakładka: Wojny ===== -->
+    <div *ngIf="activeTab === 'wojny'">
+      <div class="card" *ngIf="kingdom?.coalitionId; else needCoalition">
+        <div class="wars-section">
+          <h4>Wojny</h4>
+          <div class="war-list" *ngIf="wars.length > 0; else noWars">
+            <div class="war-row" *ngFor="let w of wars">
+              <span class="war-vs">{{ w.declaringName }} ⚔ {{ w.targetName }}</span>
+              <span class="war-tag" *ngIf="w.opponentName">
+                {{ w.isMyDeclaration ? 'wypowiedziana przez nas' : 'przeciw nam' }}
+              </span>
+              <button class="btn-sm" *ngIf="kingdom?.coalitionRole === 'Imperator' && w.opponentCoalitionId"
+                      (click)="endWar(w)">Zawrzyj pokój</button>
             </div>
           </div>
-        </ng-container>
+          <ng-template #noWars><p class="empty">Brak aktywnych wojen.</p></ng-template>
+
+          <div class="form-row" *ngIf="kingdom?.coalitionRole === 'Imperator'">
+            <label>Wypowiedz wojnę:</label>
+            <select [(ngModel)]="declareTargetId">
+              <option [ngValue]="null">Wybierz koalicję...</option>
+              <option *ngFor="let c of otherCoalitions" [ngValue]="c.id">{{ c.name }}</option>
+            </select>
+            <button class="btn-danger" (click)="declareWar()" [disabled]="!declareTargetId">Wypowiedz</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Zakładka: Pałac Sądu Ostatecznego ===== -->
+    <div *ngIf="activeTab === 'pps'">
+      <div class="card" *ngIf="kingdom?.coalitionId; else needCoalition">
+        <div class="pps-section" *ngIf="pps as p">
+          <h4>Pałac Sądu Ostatecznego</h4>
+          <p class="pps-desc">
+            Wspólna budowa kończąca erę. Wymaga {{ p.cost | number }} budulca i co najmniej
+            {{ p.requiredLand | number }} akrów koalicji. Udany atak na członka resetuje budowę do zera!
+          </p>
+
+          <div class="pps-stats">
+            <span>Obszar koalicji:
+              <strong [class.ok]="p.landThresholdMet" [class.bad]="!p.landThresholdMet">
+                {{ p.coalitionLand | number }} / {{ p.requiredLand | number }}
+              </strong>
+            </span>
+            <span>Twój budulec w magazynie: <strong>{{ p.myBudulecStored | number }}</strong></span>
+          </div>
+
+          <ng-container *ngIf="p.isBuilding; else notBuilding">
+            <div class="pps-bar">
+              <div class="fill" [style.width.%]="p.percent"></div>
+              <span class="pct">{{ p.percent }}% ({{ p.investedBudulec | number }} / {{ p.cost | number }})</span>
+            </div>
+            <div class="form-row">
+              <input type="number" min="1" [(ngModel)]="contributeAmount" placeholder="Budulec do wpłaty">
+              <button class="btn-action" (click)="contributePps()">Wpłać budulec</button>
+            </div>
+          </ng-container>
+          <ng-template #notBuilding>
+            <button class="btn-action" *ngIf="p.isLeader" (click)="startPps()"
+                    [disabled]="!p.landThresholdMet"
+                    [title]="p.landThresholdMet ? '' : 'Za mało akrów koalicji'">
+              Rozpocznij budowę PPS
+            </button>
+            <p class="pps-hint" *ngIf="!p.isLeader">Budowę może rozpocząć tylko Imperator.</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Zakładka: Koalicje (tabela wszystkich koalicji) ===== -->
+    <div *ngIf="activeTab === 'koalicje'">
+      <div class="card">
+        <h3>Wszystkie koalicje</h3>
+        <table class="coalition-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Nazwa</th><th>Tag</th><th>Lider</th>
+              <th class="num">Obszar</th><th class="num">Członkowie</th>
+              <th class="num">Siła wojskowa</th><th class="num">Siła magiczna</th><th class="num">Siła złodziejska</th>
+              <th class="num">PSO</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let c of coalitions; let i = index">
+              <tr class="coalition-row clickable"
+                  [class.mine]="c.id === kingdom?.coalitionId"
+                  [class.selected]="selectedCoalitionId === c.id"
+                  (click)="selectCoalition(c.id)">
+                <td class="rank">{{ i + 1 }}</td>
+                <td class="name">{{ selectedCoalitionId === c.id ? '▾' : '▸' }} {{ c.name }}</td>
+                <td class="tag">[{{ c.tag }}]</td>
+                <td>{{ c.leaderName || '-' }}</td>
+                <td class="num land">{{ c.totalLand | number }}</td>
+                <td class="num">{{ c.memberCount }}/{{ c.maxMembers }}</td>
+                <td class="num mil">{{ coalitionMilitary(c) | number }}</td>
+                <td class="num mag">{{ coalitionMagic(c) | number }}</td>
+                <td class="num thf">{{ coalitionThief(c) | number }}</td>
+                <td class="num pso">{{ c.psoProgress }}%</td>
+                <td>
+                  <button class="btn-sm" *ngIf="!kingdom?.coalitionId && c.memberCount < c.maxMembers"
+                          (click)="$event.stopPropagation(); joinCoalition(c.id)">Dołącz</button>
+                </td>
+              </tr>
+
+              <!-- Rozwinięcie: członkowie z tym samym podziałem sił -->
+              <tr class="member-head-row" *ngIf="selectedCoalitionId === c.id">
+                <td></td>
+                <th class="m-name">Członek</th>
+                <th class="m-role">Rola</th>
+                <th class="m-race">Rasa</th>
+                <th class="num">Obszar</th>
+                <th></th>
+                <th class="num">Siła wojskowa</th>
+                <th class="num">Siła magiczna</th>
+                <th class="num">Siła złodziejska</th>
+                <th colspan="2"></th>
+              </tr>
+              <tr class="member-row" *ngFor="let m of c.members"
+                  [class.mine]="m.id === kingdom?.id">
+                <td></td>
+                <td class="m-name">{{ m.name }}</td>
+                <td class="m-role" [ngClass]="roleClass(m.coalitionRole)">{{ roleLabel(m.coalitionRole) }}</td>
+                <td class="m-race">{{ m.race }}</td>
+                <td class="num">{{ m.land | number }}</td>
+                <td></td>
+                <td class="num mil">{{ memberMilitary(m) | number }}</td>
+                <td class="num mag">{{ m.magic | number }}</td>
+                <td class="num thf">{{ m.thiefPower | number }}</td>
+                <td colspan="2"></td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
         <p *ngIf="coalitions.length === 0" class="empty">Brak koalicji.</p>
       </div>
     </div>
+
   </div>
+
+  <ng-template #needCoalition>
+    <div class="card"><p class="empty">Nie należysz do żadnej koalicji.</p></div>
+  </ng-template>
 
   <ng-template #loadingTpl><div class="loading">Ładowanie...</div></ng-template>
 </div>

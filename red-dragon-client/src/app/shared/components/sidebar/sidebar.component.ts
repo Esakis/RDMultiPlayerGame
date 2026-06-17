@@ -22,6 +22,7 @@ export class SidebarComponent {
     { label: 'Polityka', route: '/coalition' },
     { label: 'Rynek', route: '/market' },
     { label: 'Statystyki', route: '/ranking' },
+    { label: 'Opcje', route: '/options' },
   ];
 
   constructor(private auth: AuthService, private router: Router) {}

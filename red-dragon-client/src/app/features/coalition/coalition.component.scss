@@ -81,34 +81,59 @@ h2 { color: #ffd700; margin: 0 0 15px 0; font-size: 20px; text-shadow: 1px 1px 3
   input { padding: 6px 10px; background: #fff; border: 2px solid #8b7355; color: #000; flex: 1; font-size: 13px; }
 }
 
-.coalition-list { display: flex; flex-direction: column; gap: 2px; }
-.coalition-row {
-  display: grid; grid-template-columns: 36px 2fr 80px 1fr 110px 90px 70px 80px; align-items: center;
-  padding: 8px 10px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(90,32,32,0.3);
-  &.header { background: rgba(42,8,8,0.8); color: #d4af37; font-size: 12px; font-weight: bold; }
-  &.mine { background: rgba(74,8,8,0.5); border-left: 3px solid #ffd700; }
-  .rank { color: #d4af37; font-weight: bold; text-align: center; }
-  .name { color: #ffd700; font-weight: bold; }
-  .tag { color: #66ff66; }
-  .land { color: #d4af37; font-weight: bold; text-align: right; }
-  .pso { color: #66ff66; }
-  &.clickable { cursor: pointer; transition: background 0.15s; }
-  &.clickable:hover { background: rgba(74,8,8,0.45); }
-  &.expanded { background: rgba(74,8,8,0.55); }
+/* === Zakładki sekcji Polityka (jak w Budowie) === */
+.build-tabs {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 16px;
+  border-bottom: 2px solid #5a2020;
+}
+.build-tab {
+  padding: 8px 16px;
+  background: linear-gradient(180deg, #2a0a0a, #1a0606);
+  border: 1px solid #5a2020; border-bottom: none;
+  color: #c9b58a; cursor: pointer; font-size: 14px; font-weight: bold;
+  transition: background 0.15s, color 0.15s;
+  &:hover { color: #ffd700; }
+  &.active {
+    background: linear-gradient(180deg, #6a1010, #3a0808);
+    border-color: #d4af37; color: #ffd700;
+  }
 }
 
-.coalition-details {
-  padding: 12px 14px; background: rgba(0,0,0,0.45);
-  border-bottom: 1px solid rgba(90,32,32,0.3); border-left: 3px solid #8b0000;
-  .member-count { margin: 0 0 10px; color: #ccc; font-size: 13px; strong { color: #ffd700; } }
-}
-.member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; }
-.member-card {
-  display: flex; align-items: baseline; gap: 8px;
-  padding: 6px 10px; background: rgba(0,0,0,0.35); border: 1px solid rgba(90,32,32,0.4);
-  .member-name { color: #ffd700; font-weight: bold; }
-  .member-role { font-size: 12px; font-weight: bold; }
-  .member-race { margin-left: auto; color: #9bb; font-size: 12px; font-style: italic; }
+/* === Tabela wszystkich koalicji (z liniami wewnętrznymi) === */
+.coalition-table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+
+  th, td { border: 1px solid #5a3a1a; padding: 6px 10px; text-align: left; }
+  th { background: rgba(90, 40, 20, 0.5); color: #d4af37; font-weight: bold; }
+  td.num, th.num { text-align: right; }
+
+  .coalition-row {
+    background: rgba(0,0,0,0.3);
+    &.clickable { cursor: pointer; transition: background 0.15s; }
+    &.clickable:hover { background: rgba(74,8,8,0.45); }
+    &.selected { background: rgba(74,8,8,0.55); }
+    &.mine { box-shadow: inset 3px 0 0 #ffd700; }
+    .rank { color: #d4af37; font-weight: bold; text-align: center; }
+    .name { color: #ffd700; font-weight: bold; }
+    .tag { color: #66ff66; }
+    .land { color: #d4af37; font-weight: bold; }
+    .pso { color: #66ff66; }
+  }
+
+  .mil { color: #ff9a6b; font-weight: bold; }
+  .mag { color: #9bb6ff; font-weight: bold; }
+  .thf { color: #c8a6ff; font-weight: bold; }
+
+  .member-head-row th {
+    background: rgba(42,8,8,0.7); color: #c9a86a; font-size: 12px;
+  }
+  .member-row {
+    background: rgba(0,0,0,0.45);
+    &.mine { box-shadow: inset 3px 0 0 #ffd700; }
+    .m-name { color: #ffe0a0; }
+    .m-role { font-size: 12px; font-weight: bold; }
+    .m-race { color: #9bb; font-style: italic; }
+  }
 }
 .role-imperator { color: #ffd700; }
 .role-gd { color: #ff8c42; }

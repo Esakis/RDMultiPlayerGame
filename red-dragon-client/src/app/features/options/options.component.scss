@@ -1,0 +1,18 @@
+:host { display: block; padding: 10px 15px; }
+
+h2 { color: #ffd700; margin: 0 0 15px 0; font-size: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.6); }
+
+.card {
+  background: linear-gradient(180deg, #4a1818 0%, #2a0a0a 100%);
+  border: 2px solid #8b0000; padding: 15px; margin-bottom: 12px; max-width: 520px;
+  h3 { color: #ffd700; margin: 0 0 10px 0; font-size: 16px; }
+  .info { color: #c9b58a; font-size: 13px; margin: 0 0 10px 0; strong { color: #ffd700; } }
+}
+
+.btn-danger {
+  padding: 6px 14px; background: linear-gradient(180deg, #5a2a2a, #3a1a1a);
+  border: 2px solid #8b4444; color: #ff6666; cursor: pointer; font-weight: bold;
+  &:hover { border-color: #ff6666; color: #fff; }
+}
+
+.loading { color: #888; text-align: center; padding: 40px 0; font-size: 14px; }

@@ -3,12 +3,16 @@ import { CoalitionService, PpsStatus, War, Election, Treasury } from '../../core
 import { KingdomService } from '../../core/services/kingdom.service';
 import { Coalition, Kingdom, KingdomSummary } from '../../core/models/kingdom.model';
 
+type PolTab = 'twoja' | 'wojny' | 'pps' | 'koalicje';
+
 @Component({
   selector: 'app-coalition',
   templateUrl: './coalition.component.html',
   styleUrls: ['./coalition.component.scss']
 })
 export class CoalitionComponent implements OnInit {
+  // Aktywna zakładka sekcji Polityka (układ jak w Budowie).
+  activeTab: PolTab = 'twoja';
   coalitions: Coalition[] = [];
   kingdom: Kingdom | null = null;
   loading = true;
@@ -27,12 +31,34 @@ export class CoalitionComponent implements OnInit {
   depGold = 0; depBudulec = 0;
   wdrGold = 0; wdrBudulec = 0;
   fundPpsAmount = 0;
-  expandedCoalitionId: number | null = null;
+  selectedCoalitionId: number | null = null;
 
   constructor(private coalitionService: CoalitionService, private kingdomService: KingdomService) {}
 
-  toggleCoalition(id: number): void {
-    this.expandedCoalitionId = this.expandedCoalitionId === id ? null : id;
+  setTab(tab: PolTab): void { this.activeTab = tab; }
+
+  selectCoalition(id: number): void {
+    this.selectedCoalitionId = this.selectedCoalitionId === id ? null : id;
+  }
+
+  /** Siła wojskowa = suma ataku i obrony. */
+  memberMilitary(m: KingdomSummary): number {
+    return (m.attackPower ?? 0) + (m.defensePower ?? 0);
+  }
+
+  /** Łączna siła wojskowa koalicji (Σ atak + obrona członków). */
+  coalitionMilitary(c: Coalition): number {
+    return c.members.reduce((s, m) => s + this.memberMilitary(m), 0);
+  }
+
+  /** Łączna siła magiczna koalicji (Σ many członków). */
+  coalitionMagic(c: Coalition): number {
+    return c.members.reduce((s, m) => s + (m.magic ?? 0), 0);
+  }
+
+  /** Łączna siła złodziejska koalicji (Σ siły złodziejskiej członków). */
+  coalitionThief(c: Coalition): number {
+    return c.members.reduce((s, m) => s + (m.thiefPower ?? 0), 0);
   }
 
   /** Etykieta roli członka koalicji. */
@@ -163,13 +189,6 @@ export class CoalitionComponent implements OnInit {
   joinCoalition(id: number): void {
     this.coalitionService.join(id).subscribe({
       next: (res) => { this.message = res.message || 'Dołączono!'; this.load(); this.clearMsg(); },
-      error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
-    });
-  }
-
-  leaveCoalition(): void {
-    this.coalitionService.leave().subscribe({
-      next: (res) => { this.message = res.message || 'Opuszczono.'; this.load(); this.clearMsg(); },
       error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
     });
   }
