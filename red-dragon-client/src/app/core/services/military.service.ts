@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { MilitaryUnit, UnitDefinition, RecruitUnitsDto, BattleReport, ServiceResult } from '../models/kingdom.model';
+import { MilitaryUnit, UnitDefinition, RecruitUnitsDto, BattleReport, ServiceResult, TrainingInfo } from '../models/kingdom.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,22 @@ export class MilitaryService {
 
   recruit(dto: RecruitUnitsDto): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/military/recruit`, dto);
+  }
+
+  recruitBatch(units: { [key: string]: number }): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/military/recruit-batch`, { units });
+  }
+
+  disband(units: { [key: string]: number }): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/military/disband`, { units });
+  }
+
+  getTraining(): Observable<TrainingInfo> {
+    return this.http.get<TrainingInfo>(`${this.apiUrl}/military/training`);
+  }
+
+  setTraining(dto: { trainSoldiers: boolean; trainElite: boolean }): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/military/training`, dto);
   }
 
   attack(targetKingdomId: number, units: { [key: string]: number }): Observable<ServiceResult> {

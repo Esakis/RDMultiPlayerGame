@@ -164,6 +164,15 @@ export interface RecruitUnitsDto {
   quantity: number;
 }
 
+export interface TrainingInfo {
+  trainSoldiers: boolean;
+  trainElite: boolean;
+  soldierPromotePct: number;
+  elitePromotePct: number;
+  canTrainSoldiers: boolean;
+  canTrainElite: boolean;
+}
+
 export interface Profession {
   professionType: string;
   displayName: string;

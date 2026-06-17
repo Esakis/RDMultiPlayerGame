@@ -108,6 +108,11 @@ public class Kingdom
     public bool IsFrozen { get; set; } = false;
     public DateTime? FrozenAt { get; set; }
 
+    // Szkolenie wojska — automatyczny awans jednostek co turę (Dracopedia/Trening).
+    // Żołnierze: E0→E1 (wymaga Ołtarza Inicjacji); Elita: E1→E2 (wymaga Koszar Specjalnych).
+    public bool TrainSoldiers { get; set; } = false;
+    public bool TrainElite { get; set; } = false;
+
     // Timestamps
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime LastActive { get; set; } = DateTime.UtcNow;

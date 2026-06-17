@@ -187,6 +187,42 @@ public class DailyResetService : BackgroundService
                 });
             }
 
+            // 4b. Automatyczny awans jednostek (Szkolenie żołnierzy/elity, Dracopedia/Trening)
+            var trainingKingdoms = await context.Kingdoms
+                .Include(k => k.MilitaryUnits)
+                .Include(k => k.Researches)
+                .Include(k => k.Buildings)
+                .Where(k => k.Era.IsActive && !k.IsFrozen && (k.TrainSoldiers || k.TrainElite))
+                .ToListAsync();
+
+            if (trainingKingdoms.Count > 0)
+            {
+                var races = trainingKingdoms.Select(k => k.Race).Distinct().ToList();
+                var defsByRace = (await context.UnitDefinitions
+                        .Where(u => races.Contains(u.Race)).ToListAsync())
+                    .GroupBy(u => u.Race)
+                    .ToDictionary(g => g.Key, g => g.ToList());
+
+                foreach (var kingdom in trainingKingdoms)
+                {
+                    if (!defsByRace.TryGetValue(kingdom.Race, out var defs)) continue;
+                    int level = TrainingHelper.TrainingLevel(kingdom.Researches);
+
+                    var hoplitaDef = defs.FirstOrDefault(TrainingHelper.IsHoplita);
+                    var e1Def = defs.FirstOrDefault(TrainingHelper.IsElite1);
+                    var e2Def = defs.FirstOrDefault(TrainingHelper.IsElite2);
+
+                    bool hasSoldierBld = kingdom.Buildings.Any(b => b.BuildingType == TrainingHelper.SoldierBuilding && b.Quantity > 0 && !b.IsUnderConstruction);
+                    bool hasEliteBld = kingdom.Buildings.Any(b => b.BuildingType == TrainingHelper.EliteBuilding && b.Quantity > 0 && !b.IsUnderConstruction);
+
+                    if (kingdom.TrainSoldiers && hasSoldierBld && hoplitaDef != null && e1Def != null)
+                        PromoteUnits(context, kingdom, hoplitaDef.UnitType, e1Def, TrainingHelper.SoldierPromotePct(level));
+
+                    if (kingdom.TrainElite && hasEliteBld && e1Def != null && e2Def != null)
+                        PromoteUnits(context, kingdom, e1Def.UnitType, e2Def, TrainingHelper.ElitePromotePct(level));
+                }
+            }
+
             // 5. Spadek siły zaklęć (oryginalny wzór):
             //    biała magia: nowa = siła·0,45 − ziemia/100
             //    czarna magia: nowa = siła·0,6 − ziemia/100
@@ -281,6 +317,34 @@ public class DailyResetService : BackgroundService
                 Message = $"Ukończono budowę: {name}" + (data.Quantity > 1 ? $" ×{data.Quantity}" : "")
             });
         }
+    }
+
+    /// <summary>Awansuje pct% jednostek typu fromType na jednostkę toDef (1:1, bez dodatkowych kosztów).</summary>
+    private static void PromoteUnits(ApplicationDbContext context, Kingdom kingdom, string fromType, UnitDefinition toDef, decimal pct)
+    {
+        if (pct <= 0) return;
+        var from = kingdom.MilitaryUnits.FirstOrDefault(m => m.UnitType == fromType);
+        if (from == null || from.Quantity <= 0) return;
+
+        int promote = (int)(from.Quantity * pct / 100m);
+        if (promote <= 0) return;
+
+        from.Quantity -= promote;
+        var to = kingdom.MilitaryUnits.FirstOrDefault(m => m.UnitType == toDef.UnitType);
+        if (to == null)
+        {
+            to = new MilitaryUnit { KingdomId = kingdom.Id, UnitType = toDef.UnitType, Quantity = 0, InTraining = 0 };
+            context.MilitaryUnits.Add(to);
+            kingdom.MilitaryUnits.Add(to);
+        }
+        to.Quantity += promote;
+
+        context.KingdomEvents.Add(new KingdomEvent
+        {
+            KingdomId = kingdom.Id,
+            Category = "Training",
+            Message = $"Awans: {toDef.DisplayName} ×{promote}"
+        });
     }
 
     private class ConstructionData

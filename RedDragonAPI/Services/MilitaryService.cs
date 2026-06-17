@@ -75,15 +75,19 @@ public class MilitaryService : IMilitaryService
         }).ToList();
     }
 
-    public async Task<ServiceResult> RecruitUnitsAsync(int userId, RecruitUnitsDto dto)
+    private async Task<Kingdom?> LoadKingdomForRecruitAsync(int userId)
     {
-        var kingdom = await _context.Kingdoms
+        return await _context.Kingdoms
             .Include(k => k.Buildings)
             .Include(k => k.MilitaryUnits)
             .Include(k => k.Researches)
             .Include(k => k.Professions)
             .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+    }
 
+    public async Task<ServiceResult> RecruitUnitsAsync(int userId, RecruitUnitsDto dto)
+    {
+        var kingdom = await LoadKingdomForRecruitAsync(userId);
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
 
@@ -93,12 +97,85 @@ public class MilitaryService : IMilitaryService
         if (unitDef == null)
             return ServiceResult.Fail("Nieznany typ jednostki.");
 
-        if (dto.Quantity <= 0)
+        var res = await ApplyRecruitAsync(kingdom, unitDef, dto.Quantity);
+        if (!res.Success) return res;
+
+        await _context.SaveChangesAsync();
+        return res;
+    }
+
+    /// <summary>Zbiorcza rekrutacja: wszystkie wpisane ilości w jednej transakcji.</summary>
+    public async Task<ServiceResult> RecruitBatchAsync(int userId, UnitBatchDto dto)
+    {
+        var kingdom = await LoadKingdomForRecruitAsync(userId);
+        if (kingdom == null)
+            return ServiceResult.Fail("Nie znaleziono księstwa.");
+
+        var entries = dto.Units.Where(e => e.Value > 0).ToList();
+        if (entries.Count == 0)
+            return ServiceResult.Fail("Nie podano jednostek do rekrutacji.");
+
+        var defs = await _context.UnitDefinitions
+            .Where(u => u.Race == kingdom.Race)
+            .ToListAsync();
+
+        int recruited = 0;
+        foreach (var e in entries)
+        {
+            var unitDef = defs.FirstOrDefault(u => u.UnitType == e.Key);
+            if (unitDef == null) continue;
+            var r = await ApplyRecruitAsync(kingdom, unitDef, e.Value);
+            if (!r.Success) return ServiceResult.Fail($"{unitDef.DisplayName}: {r.Message}");
+            recruited++;
+        }
+
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok($"Rozpoczęto rekrutację ({recruited} typów jednostek).");
+    }
+
+    /// <summary>Zwolnienie (rozwiązanie) jednostek — odsyła je z powrotem do bezrobotnych.</summary>
+    public async Task<ServiceResult> DisbandBatchAsync(int userId, UnitBatchDto dto)
+    {
+        var kingdom = await LoadKingdomForRecruitAsync(userId);
+        if (kingdom == null)
+            return ServiceResult.Fail("Nie znaleziono księstwa.");
+
+        var entries = dto.Units.Where(e => e.Value > 0).ToList();
+        if (entries.Count == 0)
+            return ServiceResult.Fail("Nie podano jednostek do zwolnienia.");
+
+        var unemployed = kingdom.Professions.FirstOrDefault(p => p.ProfessionType == "Bezrobotni");
+        int released = 0;
+        foreach (var e in entries)
+        {
+            var unit = kingdom.MilitaryUnits.FirstOrDefault(m => m.UnitType == e.Key);
+            if (unit == null || unit.Quantity <= 0) continue;
+            int qty = Math.Min(e.Value, unit.Quantity);
+            unit.Quantity -= qty;
+            released += qty;
+            // Żywi wracają do ludności; smoki/machiny po prostu znikają.
+            if (unemployed != null && !e.Key.EndsWith("_Smok") && !e.Key.EndsWith("_Machina"))
+                unemployed.WorkerCount += qty;
+        }
+
+        if (released == 0)
+            return ServiceResult.Fail("Brak jednostek do zwolnienia.");
+
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok($"Zwolniono {released} jednostek.");
+    }
+
+    /// <summary>Koszt i utworzenie/dodanie jednostek bez zapisu (współdzielone przez pojedynczą i zbiorczą rekrutację).</summary>
+    private async Task<ServiceResult> ApplyRecruitAsync(Kingdom kingdom, UnitDefinition unitDef, int quantity)
+    {
+        if (quantity <= 0)
             return ServiceResult.Fail("Nieprawidłowa ilość.");
 
         var (canRecruit, reason) = CheckCanRecruit(kingdom, unitDef);
         if (!canRecruit)
             return ServiceResult.Fail(reason!);
+
+        var dto = new RecruitUnitsDto { UnitType = unitDef.UnitType, Quantity = quantity };
 
         // Sprawdź koszty (Red Dragon: gold + weapons per unit)
         long totalGold = (long)unitDef.CostGold * dto.Quantity;
@@ -166,8 +243,6 @@ public class MilitaryService : IMilitaryService
             militaryUnit.TrainingCompletesAt = DateTime.UtcNow.AddDays(Math.Max(0.04, trainDays));
         }
 
-        await _context.SaveChangesAsync();
-
         string msg = unitDef.TrainingTime <= 1
             ? $"Zrekrutowano {dto.Quantity}x {unitDef.DisplayName}."
             : $"Rozpoczęto szkolenie {dto.Quantity}x {unitDef.DisplayName}. Ukończenie za {unitDef.TrainingTime} dni.";
@@ -175,14 +250,60 @@ public class MilitaryService : IMilitaryService
         return ServiceResult.Ok(msg);
     }
 
+    public async Task<TrainingInfoDto> GetTrainingInfoAsync(int userId)
+    {
+        var kingdom = await _context.Kingdoms
+            .Include(k => k.Buildings)
+            .Include(k => k.Researches)
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+
+        if (kingdom == null) return new TrainingInfoDto();
+
+        int level = TrainingHelper.TrainingLevel(kingdom.Researches);
+        bool hasSoldierBld = kingdom.Buildings.Any(b => b.BuildingType == TrainingHelper.SoldierBuilding && b.Quantity > 0);
+        bool hasEliteBld = kingdom.Buildings.Any(b => b.BuildingType == TrainingHelper.EliteBuilding && b.Quantity > 0);
+
+        return new TrainingInfoDto
+        {
+            TrainSoldiers = kingdom.TrainSoldiers && hasSoldierBld,
+            TrainElite = kingdom.TrainElite && hasEliteBld,
+            SoldierPromotePct = TrainingHelper.SoldierPromotePct(level),
+            ElitePromotePct = TrainingHelper.ElitePromotePct(level),
+            CanTrainSoldiers = hasSoldierBld,
+            CanTrainElite = hasEliteBld
+        };
+    }
+
+    public async Task<ServiceResult> SetTrainingAsync(int userId, SetTrainingDto dto)
+    {
+        var kingdom = await _context.Kingdoms
+            .Include(k => k.Buildings)
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+
+        if (kingdom == null)
+            return ServiceResult.Fail("Nie znaleziono księstwa.");
+
+        bool hasSoldierBld = kingdom.Buildings.Any(b => b.BuildingType == TrainingHelper.SoldierBuilding && b.Quantity > 0);
+        bool hasEliteBld = kingdom.Buildings.Any(b => b.BuildingType == TrainingHelper.EliteBuilding && b.Quantity > 0);
+
+        kingdom.TrainSoldiers = dto.TrainSoldiers && hasSoldierBld;
+        kingdom.TrainElite = dto.TrainElite && hasEliteBld;
+
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok("Zapisano ustawienia szkolenia.");
+    }
+
     private (bool canRecruit, string? reason) CheckCanRecruit(Kingdom kingdom, UnitDefinition unitDef)
     {
-        // Sprawdź wymagany budynek
-        var requiredBuilding = kingdom.Buildings
-            .FirstOrDefault(b => b.BuildingType == unitDef.RequiredBuilding && b.Quantity > 0);
+        // Sprawdź wymagany budynek (pusty = brak wymagań, np. Hoplita)
+        if (!string.IsNullOrEmpty(unitDef.RequiredBuilding))
+        {
+            var requiredBuilding = kingdom.Buildings
+                .FirstOrDefault(b => b.BuildingType == unitDef.RequiredBuilding && b.Quantity > 0);
 
-        if (requiredBuilding == null)
-            return (false, $"Wymaga budynku: {unitDef.RequiredBuilding}");
+            if (requiredBuilding == null)
+                return (false, $"Wymaga budynku: {unitDef.RequiredBuilding}");
+        }
 
         // Sprawdź wymaganą technologię
         if (!string.IsNullOrEmpty(unitDef.RequiredTech))

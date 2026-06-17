@@ -7,21 +7,82 @@ h2 { color: #ffd700; margin: 0 0 15px 0; font-size: 20px; text-shadow: 1px 1px 3
 }
 .info { color: #ccc; font-size: 13px; margin-bottom: 12px; }
 
-.units-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+// Układ jak na oryginalnej zakładce wojska: wyśrodkowana siatka 3 kolumn.
+.units-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 190px);
+  gap: 18px 24px;
+  justify-content: center;
+}
 .unit-card {
-  background: rgba(0,0,0,0.3); border: 2px solid #5a2020; padding: 12px;
-  &.cannot { opacity: 0.5; }
-  .unit-header { display: flex; justify-content: space-between; margin-bottom: 6px;
-    strong { color: #ffd700; font-size: 14px; } .owned { color: #66ff66; font-size: 12px; } }
-  .desc { color: #aaa; font-size: 13px; margin: 0 0 8px 0; }
-  .stats, .costs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;
-    span { color: #d4af37; font-size: 12px; background: rgba(0,0,0,0.4); padding: 2px 6px; border: 1px solid #5a2020; } }
-  .recruit-controls { display: flex; gap: 6px;
-    input { width: 60px; padding: 4px 6px; background: #fff; border: 2px solid #8b7355; color: #000; text-align: center; font-size: 13px; }
-    .btn-recruit { flex: 1; padding: 6px 12px; background: linear-gradient(180deg, #2a5a2a, #1a3a1a);
-      border: 2px solid #4a8a4a; color: #66ff66; cursor: pointer; font-weight: bold; font-size: 13px;
-      &:hover { border-color: #66ff66; color: #fff; } } }
-  .cannot-reason { color: #ff6666; font-size: 12px; font-style: italic; }
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 4px 6px 8px;
+  &.cannot { opacity: 0.55; }
+
+  .uc-header {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-bottom: 6px;
+    .uc-name { color: #ffd700; font-size: 14px; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.7); }
+    .uc-stats { display: flex; gap: 6px; }
+    .stat { color: #f0e0c0; font-size: 12px; font-weight: bold; padding: 0 4px 0 16px;
+      background-repeat: no-repeat; background-position: left center; background-size: 13px 13px; }
+    // Ikony miecza (atak) i tarczy (obrona) rysowane inline (SVG data-uri).
+    .stat.atk { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d4af37'><path d='M6.92 5L5 6.92l8.06 8.06-1.06 1.06 1.41 1.41 1.06-1.06L19 21.41 21.41 19l-4.95-4.95-8.06-8.06zM3 17l3 3-1.5 1.5L3 20zm14.5-12L21 8.5 19 10.5 16.5 8z'/></svg>"); }
+    .stat.def { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238fb8e0'><path d='M12 2L4 5v6c0 5 3.4 8.9 8 11 4.6-2.1 8-6 8-11V5l-8-3z'/></svg>"); }
+  }
+
+  .uc-portrait {
+    img { display: block; width: 150px; height: auto; image-rendering: auto;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
+  }
+
+  .uc-cost {
+    margin-top: 6px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px;
+    color: #c9a24a; font-size: 12px;
+    span:not(:last-child)::after { content: ""; }
+  }
+
+  .uc-owned {
+    color: #fff; font-size: 16px; font-weight: bold; margin: 2px 0 6px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    .share { color: #9a9a9a; font-size: 12px; font-weight: normal; margin-left: 4px; }
+  }
+
+  .uc-recruit {
+    width: 100%; display: flex; justify-content: center;
+    input { width: 120px; padding: 4px 6px; background: #fff;
+      border: 2px solid #8b7355; color: #000; text-align: center; font-size: 13px;
+      &.locked { background: #e8e0d0; opacity: 0.7; } }
+  }
+  .uc-cannot { color: #c98; font-size: 10px; font-style: italic; margin-top: 3px;
+    line-height: 1.1; }
+  .uc-note { color: #c9a24a; font-size: 11px; font-style: italic; min-height: 26px;
+    display: flex; align-items: center; justify-content: center; }
+}
+
+// Dolny pasek: szkolenie (checkboxy z %) + zbiorcze przyciski Zwolnij/Rekrutuj.
+.army-actions {
+  margin-top: 18px; padding-top: 14px; border-top: 2px solid #5a2020;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+
+  .train-row { display: flex; flex-wrap: wrap; gap: 28px; justify-content: center; }
+  .train-opt {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    color: #ffd700; font-size: 13px; font-weight: bold; user-select: none;
+    input { width: 16px; height: 16px; cursor: pointer; accent-color: #8b0000; }
+    &.disabled { color: #7a6a4a; cursor: not-allowed;
+      input { cursor: not-allowed; } }
+  }
+
+  .action-buttons { display: flex; gap: 60px; justify-content: center; }
+  .img-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    background: none; border: none; cursor: pointer; padding: 0;
+    img { width: 112px; height: auto; image-rendering: auto;
+      border: 1px solid #6a3030; transition: filter 0.15s, transform 0.15s; }
+    span { color: #ffd700; font-size: 13px; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.7); }
+    &:hover img { filter: brightness(1.2); transform: scale(1.04); }
+  }
 }
 
 .attack-form {

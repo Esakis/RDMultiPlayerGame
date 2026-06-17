@@ -39,6 +39,32 @@ public class RecruitUnitsDto
     public int Quantity { get; set; }
 }
 
+/// <summary>Zbiorcza rekrutacja/zwolnienie wielu typów jednostek naraz (jeden przycisk).</summary>
+public class UnitBatchDto
+{
+    public Dictionary<string, int> Units { get; set; } = new();
+}
+
+/// <summary>Stan i parametry automatycznego szkolenia wojska.</summary>
+public class TrainingInfoDto
+{
+    public bool TrainSoldiers { get; set; }
+    public bool TrainElite { get; set; }
+    // Procent jednostek awansujących w każdej turze (zależny od nauki Trening).
+    public decimal SoldierPromotePct { get; set; }
+    public decimal ElitePromotePct { get; set; }
+    // Czy dany stopień szkolenia jest dostępny (wymagany budynek istnieje).
+    public bool CanTrainSoldiers { get; set; }
+    public bool CanTrainElite { get; set; }
+}
+
+/// <summary>Ustawienie przełączników szkolenia.</summary>
+public class SetTrainingDto
+{
+    public bool TrainSoldiers { get; set; }
+    public bool TrainElite { get; set; }
+}
+
 public class AttackDto
 {
     public int TargetKingdomId { get; set; }

@@ -46,6 +46,33 @@ public class MilitaryController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPost("recruit-batch")]
+    public async Task<ActionResult> RecruitBatch([FromBody] UnitBatchDto dto)
+    {
+        var result = await _militaryService.RecruitBatchAsync(GetUserId(), dto);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
+    [HttpPost("disband")]
+    public async Task<ActionResult> Disband([FromBody] UnitBatchDto dto)
+    {
+        var result = await _militaryService.DisbandBatchAsync(GetUserId(), dto);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
+    [HttpGet("training")]
+    public async Task<ActionResult<TrainingInfoDto>> GetTraining()
+    {
+        return Ok(await _militaryService.GetTrainingInfoAsync(GetUserId()));
+    }
+
+    [HttpPost("training")]
+    public async Task<ActionResult> SetTraining([FromBody] SetTrainingDto dto)
+    {
+        var result = await _militaryService.SetTrainingAsync(GetUserId(), dto);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
     private int GetUserId()
     {
         return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
