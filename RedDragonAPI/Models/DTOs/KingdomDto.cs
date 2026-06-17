@@ -47,6 +47,7 @@ public class KingdomDto
 
     // Nauka (badanie) w toku
     public string? CurrentResearch { get; set; }
+    public string? CurrentResearchTech { get; set; }
     public long ResearchProgress { get; set; }
     public long ResearchCost { get; set; }
     public long SciencePoints { get; set; }

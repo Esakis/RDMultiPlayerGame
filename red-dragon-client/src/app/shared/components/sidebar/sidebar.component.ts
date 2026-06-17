@@ -25,7 +25,6 @@ export class SidebarComponent {
     { label: 'Smoki', route: '/dragons' },
     { label: 'Statystyki', route: '/ranking' },
     { label: 'Nauka', route: '/research' },
-    { label: 'Koniec', route: '/messages' },
   ];
 
   constructor(private auth: AuthService, private router: Router) {}

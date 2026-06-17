@@ -25,6 +25,7 @@ export interface Kingdom {
   specialBuildingProgress: number;
   specialBuildingCost: number;
   currentResearch: string | null;
+  currentResearchTech: string | null;
   researchProgress: number;
   researchCost: number;
   sciencePoints: number;

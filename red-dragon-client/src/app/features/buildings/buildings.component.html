@@ -37,7 +37,7 @@
                 <div class="tip-done" *ngIf="specialState(d) === 'owned'">Wybudowany ✓</div>
                 <div class="tip-prog" *ngIf="specialState(d) === 'current'">W budowie…</div>
                 <div class="tip-lock" *ngIf="specialState(d) === 'locked'">
-                  {{ d.cannotBuildReason || 'Wymaga wcześniejszego budynku' }}
+                  {{ specialLockReason(d) }}
                 </div>
                 <div class="tip-go" *ngIf="specialState(d) === 'available'">Kliknij, aby zbudować</div>
               </div>

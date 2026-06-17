@@ -98,20 +98,49 @@ public class BuildingService : IBuildingService
         if (!canBuild)
             return ServiceResult.Fail(reason!);
 
-        // Sprawdź czy specjalny budynek już istnieje
+        // === Budynek specjalny: koszt to budulec (BaseCost) gromadzony co turę; jeden naraz ===
         if (definition.IsSpecial)
         {
             var existing = kingdom.Buildings.FirstOrDefault(b => b.BuildingType == dto.BuildingType);
             if (existing != null && existing.Quantity > 0)
                 return ServiceResult.Fail("Można posiadać tylko jeden specjalny budynek tego typu.");
+
+            // Tylko jeden budynek specjalny może być wznoszony jednocześnie.
+            if (!string.IsNullOrEmpty(kingdom.CurrentSpecialBuilding))
+            {
+                var inProgress = await _context.BuildingDefinitions.AsNoTracking()
+                    .FirstOrDefaultAsync(d => d.BuildingType == kingdom.CurrentSpecialBuilding);
+                return ServiceResult.Fail(
+                    $"Już wznosisz budynek specjalny: {inProgress?.DisplayName ?? kingdom.CurrentSpecialBuilding}. Najpierw go dokończ.");
+            }
+
+            // Rabat badań: Architektura obniża koszt budulca budynków specjalnych.
+            decimal specialDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "SpecialBuildingCostReduction");
+            int budulecCost = Math.Max(1, (int)(definition.BaseCost * (1m - specialDiscount)));
+
+            kingdom.CurrentSpecialBuilding = dto.BuildingType;
+            kingdom.SpecialBuildingCost = budulecCost;
+            kingdom.SpecialBuildingProgress = 0;
+
+            // Rekord budynku „w budowie" — ResourceService dopełni go budulcem co turę.
+            var special = kingdom.Buildings.FirstOrDefault(b => b.BuildingType == dto.BuildingType);
+            if (special == null)
+            {
+                special = new Building { KingdomId = kingdom.Id, BuildingType = dto.BuildingType, Quantity = 0, Level = 1 };
+                _context.Buildings.Add(special);
+            }
+            special.IsUnderConstruction = true;
+
+            await _context.SaveChangesAsync();
+            return ServiceResult.Ok(
+                $"Rozpoczęto wznoszenie: {definition.DisplayName}. Budulec ({budulecCost}) będzie gromadzony co turę.");
         }
 
-        int quantity = definition.IsSpecial ? 1 : dto.Quantity;
+        int quantity = dto.Quantity;
 
         // Red Dragon: economic buildings cost gold + 1 budulec per building + land
-        // Rabat badań: Architektura (specjalne) / Inżynieria (gospodarcze)
-        decimal buildDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id,
-            definition.IsSpecial ? "SpecialBuildingCostReduction" : "EcoBuildingCostReduction");
+        // Rabat badań: Inżynieria obniża koszt budynków gospodarczych.
+        decimal buildDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "EcoBuildingCostReduction");
         long totalCostGold = (long)(definition.CostGold * quantity * (1m - buildDiscount));
         int totalCostBudulec = quantity; // 1 budulec per economic building
         int totalCostLand = definition.CostLand * quantity;

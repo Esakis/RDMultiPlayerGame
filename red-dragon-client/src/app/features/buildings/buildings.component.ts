@@ -90,13 +90,31 @@ export class BuildingsComponent implements OnInit {
     return this.definitions.some(d => d.isSpecial);
   }
 
+  /** Typ budynku specjalnego aktualnie wznoszonego (jeden naraz) lub null. */
+  get specialUnderConstruction(): string | null {
+    const specialTypes = this.definitions.filter(d => d.isSpecial).map(d => d.buildingType);
+    const b = this.myBuildings.find(x => x.isUnderConstruction && specialTypes.includes(x.buildingType));
+    return b ? b.buildingType : null;
+  }
+
   /** Stan kafelka budynku specjalnego. */
   specialState(def: BuildingDefinition): SpecialState {
     const owned = this.getOwned(def.buildingType);
     if (owned?.isUnderConstruction) return 'current';
     if (owned && owned.quantity > 0) return 'owned';
+    // Tylko jeden budynek specjalny może powstawać jednocześnie.
+    const inProgress = this.specialUnderConstruction;
+    if (inProgress && inProgress !== def.buildingType) return 'locked';
     if (def.canBuild) return 'available';
     return 'locked';
+  }
+
+  /** Powód, dla którego budynek specjalny jest niedostępny. */
+  specialLockReason(def: BuildingDefinition): string {
+    const inProgress = this.specialUnderConstruction;
+    if (inProgress && inProgress !== def.buildingType)
+      return 'Najpierw dokończ obecnie wznoszony budynek specjalny.';
+    return def.cannotBuildReason || 'Wymaga wcześniejszego budynku';
   }
 
   /** Czy między kafelkiem a poprzednim w kolumnie istnieje realna zależność (strzałka). */

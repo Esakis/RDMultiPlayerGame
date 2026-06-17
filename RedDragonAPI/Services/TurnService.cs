@@ -46,6 +46,13 @@ public class TurnService : ITurnService
             ["popularity"] = kingdom.Popularity
         };
 
+        // Postęp budynku specjalnego i bieżącego badania (do pokazania przyrostu % w Stolicy)
+        int beforeSpecialProgress = kingdom.SpecialBuildingProgress;
+        string? beforeTech = kingdom.CurrentResearchTech;
+        long beforeInvested = beforeTech == null ? 0 : await _context.Researches.AsNoTracking()
+            .Where(r => r.KingdomId == kingdom.Id && r.TechType == beforeTech)
+            .Select(r => (long?)r.InvestedScience).FirstOrDefaultAsync() ?? 0;
+
         kingdom.TurnsAvailable--;
         kingdom.Age++;
         kingdom.LastActive = DateTime.UtcNow;
@@ -79,6 +86,19 @@ public class TurnService : ITurnService
             ["population"] = kingdom.Population - before["population"],
             ["popularity"] = kingdom.Popularity - before["popularity"]
         };
+
+        // Przyrost postępu budynku specjalnego — tylko gdy budowa nadal trwa (po ukończeniu zerowane).
+        if (!string.IsNullOrEmpty(kingdom.CurrentSpecialBuilding))
+            deltas["specialBuildingProgress"] = kingdom.SpecialBuildingProgress - beforeSpecialProgress;
+
+        // Przyrost postępu badania — tylko gdy ta sama dziedzina nadal w toku.
+        if (beforeTech != null && kingdom.CurrentResearchTech == beforeTech)
+        {
+            long nowInvested = await _context.Researches.AsNoTracking()
+                .Where(r => r.KingdomId == kingdom.Id && r.TechType == beforeTech)
+                .Select(r => (long?)r.InvestedScience).FirstOrDefaultAsync() ?? 0;
+            deltas["researchProgress"] = nowInvested - beforeInvested;
+        }
 
         return new TurnResultDto
         {

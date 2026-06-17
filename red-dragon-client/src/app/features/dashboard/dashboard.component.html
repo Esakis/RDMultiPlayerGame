@@ -172,6 +172,7 @@
           <div class="preview-label" *ngIf="kingdom.currentSpecialBuilding">
             {{ kingdom.currentSpecialBuilding }}
             [{{ kingdom.specialBuildingCost > 0 ? ((kingdom.specialBuildingProgress / kingdom.specialBuildingCost) * 100 | number:'1.0-0') : 0 }}%]
+            <span class="progress-gain" *ngIf="specialBuildingPercentDelta > 0">+{{ specialBuildingPercentDelta }}%</span>
           </div>
           <div class="preview-label" *ngIf="!kingdom.currentSpecialBuilding">
             Nic [0%]
@@ -180,12 +181,13 @@
 
         <div class="preview-card">
           <div class="preview-image research-img">
+            <img *ngIf="kingdom.currentResearch" class="research-icon" [src]="researchIcon" [alt]="kingdom.currentResearch">
             <span *ngIf="!kingdom.currentResearch">📚 Nauka</span>
-            <span *ngIf="kingdom.currentResearch">{{ kingdom.currentResearch }}</span>
           </div>
           <div class="preview-label" *ngIf="kingdom.currentResearch">
             {{ kingdom.currentResearch }}
             [{{ kingdom.researchCost > 0 ? ((kingdom.researchProgress / kingdom.researchCost) * 100 | number:'1.0-0') : 0 }}%]
+            <span class="progress-gain" *ngIf="researchPercentDelta > 0">+{{ researchPercentDelta }}%</span>
           </div>
           <div class="preview-label" *ngIf="!kingdom.currentResearch">
             Nic nie badane — zapas: {{ kingdom.sciencePoints | numberFormat }} PN

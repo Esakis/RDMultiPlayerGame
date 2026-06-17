@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { TurnService } from '../../core/services/turn.service';
 import { Kingdom } from '../../core/models/kingdom.model';
+import { techIconPath } from '../../shared/tech-icons';
 
 @Component({
   selector: 'app-dashboard',
@@ -110,6 +111,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
       next: (res) => { this.message = res.message || ''; this.loadKingdom(); setTimeout(() => this.message = '', 5000); },
       error: (err) => { this.message = err.error?.message || err.error || 'Błąd.'; setTimeout(() => this.message = '', 5000); }
     });
+  }
+
+  /** Grafika aktualnie rozwijanej dziedziny nauki (kafelek z drzewka). */
+  get researchIcon(): string {
+    return techIconPath(this.kingdom?.currentResearchTech);
+  }
+
+  /** Przyrost procentowy postępu w ostatniej turze (np. badanie / budynek specjalny). */
+  private progressPercentDelta(deltaKey: string, cost: number | undefined): number {
+    const delta = this.deltas[deltaKey];
+    if (!delta || !cost || cost <= 0) return 0;
+    return Math.round((delta / cost) * 100);
+  }
+
+  get researchPercentDelta(): number {
+    return this.progressPercentDelta('researchProgress', this.kingdom?.researchCost);
+  }
+
+  get specialBuildingPercentDelta(): number {
+    return this.progressPercentDelta('specialBuildingProgress', this.kingdom?.specialBuildingCost);
   }
 
   getDelta(key: string): string {

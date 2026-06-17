@@ -446,10 +446,14 @@ public class KingdomService : IKingdomService
             MaxTurns = kingdom.MaxTurns,
             TurnNumber = kingdom.TurnNumber,
             Age = kingdom.Age,
-            CurrentSpecialBuilding = kingdom.CurrentSpecialBuilding,
+            CurrentSpecialBuilding = string.IsNullOrEmpty(kingdom.CurrentSpecialBuilding)
+                ? null
+                : (kingdom.Buildings.FirstOrDefault(b => b.BuildingType == kingdom.CurrentSpecialBuilding)?.Definition?.DisplayName
+                   ?? kingdom.CurrentSpecialBuilding),
             SpecialBuildingProgress = kingdom.SpecialBuildingProgress,
             SpecialBuildingCost = kingdom.SpecialBuildingCost,
             CurrentResearch = research.Name,
+            CurrentResearchTech = kingdom.CurrentResearchTech,
             ResearchProgress = research.Progress,
             ResearchCost = research.Cost,
             SciencePoints = kingdom.SciencePoints,
