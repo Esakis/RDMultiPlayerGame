@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from '../../core/services/message.service';
 import { KingdomService } from '../../core/services/kingdom.service';
@@ -21,9 +22,14 @@ export class MessagesComponent implements OnInit {
   newBody = '';
 
   constructor(private messageService: MessageService, private kingdomService: KingdomService,
-              private translate: TranslateService) {}
+              private translate: TranslateService, private route: ActivatedRoute) {}
 
-  ngOnInit(): void { this.load(); }
+  ngOnInit(): void {
+    this.load();
+    // Wejście z linku „napisz do księstwa" (np. z rankingu): ?to=<id>
+    const to = Number(this.route.snapshot.queryParamMap.get('to'));
+    if (to > 0) { this.newTo = to; this.tab = 'compose'; }
+  }
 
   load(): void {
     this.messageService.getInbox().subscribe(m => { this.inbox = m; this.loading = false; });

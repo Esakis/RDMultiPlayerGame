@@ -21,7 +21,7 @@
       <div class="card" *ngIf="kingdom?.coalitionId">
         <h3>{{ 'pol.yourCoalition' | translate }}: {{ kingdom?.coalitionName }}</h3>
         <p>{{ 'pol.roleLabel' | translate }}: <strong>{{ roleLabel(kingdom?.coalitionRole) }}</strong></p>
-        <button class="btn-danger" (click)="leaveCoalition()">{{ 'pol.leave' | translate }}</button>
+        <p class="hint">{{ 'pol.leaveInOptions' | translate }}</p>
 
         <!-- Zarządzanie Głównodowodzącym (dla Imperatora) -->
         <div class="commander-management" *ngIf="kingdom?.coalitionRole === 'Imperator'">
@@ -107,8 +107,8 @@
         <p class="hint">{{ 'pol.create.hint' | translate }}</p>
       </div>
 
-      <!-- Dołącz do dowolnej koalicji (skakanie między koalicjami) -->
-      <div class="card">
+      <!-- Dołącz do koalicji — tylko gdy nie należysz do żadnej -->
+      <div class="card" *ngIf="!kingdom?.coalitionId">
         <h3>{{ 'pol.join.title' | translate }}</h3>
         <p class="hint">{{ 'pol.join.hint' | translate }}</p>
         <table class="coalition-table" *ngIf="joinableCoalitions.length > 0; else noJoinable">
@@ -232,7 +232,7 @@
               <td class="num thf">{{ coalitionThief(c) | number }}</td>
               <td class="num pso">{{ c.psoProgress }}%</td>
               <td>
-                <button class="btn-sm" *ngIf="c.id !== kingdom?.coalitionId && c.memberCount < c.maxMembers"
+                <button class="btn-sm" *ngIf="!kingdom?.coalitionId && c.memberCount < c.maxMembers"
                         (click)="$event.stopPropagation(); joinCoalition(c.id)">{{ 'pol.join.btn' | translate }}</button>
               </td>
             </tr>
@@ -245,7 +245,7 @@
       <div class="card coalition-detail" *ngIf="selectedCoalition as c">
         <div class="detail-head">
           <button class="btn-back" (click)="clearSelection()">{{ 'pol.detail.back' | translate }}</button>
-          <button class="btn-sm" *ngIf="c.id !== kingdom?.coalitionId && c.memberCount < c.maxMembers"
+          <button class="btn-sm" *ngIf="!kingdom?.coalitionId && c.memberCount < c.maxMembers"
                   (click)="joinCoalition(c.id)">{{ 'pol.join.btn' | translate }}</button>
         </div>
 

@@ -52,9 +52,22 @@ h3 { color: #ffd700; margin: 18px 0 8px; font-size: 15px; }
     }
   }
 }
+// === Zakładki (układ jak w sekcji Budowa) ===
+.build-tabs {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 16px;
+  border-bottom: 2px solid #5a2020;
+}
+.build-tab {
+  padding: 8px 16px; background: linear-gradient(180deg, #2a0a0a, #1a0606);
+  border: 1px solid #5a2020; border-bottom: none; color: #c9b58a;
+  cursor: pointer; font-size: 14px; font-weight: bold; transition: background 0.15s, color 0.15s;
+  &:hover { color: #ffd700; }
+  &.active { background: linear-gradient(180deg, #6a1010, #3a0808); border-color: #d4af37; color: #ffd700; }
+}
+
 .ranking-table { display: flex; flex-direction: column; gap: 2px; }
 .rank-row {
-  display: grid; grid-template-columns: 50px 2fr 100px 100px 120px 100px; align-items: center;
+  display: grid; grid-template-columns: 50px 2fr 100px 100px 120px 100px 50px; align-items: center;
   padding: 8px 10px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(90,32,32,0.3);
   color: #ccc; font-size: 13px;
   &.header { background: rgba(42,8,8,0.8); color: #d4af37; font-size: 12px; font-weight: bold; }
@@ -64,6 +77,11 @@ h3 { color: #ffd700; margin: 18px 0 8px; font-size: 15px; }
   .name { color: #ffd700; font-weight: bold; }
   .land { color: #ffffff; font-weight: bold; }
   .tag { color: #66ff66; }
+  .mail { text-align: center; }
+  .mail-link {
+    color: #d4af37; font-size: 16px; text-decoration: none; cursor: pointer;
+    &:hover { color: #ffd700; text-shadow: 0 0 5px rgba(255,215,0,0.6); }
+  }
 }
 .empty { color: #888; font-style: italic; text-align: center; padding: 40px 0; }
 .loading { color: #888; text-align: center; padding: 40px 0; font-size: 14px; }

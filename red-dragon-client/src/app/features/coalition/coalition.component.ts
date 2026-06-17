@@ -205,13 +205,6 @@ export class CoalitionComponent implements OnInit {
     });
   }
 
-  leaveCoalition(): void {
-    this.coalitionService.leave().subscribe({
-      next: (res) => { this.message = res.message || 'Opuszczono koalicję.'; this.load(); this.clearMsg(); },
-      error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
-    });
-  }
-
   /** Koalicje, do których można dołączyć (inne niż moja, z wolnym miejscem). */
   get joinableCoalitions(): Coalition[] {
     return this.coalitions.filter(c => c.id !== this.kingdom?.coalitionId && c.memberCount < c.maxMembers);

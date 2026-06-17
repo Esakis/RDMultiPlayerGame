@@ -355,7 +355,8 @@
     "builtPct": "% zabud.",
     "free": "Wolne",
     "total": "RAZEM",
-    "noPlayers": "Brak graczy."
+    "noPlayers": "Brak graczy.",
+    "writeTo": "Napisz wiadomość do tego księstwa"
   },
   "mil": {
     "recruitTitle": "Rekrutacja jednostek",
@@ -577,6 +578,7 @@
     "yourCoalition": "Twoja Koalicja",
     "roleLabel": "Rola",
     "leave": "Opuść koalicję",
+    "leaveInOptions": "Aby opuścić koalicję, przejdź do zakładki Opcje.",
     "needCoalition": "Nie należysz do żadnej koalicji.",
     "tab": {
       "yours": "Twoja koalicja",

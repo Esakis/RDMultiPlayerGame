@@ -13,6 +13,9 @@ export class RankingComponent implements OnInit {
   kingdoms: KingdomSummary[] = [];
   loading = true;
 
+  // Aktywna zakładka: statystyki własnej koalicji vs ranking wszystkich księstw.
+  activeTab: 'koalicja' | 'ranking' = 'ranking';
+
   // Statystyki własnej koalicji
   kingdom: Kingdom | null = null;
   coalitionName: string | null = null;
@@ -23,6 +26,8 @@ export class RankingComponent implements OnInit {
     private coalitionService: CoalitionService,
     private translate: TranslateService
   ) {}
+
+  setTab(tab: 'koalicja' | 'ranking'): void { this.activeTab = tab; }
 
   ngOnInit(): void {
     this.kingdomService.getAllKingdoms().subscribe({

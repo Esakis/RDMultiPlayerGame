@@ -151,20 +151,15 @@
       <thead>
         <tr>
           <th>{{ 'rank.duchy' | translate }}</th>
-          <th>{{ 'pol.member.race' | translate }}</th>
-          <th>{{ 'rank.land' | translate }}</th>
-          <th>{{ 'mkt.currentPact' | translate }}</th>
           <th>{{ 'mkt.changeType' | translate }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let m of pacts.members">
           <td>{{ m.name }}</td>
-          <td>{{ m.race }}</td>
-          <td class="num">{{ m.land | number }}</td>
-          <td><span class="pact-badge" [ngClass]="pactClass(m.pactType)">{{ pactLabel(m.pactType) }}</span></td>
           <td>
-            <select [ngModel]="m.pactType" (ngModelChange)="changePact(m, $event)">
+            <select [ngModel]="m.pactType" (ngModelChange)="changePact(m, $event)"
+                    [ngClass]="pactClass(m.pactType)">
               <option *ngFor="let t of pactTypes" [value]="t.value"
                       [disabled]="t.value !== 'Handlowy' && t.value !== m.pactType && pactDisabled(m)">
                 {{ t.label }}

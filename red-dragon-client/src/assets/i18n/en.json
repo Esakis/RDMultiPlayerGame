@@ -355,7 +355,8 @@
     "builtPct": "% built",
     "free": "Free",
     "total": "TOTAL",
-    "noPlayers": "No players."
+    "noPlayers": "No players.",
+    "writeTo": "Write a message to this duchy"
   },
   "mil": {
     "recruitTitle": "Unit recruitment",
@@ -577,6 +578,7 @@
     "yourCoalition": "Your Coalition",
     "roleLabel": "Role",
     "leave": "Leave coalition",
+    "leaveInOptions": "To leave the coalition, go to the Options tab.",
     "needCoalition": "You do not belong to any coalition.",
     "tab": {
       "yours": "Your coalition",
