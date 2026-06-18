@@ -70,6 +70,21 @@ public class ResourceService : IResourceService
         bool Has(string buildingType) => kingdom.Buildings
             .Any(b => b.BuildingType == buildingType && b.Quantity > 0 && !b.IsUnderConstruction);
 
+        int Count(string buildingType) => kingdom.Buildings
+            .Where(b => b.BuildingType == buildingType && !b.IsUnderConstruction)
+            .Sum(b => b.Quantity);
+
+        // Liczba cechów wzmacniających daną profesję (model 3 cechów po 2 profesje):
+        // Cech słońca → alchemicy/chłopi, Cech ziemi → druidzi/kamieniarze,
+        // Cech gwiazd → murarze/płatnerze. Kupcy/naukowcy/magowie nie mają cechu.
+        int GuildCount(string professionType) => professionType switch
+        {
+            "Alchemicy" or "Chłopi" => Count("CechSlonca"),
+            "Druidzi" or "Kamieniarze" => Count("CechZiemi"),
+            "Murarze" or "Płatnerze" => Count("CechGwiazd"),
+            _ => 0
+        };
+
         // === 1. Produkcja profesji ===
         // produktywność = (100 − pn·0,9)/100 · (1+rb) · (1+pv) · (1+cech) · ...
         // pn — % nowicjuszy (nowicjusz pracuje na 10%), rb — bonus rasowy,
@@ -77,6 +92,12 @@ public class ResourceService : IResourceService
         // Bonusy badań: ogólna produkcja (Wynalazczość), handel (Rachunkowość), kamień (Górnictwo)
         decimal productionBonus = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "ProductionBonus");
         double scienceBonus = (double)await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "ScienceBonus");
+
+        // Budynki specjalne ekonomii (Dracopedia §7.2 — Świątynia/Ołtarz/Monument ekonomii
+        // odwzorowane jako nazwane budynki): bonusy % do produkcji wszystkich profesji.
+        if (Has("SwiatyniaAutora")) productionBonus += 0.04m;   // Świątynia bogactwa Autora (świątynia +4%)
+        if (Has("Mlyn")) productionBonus += 0.02m;              // Młyn (monument +2%)
+        if (Has("KlubOdkrywcow")) productionBonus += 0.02m;     // Klub odkrywców (ołtarz +2%)
         // Górnictwo odkrywkowe: stabilny urobek złota = % złota alchemików (Dracopedia).
         decimal mineGoldRate = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "MineGold");
         // Inżynieria zaawansowana: murarze zużywają 10% mniej kamienia.
@@ -85,13 +106,48 @@ public class ResourceService : IResourceService
 
         decimal inventedBonus = 1m + (kingdom.Education / 100m) + productionBonus;
 
+        // Zaklęcia produkcyjne (Dracopedia §9; wartości udokumentowane jako maksymalne).
+        // Pracowitość/Somnambulizm działają na profesje niemagiczne, Fluid magiczny/Głupota
+        // na magiczne (magowie, druidzi). Buffy są zawieszone na rzucającym, debuffy na celu.
+        bool HasSpell(string spellType) => kingdom.ActiveSpells.Any(s => s.SpellType == spellType);
+        decimal nonMagicSpellMult = Math.Max(0m, 1m
+            + (HasSpell("Pracowitosc") ? 0.49m : 0m)
+            - (HasSpell("Somnambulizm") ? 0.50m : 0m));
+        decimal magicSpellMult = Math.Max(0m, 1m
+            + (HasSpell("FluidMagiczny") ? 0.49m : 0m)
+            - (HasSpell("Glupota") ? 0.25m : 0m));
+        static bool IsMagicProfession(string type) => type is "Druidzi" or "Magowie";
+
         decimal Productivity(Profession prof, decimal raceBonus)
         {
             decimal novicePct = prof.WorkerCount > 0
                 ? (decimal)prof.NoviceCount / prof.WorkerCount * 100m
                 : 0m;
             decimal baseEff = (100m - novicePct * 0.9m) / 100m;
-            return baseEff * (1m + raceBonus) * inventedBonus;
+
+            // Bonus cechu (Dracopedia §3): proc = int(100·(ce/(pr·0,08+ce+99))),
+            // ce — liczba cechów profesji, pr — liczba pracowników profesji.
+            decimal guildBonus = 0m;
+            int ce = GuildCount(prof.ProfessionType);
+            if (ce > 0 && prof.WorkerCount > 0)
+                guildBonus = (int)(100m * ((decimal)ce / (prof.WorkerCount * 0.08m + ce + 99m))) / 100m;
+
+            decimal spellMult = IsMagicProfession(prof.ProfessionType) ? magicSpellMult : nonMagicSpellMult;
+
+            return baseEff * (1m + raceBonus) * (1m + guildBonus) * spellMult * inventedBonus;
+        }
+
+        // Bonus uniwersytetów dla naukowców (Dracopedia §3):
+        // proc = int(100·(un/(pr/3·0,08+un+99))), un — liczba uniwersytetów,
+        // pr — wszyscy pracownicy w profesjach (z naukowcami, bez bezrobotnych).
+        int universities = Count("Uniwersytety");
+        decimal universityBonus = 0m;
+        if (universities > 0)
+        {
+            long prAll = kingdom.Professions
+                .Where(p => p.ProfessionType != "Bezrobotni")
+                .Sum(p => (long)p.WorkerCount);
+            universityBonus = (int)(100m * (universities / (prAll / 3m * 0.08m + universities + 99m))) / 100m;
         }
 
         long merchantGold = 0;
@@ -103,6 +159,8 @@ public class ResourceService : IResourceService
             {
                 case "Alchemicy":
                     production = (long)(prof.WorkerCount * AlchemistGoldBase * Productivity(prof, race.BonusAlchemists));
+                    // Kopalnia złota (budynek specjalny, Dracopedia §14.3): +10% złota alchemików.
+                    if (Has("KopalniaZlota")) production = (long)(production * 1.10m);
                     kingdom.Gold += production;
                     // Górnictwo odkrywkowe: dodatkowy stabilny urobek złota
                     if (mineGoldRate > 0)
@@ -171,7 +229,8 @@ public class ResourceService : IResourceService
                     if (prof.WorkerCount > 0)
                     {
                         decimal spRaw = prof.WorkerCount * ScientistSciencePerWorker
-                                        * Productivity(prof, race.BonusScientists);
+                                        * Productivity(prof, race.BonusScientists)
+                                        * (1m + universityBonus);
                         long cap = await ScienceCapAsync(kingdom);
                         long sp = (long)Math.Min(spRaw, cap);
 
@@ -196,16 +255,29 @@ public class ResourceService : IResourceService
             prof.ProductionPerTurn = production;
         }
 
-        // === 2. Produkcja manufaktur ===
-        // p = (z/(z + m·25)) · k — k: sad owocowy 400 (jedzenie), kamieniołom 40 (kamień),
-        // kopalnia diamentów 4000 (złoto), manowe jeziorko 40 (mana).
-        var manufactory = kingdom.Buildings.FirstOrDefault(b => b.BuildingType == "Manufaktura" && b.Quantity > 0 && !b.IsUnderConstruction);
-        if (manufactory != null)
+        // === 2. Produkcja manufaktur (Dracopedia §7.1) ===
+        // p = (z/(z+m·25))·k·(1+2·inżynieria/100); k: Sad owocowy 400 (jedzenie),
+        // Kamieniołom 40 (kamień), Kopalnia diamentów 4000 (złoto), Manowe jeziorko 40 (mana).
+        int inzynieriaLevel = await _context.Researches.CountAsync(r =>
+            r.KingdomId == kingdom.Id && r.IsCompleted && r.TechType.StartsWith("Inzynieria"));
+        decimal manuBonus = 1m + 0.02m * inzynieriaLevel;
+
+        void Manufactory(string type, decimal k, Action<long> add)
         {
-            decimal m = manufactory.Quantity;
-            decimal perManufactory = kingdom.Land / (kingdom.Land + m * 25m) * 400m;
-            kingdom.Food += (long)(perManufactory * m);
+            var b = kingdom.Buildings.FirstOrDefault(x => x.BuildingType == type && x.Quantity > 0 && !x.IsUnderConstruction);
+            if (b == null) return;
+            decimal m = b.Quantity;
+            decimal per = kingdom.Land / (kingdom.Land + m * 25m) * k * manuBonus;
+            add((long)(per * m));
         }
+        Manufactory("Manufaktura", 400m, v => kingdom.Food += v);        // Sad owocowy (jedzenie)
+        Manufactory("Kamieniolom", 40m, v => kingdom.Stone += v);        // Kamieniołom (kamień)
+        Manufactory("KopalniaDiamentow", 4000m, v => kingdom.Gold += v); // Kopalnia diamentów (złoto)
+        Manufactory("ManoweJeziorko", 40m, v => kingdom.Mana += v);      // Manowe jeziorko (mana)
+
+        // Ratusz (budynek specjalny, Dracopedia §14.3 „podatek 10 zł/mieszkańca"): tu ~1 zł/mieszkańca
+        // na turę (przybliżenie dziennego podatku — produkcja liczona jest co turę).
+        if (Has("Ratusz")) kingdom.Gold += kingdom.Population;
 
         // === 3. Pensje i żołd ===
         int totalWorkers = kingdom.Professions
@@ -388,6 +460,14 @@ public class ResourceService : IResourceService
                     / 3m / populationCap;
                 growth = Math.Max(growth, freeSpace * 0.10m);
                 growth *= (1m + race.PopGrowthModifier);
+
+                // Zaklęcia przyrostu (Dracopedia §4): Płodność ×1,3, Szczęście ×1,1,
+                // Pech ×0,9, Kastracja ×0,5 (zawieszone buffy/debuffy mnożą się).
+                if (HasSpell("Plodnosc")) growth *= 1.3m;
+                if (HasSpell("Szczescie")) growth *= 1.1m;
+                if (HasSpell("Pech")) growth *= 0.9m;
+                if (HasSpell("Kastracja")) growth *= 0.5m;
+
                 kingdom.Population += (int)growth;
                 if (kingdom.Population > populationCap)
                     kingdom.Population = (int)populationCap;
@@ -414,16 +494,12 @@ public class ResourceService : IResourceService
                 : 0;
         }
 
-        // === 10. Mana po turze ===
-        // Mana znika po turze; wyjątek — Dżin przechowuje 1 manę na mieszkańca
+        // === 10. Mana po turze (Dracopedia §5, §14.4) ===
+        // Mana znika po turze; wyjątki: Dżin przechowuje 1 manę/mieszkańca, Elf many nie traci.
         if (kingdom.Race == "Dżin")
-        {
             kingdom.Mana = Math.Min(kingdom.Mana, kingdom.Population);
-        }
-        else
-        {
+        else if (kingdom.Race != "Elf")
             kingdom.Mana = 0;
-        }
 
         kingdom.TurnNumber++;
     }

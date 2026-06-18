@@ -136,6 +136,7 @@ public class BattleService : IBattleService
             .Include(k => k.Buildings).ThenInclude(b => b.Definition)
             .Include(k => k.Researches).ThenInclude(r => r.Tech)
             .Include(k => k.Professions)
+            .Include(k => k.ActiveSpells)
             .FirstOrDefaultAsync(k => k.Id == action.TargetKingdomId);
 
         if (attacker == null || defender == null)
@@ -149,6 +150,37 @@ public class BattleService : IBattleService
             .FirstOrDefaultAsync(r => r.Name == attacker.Race) ?? new RaceDefinition { Name = attacker.Race };
         var defenderRace = await _context.RaceDefinitions.AsNoTracking()
             .FirstOrDefaultAsync(r => r.Name == defender.Race) ?? new RaceDefinition { Name = defender.Race };
+
+        // Generałowie (potrzebni już przed obliczeniem obrony — Smokobójstwo zabija smoki obrońcy).
+        var now = DateTime.UtcNow;
+        var attackerGenerals = await _context.Generals
+            .Where(g => g.KingdomId == attacker.Id && !g.IsImprisoned && !g.IsPending
+                        && (g.WoundedUntil == null || g.WoundedUntil <= now))
+            .ToListAsync();
+        var defenderGenerals = await _context.Generals
+            .Where(g => g.KingdomId == defender.Id && !g.IsImprisoned && !g.IsOutside && !g.IsPending
+                        && (g.WoundedUntil == null || g.WoundedUntil <= now))
+            .ToListAsync();
+
+        // Najwyższy poziom generała o danej cesze drugorzędnej (0 = brak).
+        int SecLevel(IEnumerable<General> gens, string trait) =>
+            gens.Where(g => g.SecondaryTrait == trait).Select(g => g.Level).DefaultIfEmpty(0).Max();
+
+        // Smokobójstwo (atakujący, Dracopedia §11): zabija lvl% smoków obrońcy oraz
+        // z szansą lvl/4% burzy wabiki smoków (Portal, Smokodrap) — przed wyliczeniem obrony.
+        int dragonSlayLvl = SecLevel(attackerGenerals, "Smokobojstwo");
+        if (dragonSlayLvl > 0)
+        {
+            decimal killPct = Math.Min(1m, dragonSlayLvl / 100m);
+            foreach (var d in defender.MilitaryUnits.Where(u => u.UnitType.EndsWith("_Smok") && u.Quantity > 0))
+                d.Quantity = Math.Max(0, d.Quantity - (int)Math.Ceiling(d.Quantity * killPct));
+            foreach (var bt in new[] { "Portal", "Smokodrap" })
+            {
+                var b = defender.Buildings.FirstOrDefault(x => x.BuildingType == bt && x.Quantity > 0 && !x.IsUnderConstruction);
+                if (b != null && Random.Shared.NextDouble() < dragonSlayLvl / 400.0)
+                    b.Quantity = Math.Max(0, b.Quantity - 1);
+            }
+        }
 
         // Siły wg oryginalnych wzorów (docs/MECHANIKA.md §8)
         long attackPower = BattleCalculator.CalculateAttackPower(attacker, attackData.Units, attackerRace);
@@ -170,16 +202,6 @@ public class BattleService : IBattleService
             attackPower = (long)(attackPower * 1.10m);
 
         // Generałowie: Wódz zwiększa atak o lvl%, Obrońca (najlepszy w domu) obronę o lvl%
-        var now = DateTime.UtcNow;
-        var attackerGenerals = await _context.Generals
-            .Where(g => g.KingdomId == attacker.Id && !g.IsImprisoned && !g.IsPending
-                        && (g.WoundedUntil == null || g.WoundedUntil <= now))
-            .ToListAsync();
-        var defenderGenerals = await _context.Generals
-            .Where(g => g.KingdomId == defender.Id && !g.IsImprisoned && !g.IsOutside && !g.IsPending
-                        && (g.WoundedUntil == null || g.WoundedUntil <= now))
-            .ToListAsync();
-
         var leadingGeneral = attackerGenerals
             .Where(g => g.PrimaryTrait == "Wodz" && !g.IsOutside)
             .OrderByDescending(g => g.Experience)
@@ -224,6 +246,37 @@ public class BattleService : IBattleService
             attackData.Units, attackPower, defensePower, attackerWins, attackerRace);
         var defenderCasualties = BattleCalculator.CalculateDefenderCasualties(
             defender.MilitaryUnits, attackPower, defensePower, attackerWins, defenderRace);
+
+        // Uzdrawianie (Dracopedia §11): ratuje lvl% poległych własnych —
+        // atakujący ×2 po wygranej, obrońca ×4 po udanej obronie.
+        int atkHealLvl = SecLevel(attackerGenerals, "Uzdrawianie");
+        if (atkHealLvl > 0)
+        {
+            decimal save = Math.Min(0.95m, atkHealLvl / 100m * (attackerWins ? 2m : 1m));
+            foreach (var key in attackerCasualties.Keys.ToList())
+                attackerCasualties[key] = (int)(attackerCasualties[key] * (1m - save));
+        }
+        int defHealLvl = SecLevel(defenderGenerals, "Uzdrawianie");
+        if (defHealLvl > 0)
+        {
+            decimal save = Math.Min(0.95m, defHealLvl / 100m * (!attackerWins ? 4m : 1m));
+            foreach (var key in defenderCasualties.Keys.ToList())
+                defenderCasualties[key] = (int)(defenderCasualties[key] * (1m - save));
+        }
+
+        // Krwiożerczość (atakujący, Dracopedia §11): +2·lvl% strat obrońcy po wygranej.
+        int bloodLvl = SecLevel(attackerGenerals, "Krwiozerczonsc");
+        if (bloodLvl > 0 && attackerWins)
+        {
+            decimal extra = Math.Min(1m, 2m * bloodLvl / 100m);
+            foreach (var unit in defender.MilitaryUnits)
+            {
+                if (unit.Quantity <= 0 || unit.UnitType.EndsWith("_Smok") || unit.UnitType.EndsWith("_Zlodziej")) continue;
+                int already = defenderCasualties.TryGetValue(unit.UnitType, out var v) ? v : 0;
+                int more = (int)((unit.Quantity - already) * extra);
+                if (more > 0) defenderCasualties[unit.UnitType] = already + more;
+            }
+        }
 
         // Zastosuj straty atakującego
         foreach (var casualty in attackerCasualties)
@@ -310,6 +363,64 @@ public class BattleService : IBattleService
                     defCoalition.PSOProgress = 0m;
                 }
             }
+        }
+
+        // Sabotaż (atakujący, Dracopedia §11): po wygranej burzy lvl/2% zwykłych budynków
+        // obrońcy oraz z szansą 2·lvl% jeden budynek specjalny.
+        int sabotageLvl = SecLevel(attackerGenerals, "Sabotaz");
+        if (sabotageLvl > 0 && attackerWins)
+        {
+            decimal demolishPct = sabotageLvl / 200m;
+            foreach (var b in defender.Buildings.Where(x => x.Definition != null && !x.Definition.IsSpecial && x.Quantity > 0 && !x.IsUnderConstruction))
+                b.Quantity = Math.Max(0, b.Quantity - (int)Math.Ceiling(b.Quantity * demolishPct));
+            if (Random.Shared.NextDouble() < Math.Min(0.9, 2.0 * sabotageLvl / 100.0))
+            {
+                var special = defender.Buildings.FirstOrDefault(x => x.Definition != null && x.Definition.IsSpecial && x.Quantity > 0 && !x.IsUnderConstruction);
+                if (special != null) special.Quantity = 0;
+            }
+        }
+
+        // Rabunek (atakujący, Dracopedia §11): po wygranej niszczy 2·lvl% zapasów obrońcy
+        // (połowę zagarnia) oraz lvl/2% jego infrapunktów.
+        int plunderLvl = SecLevel(attackerGenerals, "Rabunek");
+        if (plunderLvl > 0 && attackerWins)
+        {
+            decimal pct = Math.Min(0.9m, 2m * plunderLvl / 100m);
+            long g = (long)(defender.Gold * pct); defender.Gold -= g; attacker.Gold += g / 2;
+            long f = (long)(defender.Food * pct); defender.Food -= f; attacker.Food += f / 2;
+            long st = (long)(defender.Stone * pct); defender.Stone -= st; attacker.Stone += st / 2;
+            long w = (long)(defender.Weapons * pct); defender.Weapons -= w; attacker.Weapons += w / 2;
+            long inf = (long)(defender.BudulecStored * (plunderLvl / 200m));
+            defender.BudulecStored = Math.Max(0, defender.BudulecStored - inf);
+        }
+
+        // Czarna magia (atakujący, Dracopedia §11): może zdjąć białą magię/tarcze celu (1,5·lvl%)
+        // oraz wywołać Smoczy oddech przy ataku (2·lvl%).
+        int blackLvl = SecLevel(attackerGenerals, "CzarnaMagia");
+        if (blackLvl > 0)
+        {
+            if (defender.ActiveSpells.Count > 0 && Random.Shared.NextDouble() < Math.Min(0.9, 1.5 * blackLvl / 100.0))
+            {
+                var positive = defender.ActiveSpells.FirstOrDefault(s =>
+                    s.SpellType is "TarczaWojenna" or "DobryHumor" or "Pracowitosc" or "FluidMagiczny"
+                        or "Plodnosc" or "Szczescie" or "PadleLegiony" or "TarczaAntymagiczna" or "ZwierciadloMagiczne");
+                if (positive != null) _context.ActiveSpells.Remove(positive);
+            }
+            if (Random.Shared.NextDouble() < Math.Min(0.9, 2.0 * blackLvl / 100.0))
+            {
+                int popKilled = (int)(defender.Population * 0.05);
+                defender.Population = Math.Max(100, defender.Population - popKilled);
+            }
+        }
+
+        // Magia czasu (atakujący, Dracopedia §11): 2·lvl% szansy na kradzież 1–4 tur obrońcy.
+        int timeLvl = SecLevel(attackerGenerals, "MagiaCzasu");
+        if (timeLvl > 0 && defender.TurnsAvailable > 0
+            && Random.Shared.NextDouble() < Math.Min(0.9, 2.0 * timeLvl / 100.0))
+        {
+            int stolen = Math.Min(defender.TurnsAvailable, Random.Shared.Next(1, 5));
+            defender.TurnsAvailable -= stolen;
+            attacker.TurnsAvailable = Math.Min(attacker.MaxTurns, attacker.TurnsAvailable + stolen);
         }
 
         // Doświadczenie generałów: zależne od sumy sił i wyrównania starcia
@@ -599,6 +710,12 @@ public class BattleService : IBattleService
 
         // siła zaklęcia = liczba wyszkolonych magów (z bonusem rasowym)
         decimal powerVal = mages * (1m + race.BonusMages);
+
+        // Budynki magiczne (Dracopedia §9, §14.2): Soczewka magiczna +20% siły zaklęć,
+        // Kondensator magiczny +10%.
+        bool HasB(string t) => kingdom.Buildings.Any(b => b.BuildingType == t && b.Quantity > 0 && !b.IsUnderConstruction);
+        if (HasB("SoczewkaMagiczna")) powerVal *= 1.20m;
+        if (HasB("KondensatorMagiczny")) powerVal *= 1.10m;
 
         // Metamagia Dżina: wzmocniona +10% siły, przyspieszona −25% siły
         if (kingdom.Race == "Dżin")

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedDragonAPI.Data;
 
@@ -11,9 +12,11 @@ using RedDragonAPI.Data;
 namespace RedDragonAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260617184400_AddUniwersytetyBuilding")]
+    partial class AddUniwersytetyBuilding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -534,69 +537,6 @@ namespace RedDragonAPI.Migrations
                             IsSpecial = false,
                             PopulationCapacity = 0,
                             ProductionBonus = 0.05m,
-                            Row = 0,
-                            WorkshopCapacity = 0
-                        },
-                        new
-                        {
-                            Id = 16,
-                            BaseCost = 0,
-                            BonusTurnsPerDay = 0,
-                            BuildTime = 1,
-                            BuildingType = "Kamieniolom",
-                            Category = "Manufaktury",
-                            Col = 0,
-                            CostBudulec = 1,
-                            CostGold = 300,
-                            CostLand = 1,
-                            DefenseBonus = 0m,
-                            Description = "Automatycznie wydobywa kamień bez pracowników",
-                            DisplayName = "Kamieniołom",
-                            IsSpecial = false,
-                            PopulationCapacity = 0,
-                            ProductionBonus = 0m,
-                            Row = 0,
-                            WorkshopCapacity = 0
-                        },
-                        new
-                        {
-                            Id = 17,
-                            BaseCost = 0,
-                            BonusTurnsPerDay = 0,
-                            BuildTime = 1,
-                            BuildingType = "KopalniaDiamentow",
-                            Category = "Manufaktury",
-                            Col = 0,
-                            CostBudulec = 1,
-                            CostGold = 300,
-                            CostLand = 1,
-                            DefenseBonus = 0m,
-                            Description = "Automatycznie wydobywa złoto bez pracowników",
-                            DisplayName = "Diamentowa kopalnia",
-                            IsSpecial = false,
-                            PopulationCapacity = 0,
-                            ProductionBonus = 0m,
-                            Row = 0,
-                            WorkshopCapacity = 0
-                        },
-                        new
-                        {
-                            Id = 18,
-                            BaseCost = 0,
-                            BonusTurnsPerDay = 0,
-                            BuildTime = 1,
-                            BuildingType = "ManoweJeziorko",
-                            Category = "Manufaktury",
-                            Col = 0,
-                            CostBudulec = 1,
-                            CostGold = 300,
-                            CostLand = 1,
-                            DefenseBonus = 0m,
-                            Description = "Automatycznie produkuje manę bez pracowników",
-                            DisplayName = "Manowe jeziorko",
-                            IsSpecial = false,
-                            PopulationCapacity = 0,
-                            ProductionBonus = 0m,
                             Row = 0,
                             WorkshopCapacity = 0
                         },
@@ -1589,7 +1529,7 @@ namespace RedDragonAPI.Migrations
                             Id = 1,
                             IsActive = true,
                             Name = "Era Przebudzenia",
-                            StartedAt = new DateTime(2026, 6, 17, 18, 50, 38, 990, DateTimeKind.Utc).AddTicks(9695),
+                            StartedAt = new DateTime(2026, 6, 17, 18, 43, 59, 856, DateTimeKind.Utc).AddTicks(5807),
                             Theme = "Pierwsza era nowego świata Red Dragon"
                         });
                 });

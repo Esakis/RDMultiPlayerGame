@@ -62,8 +62,9 @@ public static class BattleCalculator
         decimal dragonMult = 1m + dragons / (50m + dragons);
         decimal total = armyPower * dragonMult + dragons * 100m + machines * machineStrength;
 
-        // Namiot dowódcy / Sztab uderzeniowy: +10% ataku
+        // Namiot dowódcy / Sztab uderzeniowy: +10% ataku; Plac defilad: +5% ataku
         if (Has(attacker, "SztabUderzeniowy")) total *= 1.10m;
+        if (Has(attacker, "PlacDefilad")) total *= 1.05m;
 
         return (long)total;
     }
@@ -124,10 +125,19 @@ public static class BattleCalculator
 
         // budynki obronne: Smoczy mur +5%, Smocza bariera +7%, Zamek +10%,
         // Sieć fortec +5% (dodatkowo zmniejsza straty ziemi)
+        if (Has(defender, "Szaniec")) total *= 1.03m;
         if (Has(defender, "SmoczyMur")) total *= 1.05m;
         if (Has(defender, "SmoczaBariera")) total *= 1.07m;
         if (Has(defender, "Zamek")) total *= 1.10m;
         if (Has(defender, "SiecFortec")) total *= 1.05m;
+
+        // Tarcze bojowe (Dracopedia §8): Tarcza wojenna +24% obrony,
+        // Słabość −24% obrony (zawieszone na obrońcy jako ActiveSpell).
+        if (defender.ActiveSpells != null)
+        {
+            if (defender.ActiveSpells.Any(s => s.SpellType == "TarczaWojenna")) total *= 1.24m;
+            if (defender.ActiveSpells.Any(s => s.SpellType == "Slabosc")) total *= 0.76m;
+        }
 
         return (long)total;
     }

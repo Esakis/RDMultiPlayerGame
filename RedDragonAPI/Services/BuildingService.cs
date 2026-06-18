@@ -129,7 +129,10 @@ public class BuildingService : IBuildingService
 
             // Rabat badań: Architektura obniża koszt budulca budynków specjalnych.
             decimal specialDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "SpecialBuildingCostReduction");
-            int budulecCost = Math.Max(1, (int)(definition.BaseCost * (1m - specialDiscount)));
+            decimal specialCost = definition.BaseCost * (1m - specialDiscount);
+            // Protektorat początkowy (Dracopedia §1): budynki specjalne −60%.
+            if (kingdom.IsProtected) specialCost *= 0.4m;
+            int budulecCost = Math.Max(1, (int)specialCost);
 
             kingdom.CurrentSpecialBuilding = dto.BuildingType;
             kingdom.SpecialBuildingCost = budulecCost;

@@ -230,6 +230,8 @@ public class KingdomService : IKingdomService
         // Rabat badań: Rekultywacja/Osadnictwo (LandCostReduction)
         decimal landDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "LandCostReduction");
         cost = (long)(cost * (1m - landDiscount));
+        // Protektorat początkowy (Dracopedia §1): ziemia −60%.
+        if (kingdom.IsProtected) cost = (long)(cost * 0.4m);
         if (kingdom.Gold < cost)
             return ServiceResult.Fail($"Za mało złota. Potrzeba: {cost}, posiadasz: {kingdom.Gold}");
 

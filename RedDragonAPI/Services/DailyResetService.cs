@@ -235,11 +235,31 @@ public class DailyResetService : BackgroundService
                 .Include(s => s.Kingdom)
                 .ToListAsync();
 
+            // Najlepszy generał z Białą magią per księstwo (Dracopedia §9): spowalnia spadek
+            // białej magii i przyspiesza spadek czarnej (lvlBM/200).
+            var spellKingdomIds = activeSpells.Select(s => s.KingdomId).Distinct().ToList();
+            var whiteMagicLevels = (await context.Generals
+                    .Where(g => spellKingdomIds.Contains(g.KingdomId) && g.SecondaryTrait == "BialaMagia"
+                                && !g.IsImprisoned && !g.IsPending)
+                    .ToListAsync())
+                .GroupBy(g => g.KingdomId)
+                .ToDictionary(grp => grp.Key, grp => grp.Max(g => g.Level));
+            // Goblin z Tajemnicą materii (TajemnicaOdtworzenia): wolniejszy spadek białej magii (s=1).
+            var tajemnicaKingdoms = (await context.Buildings
+                    .Where(b => spellKingdomIds.Contains(b.KingdomId) && b.BuildingType == "TajemnicaOdtworzenia"
+                                && b.Quantity > 0 && !b.IsUnderConstruction)
+                    .Select(b => b.KingdomId).Distinct().ToListAsync())
+                .ToHashSet();
+
             foreach (var spell in activeSpells)
             {
                 bool isPositive = spell.Spell != null &&
                     (spell.Spell.Category == "Biała" || spell.Spell.Category == "Tarcze");
-                decimal decayFactor = isPositive ? 0.45m : 0.6m;
+                int lvlBM = whiteMagicLevels.GetValueOrDefault(spell.KingdomId, 0);
+                decimal s = tajemnicaKingdoms.Contains(spell.KingdomId) ? 1m : 0m;
+                decimal decayFactor = isPositive
+                    ? (0.45m + lvlBM / 200m) * (1m + s * 0.1m)
+                    : Math.Max(0m, 0.6m - lvlBM / 200m);
                 int newPower = (int)(spell.Power * decayFactor - spell.Kingdom.Land / 100);
 
                 if (newPower <= 0 ||

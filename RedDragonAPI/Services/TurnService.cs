@@ -61,13 +61,17 @@ public class TurnService : ITurnService
         await _resourceService.GenerateResourcesForKingdomAsync(kingdom);
 
         // Generałowie zdobywają doświadczenie z każdą turą (pomijamy będących na wyprawie,
-        // uwięzionych i oczekujących w poczekalni). Wartość łatwa do dostrojenia.
-        const int GeneralExpPerTurn = 250;
+        // uwięzionych i oczekujących w poczekalni). Wg Dracopedii (§11) generałów szkolą
+        // naukowcy — bazę 150 powiększa liczba naukowców (do +600), więc inwestycja w naukę
+        // przyspiesza rozwój dowódców.
+        int scientistCount = kingdom.Professions
+            .FirstOrDefault(p => p.ProfessionType == "Naukowcy")?.WorkerCount ?? 0;
+        int generalExpPerTurn = 150 + Math.Min(600, scientistCount);
         var homeGenerals = await _context.Generals
             .Where(g => g.KingdomId == kingdom.Id && !g.IsPending && !g.IsOutside && !g.IsImprisoned)
             .ToListAsync();
         foreach (var gen in homeGenerals)
-            gen.Experience += GeneralExpPerTurn;
+            gen.Experience += generalExpPerTurn;
 
         await _context.SaveChangesAsync();
 
