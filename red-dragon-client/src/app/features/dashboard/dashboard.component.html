@@ -72,6 +72,21 @@
           <td class="stat-change"></td>
         </tr>
         <tr>
+          <td class="stat-label">{{ 'dash.builtPercent' | translate }}</td>
+          <td class="stat-value">{{ kingdom.builtPercent }}%</td>
+          <td class="stat-change"></td>
+        </tr>
+        <tr>
+          <td class="stat-label">{{ 'dash.housingPercent' | translate }}</td>
+          <td class="stat-value">{{ kingdom.housingPercent }}%</td>
+          <td class="stat-change"></td>
+        </tr>
+        <tr>
+          <td class="stat-label">{{ 'dash.freeLand' | translate }}</td>
+          <td class="stat-value">{{ kingdom.freeLand | numberFormat }}</td>
+          <td class="stat-change"></td>
+        </tr>
+        <tr>
           <td class="stat-label">{{ 'dash.wages' | translate }}</td>
           <td class="stat-value">{{ kingdom.wages }}</td>
           <td class="stat-change"></td>
@@ -146,7 +161,11 @@
             </div>
           </div>
 
-          <div class="event-row empty" *ngIf="!hasAnyEvent">
+          <div class="event-row done dragons" *ngIf="dragonsArrived > 0">
+            🐉 {{ 'dash.dragonsArrived' | translate:{ count: dragonsArrived } }}
+          </div>
+
+          <div class="event-row empty" *ngIf="!hasAnyEvent && dragonsArrived === 0">
             {{ 'dash.noEvents' | translate }}
           </div>
         </div>
@@ -161,7 +180,8 @@
       </div>
 
       <div class="preview-cards">
-        <div class="preview-card">
+        <div class="preview-card clickable" [routerLink]="['/buildings']" [queryParams]="{ tab: 'specjalne' }"
+             [title]="'dash.goToSpecial' | translate">
           <div class="preview-image special-building-img">
             <span *ngIf="!kingdom.currentSpecialBuilding">{{ 'dash.none' | translate }}</span>
             <span *ngIf="kingdom.currentSpecialBuilding">{{ kingdom.currentSpecialBuilding }}</span>
@@ -176,7 +196,8 @@
           </div>
         </div>
 
-        <div class="preview-card">
+        <div class="preview-card clickable" [routerLink]="['/buildings']" [queryParams]="{ tab: 'nauka' }"
+             [title]="'dash.goToScience' | translate">
           <div class="preview-image research-img">
             <img *ngIf="kingdom.currentResearch" class="research-icon" [src]="researchIcon" [alt]="kingdom.currentResearch">
             <span *ngIf="!kingdom.currentResearch">📚 {{ 'dash.science' | translate }}</span>

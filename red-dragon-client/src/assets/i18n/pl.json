@@ -84,7 +84,13 @@
     "nothing": "Nic",
     "science": "Nauka",
     "noResearch": "Nic nie badane — zapas: {{points}} PN",
-    "loadingKingdom": "Ładowanie księstwa..."
+    "loadingKingdom": "Ładowanie księstwa...",
+    "builtPercent": "% zabudowy",
+    "housingPercent": "% domów",
+    "freeLand": "wolna ziemia",
+    "dragonsArrived": "Przybyło smoków: +{{count}}",
+    "goToSpecial": "Przejdź do budynków specjalnych",
+    "goToScience": "Przejdź do nauki"
   },
   "lab": {
     "lead": "Wyślij generała do labiryntu. Na każde przeliczenie masz budżet akcji: 2 punkty (4 z Zajazdem u Czerwonego Smoka — wtedy wejdziesz 2×). Wzięcie skarbu kosztuje 2 punkty (możliwa rana lub śmierć generała — oprócz złota), a akcja generała (szukanie / zmiana zdolności) 1 punkt i nigdy nie szkodzi. Wyższy poziom generała, zaklęcie „Szczęście” i cecha Odkrywca zwiększają łup i zmniejszają ryzyko. Skarb wynosisz dopiero po 5. turze przeliczenia. Akcje nie kosztują tur.",
@@ -404,7 +410,10 @@
       "Płatnerze": "+3 broni/turę",
       "Kupcy": "+1000 złota/turę",
       "Naukowcy": "+edukacja"
-    }
+    },
+    "maxWorkers": "Limit",
+    "novicePct": "% nowicjuszy",
+    "unemployed": "Bezrobotni"
   },
   "res2": {
     "lead": "Naukowcy produkują <strong>Punkty Nauki (SP)</strong>, które inwestujesz w wybraną dziedzinę. Najedź na ikonę, by zobaczyć efekt i koszt; kliknij dostępną dziedzinę, by rozpocząć badanie. Zmiana niedokończonej dziedziny kosztuje 1/3 zainwestowanych SP.",
@@ -434,6 +443,9 @@
       "science": "Nauka"
     },
     "owned": "Posiadasz",
+    "landTotal": "Ziemia łącznie",
+    "landBuilt": "Zabudowane",
+    "landFree": "Niezabudowane",
     "landCost": "ziemia",
     "baseCost": "koszt bazowy",
     "cost": "Koszt",
@@ -477,7 +489,9 @@
       "Obrona": "Obrona",
       "Wojskowe": "Wojskowe",
       "Specjalne": "Specjalne"
-    }
+    },
+    "demolishBtn": "Wyburz",
+    "nothingToDemolish": "Nie posiadasz tego budynku."
   },
   "auth": {
     "login": "Login",

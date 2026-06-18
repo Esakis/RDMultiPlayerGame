@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { BuildingService } from '../../core/services/building.service';
 import { KingdomService } from '../../core/services/kingdom.service';
@@ -37,10 +38,16 @@ export class BuildingsComponent implements OnInit {
   constructor(
     private buildingService: BuildingService,
     private kingdomService: KingdomService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    // Otwórz właściwą zakładkę, gdy przyjdziemy z kafelka na Stolicy (?tab=specjalne|nauka).
+    const tab = this.route.snapshot.queryParamMap.get('tab') as BuildTab | null;
+    if (tab && ['gospodarcze', 'specjalne', 'ziemia', 'nauka'].includes(tab)) {
+      this.activeTab = tab;
+    }
     this.load();
   }
 
@@ -98,6 +105,27 @@ export class BuildingsComponent implements OnInit {
       },
       error: (err) => {
         this.message = err.error?.message || err.error || 'Błąd budowy.';
+        setTimeout(() => this.message = '', 4000);
+      }
+    });
+  }
+
+  demolish(def: BuildingDefinition): void {
+    const owned = this.getOwned(def.buildingType);
+    if (!owned || owned.quantity <= 0) {
+      this.message = this.translate.instant('bld.nothingToDemolish');
+      setTimeout(() => this.message = '', 4000);
+      return;
+    }
+    const qty = this.quantities[def.buildingType] || 1;
+    this.buildingService.demolish({ buildingType: def.buildingType, quantity: qty }).subscribe({
+      next: (res) => {
+        this.message = res.message || 'Wyburzono.';
+        this.load();
+        setTimeout(() => this.message = '', 4000);
+      },
+      error: (err) => {
+        this.message = err.error?.message || err.error || 'Błąd wyburzania.';
         setTimeout(() => this.message = '', 4000);
       }
     });

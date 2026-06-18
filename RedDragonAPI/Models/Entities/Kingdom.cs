@@ -19,8 +19,11 @@ public class Kingdom
 
     public bool IsMagicRace { get; set; } = true;
 
+    // Próg ziemi, po którym księstwo traci status nowicjusza („parasol" ochronny spada).
+    public const int NoviceLandCap = 30000;
+
     // Zasoby (Red Dragon faithful)
-    public int Land { get; set; } = 100;
+    public int Land { get; set; } = 1000;
     public long Gold { get; set; } = 50000;
     public long Food { get; set; } = 10000;
     public long Stone { get; set; } = 2000;

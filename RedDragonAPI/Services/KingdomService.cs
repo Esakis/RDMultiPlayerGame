@@ -116,7 +116,7 @@ public class KingdomService : IKingdomService
             Race = race,
             IsMagicRace = (raceDef?.MagicBooks ?? 0) > 0,
             EraId = eraId,
-            Land = 100,
+            Land = 1000,
             Gold = 50000,
             Food = 10000,
             Stone = 2000,
@@ -173,6 +173,7 @@ public class KingdomService : IKingdomService
     {
         var kingdom = await _context.Kingdoms
             .Include(k => k.Professions)
+            .Include(k => k.Buildings)
             .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
 
         if (kingdom == null)
@@ -196,8 +197,18 @@ public class KingdomService : IKingdomService
             if (unemployed.WorkerCount < dto.WorkerCount)
                 return ServiceResult.Fail($"Za mało bezrobotnych. Dostępnych: {unemployed.WorkerCount}");
 
+            // Limit zawodu (baza + cechy/uniwersytety) — by zatrudnić więcej, trzeba rozbudować budynki.
+            int capacity = ProfessionCapacity(kingdom, dto.ProfessionType);
+            if (targetProfession.WorkerCount + dto.WorkerCount > capacity)
+                return ServiceResult.Fail(
+                    $"Limit zawodu {targetProfession.ProfessionType}: {capacity}. " +
+                    $"Obecnie {targetProfession.WorkerCount}. Rozbuduj odpowiednie budynki (cechy / uniwersytety), aby zwiększyć limit.");
+
             unemployed.WorkerCount -= dto.WorkerCount;
             targetProfession.WorkerCount += dto.WorkerCount;
+            // Świeżo zatrudnieni są nowicjuszami (produkują 10%, płacą połowę pensji)
+            // do czasu wyszkolenia w Szkołach — docs/MECHANIKA.md §9, ResourceService.
+            targetProfession.NoviceCount += dto.WorkerCount;
         }
         else
         {
@@ -206,9 +217,20 @@ public class KingdomService : IKingdomService
             if (targetProfession.WorkerCount < toFree)
                 return ServiceResult.Fail($"Za mało pracowników w tej profesji. Aktualnie: {targetProfession.WorkerCount}");
 
+            // Zwalniamy proporcjonalnie nowicjuszy i wyszkolonych, aby % nowicjuszy nie skakał.
+            int freedNovices = targetProfession.WorkerCount > 0
+                ? (int)((long)toFree * targetProfession.NoviceCount / targetProfession.WorkerCount)
+                : 0;
             targetProfession.WorkerCount -= toFree;
+            targetProfession.NoviceCount = Math.Max(0, targetProfession.NoviceCount - freedNovices);
+            if (targetProfession.NoviceCount > targetProfession.WorkerCount)
+                targetProfession.NoviceCount = targetProfession.WorkerCount;
             unemployed.WorkerCount += toFree;
         }
+
+        targetProfession.NovicePercent = targetProfession.WorkerCount > 0
+            ? (decimal)targetProfession.NoviceCount / targetProfession.WorkerCount * 100m
+            : 0m;
 
         await _context.SaveChangesAsync();
         return ServiceResult.Ok("Pracownicy zostali przydzieleni.");
@@ -237,6 +259,13 @@ public class KingdomService : IKingdomService
 
         kingdom.Gold -= cost;
         kingdom.Land += amount;
+
+        // „Parasol" nowicjusza spada po przekroczeniu progu obszaru (Kingdom.NoviceLandCap).
+        if (kingdom.IsProtected && kingdom.Land >= Kingdom.NoviceLandCap)
+        {
+            kingdom.IsProtected = false;
+            kingdom.ProtectionDaysLeft = 0;
+        }
 
         await _context.SaveChangesAsync();
         return ServiceResult.Ok($"Zakupiono {amount} akrów za {cost} złota.");
@@ -441,10 +470,47 @@ public class KingdomService : IKingdomService
         return Math.Max(1, (long)Math.Ceiling(cost));
     }
 
+    /// <summary>
+    /// Maksymalna liczba pracowników, jaką można przydzielić do danej profesji.
+    /// Baza startowa + przyrost za odpowiednie budynki (cechy / uniwersytety) —
+    /// aby zatrudnić więcej, trzeba je rozbudować. „Bezrobotni" to pula bez limitu (0 = n/d).
+    /// </summary>
+    public static int ProfessionCapacity(Kingdom kingdom, string professionType)
+    {
+        if (professionType == "Bezrobotni") return 0;
+
+        int Count(string bt) => kingdom.Buildings
+            .Where(b => b.BuildingType == bt && !b.IsUnderConstruction)
+            .Sum(b => b.Quantity);
+
+        const int Base = 1000;        // każdy zawód można obsadzić startowo do 1000 osób
+        const int PerBuilding = 2000; // każdy odpowiedni budynek dokłada miejsca
+
+        int buildings = professionType switch
+        {
+            "Alchemicy" or "Chłopi" => Count("CechSlonca"),
+            "Druidzi" or "Kamieniarze" => Count("CechZiemi"),
+            "Murarze" or "Płatnerze" => Count("CechGwiazd"),
+            "Naukowcy" => Count("Uniwersytety"),
+            _ => 0 // Kupcy, Magowie — tylko baza
+        };
+
+        return Base + buildings * PerBuilding;
+    }
+
     private static KingdomDto MapToDto(Kingdom kingdom, int pendingGeneralCount = 0,
         List<KingdomEventDto>? recentEvents = null,
         (string? Name, long Progress, long Cost) research = default)
     {
+        // Zabudowa ziemi: zajęta ziemia = Σ ilość × koszt ziemi z definicji budynku.
+        int usedLand = kingdom.Buildings.Sum(b => b.Quantity * (b.Definition?.CostLand ?? 0));
+        int freeLand = Math.Max(0, kingdom.Land - usedLand);
+        decimal builtPercent = kingdom.Land > 0 ? Math.Round((decimal)usedLand / kingdom.Land * 100m, 1) : 0m;
+        int housingLand = kingdom.Buildings
+            .Where(b => b.BuildingType == "Domy")
+            .Sum(b => b.Quantity * (b.Definition?.CostLand ?? 0));
+        decimal housingPercent = kingdom.Land > 0 ? Math.Round((decimal)housingLand / kingdom.Land * 100m, 1) : 0m;
+
         return new KingdomDto
         {
             Id = kingdom.Id,
@@ -476,6 +542,11 @@ public class KingdomService : IKingdomService
             MaxTurns = kingdom.MaxTurns,
             TurnNumber = kingdom.TurnNumber,
             Age = kingdom.Age,
+            UsedLand = usedLand,
+            FreeLand = freeLand,
+            BuiltPercent = builtPercent,
+            HousingLand = housingLand,
+            HousingPercent = housingPercent,
             CurrentSpecialBuilding = string.IsNullOrEmpty(kingdom.CurrentSpecialBuilding)
                 ? null
                 : (kingdom.Buildings.FirstOrDefault(b => b.BuildingType == kingdom.CurrentSpecialBuilding)?.Definition?.DisplayName
@@ -526,7 +597,7 @@ public class KingdomService : IKingdomService
                 DisplayName = p.ProfessionType,
                 WorkerCount = p.WorkerCount,
                 NoviceCount = p.NoviceCount,
-                MaxCapacity = p.MaxCapacity,
+                MaxCapacity = ProfessionCapacity(kingdom, p.ProfessionType),
                 ProductionPerTurn = p.ProductionPerTurn,
                 NovicePercent = p.NovicePercent
             }).ToList(),

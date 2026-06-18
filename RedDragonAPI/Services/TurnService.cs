@@ -82,7 +82,7 @@ public class TurnService : ITurnService
         await _generalService.TryGeneralArrivalAsync(kingdom);
 
         // Pasywne przychodzenie smoków co turę (dużo na początku, malejąco do 200)
-        await _dragonService.ProcessTurnArrivalAsync(kingdom);
+        int dragonsArrived = await _dragonService.ProcessTurnArrivalAsync(kingdom);
 
         // Calculate deltas
         var deltas = new Dictionary<string, long>
@@ -96,6 +96,10 @@ public class TurnService : ITurnService
             ["population"] = kingdom.Population - before["population"],
             ["popularity"] = kingdom.Popularity - before["popularity"]
         };
+
+        // Smoki przybyłe w tej turze (informacyjnie na Stolicy).
+        if (dragonsArrived > 0)
+            deltas["dragonsArrived"] = dragonsArrived;
 
         // Przyrost postępu budynku specjalnego — tylko gdy budowa nadal trwa (po ukończeniu zerowane).
         if (!string.IsNullOrEmpty(kingdom.CurrentSpecialBuilding))

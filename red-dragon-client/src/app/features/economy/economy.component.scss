@@ -33,6 +33,12 @@ h2 {
       border: 2px solid #8b7355; color: #000; text-align: center; font-size: 13px;
     }
     .wages-gold { color: #d4af37; font-size: 13px; }
+    .unemployed-badge {
+      margin-left: auto; color: #cfcfcf; font-size: 14px;
+      padding: 4px 10px; border: 1px solid #5a2020; border-radius: 4px;
+      background: rgba(0,0,0,0.3);
+      strong { color: #ffd700; }
+    }
     .btn-assign {
       padding: 6px 14px; background: linear-gradient(180deg, #4a0808, #2a0808);
       border: 2px solid #8b0000; color: #ffd700; cursor: pointer; font-weight: bold;
@@ -48,7 +54,7 @@ h2 {
 
 .profession-table { display: flex; flex-direction: column; gap: 2px; }
 .prof-row {
-  display: grid; grid-template-columns: 1fr 100px 160px 200px; align-items: center;
+  display: grid; grid-template-columns: 1fr 90px 90px 90px 150px 200px; align-items: center;
   padding: 8px 10px; background: rgba(0,0,0,0.3);
   border-bottom: 1px solid rgba(90,32,32,0.3);
   &.header-row {
@@ -57,6 +63,8 @@ h2 {
   }
   .prof-name { color: #ffd700; font-weight: bold; }
   .prof-count { color: #ffffff; font-weight: bold; text-align: center; }
+  .prof-max { color: #cccccc; text-align: center; &.full { color: #ff8c66; font-weight: bold; } }
+  .prof-novice { color: #9ecbff; text-align: center; }
   .prof-prod { color: #66ff66; font-size: 13px; }
   .idle { color: #888; font-size: 12px; font-style: italic; }
 }

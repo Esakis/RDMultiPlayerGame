@@ -33,6 +33,16 @@ export class EconomyComponent implements OnInit {
     return Math.min(100, (this.wagesInput || 0) * 2);
   }
 
+  /** Liczba bezrobotnych (pula, z której przydzielamy do zawodów). */
+  get unemployed(): number {
+    return this.kingdom?.professions?.find(p => p.professionType === 'Bezrobotni')?.workerCount ?? 0;
+  }
+
+  /** Zawody, do których można przydzielać pracowników (bez puli „Bezrobotni"). */
+  get assignableProfessions() {
+    return this.kingdom?.professions?.filter(p => p.professionType !== 'Bezrobotni') ?? [];
+  }
+
   setWages(): void {
     this.kingdomService.setWages(this.wagesInput).subscribe({
       next: (res) => { this.message = res.message || 'OK'; this.load(); this.clearMsg(); },

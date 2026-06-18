@@ -23,7 +23,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadKingdom();
+    // turnProcessed$ to BehaviorSubject — przy wejściu na Stolicę natychmiast
+    // odtwarza ostatnie delty (zmiany pozostają widoczne po powrocie z innej zakładki).
     this.turnSub = this.turnService.turnProcessed$.subscribe(deltas => {
       this.deltas = deltas;
       this.loadKingdom();
@@ -112,6 +113,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const delta = this.deltas[deltaKey];
     if (!delta || !cost || cost <= 0) return 0;
     return Math.round((delta / cost) * 100);
+  }
+
+  /** Liczba smoków przybyłych w ostatniej turze (0 = brak / nie pokazuj). */
+  get dragonsArrived(): number {
+    return this.deltas['dragonsArrived'] || 0;
   }
 
   get researchPercentDelta(): number {

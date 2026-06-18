@@ -46,6 +46,18 @@ public class BuildingController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPost("demolish")]
+    public async Task<ActionResult> Demolish([FromBody] ConstructBuildingDto dto)
+    {
+        var userId = GetUserId();
+        var result = await _buildingService.DemolishBuildingAsync(userId, dto);
+
+        if (!result.Success)
+            return BadRequest(result.Message);
+
+        return Ok(result);
+    }
+
     private int GetUserId()
     {
         return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");

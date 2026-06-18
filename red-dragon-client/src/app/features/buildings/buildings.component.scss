@@ -1,5 +1,21 @@
 :host { display: block; padding: 10px 15px; }
 
+.land-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 0 0 14px 0;
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid #5a2020;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #d8c8a0;
+
+  strong { color: #ffd700; }
+  strong.zero { color: #e07a5f; }
+}
+
 h2 {
   color: #ffd700;
   margin: 0 0 15px 0;
@@ -151,6 +167,20 @@ h3 {
         background: linear-gradient(180deg, #6a0808, #4a0808);
         border-color: #ffd700; color: #fff;
       }
+    }
+    .btn-demolish {
+      padding: 6px 12px;
+      background: linear-gradient(180deg, #3a3a3a, #1a1a1a);
+      border: 2px solid #777;
+      color: #ddd; cursor: pointer; font-size: 13px; font-weight: bold;
+      white-space: nowrap;
+      &:hover {
+        background: linear-gradient(180deg, #5a2a2a, #3a1a1a);
+        border-color: #ff6666; color: #fff;
+      }
+    }
+    .btn-build:disabled, .btn-demolish:disabled {
+      opacity: 0.4; cursor: not-allowed;
     }
   }
 

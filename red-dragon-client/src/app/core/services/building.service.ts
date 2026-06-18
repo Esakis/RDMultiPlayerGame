@@ -23,4 +23,8 @@ export class BuildingService {
   construct(dto: ConstructBuildingDto): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/construct`, dto);
   }
+
+  demolish(dto: ConstructBuildingDto): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/demolish`, dto);
+  }
 }

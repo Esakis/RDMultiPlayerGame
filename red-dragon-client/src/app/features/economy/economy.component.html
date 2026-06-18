@@ -12,6 +12,7 @@
       <input type="number" min="0" max="50" [(ngModel)]="wagesInput" class="wages-num" />
       <span class="wages-gold">{{ 'eco.wagesPerWorker' | translate }}</span>
       <button class="btn-sm btn-assign" (click)="setWages()">{{ 'eco.wagesApply' | translate }}</button>
+      <span class="unemployed-badge">{{ 'eco.unemployed' | translate }}: <strong>{{ unemployed | numberFormat }}</strong></span>
     </div>
     <p class="wages-effect">
       {{ 'eco.wagesTarget' | translate }}:
@@ -29,19 +30,25 @@
 
     <div class="profession-table">
       <div class="prof-row header-row">
-        <span>{{ 'eco.profession' | translate }}</span><span>{{ 'eco.workers' | translate }}</span><span>{{ 'eco.perTurn' | translate }}</span><span>{{ 'eco.actions' | translate }}</span>
+        <span>{{ 'eco.profession' | translate }}</span>
+        <span>{{ 'eco.workers' | translate }}</span>
+        <span>{{ 'eco.maxWorkers' | translate }}</span>
+        <span>{{ 'eco.novicePct' | translate }}</span>
+        <span>{{ 'eco.perTurn' | translate }}</span>
+        <span>{{ 'eco.actions' | translate }}</span>
       </div>
-      <div class="prof-row" *ngFor="let p of kingdom.professions">
+      <div class="prof-row" *ngFor="let p of assignableProfessions">
         <span class="prof-name">{{ p.displayName }}</span>
         <span class="prof-count">{{ p.workerCount | numberFormat }}</span>
+        <span class="prof-max" [class.full]="p.workerCount >= p.maxCapacity">{{ p.maxCapacity | numberFormat }}</span>
+        <span class="prof-novice">{{ p.novicePercent | number:'1.0-0' }}%</span>
         <span class="prof-prod">{{ getProductionInfo(p.professionType) }}</span>
-        <div class="prof-actions" *ngIf="p.professionType !== 'Bezrobotni'">
+        <div class="prof-actions">
           <input type="number" [(ngModel)]="assignAmounts[p.professionType]"
                  min="1" max="10000" [placeholder]="'eco.amount' | translate" />
           <button class="btn-sm btn-assign" (click)="assign(p.professionType, assignAmounts[p.professionType] || 10)">+</button>
           <button class="btn-sm btn-remove" (click)="unassign(p.professionType, assignAmounts[p.professionType] || 10)">−</button>
         </div>
-        <span *ngIf="p.professionType === 'Bezrobotni'" class="idle">{{ 'eco.awaiting' | translate }}</span>
       </div>
     </div>
   </div>

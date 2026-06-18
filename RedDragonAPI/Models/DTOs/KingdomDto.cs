@@ -40,6 +40,14 @@ public class KingdomDto
     // Wiek
     public int Age { get; set; }
 
+    // Zabudowa ziemi (liczone z budynków: Σ ilość × koszt ziemi)
+    public int UsedLand { get; set; }
+    public int FreeLand { get; set; }
+    public decimal BuiltPercent { get; set; }
+    // Udział ziemi pod domami (budynek „Domy")
+    public int HousingLand { get; set; }
+    public decimal HousingPercent { get; set; }
+
     // Budynek specjalny w budowie
     public string? CurrentSpecialBuilding { get; set; }
     public int SpecialBuildingProgress { get; set; }

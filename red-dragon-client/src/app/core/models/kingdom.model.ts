@@ -21,6 +21,11 @@ export interface Kingdom {
   maxTurns: number;
   turnNumber: number;
   age: number;
+  usedLand: number;
+  freeLand: number;
+  builtPercent: number;
+  housingLand: number;
+  housingPercent: number;
   currentSpecialBuilding: string | null;
   specialBuildingProgress: number;
   specialBuildingCost: number;

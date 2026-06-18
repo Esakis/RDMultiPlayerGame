@@ -68,7 +68,7 @@ public static class EraConcluder
             int tpd = races.FirstOrDefault(r => r.Name == k.Race)?.TurnsPerDay ?? 15;
 
             k.EraId = newEra.Id;
-            k.Land = 100;
+            k.Land = 1000;
             k.Gold = 50000; k.Food = 10000; k.Stone = 2000;
             k.Budulec = 0; k.BudulecStored = 0; k.Weapons = 0; k.Mana = 0;
             k.Population = 1000; k.Popularity = 100; k.Wages = 50; k.Education = 0;

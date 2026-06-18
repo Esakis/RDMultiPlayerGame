@@ -220,6 +220,35 @@ public class BuildingService : IBuildingService
         return ServiceResult.Ok(msg);
     }
 
+    public async Task<ServiceResult> DemolishBuildingAsync(int userId, ConstructBuildingDto dto)
+    {
+        var kingdom = await _context.Kingdoms
+            .Include(k => k.Buildings)
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+
+        if (kingdom == null)
+            return ServiceResult.Fail("Nie znaleziono księstwa.");
+
+        var definition = await _context.BuildingDefinitions
+            .FirstOrDefaultAsync(d => d.BuildingType == dto.BuildingType);
+        if (definition == null)
+            return ServiceResult.Fail("Nieznany typ budynku.");
+
+        var building = kingdom.Buildings.FirstOrDefault(b => b.BuildingType == dto.BuildingType);
+        if (building == null || building.Quantity <= 0)
+            return ServiceResult.Fail("Nie posiadasz tego budynku.");
+
+        int quantity = Math.Min(Math.Max(1, dto.Quantity), building.Quantity);
+        building.Quantity -= quantity;
+
+        // Budynek bez sztuk i bez trwającej budowy można usunąć z bazy (zwalnia drzewko specjalne).
+        if (building.Quantity == 0 && !building.IsUnderConstruction)
+            _context.Buildings.Remove(building);
+
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok($"Wyburzono {quantity}x {definition.DisplayName}. Zajmowana ziemia została zwolniona.");
+    }
+
     /// <summary>
     /// Koszt jednego budynku gospodarczego wg oryginalnego wzoru (manual „Cena infrabudov"):
     /// infrabody = int((149·ziemia/15000 + 1)·(1 − rabat)); dla ziemi > 20000 wariant rasowy
