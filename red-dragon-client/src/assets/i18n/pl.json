@@ -87,7 +87,7 @@
     "loadingKingdom": "Ładowanie księstwa..."
   },
   "lab": {
-    "lead": "Wyślij generała do labiryntu. Na każde przeliczenie masz budżet akcji: 2 punkty (4 z Zajazdem u Czerwonego Smoka — wtedy wejdziesz 2×). Wzięcie skarbu kosztuje 2 punkty (możliwa rana lub śmierć generała — oprócz złota), a akcja generała (szukanie / zmiana zdolności) 1 punkt i nigdy nie szkodzi. Wyższy poziom generała, zaklęcie „Szczęście" i cecha Odkrywca zwiększają łup i zmniejszają ryzyko. Skarb wynosisz dopiero po 5. turze przeliczenia. Akcje nie kosztują tur.",
+    "lead": "Wyślij generała do labiryntu. Na każde przeliczenie masz budżet akcji: 2 punkty (4 z Zajazdem u Czerwonego Smoka — wtedy wejdziesz 2×). Wzięcie skarbu kosztuje 2 punkty (możliwa rana lub śmierć generała — oprócz złota), a akcja generała (szukanie / zmiana zdolności) 1 punkt i nigdy nie szkodzi. Wyższy poziom generała, zaklęcie „Szczęście” i cecha Odkrywca zwiększają łup i zmniejszają ryzyko. Skarb wynosisz dopiero po 5. turze przeliczenia. Akcje nie kosztują tur.",
     "actionPoints": "Punkty akcji",
     "doubleEntryActive": "Zajazd u Czerwonego Smoka — wejście ×2",
     "turnsUsed": "Tury wykorzystane w tym przeliczeniu",
