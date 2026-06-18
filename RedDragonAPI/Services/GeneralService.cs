@@ -229,7 +229,15 @@ public class GeneralService : IGeneralService
         bool hasPending = await _context.Generals.AnyAsync(g => g.KingdomId == kingdom.Id && g.IsPending);
         int limit = await GetGeneralsLimitAsync(kingdom);
 
-        bool arrived = TryArrival(kingdom, activeCount, hasPending, limit);
+        // Cecha ostatnio przybyłego generała — by nie generować serii tej samej cechy
+        // (np. „same kupcy”). Kolejny kandydat dostanie inną cechę główną, jeśli to możliwe.
+        string? lastPrimary = await _context.Generals
+            .Where(g => g.KingdomId == kingdom.Id)
+            .OrderByDescending(g => g.ArrivedAt)
+            .Select(g => g.PrimaryTrait)
+            .FirstOrDefaultAsync();
+
+        bool arrived = TryArrival(kingdom, activeCount, hasPending, limit, lastPrimary);
         if (arrived) await _context.SaveChangesAsync();
         return arrived;
     }
@@ -294,7 +302,7 @@ public class GeneralService : IGeneralService
     /// dalej szansa maleje z liczbą generałów, a Akademia dowodzenia ją podwaja.
     /// Gdy w poczekalni już ktoś czeka — nie przychodzi kolejny. Nie zapisuje zmian.
     /// </summary>
-    private bool TryArrival(Kingdom kingdom, int activeCount, bool hasPending, int limit)
+    private bool TryArrival(Kingdom kingdom, int activeCount, bool hasPending, int limit, string? excludePrimary = null)
     {
         // Jeden kandydat na raz — dopóki gracz nie zdecyduje, nowi nie przychodzą
         if (hasPending) return false;
@@ -319,7 +327,12 @@ public class GeneralService : IGeneralService
 
         if (Random.Shared.NextDouble() >= chance) return false;
 
-        string primary = PrimaryTraits[Random.Shared.Next(PrimaryTraits.Length)];
+        // Losuj cechę główną, unikając powtórzenia po ostatnio przybyłym generale.
+        var primaryPool = excludePrimary != null
+            ? PrimaryTraits.Where(t => t != excludePrimary).ToArray()
+            : PrimaryTraits;
+        if (primaryPool.Length == 0) primaryPool = PrimaryTraits;
+        string primary = primaryPool[Random.Shared.Next(primaryPool.Length)];
         var secondaries = AllowedSecondary[primary];
         string secondary = secondaries[Random.Shared.Next(secondaries.Length)];
 

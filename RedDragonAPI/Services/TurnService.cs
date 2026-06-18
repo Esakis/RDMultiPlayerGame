@@ -9,12 +9,15 @@ public class TurnService : ITurnService
     private readonly ApplicationDbContext _context;
     private readonly IResourceService _resourceService;
     private readonly IGeneralService _generalService;
+    private readonly IDragonService _dragonService;
 
-    public TurnService(ApplicationDbContext context, IResourceService resourceService, IGeneralService generalService)
+    public TurnService(ApplicationDbContext context, IResourceService resourceService,
+        IGeneralService generalService, IDragonService dragonService)
     {
         _context = context;
         _resourceService = resourceService;
         _generalService = generalService;
+        _dragonService = dragonService;
     }
 
     public async Task<TurnResultDto> UseTurnAsync(int userId)
@@ -77,6 +80,9 @@ public class TurnService : ITurnService
 
         // Próba przyjścia generała (gwarantowana, gdy księstwo nie ma żadnego generała)
         await _generalService.TryGeneralArrivalAsync(kingdom);
+
+        // Pasywne przychodzenie smoków co turę (dużo na początku, malejąco do 200)
+        await _dragonService.ProcessTurnArrivalAsync(kingdom);
 
         // Calculate deltas
         var deltas = new Dictionary<string, long>

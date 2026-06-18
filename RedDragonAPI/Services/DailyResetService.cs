@@ -273,36 +273,9 @@ public class DailyResetService : BackgroundService
                 }
             }
 
-            // 5b. Wabienie smoków Portalem (docs/MECHANIKA.md §7, §9)
-            foreach (var kingdom in kingdoms.Where(k => DragonHelper.Has(k, "Portal")))
-            {
-                long dragons = await context.MilitaryUnits
-                    .Where(m => m.KingdomId == kingdom.Id && m.UnitType.EndsWith("_Smok"))
-                    .SumAsync(m => (long)m.Quantity);
-                int draco = await context.Researches
-                    .CountAsync(r => r.KingdomId == kingdom.Id && r.IsCompleted && r.TechType.StartsWith("Smoko"));
-                long cap = DragonHelper.ComputeCap(kingdom, draco);
-                if (dragons >= cap) continue;
-
-                // Szansa: 25% + 10% za każdy poziom badań o smokach; Ministerstwo smoków +25%
-                double chance = 0.25 + 0.10 * draco
-                    + (DragonHelper.Has(kingdom, "MinisterstwoSmokow") ? 0.25 : 0);
-                if (Random.Shared.NextDouble() >= chance) continue;
-
-                var dragonDef = await context.UnitDefinitions
-                    .FirstOrDefaultAsync(u => u.Race == kingdom.Race && u.UnitType.EndsWith("_Smok"));
-                if (dragonDef == null) continue;
-
-                var unit = await context.MilitaryUnits
-                    .FirstOrDefaultAsync(m => m.KingdomId == kingdom.Id && m.UnitType == dragonDef.UnitType);
-                if (unit == null)
-                    context.MilitaryUnits.Add(new MilitaryUnit
-                    {
-                        KingdomId = kingdom.Id, UnitType = dragonDef.UnitType, Quantity = 1
-                    });
-                else
-                    unit.Quantity += 1;
-            }
+            // 5b. Smoki przychodzą teraz pasywnie co turę (DragonService.ProcessTurnArrivalAsync,
+            //     wywoływane z TurnService) — model hybrydowy malejący do 200. Dzienne wabienie
+            //     Portalem usunięto, by nie dublować źródła smoków.
 
             // 6. Badania kończą się teraz przez Punkty Nauki (ResourceService),
             //    nie przez czas — patrz docs/MECHANIKA.md §13.

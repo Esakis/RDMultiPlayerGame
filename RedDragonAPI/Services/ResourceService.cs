@@ -151,6 +151,9 @@ public class ResourceService : IResourceService
         }
 
         long merchantGold = 0;
+        // Mana nie jest dodawana wprost — druidzi (i Manowe jeziorko / Dżin) wyznaczają
+        // POJEMNOŚĆ many, do której manę uzupełnia się o ⅓ różnicy w sekcji 10 (profese.txt).
+        long manaCapacity = 0;
         foreach (var prof in kingdom.Professions)
         {
             long production = 0;
@@ -171,8 +174,10 @@ public class ResourceService : IResourceService
                     kingdom.Food += production;
                     break;
                 case "Druidzi":
+                    // Druidzi nie produkują many wprost — ich liczba × produktywność to
+                    // POJEMNOŚĆ many, jaką księstwo może utrzymać (profese.txt: „1 mana/druida”).
                     production = (long)(prof.WorkerCount * DruidManaBase * Productivity(prof, race.BonusDruids));
-                    kingdom.Mana += production;
+                    manaCapacity += production;
                     break;
                 case "Kamieniarze":
                     production = (long)(prof.WorkerCount * StonemasonStoneBase * Productivity(prof, race.BonusStonemasons));
@@ -273,17 +278,24 @@ public class ResourceService : IResourceService
         Manufactory("Manufaktura", 400m, v => kingdom.Food += v);        // Sad owocowy (jedzenie)
         Manufactory("Kamieniolom", 40m, v => kingdom.Stone += v);        // Kamieniołom (kamień)
         Manufactory("KopalniaDiamentow", 4000m, v => kingdom.Gold += v); // Kopalnia diamentów (złoto)
-        Manufactory("ManoweJeziorko", 40m, v => kingdom.Mana += v);      // Manowe jeziorko (mana)
+        Manufactory("ManoweJeziorko", 40m, v => manaCapacity += v);      // Manowe jeziorko (zwiększa pojemność many)
 
-        // Ratusz (budynek specjalny, Dracopedia §14.3 „podatek 10 zł/mieszkańca"): tu ~1 zł/mieszkańca
-        // na turę (przybliżenie dziennego podatku — produkcja liczona jest co turę).
-        if (Has("Ratusz")) kingdom.Gold += kingdom.Population;
+        // Ratusz (budynek specjalny, Dracopedia §14.3): podatek 10 zł/mieszkańca na turę —
+        // główne pasywne źródło złota utrzymujące ekonomię (płace obciążają wszystkich pracowników).
+        if (Has("Ratusz")) kingdom.Gold += kingdom.Population * 10L;
 
         // === 3. Pensje i żołd ===
+        // Nowicjusze produkują 10% — płacą połowę pensji (złagodzenie, by nowe księstwo nie bankrutowało
+        // na świeżo zatrudnionych). Wyszkoleni pracownicy płacą pełną stawkę.
         int totalWorkers = kingdom.Professions
             .Where(p => p.ProfessionType != "Bezrobotni")
             .Sum(p => p.WorkerCount);
-        long wagesCost = (long)totalWorkers * kingdom.Wages;
+        long noviceWorkers = kingdom.Professions
+            .Where(p => p.ProfessionType != "Bezrobotni")
+            .Sum(p => (long)p.NoviceCount);
+        long trainedWorkers = totalWorkers - noviceWorkers;
+        long wagesCost = trainedWorkers * kingdom.Wages
+                         + (long)(noviceWorkers * kingdom.Wages * 0.5m);
         kingdom.Gold -= wagesCost;
 
         var militaryUnits = await _context.MilitaryUnits
@@ -494,12 +506,20 @@ public class ResourceService : IResourceService
                 : 0;
         }
 
-        // === 10. Mana po turze (Dracopedia §5, §14.4) ===
-        // Mana znika po turze; wyjątki: Dżin przechowuje 1 manę/mieszkańca, Elf many nie traci.
+        // === 10. Mana po turze (profese.txt: druidzi wyznaczają pojemność many) ===
+        // Mana NIE znika — co turę dochodzi ⅓ różnicy między posiadaną maną a pojemnością.
+        // Gdy mana > pojemność (np. kupiona), nadwyżka maleje o ⅓ różnicy w stronę pojemności.
+        // Dżin przechowuje dodatkowo 1 manę/mieszkańca; Elf many nie traci (może gromadzić ponad pojemność).
         if (kingdom.Race == "Dżin")
-            kingdom.Mana = Math.Min(kingdom.Mana, kingdom.Population);
-        else if (kingdom.Race != "Elf")
-            kingdom.Mana = 0;
+            manaCapacity += kingdom.Population;
+
+        long manaDiff = manaCapacity - kingdom.Mana;
+        long manaDelta = manaDiff / 3;
+        // Domknij niewielką resztę, by mana nie utykała tuż pod/nad pojemnością.
+        if (manaDelta == 0 && manaDiff != 0) manaDelta = manaDiff;
+        // Elf many nie traci — przy nadwyżce nie zmniejszamy.
+        if (kingdom.Race == "Elf") manaDelta = Math.Max(0, manaDelta);
+        kingdom.Mana = Math.Max(0, kingdom.Mana + manaDelta);
 
         kingdom.TurnNumber++;
     }
