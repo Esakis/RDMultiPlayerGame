@@ -285,8 +285,9 @@ public class ResourceService : IResourceService
         if (Has("Ratusz")) kingdom.Gold += kingdom.Population * 10L;
 
         // === 3. Pensje i żołd ===
-        // Nowicjusze produkują 10% — płacą połowę pensji (złagodzenie, by nowe księstwo nie bankrutowało
-        // na świeżo zatrudnionych). Wyszkoleni pracownicy płacą pełną stawkę.
+        // Nowicjusze produkują tylko 10% i NIE pobierają pensji (są na nauce zawodu) —
+        // dzięki temu rozbudowa zatrudnienia nie topi nowego księstwa w długach, zanim
+        // pracownicy się wyszkolą. Pełną stawkę płacą dopiero wyszkoleni.
         int totalWorkers = kingdom.Professions
             .Where(p => p.ProfessionType != "Bezrobotni")
             .Sum(p => p.WorkerCount);
@@ -294,8 +295,7 @@ public class ResourceService : IResourceService
             .Where(p => p.ProfessionType != "Bezrobotni")
             .Sum(p => (long)p.NoviceCount);
         long trainedWorkers = totalWorkers - noviceWorkers;
-        long wagesCost = trainedWorkers * kingdom.Wages
-                         + (long)(noviceWorkers * kingdom.Wages * 0.5m);
+        long wagesCost = trainedWorkers * kingdom.Wages;
         kingdom.Gold -= wagesCost;
 
         var militaryUnits = await _context.MilitaryUnits
@@ -493,10 +493,14 @@ public class ResourceService : IResourceService
         ReconcileWorkforceWithPopulation(kingdom);
 
         // === 9. Szkolenie nowicjuszy ===
-        // p% = 100/(6 − 500·s/(z + 100·s + 99)) — s: liczba szkół
+        // p% = 100/(3,5 − 250·s/(z + 100·s + 99)) — s: liczba szkół.
+        // Baza (bez szkół) ≈ 28,6%/turę zamiast dawnych 16,7% — rampa nowicjusza trwa
+        // ~3-4 tury zamiast ~13, więc nowe księstwo szybko osiąga pełną produktywność.
+        // Szkoły skracają ją dalej (mianownik dąży do 1 → ~90%). Clamp dla bezpieczeństwa.
         var schools = kingdom.Buildings.FirstOrDefault(b => b.BuildingType == "Szkoly" && !b.IsUnderConstruction);
         decimal s = schools?.Quantity ?? 0;
-        decimal trainedPct = 100m / (6m - 500m * s / (kingdom.Land + 100m * s + 99m)) / 100m;
+        decimal trainedDenom = 3.5m - 250m * s / (kingdom.Land + 100m * s + 99m);
+        decimal trainedPct = Math.Clamp(100m / trainedDenom / 100m, 0.05m, 0.90m);
         foreach (var prof in kingdom.Professions.Where(p => p.NoviceCount > 0))
         {
             int trained = Math.Max(1, (int)(prof.NoviceCount * trainedPct));

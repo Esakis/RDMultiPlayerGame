@@ -117,9 +117,11 @@ public class KingdomService : IKingdomService
             IsMagicRace = (raceDef?.MagicBooks ?? 0) > 0,
             EraId = eraId,
             Land = 1000,
-            Gold = 50000,
-            Food = 10000,
-            Stone = 2000,
+            // Bufory startowe dobrane tak, by przetrwać pierwsze tury rozruchu
+            // (rampa nowicjuszy + budowa/rekrutacja), nie wpadając od razu w spiralę bankructwa.
+            Gold = 75000,
+            Food = 15000,
+            Stone = 5000,
             Budulec = 0,
             BudulecStored = 0,
             Weapons = 0,
@@ -143,21 +145,35 @@ public class KingdomService : IKingdomService
         await _context.SaveChangesAsync();
 
         // Profesje oryginalnego RD: bezrobotni + farmerzy, kamieniarze, murarze,
-        // kupcy, alchemicy, płatnerze, druidzi, magowie, naukowcy
-        var professionTypes = new[]
+        // kupcy, alchemicy, płatnerze, druidzi, magowie, naukowcy.
+        // Startowa, WYSZKOLONA kadra (NoviceCount=0): księstwo jest samowystarczalne
+        // już w turze 0 (dodatni bilans złota, jedzenia i kamienia), a gracz rozwija je
+        // dalej zatrudniając bezrobotnych. Bez tego cała ludność zaczynała jako nowicjusze
+        // (10% produkcji) i ekonomia od razu wpadała w spiralę bankructwa.
+        // Bilans przy płacy 50: złoto +2500/t (alchemicy 250×100 − pensje 450×50),
+        // jedzenie +500/t (chłopi 150×10 − ludność 1000×1), kamień +250/t (kamieniarze 50×5).
+        var startingWorkers = new Dictionary<string, int>
         {
-            "Bezrobotni", "Alchemicy", "Chłopi", "Druidzi",
-            "Kamieniarze", "Murarze", "Płatnerze", "Kupcy", "Magowie", "Naukowcy"
+            ["Bezrobotni"] = 550,
+            ["Alchemicy"] = 250,
+            ["Chłopi"] = 150,
+            ["Kamieniarze"] = 50,
+            ["Druidzi"] = 0,
+            ["Murarze"] = 0,
+            ["Płatnerze"] = 0,
+            ["Kupcy"] = 0,
+            ["Magowie"] = 0,
+            ["Naukowcy"] = 0
         };
 
-        foreach (var profType in professionTypes)
+        foreach (var (profType, count) in startingWorkers)
         {
             _context.Professions.Add(new Profession
             {
                 KingdomId = kingdom.Id,
                 ProfessionType = profType,
-                WorkerCount = profType == "Bezrobotni" ? 1000 : 0,
-                NoviceCount = 0,
+                WorkerCount = count,
+                NoviceCount = 0,   // kadra startowa jest już wyszkolona (pełna produktywność)
                 MaxCapacity = 0,
                 ProductionPerTurn = 0,
                 NovicePercent = 0
