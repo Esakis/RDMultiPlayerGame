@@ -355,13 +355,18 @@
     },
     "planned": {
       "title": "Planned attacks",
+      "coalitionTitle": "War panel — coalition duchies' attacks",
       "hint": "These attacks will execute at the next 5:00 recalculation. Until then you can cancel them — the turn and the general will return.",
+      "attacker": "Attacker",
       "target": "Target",
       "general": "General",
       "units": "Units",
       "cancel": "Cancel",
       "cancelled": "Attack cancelled."
     },
+    "fromKingdom": "Attack from duchy",
+    "fromOwn": "my duchy",
+    "fromTurns": "This duchy's available turns: {{n}}",
     "reason": {
       "attackable": "Attackable",
       "protected": "Novice (protected)",

@@ -6,6 +6,8 @@ import { MilitaryUnit, UnitDefinition, RecruitUnitsDto, BattleReport, ServiceRes
 
 export interface PlannedAttack {
   id: number;
+  attackerKingdomId: number;
+  attackerName: string;
   targetKingdomId: number;
   targetName: string;
   generalId: number;
@@ -13,6 +15,24 @@ export interface PlannedAttack {
   units: { [unitType: string]: number };
   scheduledFor: string;
   createdAt: string;
+}
+
+export interface AttackUnit {
+  unitType: string;
+  displayName: string;
+  quantity: number;
+  attackPower: number;
+}
+
+export interface AttackOptions {
+  kingdomId: number;
+  kingdomName: string;
+  turnsAvailable: number;
+  generals: {
+    id: number; name: string; primaryTrait: string; secondaryTrait: string;
+    level: number; experience: number; isAvailable: boolean; status: string;
+  }[];
+  units: AttackUnit[];
 }
 
 @Injectable({
@@ -51,12 +71,22 @@ export class MilitaryService {
     return this.http.post<ServiceResult>(`${this.apiUrl}/military/training`, dto);
   }
 
-  attack(targetKingdomId: number, generalId: number, units: { [key: string]: number }): Observable<ServiceResult> {
-    return this.http.post<ServiceResult>(`${this.apiUrl}/battle/attack`, { targetKingdomId, generalId, units });
+  attack(targetKingdomId: number, generalId: number, units: { [key: string]: number },
+         attackerKingdomId?: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/battle/attack`,
+      { targetKingdomId, generalId, units, attackerKingdomId });
+  }
+
+  getAttackOptions(kingdomId: number): Observable<AttackOptions> {
+    return this.http.get<AttackOptions>(`${this.apiUrl}/battle/attack-options/${kingdomId}`);
   }
 
   getPlannedAttacks(): Observable<PlannedAttack[]> {
     return this.http.get<PlannedAttack[]>(`${this.apiUrl}/battle/planned`);
+  }
+
+  getCoalitionPlannedAttacks(): Observable<PlannedAttack[]> {
+    return this.http.get<PlannedAttack[]>(`${this.apiUrl}/battle/planned/coalition`);
   }
 
   cancelPlannedAttack(id: number): Observable<ServiceResult> {

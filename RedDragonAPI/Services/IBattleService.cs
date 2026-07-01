@@ -7,6 +7,8 @@ public interface IBattleService
 {
     Task<ServiceResult> QueueAttackAsync(int userId, AttackDto dto);
     Task<List<PlannedAttackDto>> GetPlannedAttacksAsync(int userId);
+    Task<List<PlannedAttackDto>> GetCoalitionPlannedAttacksAsync(int userId);
+    Task<ServiceResult<AttackOptionsDto>> GetAttackOptionsAsync(int userId, int kingdomId);
     Task<ServiceResult> CancelPlannedAttackAsync(int userId, int actionId);
     Task<List<BattleReportDto>> GetBattleReportsAsync(int userId);
     Task<List<BattleReportDto>> GetCoalitionBattleReportsAsync(int userId);

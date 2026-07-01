@@ -355,13 +355,18 @@
     },
     "planned": {
       "title": "Zaplanowane ataki",
+      "coalitionTitle": "Panel wojenny — ataki księstw koalicji",
       "hint": "Te ataki wykonają się przy najbliższym przeliczeniu o 5:00. Do tego czasu możesz je odwołać — tura i generał wrócą do księstwa.",
+      "attacker": "Atakujący",
       "target": "Cel",
       "general": "Generał",
       "units": "Jednostki",
       "cancel": "Odwołaj",
       "cancelled": "Atak odwołany."
     },
+    "fromKingdom": "Atakuj z księstwa",
+    "fromOwn": "moje księstwo",
+    "fromTurns": "Dostępne tury tego księstwa: {{n}}",
     "reason": {
       "attackable": "Atakowalne",
       "protected": "Nowicjusz (chroniony)",

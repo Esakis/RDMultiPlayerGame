@@ -70,13 +70,38 @@ public class AttackDto
     public int TargetKingdomId { get; set; }
     /// <summary>Generał prowadzący atak — wymagany, atak bez generała nie wyrusza.</summary>
     public int GeneralId { get; set; }
+    /// <summary>
+    /// Księstwo, z którego wyrusza atak. Null/własne = atak z własnego księstwa.
+    /// Inne księstwo koalicji mogą wskazać tylko Imperator i Głównodowodzący.
+    /// </summary>
+    public int? AttackerKingdomId { get; set; }
     public Dictionary<string, int> Units { get; set; } = new();
+}
+
+/// <summary>Dane do zaplanowania ataku z danego księstwa: dostępni generałowie i jednostki.</summary>
+public class AttackOptionsDto
+{
+    public int KingdomId { get; set; }
+    public string KingdomName { get; set; } = string.Empty;
+    public int TurnsAvailable { get; set; }
+    public List<GeneralDto> Generals { get; set; } = new();
+    public List<AttackUnitDto> Units { get; set; } = new();
+}
+
+public class AttackUnitDto
+{
+    public string UnitType { get; set; } = string.Empty;
+    public string DisplayName { get; set; } = string.Empty;
+    public int Quantity { get; set; }
+    public int AttackPower { get; set; }
 }
 
 /// <summary>Zaplanowany (zakolejkowany) atak oczekujący na przeliczenie o 5:00.</summary>
 public class PlannedAttackDto
 {
     public int Id { get; set; }
+    public int AttackerKingdomId { get; set; }
+    public string AttackerName { get; set; } = string.Empty;
     public int TargetKingdomId { get; set; }
     public string TargetName { get; set; } = string.Empty;
     public int GeneralId { get; set; }

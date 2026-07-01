@@ -40,7 +40,48 @@
     </table>
   </div>
 
+  <!-- Panel wojenny dowódcy: zaplanowane ataki pozostałych księstw koalicji -->
+  <div class="planned-attacks" *ngIf="isCommander && coalitionPlannedAttacks.length > 0">
+    <h3>{{ 'atk.planned.coalitionTitle' | translate }}</h3>
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th>{{ 'atk.planned.attacker' | translate }}</th>
+          <th>{{ 'atk.planned.target' | translate }}</th>
+          <th>{{ 'atk.planned.general' | translate }}</th>
+          <th>{{ 'atk.planned.units' | translate }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of coalitionPlannedAttacks">
+          <td class="name">{{ p.attackerName }}</td>
+          <td class="name">{{ p.targetName }}</td>
+          <td>{{ p.generalName }}</td>
+          <td>{{ unitsSummary(p.units) }}</td>
+          <td>
+            <button class="btn-cancel" (click)="cancelPlanned(p.id)">{{ 'atk.planned.cancel' | translate }}</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <ng-container *ngIf="!loading">
+    <!-- Imperator/Głównodowodzący: wybór księstwa, z którego wyrusza atak -->
+    <div class="attack-from" *ngIf="isCommander && coalitionMembers.length > 1">
+      <label>{{ 'atk.fromKingdom' | translate }}:
+        <select [(ngModel)]="attackFromId" (ngModelChange)="onAttackFromChange()">
+          <option *ngFor="let m of coalitionMembers" [ngValue]="m.id">
+            {{ m.name }}{{ m.id === myKingdom?.id ? (' — ' + ('atk.fromOwn' | translate)) : '' }}
+          </option>
+        </select>
+      </label>
+      <span class="hint" *ngIf="attackOptions">
+        {{ 'atk.fromTurns' | translate:{ n: attackOptions.turnsAvailable } }}
+      </span>
+    </div>
+
     <div class="filters">
       <label>{{ 'atk.show' | translate }}:
         <select [(ngModel)]="filterMode">
@@ -95,7 +136,7 @@
       <table class="rd-table units">
         <thead><tr><th>{{ 'atk.unit' | translate }}</th><th>{{ 'mil.attack' | translate }}</th><th>{{ 'atk.available' | translate }}</th><th>{{ 'atk.send' | translate }}</th></tr></thead>
         <tbody>
-          <tr *ngFor="let u of myUnits">
+          <tr *ngFor="let u of attackUnits">
             <td>{{ u.displayName }}</td>
             <td class="num">{{ u.attackPower }}</td>
             <td class="num">{{ u.quantity | number }}</td>
@@ -105,7 +146,7 @@
           </tr>
         </tbody>
       </table>
-      <p class="hint" *ngIf="myUnits.length === 0">{{ 'atk.noUnits' | translate }}</p>
+      <p class="hint" *ngIf="attackUnits.length === 0">{{ 'atk.noUnits' | translate }}</p>
       <div class="actions">
         <button class="btn-attack" (click)="launchAttack()" [disabled]="totalSelected <= 0 || !selectedGeneralId">
           {{ 'atk.attackBtn' | translate:{ n: (totalSelected | number) } }}

@@ -72,6 +72,13 @@
   .rd-table { margin-bottom: 4px; }
 }
 
+.attack-from {
+  display: flex; align-items: baseline; gap: 14px; margin: 10px 0;
+  padding: 8px 12px; border: 1px solid #c9a86a; background: rgba(60, 45, 15, 0.25);
+  label { font-size: 13px; color: #c9a86a; }
+  select { background: #2a1208; color: #e8d5b0; border: 1px solid #5a3a1a; padding: 3px 6px; margin-left: 6px; min-width: 240px; }
+}
+
 .general-pick {
   margin: 8px 0 12px;
   label { font-size: 13px; color: #c9a86a; }

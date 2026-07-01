@@ -16,20 +16,40 @@ public class BattleService : IBattleService
         _context = context;
     }
 
+    /// <summary>Czy rola koalicyjna pozwala działać w imieniu innych księstw koalicji.</summary>
+    private static bool IsCoalitionCommander(Kingdom k) =>
+        k.CoalitionRole is "Imperator" or "MainCommander";
+
     public async Task<ServiceResult> QueueAttackAsync(int userId, AttackDto dto)
     {
-        var kingdom = await _context.Kingdoms
+        var callerKingdom = await _context.Kingdoms
             .Include(k => k.MilitaryUnits)
             .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
 
-        if (kingdom == null)
+        if (callerKingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
 
+        // Imperator/Głównodowodzący może zaplanować atak z dowolnego księstwa koalicji
+        Kingdom kingdom = callerKingdom;
+        if (dto.AttackerKingdomId.HasValue && dto.AttackerKingdomId != callerKingdom.Id)
+        {
+            if (!IsCoalitionCommander(callerKingdom))
+                return ServiceResult.Fail("Tylko Imperator lub Głównodowodzący może planować ataki z innych księstw koalicji.");
+
+            var delegated = await _context.Kingdoms
+                .Include(k => k.MilitaryUnits)
+                .FirstOrDefaultAsync(k => k.Id == dto.AttackerKingdomId && k.Era.IsActive);
+            if (delegated == null || callerKingdom.CoalitionId == null
+                || delegated.CoalitionId != callerKingdom.CoalitionId)
+                return ServiceResult.Fail("Wskazane księstwo nie należy do Twojej koalicji.");
+            kingdom = delegated;
+        }
+
         if (kingdom.IsFrozen)
-            return ServiceResult.Fail("Twoje księstwo jest zamrożone — odmróź je, aby atakować.");
+            return ServiceResult.Fail("Księstwo atakujące jest zamrożone — nie może atakować.");
 
         if (kingdom.TurnsAvailable <= 0)
-            return ServiceResult.Fail("Brak dostępnych tur.");
+            return ServiceResult.Fail("Księstwo atakujące nie ma dostępnych tur.");
 
         var target = await _context.Kingdoms
             .FirstOrDefaultAsync(k => k.Id == dto.TargetKingdomId);
@@ -116,9 +136,33 @@ public class BattleService : IBattleService
             .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
         if (kingdom == null) return new List<PlannedAttackDto>();
 
+        return await ProjectPlannedAttacksAsync(new[] { kingdom.Id });
+    }
+
+    /// <summary>
+    /// Zaplanowane ataki wszystkich księstw koalicji — panel wojenny Imperatora/Głównodowodzącego.
+    /// </summary>
+    public async Task<List<PlannedAttackDto>> GetCoalitionPlannedAttacksAsync(int userId)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom?.CoalitionId == null || !IsCoalitionCommander(kingdom))
+            return new List<PlannedAttackDto>();
+
+        var memberIds = await _context.Kingdoms
+            .Where(k => k.CoalitionId == kingdom.CoalitionId)
+            .Select(k => k.Id)
+            .ToListAsync();
+
+        return await ProjectPlannedAttacksAsync(memberIds);
+    }
+
+    private async Task<List<PlannedAttackDto>> ProjectPlannedAttacksAsync(IReadOnlyCollection<int> kingdomIds)
+    {
         var actions = await _context.QueuedActions
+            .Include(a => a.Kingdom)
             .Include(a => a.TargetKingdom)
-            .Where(a => a.KingdomId == kingdom.Id && a.ActionType == "MilitaryAttack" && a.Status == "Pending")
+            .Where(a => kingdomIds.Contains(a.KingdomId) && a.ActionType == "MilitaryAttack" && a.Status == "Pending")
             .OrderBy(a => a.CreatedAt)
             .ToListAsync();
 
@@ -139,6 +183,8 @@ public class BattleService : IBattleService
         return parsed.Select(p => new PlannedAttackDto
         {
             Id = p.action.Id,
+            AttackerKingdomId = p.action.KingdomId,
+            AttackerName = p.action.Kingdom?.Name ?? "?",
             TargetKingdomId = p.action.TargetKingdomId ?? 0,
             TargetName = p.action.TargetKingdom?.Name ?? "?",
             GeneralId = p.data.GeneralId,
@@ -149,18 +195,86 @@ public class BattleService : IBattleService
         }).ToList();
     }
 
-    /// <summary>Odwołuje zaplanowany atak przed przeliczeniem: zwraca turę i generała do domu.</summary>
+    /// <summary>
+    /// Dostępni generałowie i jednostki księstwa do zaplanowania ataku.
+    /// Własne księstwo — zawsze; cudze — tylko Imperator/Głównodowodzący tej samej koalicji.
+    /// </summary>
+    public async Task<ServiceResult<AttackOptionsDto>> GetAttackOptionsAsync(int userId, int kingdomId)
+    {
+        var callerKingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (callerKingdom == null)
+            return ServiceResult<AttackOptionsDto>.Fail("Nie znaleziono księstwa.");
+
+        if (kingdomId != callerKingdom.Id
+            && (!IsCoalitionCommander(callerKingdom) || callerKingdom.CoalitionId == null))
+            return ServiceResult<AttackOptionsDto>.Fail("Brak uprawnień do tego księstwa.");
+
+        var kingdom = await _context.Kingdoms
+            .Include(k => k.MilitaryUnits).ThenInclude(m => m.Definition)
+            .FirstOrDefaultAsync(k => k.Id == kingdomId && k.Era.IsActive);
+        if (kingdom == null || (kingdom.Id != callerKingdom.Id && kingdom.CoalitionId != callerKingdom.CoalitionId))
+            return ServiceResult<AttackOptionsDto>.Fail("Wskazane księstwo nie należy do Twojej koalicji.");
+
+        var now = DateTime.UtcNow;
+        var generals = await _context.Generals
+            .Where(g => g.KingdomId == kingdom.Id && !g.IsPending && !g.IsImprisoned && !g.IsOutside
+                        && (g.WoundedUntil == null || g.WoundedUntil <= now))
+            .OrderByDescending(g => g.Experience)
+            .ToListAsync();
+
+        return ServiceResult<AttackOptionsDto>.Ok(new AttackOptionsDto
+        {
+            KingdomId = kingdom.Id,
+            KingdomName = kingdom.Name,
+            TurnsAvailable = kingdom.TurnsAvailable,
+            Generals = generals.Select(g => new GeneralDto
+            {
+                Id = g.Id,
+                Name = g.Name,
+                PrimaryTrait = g.PrimaryTrait,
+                SecondaryTrait = g.SecondaryTrait,
+                Level = g.Level,
+                Experience = g.Experience,
+                IsAvailable = true,
+                Status = "W domu"
+            }).ToList(),
+            Units = kingdom.MilitaryUnits
+                .Where(u => u.Quantity > 0 && !u.UnitType.EndsWith("_Zlodziej"))
+                .Select(u => new AttackUnitDto
+                {
+                    UnitType = u.UnitType,
+                    DisplayName = u.Definition?.DisplayName ?? u.UnitType,
+                    Quantity = u.Quantity,
+                    AttackPower = u.Definition?.AttackPower ?? 0
+                }).ToList()
+        });
+    }
+
+    /// <summary>
+    /// Odwołuje zaplanowany atak przed przeliczeniem: zwraca turę i generała do domu.
+    /// Własne ataki — zawsze; ataki księstw koalicji — Imperator/Głównodowodzący.
+    /// </summary>
     public async Task<ServiceResult> CancelPlannedAttackAsync(int userId, int actionId)
     {
-        var kingdom = await _context.Kingdoms
+        var callerKingdom = await _context.Kingdoms
             .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
-        if (kingdom == null)
+        if (callerKingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
 
-        var action = await _context.QueuedActions.FirstOrDefaultAsync(a =>
-            a.Id == actionId && a.KingdomId == kingdom.Id && a.ActionType == "MilitaryAttack");
+        var action = await _context.QueuedActions
+            .Include(a => a.Kingdom)
+            .FirstOrDefaultAsync(a => a.Id == actionId && a.ActionType == "MilitaryAttack");
         if (action == null)
             return ServiceResult.Fail("Nie znaleziono zaplanowanego ataku.");
+
+        bool ownAttack = action.KingdomId == callerKingdom.Id;
+        bool commanderOfCoalition = IsCoalitionCommander(callerKingdom)
+            && callerKingdom.CoalitionId != null
+            && action.Kingdom.CoalitionId == callerKingdom.CoalitionId;
+        if (!ownAttack && !commanderOfCoalition)
+            return ServiceResult.Fail("Nie masz uprawnień do odwołania tego ataku.");
+
         if (action.Status != "Pending")
             return ServiceResult.Fail("Tego ataku nie można już odwołać — został wykonany lub anulowany.");
 
@@ -171,12 +285,12 @@ public class BattleService : IBattleService
         if (data != null && data.GeneralId > 0)
         {
             var general = await _context.Generals
-                .FirstOrDefaultAsync(g => g.Id == data.GeneralId && g.KingdomId == kingdom.Id);
+                .FirstOrDefaultAsync(g => g.Id == data.GeneralId && g.KingdomId == action.KingdomId);
             if (general != null) general.IsOutside = false;
         }
 
-        // Zwrot zużytej tury
-        kingdom.TurnsAvailable = Math.Min(kingdom.MaxTurns, kingdom.TurnsAvailable + 1);
+        // Zwrot zużytej tury księstwu, z którego atak miał wyruszyć
+        action.Kingdom.TurnsAvailable = Math.Min(action.Kingdom.MaxTurns, action.Kingdom.TurnsAvailable + 1);
 
         await _context.SaveChangesAsync();
         return ServiceResult.Ok("Atak został odwołany. Tura wróciła do puli, a generał do księstwa.");
