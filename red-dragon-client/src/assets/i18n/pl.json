@@ -294,6 +294,9 @@
     "ownKingdom": "własne księstwo",
     "cast": "Rzuć",
     "noWarTargets": "Brak celów — zaklęcia ofensywne można rzucać tylko na księstwa w stanie wojny lub zasadzki.",
+    "autoCast": "Auto-rzucanie po przeliczeniu",
+    "autoCastOff": "— wyłączone —",
+    "autoCastTip": "Wybrane pozytywne zaklęcie rzuci się automatycznie na Twoje księstwo po każdym przeliczeniu (kosztuje turę i manę).",
     "noMagic": "Twoja rasa nie włada magią (0 ksiąg magii)."
   },
   "forum": {

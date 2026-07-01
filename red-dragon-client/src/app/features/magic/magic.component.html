@@ -41,6 +41,16 @@
   <app-notify-relay [message]="error" type="error"></app-notify-relay>
   <div class="loading" *ngIf="loading">{{ 'mag.loading' | translate }}</div>
 
+  <!-- Auto-rzucanie po przeliczeniu -->
+  <div class="metamagic auto-cast" *ngIf="!loading && autoCastOptions.length > 0">
+    <span class="mm-label" [title]="'mag.autoCastTip' | translate">{{ 'mag.autoCast' | translate }}:</span>
+    <select [(ngModel)]="autoCastSpell">
+      <option [ngValue]="null">{{ 'mag.autoCastOff' | translate }}</option>
+      <option *ngFor="let s of autoCastOptions" [ngValue]="s.spellType">{{ s.displayName }}</option>
+    </select>
+    <button class="mm-btn" (click)="saveAutoCast()">{{ 'common.save' | translate }}</button>
+  </div>
+
   <ng-container *ngFor="let cat of categories">
     <div class="spell-category" *ngIf="spellsInCategory(cat).length > 0">
       <h3>{{ 'menu.magic' | translate }}: {{ cat }}</h3>

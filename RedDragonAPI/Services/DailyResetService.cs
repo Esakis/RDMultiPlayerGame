@@ -192,6 +192,11 @@ public class DailyResetService : BackgroundService
                     if (kingdom.ProtectionDaysLeft <= 0 || kingdom.Land >= Kingdom.NoviceLandCap)
                         kingdom.IsProtected = false;
                 }
+
+                // Zdarzenia losowe — plagi (GAME_DESIGN.md, krok 18 tury). Chronieni nowicjusze
+                // są oszczędzani. Odporności rasowe wg docs/MECHANIKA.md §2.2 i §14.4.
+                if (!kingdom.IsProtected)
+                    await ApplyRandomPlagues(kingdom, context);
             }
 
             // 4. Zakończ szkolenie jednostek
@@ -298,7 +303,32 @@ public class DailyResetService : BackgroundService
                 }
             }
 
-            // 5b. Smoki przychodzą teraz pasywnie co turę (DragonService.ProcessTurnArrivalAsync,
+            // 5b. Auto-rzucanie (GAME_DESIGN.md, krok 24 tury): pozytywne zaklęcie na siebie
+            //     po przeliczeniu — po rozpadzie zaklęć, żeby świeży czar nie osłabł od razu.
+            //     Kosztuje turę i manę jak zwykłe rzucenie.
+            await context.SaveChangesAsync();
+            foreach (var kingdom in kingdoms.Where(k => k.AutoCastSpellType != null && k.TurnsAvailable > 0))
+            {
+                try
+                {
+                    var result = await battleService.CastSpellAsync(kingdom.UserId,
+                        new Models.DTOs.CastSpellDto { SpellType = kingdom.AutoCastSpellType! });
+                    context.KingdomEvents.Add(new KingdomEvent
+                    {
+                        KingdomId = kingdom.Id,
+                        Category = "Magic",
+                        Message = result.Success
+                            ? $"Auto-rzucanie: {result.Message}"
+                            : $"Auto-rzucanie nie powiodło się: {result.Message}"
+                    });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Błąd auto-rzucania dla księstwa {KingdomId}", kingdom.Id);
+                }
+            }
+
+            // 5c. Smoki przychodzą teraz pasywnie co turę (DragonService.ProcessTurnArrivalAsync,
             //     wywoływane z TurnService) — model hybrydowy malejący do 200. Dzienne wabienie
             //     Portalem usunięto, by nie dublować źródła smoków.
 
@@ -312,6 +342,61 @@ public class DailyResetService : BackgroundService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Błąd podczas przeliczenia!");
+        }
+    }
+
+    /// <summary>
+    /// Losowe plagi przy przeliczeniu: Zaraza (3% — zabija 3–5% ludności; Nekromant
+    /// i Olbrzym odporni), Szarańcza (3% — zjada 10–20% jedzenia), Chochliki
+    /// (2% — niszczą 5–10% machin; Gnom odporny, machiny Goblina niezniszczalne).
+    /// </summary>
+    private static async Task ApplyRandomPlagues(Kingdom kingdom, ApplicationDbContext context)
+    {
+        void Notify(string message) => context.KingdomEvents.Add(new KingdomEvent
+        {
+            KingdomId = kingdom.Id,
+            Category = "Plague",
+            Message = message
+        });
+
+        // Zaraza
+        if (Random.Shared.NextDouble() < 0.03
+            && kingdom.Race is not ("Nekromant" or "Olbrzym") && kingdom.Population > 200)
+        {
+            decimal pct = 0.03m + (decimal)Random.Shared.NextDouble() * 0.02m;
+            int killed = (int)(kingdom.Population * pct);
+            kingdom.Population = Math.Max(100, kingdom.Population - killed);
+            Notify($"Zaraza nawiedziła księstwo — zmarło {killed} mieszkańców.");
+        }
+
+        // Szarańcza
+        if (Random.Shared.NextDouble() < 0.03 && kingdom.Food > 0)
+        {
+            decimal pct = 0.10m + (decimal)Random.Shared.NextDouble() * 0.10m;
+            long eaten = (long)(kingdom.Food * pct);
+            kingdom.Food -= eaten;
+            Notify($"Szarańcza pożarła {eaten} jedzenia.");
+        }
+
+        // Chochliki
+        if (Random.Shared.NextDouble() < 0.02
+            && kingdom.Race is not ("Gnom" or "Goblin"))
+        {
+            var machines = await context.MilitaryUnits
+                .Where(m => m.KingdomId == kingdom.Id && m.UnitType.EndsWith("_Machina") && m.Quantity > 0)
+                .ToListAsync();
+            if (machines.Count > 0)
+            {
+                decimal pct = 0.05m + (decimal)Random.Shared.NextDouble() * 0.05m;
+                int destroyed = 0;
+                foreach (var m in machines)
+                {
+                    int lost = Math.Max(1, (int)(m.Quantity * pct));
+                    m.Quantity = Math.Max(0, m.Quantity - lost);
+                    destroyed += lost;
+                }
+                Notify($"Chochliki zepsuły {destroyed} machin wojennych.");
+            }
         }
     }
 

@@ -53,6 +53,13 @@ public class Kingdom
     /// </summary>
     public int DrunkArmyPct { get; set; } = 0;
 
+    /// <summary>
+    /// Auto-rzucanie (docs/GAME_DESIGN.md, krok 24 tury): zaklęcie pozytywne rzucane
+    /// automatycznie na siebie po każdym przeliczeniu (kosztuje turę i manę). Null = wyłączone.
+    /// </summary>
+    [MaxLength(100)]
+    public string? AutoCastSpellType { get; set; }
+
     // Szamanizm Olbrzyma (docs/MECHANIKA.md §2.2) — 3 totemy ładowane maną (poziom 0–10)
     public int TotemPlunder { get; set; } = 0;       // +5%/lvl zrabowanych surowców
     public int TotemDragonSlay { get; set; } = 0;    // zabija %/lvl smoków wroga

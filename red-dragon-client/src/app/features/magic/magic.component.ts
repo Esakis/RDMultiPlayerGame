@@ -29,6 +29,7 @@ export class MagicComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+    this.loadAutoCast();
     this.kingdomService.getAllKingdoms().subscribe(k => this.kingdoms = k);
     this.kingdomService.getMyKingdom().subscribe(k => this.myKingdom = k);
     this.coalitionService.getWars().subscribe({
@@ -57,6 +58,30 @@ export class MagicComponent implements OnInit {
   /** Czy zaklęcie pozytywne (można je rzucić także na sojusznika). */
   isPositive(s: SpellListItem): boolean {
     return (s.category === 'Biała' || s.category === 'Tarcze') && s.targetType !== 'Enemy';
+  }
+
+  // ===== Auto-rzucanie po przeliczeniu =====
+  autoCastSpell: string | null = null;
+
+  /** Zaklęcia dostępne do auto-rzucania (pozytywne, na siebie). */
+  get autoCastOptions(): SpellListItem[] {
+    return this.spells.filter(s => this.isPositive(s));
+  }
+
+  loadAutoCast(): void {
+    this.magic.getAutoCast().subscribe({
+      next: r => this.autoCastSpell = r.spellType,
+      error: () => {}
+    });
+  }
+
+  saveAutoCast(): void {
+    this.message = '';
+    this.error = '';
+    this.magic.setAutoCast(this.autoCastSpell).subscribe({
+      next: r => { this.message = r.message ?? ''; },
+      error: e => { this.error = e.error?.message || e.error || 'Błąd zapisu auto-rzucania.'; }
+    });
   }
 
   setMetamagic(mode: string): void {

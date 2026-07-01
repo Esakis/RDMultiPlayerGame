@@ -20,6 +20,12 @@ public class CastSpellDto
     public int? TargetKingdomId { get; set; }
 }
 
+public class SetAutoCastDto
+{
+    /// <summary>Zaklęcie do auto-rzucania po przeliczeniu; null/puste = wyłącz.</summary>
+    public string? SpellType { get; set; }
+}
+
 public class ThiefActionListItemDto
 {
     public string ActionType { get; set; } = string.Empty;

@@ -294,6 +294,9 @@
     "ownKingdom": "own duchy",
     "cast": "Cast",
     "noWarTargets": "No targets — offensive spells can only be cast on duchies at war or ambush.",
+    "autoCast": "Auto-cast after recalculation",
+    "autoCastOff": "— disabled —",
+    "autoCastTip": "The selected positive spell will be cast automatically on your duchy after each recalculation (costs a turn and mana).",
     "noMagic": "Your race does not wield magic (0 magic books)."
   },
   "forum": {

@@ -30,4 +30,12 @@ export class MagicService {
   cast(spellType: string, targetKingdomId?: number): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/cast`, { spellType, targetKingdomId });
   }
+
+  getAutoCast(): Observable<{ spellType: string | null }> {
+    return this.http.get<{ spellType: string | null }>(`${this.apiUrl}/auto-cast`);
+  }
+
+  setAutoCast(spellType: string | null): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/auto-cast`, { spellType });
+  }
 }
