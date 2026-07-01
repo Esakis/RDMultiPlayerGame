@@ -41,6 +41,7 @@ import { MarketComponent } from './features/market/market.component';
 import { LabyrinthComponent } from './features/labyrinth/labyrinth.component';
 import { DragonsComponent } from './features/dragons/dragons.component';
 import { AttackComponent } from './features/attack/attack.component';
+import { ReportsComponent } from './features/reports/reports.component';
 import { OptionsComponent } from './features/options/options.component';
 
 @NgModule({
@@ -70,6 +71,7 @@ import { OptionsComponent } from './features/options/options.component';
     LabyrinthComponent,
     DragonsComponent,
     AttackComponent,
+    ReportsComponent,
     OptionsComponent
   ],
   imports: [

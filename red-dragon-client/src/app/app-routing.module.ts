@@ -20,6 +20,7 @@ import { MarketComponent } from './features/market/market.component';
 import { LabyrinthComponent } from './features/labyrinth/labyrinth.component';
 import { DragonsComponent } from './features/dragons/dragons.component';
 import { AttackComponent } from './features/attack/attack.component';
+import { ReportsComponent } from './features/reports/reports.component';
 import { OptionsComponent } from './features/options/options.component';
 
 const routes: Routes = [
@@ -42,6 +43,7 @@ const routes: Routes = [
   { path: 'labyrinth', component: LabyrinthComponent, canActivate: [AuthGuard] },
   { path: 'dragons', component: DragonsComponent, canActivate: [AuthGuard] },
   { path: 'attack', component: AttackComponent, canActivate: [AuthGuard] },
+  { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard] },
   { path: 'options', component: OptionsComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/dashboard' }
 ];

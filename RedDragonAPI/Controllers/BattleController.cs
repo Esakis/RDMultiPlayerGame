@@ -57,6 +57,14 @@ public class BattleController : ControllerBase
         return Ok(reports);
     }
 
+    [HttpGet("reports/coalition")]
+    public async Task<ActionResult<List<BattleReportDto>>> GetCoalitionReports()
+    {
+        var userId = GetUserId();
+        var reports = await _battleService.GetCoalitionBattleReportsAsync(userId);
+        return Ok(reports);
+    }
+
     private int GetUserId()
     {
         return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");

@@ -9,6 +9,7 @@ public interface IBattleService
     Task<List<PlannedAttackDto>> GetPlannedAttacksAsync(int userId);
     Task<ServiceResult> CancelPlannedAttackAsync(int userId, int actionId);
     Task<List<BattleReportDto>> GetBattleReportsAsync(int userId);
+    Task<List<BattleReportDto>> GetCoalitionBattleReportsAsync(int userId);
     Task<BattleResult> ExecuteMilitaryAttackAsync(QueuedAction action);
     Task ExecuteThiefActionAsync(QueuedAction action);
     Task ExecuteSpellAsync(QueuedAction action);

@@ -25,6 +25,7 @@
     "employment": "Zatrudnienie",
     "military": "Wojsko",
     "combat": "Walka",
+    "reports": "Raporty",
     "magic": "Magia",
     "thieves": "Złodzieje",
     "generals": "Generałowie",
@@ -367,6 +368,41 @@
       "tooSmall": "Zbyt mały (<¼)",
       "ally": "Sojusznik",
       "noWar": "Brak wojny"
+    }
+  },
+  "rpt": {
+    "title": "Raporty bitewne",
+    "lead": "Wszystkie ataki, zaklęcia i akcje złodziejskie rozstrzygają się przy przeliczeniu o 5:00. Tutaj znajdziesz wyniki — swoje oraz całej koalicji.",
+    "tab": {
+      "mine": "Moje raporty",
+      "coalition": "Raporty koalicji"
+    },
+    "loading": "Wczytywanie raportów...",
+    "none": "Brak raportów. Wyniki pojawią się po najbliższym przeliczeniu.",
+    "errLoad": "Błąd wczytywania raportów.",
+    "type": {
+      "Military": "Bitwa",
+      "Magic": "Magia",
+      "Thief": "Złodzieje"
+    },
+    "result": {
+      "Victory": "Zwycięstwo atakującego",
+      "Defeat": "Atak odparty",
+      "Success": "Akcja udana",
+      "Failed": "Akcja nieudana"
+    },
+    "landCaptured": "Zdobyta ziemia: {{n}} akrów",
+    "stolen": "Łupy —",
+    "attLosses": "Straty atakującego:",
+    "defLosses": "Straty obrońcy:",
+    "spell": "Zaklęcie",
+    "action": "Akcja",
+    "thievesLost": "stracono {{n}} złodziei",
+    "res": {
+      "gold": "złoto",
+      "food": "jedzenie",
+      "stone": "kamień",
+      "weapons": "broń"
     }
   },
   "rank": {

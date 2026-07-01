@@ -249,6 +249,8 @@ export interface Coalition {
 
 export interface BattleReport {
   id: number;
+  attackerKingdomId: number;
+  defenderKingdomId: number;
   attackerName: string;
   defenderName: string;
   battleType: string;

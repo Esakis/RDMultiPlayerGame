@@ -1,0 +1,42 @@
+<div class="game-panel">
+  <h2 class="panel-title">
+    <img src="assets/img/role/napastnik.png" [alt]="'rpt.title' | translate" class="title-icon">
+    {{ 'rpt.title' | translate }}
+  </h2>
+
+  <p class="lead">{{ 'rpt.lead' | translate }}</p>
+
+  <app-notify-relay [message]="error" type="error"></app-notify-relay>
+
+  <div class="tabs">
+    <button [class.active]="tab === 'mine'" (click)="setTab('mine')">{{ 'rpt.tab.mine' | translate }}</button>
+    <button [class.active]="tab === 'coalition'" (click)="setTab('coalition')" [disabled]="!myKingdom?.coalitionId">
+      {{ 'rpt.tab.coalition' | translate }}
+    </button>
+  </div>
+
+  <div class="loading" *ngIf="loading">{{ 'rpt.loading' | translate }}</div>
+
+  <ng-container *ngIf="!loading">
+    <p class="hint" *ngIf="reports.length === 0">{{ 'rpt.none' | translate }}</p>
+
+    <div class="report" *ngFor="let r of reports"
+         [class.defense]="isDefense(r)"
+         [class.good]="resultGood(r)"
+         [class.bad]="!resultGood(r)">
+      <div class="head">
+        <span class="type">{{ 'rpt.type.' + r.battleType | translate }}</span>
+        <span class="who">
+          <strong [class.me]="myKingdom?.id === r.attackerKingdomId">{{ r.attackerName }}</strong>
+          ⚔
+          <strong [class.me]="myKingdom?.id === r.defenderKingdomId">{{ r.defenderName }}</strong>
+        </span>
+        <span class="result">{{ resultKey(r) | translate }}</span>
+        <span class="date">{{ r.occurredAt | date:'yyyy-MM-dd HH:mm' }}</span>
+      </div>
+      <ul class="detail-lines">
+        <li *ngFor="let line of details(r)">{{ line }}</li>
+      </ul>
+    </div>
+  </ng-container>
+</div>

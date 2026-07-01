@@ -25,6 +25,7 @@
     "employment": "Employment",
     "military": "Army",
     "combat": "Combat",
+    "reports": "Reports",
     "magic": "Magic",
     "thieves": "Thieves",
     "generals": "Generals",
@@ -367,6 +368,41 @@
       "tooSmall": "Too small (<¼)",
       "ally": "Ally",
       "noWar": "No war"
+    }
+  },
+  "rpt": {
+    "title": "Battle reports",
+    "lead": "All attacks, spells and thief actions resolve at the 5:00 recalculation. Here you will find the results — yours and your whole coalition's.",
+    "tab": {
+      "mine": "My reports",
+      "coalition": "Coalition reports"
+    },
+    "loading": "Loading reports...",
+    "none": "No reports yet. Results will appear after the next recalculation.",
+    "errLoad": "Error loading reports.",
+    "type": {
+      "Military": "Battle",
+      "Magic": "Magic",
+      "Thief": "Thieves"
+    },
+    "result": {
+      "Victory": "Attacker victorious",
+      "Defeat": "Attack repelled",
+      "Success": "Action succeeded",
+      "Failed": "Action failed"
+    },
+    "landCaptured": "Land captured: {{n}} acres",
+    "stolen": "Loot —",
+    "attLosses": "Attacker losses:",
+    "defLosses": "Defender losses:",
+    "spell": "Spell",
+    "action": "Action",
+    "thievesLost": "{{n}} thieves lost",
+    "res": {
+      "gold": "gold",
+      "food": "food",
+      "stone": "stone",
+      "weapons": "weapons"
     }
   },
   "rank": {

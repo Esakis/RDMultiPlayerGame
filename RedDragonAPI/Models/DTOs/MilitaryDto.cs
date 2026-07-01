@@ -89,6 +89,8 @@ public class PlannedAttackDto
 public class BattleReportDto
 {
     public int Id { get; set; }
+    public int AttackerKingdomId { get; set; }
+    public int DefenderKingdomId { get; set; }
     public string AttackerName { get; set; } = string.Empty;
     public string DefenderName { get; set; } = string.Empty;
     public string BattleType { get; set; } = string.Empty;

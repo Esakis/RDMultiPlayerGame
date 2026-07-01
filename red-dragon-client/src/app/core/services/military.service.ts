@@ -66,4 +66,8 @@ export class MilitaryService {
   getBattleReports(): Observable<BattleReport[]> {
     return this.http.get<BattleReport[]>(`${this.apiUrl}/battle/reports`);
   }
+
+  getCoalitionBattleReports(): Observable<BattleReport[]> {
+    return this.http.get<BattleReport[]>(`${this.apiUrl}/battle/reports/coalition`);
+  }
 }

@@ -16,6 +16,7 @@ export class SidebarComponent {
     { label: 'menu.employment', route: '/economy' },
     { label: 'menu.military', route: '/military' },
     { label: 'menu.combat', route: '/attack' },
+    { label: 'menu.reports', route: '/reports' },
     { label: 'menu.magic', route: '/magic' },
     { label: 'menu.thieves', route: '/thieves' },
     { label: 'menu.generals', route: '/generals' },

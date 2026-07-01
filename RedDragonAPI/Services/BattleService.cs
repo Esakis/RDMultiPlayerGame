@@ -189,15 +189,44 @@ public class BattleService : IBattleService
 
         if (kingdom == null) return new List<BattleReportDto>();
 
-        var reports = await _context.BattleReports
-            .Where(b => b.AttackerKingdomId == kingdom.Id || b.DefenderKingdomId == kingdom.Id)
+        return await ProjectReportsAsync(b =>
+            b.AttackerKingdomId == kingdom.Id || b.DefenderKingdomId == kingdom.Id);
+    }
+
+    /// <summary>
+    /// Raporty koalicyjne: wszystkie bitwy, w których uczestniczyło (atakując lub broniąc się)
+    /// dowolne księstwo koalicji gracza.
+    /// </summary>
+    public async Task<List<BattleReportDto>> GetCoalitionBattleReportsAsync(int userId)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+
+        if (kingdom?.CoalitionId == null) return new List<BattleReportDto>();
+
+        var memberIds = await _context.Kingdoms
+            .Where(k => k.CoalitionId == kingdom.CoalitionId)
+            .Select(k => k.Id)
+            .ToListAsync();
+
+        return await ProjectReportsAsync(b =>
+            memberIds.Contains(b.AttackerKingdomId) || memberIds.Contains(b.DefenderKingdomId));
+    }
+
+    private async Task<List<BattleReportDto>> ProjectReportsAsync(
+        System.Linq.Expressions.Expression<Func<BattleReport, bool>> filter)
+    {
+        return await _context.BattleReports
+            .Where(filter)
             .Include(b => b.AttackerKingdom)
             .Include(b => b.DefenderKingdom)
             .OrderByDescending(b => b.OccurredAt)
-            .Take(50)
+            .Take(100)
             .Select(b => new BattleReportDto
             {
                 Id = b.Id,
+                AttackerKingdomId = b.AttackerKingdomId,
+                DefenderKingdomId = b.DefenderKingdomId,
                 AttackerName = b.AttackerKingdom.Name,
                 DefenderName = b.DefenderKingdom.Name,
                 BattleType = b.BattleType,
@@ -209,8 +238,6 @@ public class BattleService : IBattleService
                 OccurredAt = b.OccurredAt
             })
             .ToListAsync();
-
-        return reports;
     }
 
     public async Task<BattleResult> ExecuteMilitaryAttackAsync(QueuedAction action)
