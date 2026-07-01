@@ -691,6 +691,54 @@ public class BattleService : IBattleService
             attacker.TurnsAvailable = Math.Min(attacker.MaxTurns, attacker.TurnsAvailable + stolen);
         }
 
+        // Cechy przeciw generałom w bitwie (Dracopedia §11): Porwanie 2·lvl% i Zabójstwo
+        // 2·lvl% działają po zwycięstwie; Zranienie 3·lvl% (na 3 dni) także przy porażce.
+        General? RandomDefenderGeneral() => defenderGenerals
+            .Where(g => !g.IsImprisoned)
+            .OrderBy(_ => Random.Shared.Next())
+            .FirstOrDefault();
+        void NotifyBoth(string message)
+        {
+            _context.KingdomEvents.Add(new KingdomEvent { KingdomId = attacker.Id, Category = "Battle", Message = message });
+            _context.KingdomEvents.Add(new KingdomEvent { KingdomId = defender.Id, Category = "Battle", Message = message });
+        }
+
+        int kidnapLvl = SecLevel(attackerGenerals, "PorwanieGenerala");
+        if (kidnapLvl > 0 && attackerWins
+            && Random.Shared.NextDouble() < Math.Min(0.9, 2.0 * kidnapLvl / 100.0))
+        {
+            var victim = RandomDefenderGeneral();
+            if (victim != null)
+            {
+                victim.IsImprisoned = true;
+                NotifyBoth($"Bitwa {attacker.Name} ⚔ {defender.Name}: porwano generała {victim.Name} (poziom {victim.Level}) — trafił do lochów.");
+            }
+        }
+
+        int killGenLvl = SecLevel(attackerGenerals, "ZabojstwoGenerala");
+        if (killGenLvl > 0 && attackerWins
+            && Random.Shared.NextDouble() < Math.Min(0.9, 2.0 * killGenLvl / 100.0))
+        {
+            var victim = RandomDefenderGeneral();
+            if (victim != null)
+            {
+                defenderGenerals.Remove(victim);
+                _context.Generals.Remove(victim);
+                NotifyBoth($"Bitwa {attacker.Name} ⚔ {defender.Name}: generał {victim.Name} (poziom {victim.Level}) poległ z ręki skrytobójcy.");
+            }
+        }
+
+        int woundLvl = SecLevel(attackerGenerals, "ZranienieGenerala");
+        if (woundLvl > 0 && Random.Shared.NextDouble() < Math.Min(0.9, 3.0 * woundLvl / 100.0))
+        {
+            var victim = RandomDefenderGeneral();
+            if (victim != null)
+            {
+                victim.WoundedUntil = DateTime.UtcNow.AddDays(3);
+                NotifyBoth($"Bitwa {attacker.Name} ⚔ {defender.Name}: generał {victim.Name} został ranny (wraca do sił za 3 dni).");
+            }
+        }
+
         // Doświadczenie generałów: zależne od sumy sił i wyrównania starcia
         long expGain = (long)((attackPower + defensePower) / 1000.0
             * Math.Min(1.0, (double)Math.Min(attackPower, defensePower) / Math.Max(1, Math.Max(attackPower, defensePower))));
