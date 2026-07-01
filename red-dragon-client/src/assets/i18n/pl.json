@@ -34,6 +34,8 @@
     "magic": "Magia",
     "thieves": "Złodzieje",
     "generals": "Generałowie",
+    "research": "Nauka",
+    "dragons": "Smoki",
     "politics": "Polityka",
     "market": "Rynek",
     "stats": "Statystyki",
@@ -428,7 +430,16 @@
     "free": "Wolne",
     "total": "RAZEM",
     "noPlayers": "Brak graczy.",
-    "writeTo": "Napisz wiadomość do tego księstwa"
+    "writeTo": "Napisz wiadomość do tego księstwa",
+    "pantheon": {
+      "title": "Panteon",
+      "hint": "Sala chwały — koalicje, które ukończyły Pałac Sądu Ostatecznego i zwyciężyły erę.",
+      "era": "Era",
+      "coalition": "Zwycięska koalicja",
+      "imperator": "Imperator",
+      "date": "Data zwycięstwa",
+      "none": "Panteon jest jeszcze pusty — żadna koalicja nie ukończyła Pałacu Sądu Ostatecznego."
+    }
   },
   "mil": {
     "recruitTitle": "Rekrutacja jednostek",

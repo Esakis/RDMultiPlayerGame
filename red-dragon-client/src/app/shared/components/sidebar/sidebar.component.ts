@@ -20,6 +20,8 @@ export class SidebarComponent {
     { label: 'menu.magic', route: '/magic' },
     { label: 'menu.thieves', route: '/thieves' },
     { label: 'menu.generals', route: '/generals' },
+    { label: 'menu.research', route: '/research' },
+    { label: 'menu.dragons', route: '/dragons' },
     { label: 'menu.politics', route: '/coalition' },
     { label: 'menu.market', route: '/market' },
     { label: 'menu.stats', route: '/ranking' },

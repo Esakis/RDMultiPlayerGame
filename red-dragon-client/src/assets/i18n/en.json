@@ -34,6 +34,8 @@
     "magic": "Magic",
     "thieves": "Thieves",
     "generals": "Generals",
+    "research": "Research",
+    "dragons": "Dragons",
     "politics": "Politics",
     "market": "Market",
     "stats": "Statistics",
@@ -428,7 +430,16 @@
     "free": "Free",
     "total": "TOTAL",
     "noPlayers": "No players.",
-    "writeTo": "Write a message to this duchy"
+    "writeTo": "Write a message to this duchy",
+    "pantheon": {
+      "title": "Pantheon",
+      "hint": "Hall of fame — coalitions that completed the Palace of Final Judgement and won an era.",
+      "era": "Era",
+      "coalition": "Winning coalition",
+      "imperator": "Imperator",
+      "date": "Victory date",
+      "none": "The Pantheon is still empty — no coalition has completed the Palace of Final Judgement yet."
+    }
   },
   "mil": {
     "recruitTitle": "Unit recruitment",
