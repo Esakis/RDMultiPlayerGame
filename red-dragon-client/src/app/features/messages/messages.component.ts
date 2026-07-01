@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from '../../core/services/message.service';
 import { KingdomService } from '../../core/services/kingdom.service';
+import { GameStatusService } from '../../core/services/game-status.service';
 import { GameMessage, KingdomSummary } from '../../core/models/kingdom.model';
 
 @Component({
@@ -22,7 +23,8 @@ export class MessagesComponent implements OnInit {
   newBody = '';
 
   constructor(private messageService: MessageService, private kingdomService: KingdomService,
-              private translate: TranslateService, private route: ActivatedRoute) {}
+              private translate: TranslateService, private route: ActivatedRoute,
+              private gameStatus: GameStatusService) {}
 
   ngOnInit(): void {
     this.load();
@@ -51,6 +53,9 @@ export class MessagesComponent implements OnInit {
   }
 
   markRead(id: number): void {
-    this.messageService.markAsRead(id).subscribe(() => this.load());
+    this.messageService.markAsRead(id).subscribe(() => {
+      this.load();
+      this.gameStatus.refresh(); // badge nieprzeczytanych w nagłówku
+    });
   }
 }

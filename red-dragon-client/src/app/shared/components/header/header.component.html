@@ -32,12 +32,19 @@
 
   <nav class="top-game-menu">
     <a routerLink="/dashboard">{{ 'nav.details' | translate }}</a>
-    <a href="javascript:void(0)">{{ 'nav.news' | translate }}</a>
     <a routerLink="/forum">{{ 'nav.forum' | translate }}</a>
-    <a routerLink="/messages">{{ 'nav.mail' | translate }}</a>
+    <a routerLink="/messages" class="badge-link">
+      {{ 'nav.mail' | translate }}
+      <span class="nav-badge" *ngIf="status && status.unreadMessages > 0">{{ status.unreadMessages }}</span>
+    </a>
+    <a routerLink="/reports" class="badge-link">
+      {{ 'nav.reports' | translate }}
+      <span class="nav-badge reports" *ngIf="status && status.reportsSinceReset > 0">{{ status.reportsSinceReset }}</span>
+    </a>
     <a routerLink="/labyrinth" routerLinkActive="active">{{ 'nav.labyrinth' | translate }}</a>
-    <a href="javascript:void(0)">{{ 'nav.advisors' | translate }}</a>
-    <a href="javascript:void(0)">{{ 'nav.chat' | translate }}</a>
+    <span class="reset-countdown" *ngIf="countdown" [title]="'nav.resetTip' | translate">
+      ⏳ {{ 'nav.reset' | translate }}: <strong>{{ countdown }}</strong>
+    </span>
   </nav>
 
   <div class="resources-bar" *ngIf="kingdom">

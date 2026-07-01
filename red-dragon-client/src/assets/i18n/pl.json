@@ -17,6 +17,9 @@
     "news": "Wieści",
     "forum": "Forum",
     "mail": "Poczta",
+    "reports": "Raporty",
+    "reset": "Przeliczenie za",
+    "resetTip": "Codzienne przeliczenie o 5:00 — wtedy wykonują się ataki, czary i akcje złodziei oraz odnawiają się tury.",
     "labyrinth": "Labirynt",
     "advisors": "Doradcy",
     "chat": "Chat"

@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService, AppLang } from '../../../core/services/language.service';
+import { GameStatusService, GameStatus } from '../../../core/services/game-status.service';
 import { Kingdom } from '../../../core/models/kingdom.model';
 
 @Component({
@@ -9,15 +10,38 @@ import { Kingdom } from '../../../core/models/kingdom.model';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements AfterViewInit, OnDestroy {
+export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() kingdom: Kingdom | null = null;
 
   @ViewChild('headerWrap') headerWrap?: ElementRef<HTMLElement>;
   private resizeObserver?: ResizeObserver;
 
-  constructor(private auth: AuthService, public language: LanguageService, private router: Router) {}
+  status: GameStatus | null = null;
+  countdown = '';
+  private countdownTimer?: ReturnType<typeof setInterval>;
+
+  constructor(private auth: AuthService, public language: LanguageService,
+              private router: Router, private gameStatus: GameStatusService) {}
 
   setLang(lang: AppLang): void { this.language.use(lang); }
+
+  ngOnInit(): void {
+    this.gameStatus.start();
+    this.gameStatus.status$.subscribe(s => this.status = s);
+    this.countdownTimer = setInterval(() => this.updateCountdown(), 1000);
+  }
+
+  /** Odliczanie do przeliczenia o 5:00 (na podstawie czasu z serwera). */
+  private updateCountdown(): void {
+    if (!this.status?.nextResetAt) { this.countdown = ''; return; }
+    const ms = new Date(this.status.nextResetAt).getTime() - Date.now();
+    if (ms <= 0) { this.countdown = '0:00:00'; this.gameStatus.refresh(); return; }
+    const totalSec = Math.floor(ms / 1000);
+    const h = Math.floor(totalSec / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
+    this.countdown = `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
 
   ngAfterViewInit(): void {
     const el = this.headerWrap?.nativeElement;
@@ -34,6 +58,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.resizeObserver?.disconnect();
+    if (this.countdownTimer) clearInterval(this.countdownTimer);
   }
 
   private updateHeaderHeight(): void {

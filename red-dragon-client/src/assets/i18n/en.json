@@ -17,6 +17,9 @@
     "news": "News",
     "forum": "Forum",
     "mail": "Mail",
+    "reports": "Reports",
+    "reset": "Recalculation in",
+    "resetTip": "Daily recalculation at 5:00 — attacks, spells and thief actions execute then, and turns are renewed.",
     "labyrinth": "Labyrinth",
     "advisors": "Advisors",
     "chat": "Chat"

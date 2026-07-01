@@ -135,3 +135,18 @@
   vertical-align: middle;
   margin-right: 10px;
 }
+
+/* Powiadomienia w górnym menu */
+.badge-link { position: relative; }
+
+.nav-badge {
+  display: inline-block; min-width: 16px; padding: 0 4px; margin-left: 3px;
+  background: #8b0000; color: #ffd1c0; border: 1px solid #c9a86a; border-radius: 8px;
+  font-size: 11px; line-height: 15px; text-align: center; vertical-align: super;
+  &.reports { background: #5a4a2a; color: #ffd27b; }
+}
+
+.reset-countdown {
+  margin-left: auto; color: #c9a86a; font-size: 12px; white-space: nowrap;
+  strong { color: #ffd27b; font-variant-numeric: tabular-nums; }
+}
