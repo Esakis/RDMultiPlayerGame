@@ -47,6 +47,12 @@ public class Kingdom
     /// <summary>Gniew Enta (docs/MECHANIKA.md §2.2): +100% ataku po stratach, do najbliższego przeliczenia.</summary>
     public bool EntWrathActive { get; set; } = false;
 
+    /// <summary>
+    /// Upojenie armii (akcja złodziejska, docs/MECHANIKA.md §10): % armii upitej —
+    /// obniża obronę o tyle procent; zerowane w DailyResetService po wykonaniu ataków.
+    /// </summary>
+    public int DrunkArmyPct { get; set; } = 0;
+
     // Szamanizm Olbrzyma (docs/MECHANIKA.md §2.2) — 3 totemy ładowane maną (poziom 0–10)
     public int TotemPlunder { get; set; } = 0;       // +5%/lvl zrabowanych surowców
     public int TotemDragonSlay { get; set; } = 0;    // zabija %/lvl smoków wroga

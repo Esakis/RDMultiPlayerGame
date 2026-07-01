@@ -158,6 +158,9 @@ public class DailyResetService : BackgroundService
                 // Nowe przeliczenie — odnów budżet akcji labiryntu (docs/MECHANIKA.md §13)
                 kingdom.LabyrinthActionsUsed = 0;
 
+                // Upojenie armii mija — trzeźwieją po przeliczeniu (docs/MECHANIKA.md §10)
+                kingdom.DrunkArmyPct = 0;
+
                 kingdom.Age++;
                 if (kingdom.IsProtected)
                 {

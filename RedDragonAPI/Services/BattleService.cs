@@ -1323,6 +1323,28 @@ public class BattleService : IBattleService
                     }
                     return $"{spell.DisplayName} zburzył {destroyed} budynków{extra}.";
                 }
+            case "MachineDamage": // Chochliki — niszczą machiny wojenne (docs/MECHANIKA.md §14.2)
+                {
+                    if (defender.Race == "Gnom")
+                        return "Gnomy są odporne na Chochliki.";
+                    if (defender.Race == "Goblin")
+                        return "Machiny Goblinów są niezniszczalne — Chochliki nic nie wskórały.";
+                    var machines = defender.MilitaryUnits
+                        .Where(u => u.UnitType.EndsWith("_Machina") && u.Quantity > 0)
+                        .ToList();
+                    if (machines.Count == 0)
+                        return "Cel nie ma machin wojennych.";
+                    // 10–20% machin zniszczonych
+                    decimal machinePct = 0.10m + (decimal)Random.Shared.NextDouble() * 0.10m;
+                    int machinesDestroyed = 0;
+                    foreach (var m in machines)
+                    {
+                        int lost = Math.Max(1, (int)(m.Quantity * machinePct));
+                        m.Quantity = Math.Max(0, m.Quantity - lost);
+                        machinesDestroyed += lost;
+                    }
+                    return $"Chochliki zniszczyły {machinesDestroyed} machin wojennych.";
+                }
             default:
                 // negatywne uroki (Pech, Zły humor, Somnambulizm…) — zawieszane na celu
                 if (spell.EffectType == "PopularityDebuff" && defender.Race == "Hobbit")
@@ -1577,11 +1599,14 @@ public class BattleService : IBattleService
                 }
             case "DrunkArmy":
                 {
-                    // upita armia: osłabienie odnotowane w raporcie
                     int affected = defender.MilitaryUnits
                         .Where(u => !u.UnitType.EndsWith("_Smok") && !u.UnitType.EndsWith("_Zlodziej"))
                         .Sum(u => u.Quantity) / 4;
-                    return $"Upito ~{affected} żołnierzy — nie staną do obrony przy najbliższym przeliczeniu.";
+                    if (affected <= 0) return "Cel nie ma armii do upicia.";
+                    // 25% armii upite → obrona −25% do końca najbliższego przeliczenia
+                    // (flaga zerowana w DailyResetService po wykonaniu wszystkich ataków).
+                    defender.DrunkArmyPct = Math.Max(defender.DrunkArmyPct, 25);
+                    return $"Upito ~{affected} żołnierzy — armia broni się o 25% słabiej do najbliższego przeliczenia.";
                 }
             case "KillGeneral":
                 {

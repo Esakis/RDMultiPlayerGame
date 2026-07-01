@@ -139,6 +139,10 @@ public static class BattleCalculator
             if (defender.ActiveSpells.Any(s => s.SpellType == "Slabosc")) total *= 0.76m;
         }
 
+        // Upojenie armii (akcja złodziejska, docs/MECHANIKA.md §10): −% obrony do przeliczenia
+        if (defender.DrunkArmyPct > 0)
+            total *= 1m - Math.Min(90, defender.DrunkArmyPct) / 100m;
+
         return (long)total;
     }
 
