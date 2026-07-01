@@ -185,7 +185,8 @@
     "minThieves": "Min. złodziei",
     "chooseKingdom": "— wybierz księstwo —",
     "thievesCount": "Liczba złodziei",
-    "sendThieves": "Wyślij złodziei"
+    "sendThieves": "Wyślij złodziei",
+    "noWarTargets": "Brak celów — złodziei można wysyłać tylko na księstwa w stanie wojny lub zasadzki."
   },
   "mkt": {
     "title": "Rynek surowców",
@@ -285,6 +286,7 @@
     "chooseTarget": "— wybierz cel —",
     "ownKingdom": "własne księstwo",
     "cast": "Rzuć",
+    "noWarTargets": "Brak celów — zaklęcia ofensywne można rzucać tylko na księstwa w stanie wojny lub zasadzki.",
     "noMagic": "Twoja rasa nie włada magią (0 ksiąg magii)."
   },
   "forum": {
@@ -436,6 +438,7 @@
     "disbandTip": "Zwolnij wpisane jednostki",
     "attackPlanTitle": "Planowanie Ataku",
     "attackPlanInfo": "Ataki wykonywane są podczas codziennego przeliczenia o 5:00.",
+    "attackMoved": "Ataki planujesz teraz w panelu Walka — atak musi poprowadzić generał, a wykonuje się przy przeliczeniu o 5:00.",
     "attackTarget": "Cel ataku",
     "chooseTarget": "-- Wybierz cel --",
     "queueAttack": "Zakolejkuj Atak"

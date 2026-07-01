@@ -185,7 +185,8 @@
     "minThieves": "Min. thieves",
     "chooseKingdom": "— choose a duchy —",
     "thievesCount": "Number of thieves",
-    "sendThieves": "Send thieves"
+    "sendThieves": "Send thieves",
+    "noWarTargets": "No targets — thieves can only be sent against duchies at war or ambush."
   },
   "mkt": {
     "title": "Resource market",
@@ -285,6 +286,7 @@
     "chooseTarget": "— choose target —",
     "ownKingdom": "own duchy",
     "cast": "Cast",
+    "noWarTargets": "No targets — offensive spells can only be cast on duchies at war or ambush.",
     "noMagic": "Your race does not wield magic (0 magic books)."
   },
   "forum": {
@@ -436,6 +438,7 @@
     "disbandTip": "Disband the entered units",
     "attackPlanTitle": "Attack Planning",
     "attackPlanInfo": "Attacks are executed during the daily recalculation at 5:00.",
+    "attackMoved": "You now plan attacks in the Combat panel — an attack must be led by a general and executes at the 5:00 recalculation.",
     "attackTarget": "Attack target",
     "chooseTarget": "-- Choose a target --",
     "queueAttack": "Queue Attack"

@@ -63,13 +63,22 @@
             <td class="spell-desc">{{ s.description }}</td>
             <td class="spell-cost">{{ s.currentCost }}</td>
             <td>
-              <ng-container *ngIf="s.targetType === 'Enemy'; else selfTarget">
+              <ng-container *ngIf="s.targetType === 'Enemy'; else allyOrSelf">
                 <select [(ngModel)]="targetId[s.spellType]">
                   <option [ngValue]="undefined">{{ 'mag.chooseTarget' | translate }}</option>
-                  <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }} ({{ 'bld.acres' | translate:{ n: k.land } }})</option>
+                  <option *ngFor="let k of enemyTargets" [ngValue]="k.id">{{ k.name }} ({{ 'bld.acres' | translate:{ n: k.land } }})</option>
                 </select>
+                <div class="hint" *ngIf="enemyTargets.length === 0">{{ 'mag.noWarTargets' | translate }}</div>
               </ng-container>
-              <ng-template #selfTarget>{{ 'mag.ownKingdom' | translate }}</ng-template>
+              <ng-template #allyOrSelf>
+                <ng-container *ngIf="isPositive(s) && allyTargets.length > 0; else selfTarget">
+                  <select [(ngModel)]="targetId[s.spellType]">
+                    <option [ngValue]="undefined">{{ 'mag.ownKingdom' | translate }}</option>
+                    <option *ngFor="let k of allyTargets" [ngValue]="k.id">{{ k.name }} ({{ 'bld.acres' | translate:{ n: k.land } }})</option>
+                  </select>
+                </ng-container>
+                <ng-template #selfTarget>{{ 'mag.ownKingdom' | translate }}</ng-template>
+              </ng-template>
             </td>
             <td>
               <button class="btn-cast" (click)="cast(s)" [disabled]="!s.canCast"

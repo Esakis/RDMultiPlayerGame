@@ -73,26 +73,11 @@
       </div>
     </div>
 
-    <!-- Atak -->
+    <!-- Atak — planowanie przeniesione do panelu Walka (wymaga generała prowadzącego) -->
     <div class="card">
       <h3>{{ 'mil.attackPlanTitle' | translate }}</h3>
-      <p class="info">{{ 'mil.attackPlanInfo' | translate }}</p>
-      <div class="attack-form">
-        <div class="form-group">
-          <label>{{ 'mil.attackTarget' | translate }}:</label>
-          <select [(ngModel)]="attackTarget">
-            <option [ngValue]="0">{{ 'mil.chooseTarget' | translate }}</option>
-            <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }} ({{ k.race }}, {{ 'bld.acres' | translate:{ n: k.land } }})</option>
-          </select>
-        </div>
-        <div class="attack-units">
-          <div *ngFor="let u of myArmy" class="attack-unit-row">
-            <span>{{ u.displayName }} ({{ u.quantity }})</span>
-            <input type="number" [(ngModel)]="attackUnits[u.unitType]" min="0" [max]="u.quantity" placeholder="0" />
-          </div>
-        </div>
-        <button class="btn-attack" (click)="sendAttack()">{{ 'mil.queueAttack' | translate }}</button>
-      </div>
+      <p class="info">{{ 'mil.attackMoved' | translate }}</p>
+      <button class="btn-attack" routerLink="/attack">{{ 'menu.combat' | translate }} →</button>
     </div>
   </div>
 

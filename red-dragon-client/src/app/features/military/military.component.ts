@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MilitaryService } from '../../core/services/military.service';
-import { KingdomService } from '../../core/services/kingdom.service';
-import { UnitDefinition, MilitaryUnit, KingdomSummary, TrainingInfo } from '../../core/models/kingdom.model';
+import { UnitDefinition, MilitaryUnit, TrainingInfo } from '../../core/models/kingdom.model';
 
 @Component({
   selector: 'app-military',
@@ -11,12 +10,9 @@ import { UnitDefinition, MilitaryUnit, KingdomSummary, TrainingInfo } from '../.
 export class MilitaryComponent implements OnInit {
   unitDefs: UnitDefinition[] = [];
   myArmy: MilitaryUnit[] = [];
-  kingdoms: KingdomSummary[] = [];
   loading = true;
   message = '';
   recruitQty: { [key: string]: number } = {};
-  attackTarget = 0;
-  attackUnits: { [key: string]: number } = {};
   training: TrainingInfo = {
     trainSoldiers: false, trainElite: false,
     soldierPromotePct: 0, elitePromotePct: 0,
@@ -27,7 +23,7 @@ export class MilitaryComponent implements OnInit {
   // Żołnierz, Elita 1, Elita 2 / Złodziej, Machina, Smok
   private readonly slotOrder = ['hoplita', 'elita1', 'elita2', 'zlodziej', 'machina', 'smok'];
 
-  constructor(private militaryService: MilitaryService, private kingdomService: KingdomService) {}
+  constructor(private militaryService: MilitaryService) {}
 
   ngOnInit(): void { this.load(); }
 
@@ -36,7 +32,6 @@ export class MilitaryComponent implements OnInit {
       this.unitDefs = [...u].sort((a, b) => this.slotRank(a) - this.slotRank(b));
     });
     this.militaryService.getMyArmy().subscribe(a => { this.myArmy = a; this.loading = false; });
-    this.kingdomService.getAllKingdoms().subscribe(k => this.kingdoms = k);
     this.militaryService.getTraining().subscribe(t => this.training = t);
   }
 
@@ -81,19 +76,6 @@ export class MilitaryComponent implements OnInit {
       trainElite: this.training.trainElite
     }).subscribe({
       next: () => this.militaryService.getTraining().subscribe(t => this.training = t),
-      error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
-    });
-  }
-
-  sendAttack(): void {
-    if (!this.attackTarget) { this.message = 'Wybierz cel ataku.'; this.clearMsg(); return; }
-    const units: { [key: string]: number } = {};
-    for (const key of Object.keys(this.attackUnits)) {
-      if (this.attackUnits[key] > 0) units[key] = this.attackUnits[key];
-    }
-    if (Object.keys(units).length === 0) { this.message = 'Wybierz jednostki do ataku.'; this.clearMsg(); return; }
-    this.militaryService.attack(this.attackTarget, units).subscribe({
-      next: (res) => { this.message = res.message || 'Atak zakolejkowany!'; this.load(); this.clearMsg(); },
       error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
     });
   }

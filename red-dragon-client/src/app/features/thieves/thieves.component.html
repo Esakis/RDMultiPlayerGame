@@ -29,9 +29,10 @@
       {{ 'mag.target' | translate }}:
       <select [(ngModel)]="targetId">
         <option [ngValue]="undefined">{{ 'thf.chooseKingdom' | translate }}</option>
-        <option *ngFor="let k of kingdoms" [ngValue]="k.id">{{ k.name }} ({{ 'bld.acres' | translate:{ n: k.land } }})</option>
+        <option *ngFor="let k of targets" [ngValue]="k.id">{{ k.name }} ({{ 'bld.acres' | translate:{ n: k.land } }})</option>
       </select>
     </label>
+    <p class="hint" *ngIf="targets.length === 0">{{ 'thf.noWarTargets' | translate }}</p>
     <label>
       {{ 'thf.thievesCount' | translate }}:
       <input type="number" [(ngModel)]="thieves" min="1">

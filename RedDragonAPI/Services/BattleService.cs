@@ -884,6 +884,33 @@ public class BattleService : IBattleService
         bool selfTarget = spell.TargetType != "Enemy"
             || dto.TargetKingdomId == null || dto.TargetKingdomId == kingdom.Id;
 
+        // Biała magia na sojusznika: pozytywne zaklęcie można rzucić na członka własnej
+        // koalicji — zawiesza się na nim od razu, jak przy rzucaniu na siebie.
+        bool isPositive = spell.Category is "Biała" or "Tarcze";
+        if (selfTarget && isPositive && dto.TargetKingdomId.HasValue
+            && dto.TargetKingdomId != kingdom.Id
+            && spell.EffectType is not ("Mannamorphosis" or "SummonDragon" or "Sacrifice"
+                or "SummonE2" or "SummonE1" or "SummonHoplites" or "SummonThieves"))
+        {
+            var ally = await _context.Kingdoms.FirstOrDefaultAsync(k => k.Id == dto.TargetKingdomId);
+            if (ally == null)
+                return ServiceResult.Fail("Nie znaleziono celu.");
+            if (kingdom.CoalitionId == null || ally.CoalitionId != kingdom.CoalitionId)
+                return ServiceResult.Fail("Białą magię możesz rzucać tylko na siebie lub na członków własnej koalicji.");
+            if (ally.IsFrozen)
+                return ServiceResult.Fail("Cel jest zamrożony.");
+
+            _context.ActiveSpells.Add(new ActiveSpell
+            {
+                KingdomId = ally.Id,
+                SpellType = spell.SpellType,
+                Power = (int)Math.Min(int.MaxValue, power),
+                CastAt = DateTime.UtcNow
+            });
+            await _context.SaveChangesAsync();
+            return ServiceResult.Ok($"Zaklęcie {spell.DisplayName} rzucone na sojusznika {ally.Name} (siła {power}). Koszt: {cost} many.");
+        }
+
         if (selfTarget)
         {
             if (spell.TargetType == "Enemy")
@@ -937,10 +964,13 @@ public class BattleService : IBattleService
         if (target.IsFrozen)
             return ServiceResult.Fail("Cel jest zamrożony — nie można go zaatakować zaklęciem.");
 
-        // Zaklęcia ofensywne na członka obcej koalicji tylko w stanie wojny (docs/MECHANIKA.md §14.4)
-        if (target.CoalitionId != null && target.CoalitionId != kingdom.CoalitionId
-            && !await WarHelper.AreAtWarAsync(_context, kingdom.CoalitionId, target.CoalitionId))
-            return ServiceResult.Fail("Możesz rzucać zaklęcia na członka obcej koalicji tylko w stanie wojny.");
+        // Zaklęcia ofensywne WYŁĄCZNIE na cele w stanie wojny/zasadzki (docs/TODO.md A3):
+        // obie strony muszą być w koalicjach, między którymi wypowiedziano wojnę.
+        if (target.CoalitionId == kingdom.CoalitionId && kingdom.CoalitionId != null)
+            return ServiceResult.Fail("Nie możesz rzucać zaklęć ofensywnych na członka własnej koalicji.");
+        if (kingdom.CoalitionId == null || target.CoalitionId == null
+            || !await WarHelper.AreAtWarAsync(_context, kingdom.CoalitionId, target.CoalitionId))
+            return ServiceResult.Fail("Zaklęcia ofensywne możesz rzucać tylko na księstwa, którym Twoja koalicja wypowiedziała wojnę lub zasadzkę.");
 
         _context.QueuedActions.Add(new QueuedAction
         {
@@ -1237,6 +1267,15 @@ public class BattleService : IBattleService
             return ServiceResult.Fail("Nie możesz okradać samego siebie.");
         if (target.IsProtected)
             return ServiceResult.Fail("Cel jest pod ochroną początkową.");
+        if (target.IsFrozen)
+            return ServiceResult.Fail("Cel jest zamrożony — nie można wysłać na niego złodziei.");
+
+        // Akcje złodziejskie WYŁĄCZNIE na cele w stanie wojny/zasadzki (docs/TODO.md A3)
+        if (target.CoalitionId == kingdom.CoalitionId && kingdom.CoalitionId != null)
+            return ServiceResult.Fail("Nie możesz wysyłać złodziei na członka własnej koalicji.");
+        if (kingdom.CoalitionId == null || target.CoalitionId == null
+            || !await WarHelper.AreAtWarAsync(_context, kingdom.CoalitionId, target.CoalitionId))
+            return ServiceResult.Fail("Złodziei możesz wysyłać tylko na księstwa, którym Twoja koalicja wypowiedziała wojnę lub zasadzkę.");
 
         // złodzieje wychodzą z księstwa — wracają (ci, co przeżyją) po przeliczeniu
         thievesUnit.Quantity -= dto.Thieves;
