@@ -6,9 +6,12 @@ Stan na 2026-07-01. Uwagi od właściciela projektu + wyniki audytu kodu (backen
 
 ## A. Uwagi od właściciela (priorytet — model rozgrywki)
 
-### A1. Ataki rozstrzygane przy przeliczeniu (NIE w czasie rzeczywistym)
-- Ataki wojskowe są **zakładane** w ciągu dnia, a **wykonywane przy przeliczeniu o 5:00**
-  (faza wojskowa), nie natychmiast.
+### A1. Rytm gry: dzień przygotowań → walki raz dziennie o 5:00
+- Każde konto ma dzienną pulę **tur**, którymi w ciągu dnia wykonuje akcje:
+  rozbudowę, ekonomię, rekrutację — czyli **przygotowuje księstwo i koalicję do walki**.
+- **Walki NIE odbywają się natychmiast ani „na tury"** — ataki założone w ciągu dnia
+  rozstrzygają się **wyłącznie raz dziennie przy przeliczeniu o 5:00** (faza wojskowa).
+  Potem znów cały dzień przygotowań i kolejne przeliczenie następnego dnia o 5:00.
 - Po przeliczeniu gracz musi dostać **raport z ataków**:
   - ataki na jego księstwo (kto, czym, wynik, straty, zdobycz),
   - ataki na księstwa jego koalicji (widok koalicyjny).
