@@ -36,6 +36,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<War> Wars { get; set; }
     public DbSet<MarketTransaction> MarketTransactions { get; set; }
     public DbSet<KingdomEvent> KingdomEvents { get; set; }
+    public DbSet<CoalitionAnnouncement> CoalitionAnnouncements { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -322,6 +323,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<War>().HasIndex(w => new { w.EraId, w.Status });
         modelBuilder.Entity<MarketTransaction>().HasIndex(t => t.BuyerKingdomId);
         modelBuilder.Entity<MarketTransaction>().HasIndex(t => t.SellerKingdomId);
+        modelBuilder.Entity<CoalitionAnnouncement>().HasIndex(a => a.CoalitionId);
     }
 
     private void ConfigureUniqueConstraints(ModelBuilder modelBuilder)

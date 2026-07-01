@@ -8,7 +8,9 @@
     "back": "Wróć",
     "confirm": "Potwierdź",
     "yes": "Tak",
-    "no": "Nie"
+    "no": "Nie",
+    "edit": "Edytuj",
+    "delete": "Usuń"
   },
   "nav": {
     "details": "Szczegóły",
@@ -665,9 +667,22 @@
     "needCoalition": "Nie należysz do żadnej koalicji.",
     "tab": {
       "yours": "Twoja koalicja",
+      "board": "Tablica ogłoszeń",
       "wars": "Wojny",
       "pps": "Pałac Sądu Ostatecznego",
       "coalitions": "Koalicje"
+    },
+    "ann": {
+      "title": "Tablica ogłoszeń koalicji",
+      "hint": "Ogłoszenia widzi cała koalicja. Edytować mogą tylko Imperator i Głównodowodzący. Wpisy nie znikają — dopóki ktoś ich nie usunie.",
+      "add": "Dodaj ogłoszenie",
+      "formTitle": "Tytuł (opcjonalny)",
+      "formContent": "Treść",
+      "preview": "Podgląd",
+      "none": "Brak ogłoszeń.",
+      "updated": "aktualizacja",
+      "errEmpty": "Treść ogłoszenia nie może być pusta.",
+      "confirmDelete": "Na pewno usunąć to ogłoszenie? Tego nie można cofnąć."
     },
     "role": {
       "imperator": "Imperator",

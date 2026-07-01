@@ -57,6 +57,15 @@ export interface PpsStatus {
   myBudulecStored: number;
 }
 
+export interface Announcement {
+  id: number;
+  title: string | null;
+  contentHtml: string;
+  authorName: string;
+  createdAt: string;
+  updatedAt: string | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -132,6 +141,22 @@ export class CoalitionService {
 
   appointMainCommander(kingdomId: number): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/appoint-main-commander`, { kingdomId });
+  }
+
+  getAnnouncements(): Observable<Announcement[]> {
+    return this.http.get<Announcement[]>(`${this.apiUrl}/announcements`);
+  }
+
+  createAnnouncement(title: string | null, contentHtml: string): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/announcements`, { title, contentHtml });
+  }
+
+  updateAnnouncement(id: number, title: string | null, contentHtml: string): Observable<ServiceResult> {
+    return this.http.put<ServiceResult>(`${this.apiUrl}/announcements/${id}`, { title, contentHtml });
+  }
+
+  deleteAnnouncement(id: number): Observable<ServiceResult> {
+    return this.http.delete<ServiceResult>(`${this.apiUrl}/announcements/${id}`);
   }
 
   removeMainCommander(): Observable<ServiceResult> {

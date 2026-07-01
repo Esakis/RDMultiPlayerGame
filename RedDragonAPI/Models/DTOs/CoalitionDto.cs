@@ -29,3 +29,20 @@ public class AppointMainCommanderDto
 {
     public int KingdomId { get; set; }
 }
+
+/// <summary>Wpis na tablicy ogłoszeń koalicji (docs/TODO.md A5).</summary>
+public class AnnouncementDto
+{
+    public int Id { get; set; }
+    public string? Title { get; set; }
+    public string ContentHtml { get; set; } = string.Empty;
+    public string AuthorName { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+}
+
+public class SaveAnnouncementDto
+{
+    public string? Title { get; set; }
+    public string ContentHtml { get; set; } = string.Empty;
+}

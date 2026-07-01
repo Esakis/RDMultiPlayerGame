@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { CoalitionService, PpsStatus, War, Election, Treasury } from '../../core/services/coalition.service';
+import { CoalitionService, PpsStatus, War, Election, Treasury, Announcement } from '../../core/services/coalition.service';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { Coalition, Kingdom, KingdomSummary } from '../../core/models/kingdom.model';
 
-type PolTab = 'twoja' | 'wojny' | 'pps' | 'koalicje';
+type PolTab = 'twoja' | 'tablica' | 'wojny' | 'pps' | 'koalicje';
 
 @Component({
   selector: 'app-coalition',
@@ -33,6 +33,13 @@ export class CoalitionComponent implements OnInit {
   wdrGold = 0; wdrBudulec = 0;
   fundPpsAmount = 0;
   selectedCoalitionId: number | null = null;
+
+  // Tablica ogłoszeń
+  announcements: Announcement[] = [];
+  annEditId: number | null = null;   // null = nowy wpis
+  annTitle = '';
+  annContent = '';
+  annFormOpen = false;
 
   constructor(private coalitionService: CoalitionService, private kingdomService: KingdomService,
               private translate: TranslateService) {}
@@ -107,11 +114,61 @@ export class CoalitionComponent implements OnInit {
   }
 
   loadPps(): void {
-    if (!this.kingdom?.coalitionId) { this.pps = null; this.wars = []; this.election = null; return; }
+    if (!this.kingdom?.coalitionId) { this.pps = null; this.wars = []; this.election = null; this.announcements = []; return; }
     this.coalitionService.getPps().subscribe({ next: p => this.pps = p, error: () => this.pps = null });
     this.coalitionService.getWars().subscribe({ next: w => this.wars = w, error: () => this.wars = [] });
     this.coalitionService.getElection().subscribe({ next: e => this.election = e, error: () => this.election = null });
     this.coalitionService.getTreasury().subscribe({ next: t => this.treasury = t, error: () => this.treasury = null });
+    this.coalitionService.getAnnouncements().subscribe({ next: a => this.announcements = a, error: () => this.announcements = [] });
+  }
+
+  // ===== Tablica ogłoszeń =====
+
+  /** Czy zalogowany gracz może edytować tablicę (Imperator/Głównodowodzący). */
+  get canEditAnnouncements(): boolean {
+    return this.kingdom?.coalitionRole === 'Imperator' || this.kingdom?.coalitionRole === 'MainCommander';
+  }
+
+  openAnnForm(a?: Announcement): void {
+    this.annFormOpen = true;
+    this.annEditId = a?.id ?? null;
+    this.annTitle = a?.title ?? '';
+    this.annContent = a?.contentHtml ?? '';
+  }
+
+  closeAnnForm(): void {
+    this.annFormOpen = false;
+    this.annEditId = null;
+    this.annTitle = '';
+    this.annContent = '';
+  }
+
+  saveAnnouncement(): void {
+    if (!this.annContent.trim()) { this.message = this.translate.instant('pol.ann.errEmpty'); this.clearMsg(); return; }
+    const req = this.annEditId == null
+      ? this.coalitionService.createAnnouncement(this.annTitle || null, this.annContent)
+      : this.coalitionService.updateAnnouncement(this.annEditId, this.annTitle || null, this.annContent);
+    req.subscribe({
+      next: res => {
+        this.message = res.message || 'OK';
+        this.closeAnnForm();
+        this.coalitionService.getAnnouncements().subscribe(a => this.announcements = a);
+        this.clearMsg();
+      },
+      error: err => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
+  }
+
+  deleteAnnouncement(a: Announcement): void {
+    if (!confirm(this.translate.instant('pol.ann.confirmDelete'))) return;
+    this.coalitionService.deleteAnnouncement(a.id).subscribe({
+      next: res => {
+        this.message = res.message || 'OK';
+        this.coalitionService.getAnnouncements().subscribe(x => this.announcements = x);
+        this.clearMsg();
+      },
+      error: err => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
   }
 
   private treasuryOp(obs: any): void {

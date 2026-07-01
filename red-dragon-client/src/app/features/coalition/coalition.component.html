@@ -6,6 +6,8 @@
   <div class="build-tabs">
     <button class="build-tab" [class.active]="activeTab === 'twoja'"
             (click)="setTab('twoja')">{{ 'pol.tab.yours' | translate }}</button>
+    <button class="build-tab" *ngIf="kingdom?.coalitionId" [class.active]="activeTab === 'tablica'"
+            (click)="setTab('tablica')">{{ 'pol.tab.board' | translate }}</button>
     <button class="build-tab" [class.active]="activeTab === 'wojny'"
             (click)="setTab('wojny')">{{ 'pol.tab.wars' | translate }}</button>
     <button class="build-tab" [class.active]="activeTab === 'pps'"
@@ -130,6 +132,55 @@
           </tbody>
         </table>
         <ng-template #noJoinable><p class="empty">{{ 'pol.join.none' | translate }}</p></ng-template>
+      </div>
+    </div>
+
+    <!-- ===== Zakładka: Tablica ogłoszeń ===== -->
+    <div *ngIf="activeTab === 'tablica'">
+      <div class="card" *ngIf="kingdom?.coalitionId; else needCoalition">
+        <h3>{{ 'pol.ann.title' | translate }}</h3>
+        <p class="hint">{{ 'pol.ann.hint' | translate }}</p>
+
+        <div class="ann-actions" *ngIf="canEditAnnouncements && !annFormOpen">
+          <button class="btn-sm" (click)="openAnnForm()">{{ 'pol.ann.add' | translate }}</button>
+        </div>
+
+        <!-- Formularz dodawania/edycji (Imperator/GD) -->
+        <div class="ann-form" *ngIf="annFormOpen">
+          <div class="form-row">
+            <label>{{ 'pol.ann.formTitle' | translate }}:</label>
+            <input type="text" [(ngModel)]="annTitle" maxlength="200">
+          </div>
+          <div class="form-row">
+            <label>{{ 'pol.ann.formContent' | translate }} (HTML):</label>
+            <textarea [(ngModel)]="annContent" rows="10"></textarea>
+          </div>
+          <div class="form-row preview" *ngIf="annContent">
+            <label>{{ 'pol.ann.preview' | translate }}:</label>
+            <div class="ann-content" [innerHTML]="annContent"></div>
+          </div>
+          <div class="form-row">
+            <button class="btn-sm" (click)="saveAnnouncement()">{{ 'common.save' | translate }}</button>
+            <button class="btn-sm" (click)="closeAnnForm()">{{ 'common.cancel' | translate }}</button>
+          </div>
+        </div>
+
+        <!-- Lista ogłoszeń -->
+        <p class="empty" *ngIf="announcements.length === 0">{{ 'pol.ann.none' | translate }}</p>
+        <div class="ann-item" *ngFor="let a of announcements">
+          <div class="ann-head">
+            <strong class="ann-title" *ngIf="a.title">{{ a.title }}</strong>
+            <span class="ann-meta">
+              {{ a.authorName }} — {{ a.createdAt | date:'yyyy-MM-dd HH:mm' }}
+              <ng-container *ngIf="a.updatedAt"> ({{ 'pol.ann.updated' | translate }} {{ a.updatedAt | date:'yyyy-MM-dd HH:mm' }})</ng-container>
+            </span>
+            <span class="ann-buttons" *ngIf="canEditAnnouncements">
+              <button class="btn-sm" (click)="openAnnForm(a)">{{ 'common.edit' | translate }}</button>
+              <button class="btn-sm danger" (click)="deleteAnnouncement(a)">{{ 'common.delete' | translate }}</button>
+            </span>
+          </div>
+          <div class="ann-content" [innerHTML]="a.contentHtml"></div>
+        </div>
       </div>
     </div>
 

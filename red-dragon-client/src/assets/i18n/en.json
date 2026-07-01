@@ -8,7 +8,9 @@
     "back": "Back",
     "confirm": "Confirm",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "nav": {
     "details": "Details",
@@ -665,9 +667,22 @@
     "needCoalition": "You do not belong to any coalition.",
     "tab": {
       "yours": "Your coalition",
+      "board": "Notice board",
       "wars": "Wars",
       "pps": "Palace of Final Judgement",
       "coalitions": "Coalitions"
+    },
+    "ann": {
+      "title": "Coalition notice board",
+      "hint": "Announcements are visible to the whole coalition. Only the Imperator and the Main Commander can edit them. Entries never expire — they stay until deleted.",
+      "add": "Add announcement",
+      "formTitle": "Title (optional)",
+      "formContent": "Content",
+      "preview": "Preview",
+      "none": "No announcements.",
+      "updated": "updated",
+      "errEmpty": "Announcement content cannot be empty.",
+      "confirmDelete": "Really delete this announcement? This cannot be undone."
     },
     "role": {
       "imperator": "Emperor",

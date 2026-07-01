@@ -679,6 +679,97 @@ public class CoalitionController : ControllerBase
         return Ok(new ServiceResult { Success = true, Message = "Zawarto pokój — wojna zakończona." });
     }
 
+    // ====================== TABLICA OGŁOSZEŃ (docs/TODO.md A5) ======================
+
+    /// <summary>Czy księstwo może edytować tablicę ogłoszeń (Imperator/Głównodowodzący).</summary>
+    private static bool CanEditAnnouncements(Kingdom k) =>
+        k.CoalitionRole is "Imperator" or "MainCommander";
+
+    [HttpGet("announcements")]
+    public async Task<ActionResult<List<AnnouncementDto>>> GetAnnouncements()
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom?.CoalitionId == null) return Ok(new List<AnnouncementDto>());
+
+        var items = await _context.CoalitionAnnouncements
+            .Where(a => a.CoalitionId == kingdom.CoalitionId)
+            .OrderByDescending(a => a.CreatedAt)
+            .Select(a => new AnnouncementDto
+            {
+                Id = a.Id,
+                Title = a.Title,
+                ContentHtml = a.ContentHtml,
+                AuthorName = a.AuthorName,
+                CreatedAt = a.CreatedAt,
+                UpdatedAt = a.UpdatedAt
+            })
+            .ToListAsync();
+
+        return Ok(items);
+    }
+
+    [HttpPost("announcements")]
+    public async Task<ActionResult> CreateAnnouncement([FromBody] SaveAnnouncementDto dto)
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom?.CoalitionId == null) return BadRequest("Nie należysz do koalicji.");
+        if (!CanEditAnnouncements(kingdom))
+            return BadRequest("Tylko Imperator i Głównodowodzący mogą edytować tablicę ogłoszeń.");
+        if (string.IsNullOrWhiteSpace(dto.ContentHtml))
+            return BadRequest("Treść ogłoszenia nie może być pusta.");
+
+        _context.CoalitionAnnouncements.Add(new CoalitionAnnouncement
+        {
+            CoalitionId = kingdom.CoalitionId.Value,
+            Title = dto.Title,
+            ContentHtml = dto.ContentHtml,
+            AuthorName = kingdom.Name
+        });
+        await _context.SaveChangesAsync();
+
+        return Ok(new ServiceResult { Success = true, Message = "Ogłoszenie dodane." });
+    }
+
+    [HttpPut("announcements/{id:int}")]
+    public async Task<ActionResult> UpdateAnnouncement(int id, [FromBody] SaveAnnouncementDto dto)
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom?.CoalitionId == null) return BadRequest("Nie należysz do koalicji.");
+        if (!CanEditAnnouncements(kingdom))
+            return BadRequest("Tylko Imperator i Głównodowodzący mogą edytować tablicę ogłoszeń.");
+
+        var item = await _context.CoalitionAnnouncements
+            .FirstOrDefaultAsync(a => a.Id == id && a.CoalitionId == kingdom.CoalitionId);
+        if (item == null) return NotFound("Nie znaleziono ogłoszenia.");
+        if (string.IsNullOrWhiteSpace(dto.ContentHtml))
+            return BadRequest("Treść ogłoszenia nie może być pusta.");
+
+        item.Title = dto.Title;
+        item.ContentHtml = dto.ContentHtml;
+        item.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        return Ok(new ServiceResult { Success = true, Message = "Ogłoszenie zaktualizowane." });
+    }
+
+    [HttpDelete("announcements/{id:int}")]
+    public async Task<ActionResult> DeleteAnnouncement(int id)
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom?.CoalitionId == null) return BadRequest("Nie należysz do koalicji.");
+        if (!CanEditAnnouncements(kingdom))
+            return BadRequest("Tylko Imperator i Głównodowodzący mogą edytować tablicę ogłoszeń.");
+
+        var item = await _context.CoalitionAnnouncements
+            .FirstOrDefaultAsync(a => a.Id == id && a.CoalitionId == kingdom.CoalitionId);
+        if (item == null) return NotFound("Nie znaleziono ogłoszenia.");
+
+        _context.CoalitionAnnouncements.Remove(item);
+        await _context.SaveChangesAsync();
+
+        return Ok(new ServiceResult { Success = true, Message = "Ogłoszenie usunięte." });
+    }
+
     private async Task<Kingdom?> GetCurrentKingdom()
     {
         var userId = GetUserId();
