@@ -126,6 +126,14 @@ public class DailyResetService : BackgroundService
                 .Where(k => k.Era.IsActive && !k.IsFrozen)
                 .ToListAsync();
 
+            // Koalicje w aktywnym stanie wojny — Renowacja broni produkuje wtedy broń
+            var warringCoalitions = (await context.Wars
+                    .Where(w => w.Status == "Active")
+                    .Select(w => new { w.DeclaringCoalitionId, w.TargetCoalitionId })
+                    .ToListAsync())
+                .SelectMany(w => new[] { w.DeclaringCoalitionId, w.TargetCoalitionId })
+                .ToHashSet();
+
             foreach (var kingdom in kingdoms)
             {
                 int bonusTurns = kingdom.Buildings
@@ -160,6 +168,21 @@ public class DailyResetService : BackgroundService
 
                 // Upojenie armii mija — trzeźwieją po przeliczeniu (docs/MECHANIKA.md §10)
                 kingdom.DrunkArmyPct = 0;
+
+                // Renowacja broni w czasie wojny (Dracopedia §14.3): 40–50 tys. broni/przeliczenie
+                if (kingdom.CoalitionId != null && warringCoalitions.Contains(kingdom.CoalitionId.Value)
+                    && kingdom.Buildings.Any(b => b.BuildingType == "RenowacjaBroni"
+                                                  && b.Quantity > 0 && !b.IsUnderConstruction))
+                {
+                    int warWeapons = Random.Shared.Next(40_000, 50_001);
+                    kingdom.Weapons += warWeapons;
+                    context.KingdomEvents.Add(new KingdomEvent
+                    {
+                        KingdomId = kingdom.Id,
+                        Category = "Economy",
+                        Message = $"Renowacja broni pracuje na wojnę: +{warWeapons} broni."
+                    });
+                }
 
                 kingdom.Age++;
                 if (kingdom.IsProtected)

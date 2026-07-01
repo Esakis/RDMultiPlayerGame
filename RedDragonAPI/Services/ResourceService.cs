@@ -300,6 +300,16 @@ public class ResourceService : IResourceService
         // główne pasywne źródło złota utrzymujące ekonomię (płace obciążają wszystkich pracowników).
         if (Has("Ratusz")) kingdom.Gold += kingdom.Population * 10L;
 
+        // Port towarowy (Dracopedia §14.3): 400–600 tys. złota na turę, w czasie wojny ×2.
+        if (Has("PortTowarowy"))
+        {
+            long portGold = Random.Shared.Next(400_000, 600_001);
+            if (kingdom.CoalitionId != null && await _context.Wars.AnyAsync(w => w.Status == "Active"
+                    && (w.DeclaringCoalitionId == kingdom.CoalitionId || w.TargetCoalitionId == kingdom.CoalitionId)))
+                portGold *= 2;
+            kingdom.Gold += portGold;
+        }
+
         // === 3. Pensje i żołd ===
         // Nowicjusze produkują tylko 10% i NIE pobierają pensji (są na nauce zawodu) —
         // dzięki temu rozbudowa zatrudnienia nie topi nowego księstwa w długach, zanim

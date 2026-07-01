@@ -82,7 +82,7 @@ public static class BattleCalculator
         {
             if (unit.Definition == null || unit.Quantity <= 0) continue;
             if (IsDragon(unit.UnitType)) { dragons += unit.Quantity; continue; }
-            if (IsMachine(unit.UnitType)) continue;   // machiny nie bronią (wyjątek Goblin — TODO)
+            if (IsMachine(unit.UnitType)) continue;   // machiny nie bronią (wyjątek: Goblin w wieżach, niżej)
             if (IsThief(unit.UnitType)) continue;     // złodzieje bronią tylko przed złodziejami
 
             armyPower += unit.Quantity * (unit.Definition.DefensePower + k);
@@ -117,6 +117,17 @@ public static class BattleCalculator
         {
             decimal towerBase = defenderRace.Name == "Człowiek" ? 10m : 15m;
             armyPower += towers * towerBase * (1m + 4m * towers / (towers + 400m));
+
+            // Goblińska inżynieria (docs/MECHANIKA.md §2.2): wieże Goblina mieszczą
+            // po 10 machin, każda broni z siłą 100.
+            if (defenderRace.Name == "Goblin")
+            {
+                long goblinMachines = defender.MilitaryUnits
+                    .Where(u => IsMachine(u.UnitType))
+                    .Sum(u => (long)u.Quantity);
+                long machinesInTowers = Math.Min(goblinMachines, towers * 10);
+                armyPower += machinesInTowers * 100m;
+            }
         }
 
         // smoki

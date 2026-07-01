@@ -560,6 +560,14 @@ public class BattleService : IBattleService
         if (defender.Race == "Nekromant") defender.Bodies += attackerDead + defenderDead;
         if (attacker.Race == "Nekromant") attacker.Bodies += attackerDead;
 
+        // Renowacja broni (Dracopedia §14.3): odzyskuje 5 broni za każdego własnego poległego
+        bool HasBld(Kingdom k2, string type) => k2.Buildings.Any(b =>
+            b.BuildingType == type && b.Quantity > 0 && !b.IsUnderConstruction);
+        if (attackerDead > 0 && HasBld(attacker, "RenowacjaBroni"))
+            attacker.Weapons += attackerDead * 5;
+        if (defenderDead > 0 && HasBld(defender, "RenowacjaBroni"))
+            defender.Weapons += defenderDead * 5;
+
         // Gniew Enta: Ent, który poniósł straty, wpada w szał (+100% ataku do przeliczenia)
         if (defender.Race == "Ent" && defenderDead > 0) defender.EntWrathActive = true;
 
