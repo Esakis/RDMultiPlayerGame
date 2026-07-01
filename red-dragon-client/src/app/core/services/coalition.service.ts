@@ -57,6 +57,15 @@ export interface PpsStatus {
   myBudulecStored: number;
 }
 
+export interface PantheonEntry {
+  id: number;
+  eraName: string;
+  coalitionName: string;
+  coalitionTag: string | null;
+  imperatorName: string | null;
+  victoryDate: string;
+}
+
 export interface Announcement {
   id: number;
   title: string | null;
@@ -141,6 +150,10 @@ export class CoalitionService {
 
   appointMainCommander(kingdomId: number): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/appoint-main-commander`, { kingdomId });
+  }
+
+  getPantheon(): Observable<PantheonEntry[]> {
+    return this.http.get<PantheonEntry[]>(`${this.apiUrl}/pantheon`);
   }
 
   getSharedPasswordStatus(): Observable<{ enabled: boolean; canManage: boolean }> {

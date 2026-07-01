@@ -7,6 +7,8 @@
             (click)="setTab('koalicja')">{{ 'pol.tab.yours' | translate }}</button>
     <button class="build-tab" [class.active]="activeTab === 'ranking'"
             (click)="setTab('ranking')">{{ 'rank.title' | translate }}</button>
+    <button class="build-tab" [class.active]="activeTab === 'panteon'"
+            (click)="setTab('panteon')">{{ 'rank.pantheon.title' | translate }}</button>
   </div>
 
   <div *ngIf="!loading; else loadingTpl">
@@ -98,6 +100,33 @@
         </span>
       </div>
       <p *ngIf="kingdoms.length === 0" class="empty">{{ 'rank.noPlayers' | translate }}</p>
+    </div>
+
+    <!-- Panteon — zwycięzcy zakończonych er -->
+    <div class="pantheon" *ngIf="activeTab === 'panteon'">
+      <h3>{{ 'rank.pantheon.title' | translate }}</h3>
+      <p class="hint">{{ 'rank.pantheon.hint' | translate }}</p>
+      <table class="coalition-stats-table" *ngIf="pantheon.length > 0; else emptyPantheon">
+        <thead>
+          <tr>
+            <th>{{ 'rank.pantheon.era' | translate }}</th>
+            <th>{{ 'rank.pantheon.coalition' | translate }}</th>
+            <th>{{ 'rank.pantheon.imperator' | translate }}</th>
+            <th>{{ 'rank.pantheon.date' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of pantheon">
+            <td>{{ p.eraName }}</td>
+            <td class="member-name">{{ p.coalitionTag ? '[' + p.coalitionTag + '] ' : '' }}{{ p.coalitionName }}</td>
+            <td>{{ p.imperatorName || '—' }}</td>
+            <td>{{ p.victoryDate | date:'yyyy-MM-dd' }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #emptyPantheon>
+        <p class="empty">{{ 'rank.pantheon.none' | translate }}</p>
+      </ng-template>
     </div>
   </div>
   <ng-template #loadingTpl><div class="loading">{{ 'common.loading' | translate }}</div></ng-template>

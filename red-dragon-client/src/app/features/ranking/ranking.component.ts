@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { KingdomService } from '../../core/services/kingdom.service';
-import { CoalitionService } from '../../core/services/coalition.service';
+import { CoalitionService, PantheonEntry } from '../../core/services/coalition.service';
 import { Kingdom, KingdomSummary } from '../../core/models/kingdom.model';
 
 @Component({
@@ -13,13 +13,17 @@ export class RankingComponent implements OnInit {
   kingdoms: KingdomSummary[] = [];
   loading = true;
 
-  // Aktywna zakładka: statystyki własnej koalicji vs ranking wszystkich księstw.
-  activeTab: 'koalicja' | 'ranking' = 'ranking';
+  // Aktywna zakładka: statystyki własnej koalicji / ranking wszystkich księstw / Panteon.
+  activeTab: 'koalicja' | 'ranking' | 'panteon' = 'ranking';
 
   // Statystyki własnej koalicji
   kingdom: Kingdom | null = null;
   coalitionName: string | null = null;
   coalitionMembers: KingdomSummary[] = [];
+
+  // Panteon — sala chwały zakończonych er
+  pantheon: PantheonEntry[] = [];
+  pantheonLoaded = false;
 
   constructor(
     private kingdomService: KingdomService,
@@ -27,7 +31,15 @@ export class RankingComponent implements OnInit {
     private translate: TranslateService
   ) {}
 
-  setTab(tab: 'koalicja' | 'ranking'): void { this.activeTab = tab; }
+  setTab(tab: 'koalicja' | 'ranking' | 'panteon'): void {
+    this.activeTab = tab;
+    if (tab === 'panteon' && !this.pantheonLoaded) {
+      this.coalitionService.getPantheon().subscribe({
+        next: p => { this.pantheon = p; this.pantheonLoaded = true; },
+        error: () => {}
+      });
+    }
+  }
 
   ngOnInit(): void {
     this.kingdomService.getAllKingdoms().subscribe({

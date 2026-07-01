@@ -770,6 +770,31 @@ public class CoalitionController : ControllerBase
         return Ok(new ServiceResult { Success = true, Message = "Ogłoszenie usunięte." });
     }
 
+    // ====================== PANTEON (docs/MECHANIKA.md §12) ======================
+
+    /// <summary>Sala chwały: zwycięskie koalicje zakończonych er.</summary>
+    [HttpGet("pantheon")]
+    [AllowAnonymous]
+    public async Task<ActionResult> GetPantheon()
+    {
+        var entries = await _context.Pantheons
+            .Include(p => p.Era)
+            .Include(p => p.Coalition).ThenInclude(c => c.Leader)
+            .OrderByDescending(p => p.VictoryDate)
+            .Select(p => new
+            {
+                p.Id,
+                EraName = p.Era.Name,
+                CoalitionName = p.Coalition.Name,
+                CoalitionTag = p.Coalition.Tag,
+                ImperatorName = p.Coalition.Leader != null ? p.Coalition.Leader.Name : null,
+                p.VictoryDate
+            })
+            .ToListAsync();
+
+        return Ok(entries);
+    }
+
     // ====================== WSPÓLNE HASŁO KOALICJI (docs/TODO.md A4) ======================
 
     /// <summary>
