@@ -76,41 +76,49 @@ Stan na 2026-07-01. Uwagi od właściciela projektu + wyniki audytu kodu (backen
 ## B. Wyniki audytu — backend (RedDragonAPI)
 
 ### Krytyczne (psują balans)
-- **B1. Bonusy produkcyjne generałów martwe** — Kupiec (+złoto kupców),
-  Profesor (+szkolenie nowicjuszy), Mag (+siła zaklęć), Złodziej (+siła złodziei)
-  zbierają expy, ale bonusy nie są nigdzie stosowane (brak odwołań w `ResourceService`).
-- **B2. Zaklęcie Chochliki bez efektu** — `EffectType="MachineDamage"` nie ma obsługi
-  w `ApplySpellEffect` (`BattleService`), czar wisi i nic nie robi.
-- **B3. Upijanie armii kosmetyczne** — akcja złodziejska zwraca tylko tekst,
-  nie osłabia obrony celu przy najbliższym przeliczeniu.
+- ✅ **B1. Bonusy produkcyjne generałów** — ZROBIONE: Kupiec (+1,5·lvl/(lvl+50) kupcom),
+  Profesor (+lvl p.p. szkolenia), Mag i Złodziej (+lvl/(lvl+50) siły) — liczy się
+  najlepszy generał w domu.
+- ✅ **B2. Zaklęcie Chochliki** — ZROBIONE: niszczy 10–20% machin (Gnom odporny,
+  machiny Goblina niezniszczalne).
+- ✅ **B3. Upijanie armii** — ZROBIONE: `Kingdom.DrunkArmyPct` obniża obronę o 25%
+  w fazie wojskowej tego samego przeliczenia.
 
 ### Ważne
-- **B4. Renowacja broni bez efektu** — budynek jest w seedzie, brak logiki
-  (broń za poległych, produkcja broni w wojnie).
-- **B5. Port towarowy nie istnieje** — wg manuala PL: 400–600k złota/turę, w wojnie ×2.
-- **B6. Goblińska inżynieria obronna** — machiny Goblina nie bronią w wieżach
-  (TODO w `BattleCalculator.cs:85`).
-- **B7. Cechy generałów w bitwie** — Porwanie/Zabójstwo/Zranienie generała działają
-  tylko jako akcje złodziei; w starciu zbrojnym nieaktywne.
-- **B8. Panteon niewidoczny** — `EraConcluder` zapisuje zwycięzców do encji `Pantheon`,
-  ale żaden endpoint jej nie czyta; brak też dedykowanego endpointu rankingowego.
+- ✅ **B4. Renowacja broni** — ZROBIONE: +5 broni za własnego poległego,
+  w wojnie koalicji 40–50 tys. broni/przeliczenie.
+- ✅ **B5. Port towarowy** — ZROBIONE: nowy budynek specjalny (rząd 5),
+  400–600 tys. złota/turę, w wojnie ×2.
+- ✅ **B6. Goblińska inżynieria obronna** — ZROBIONE: wieże Goblina mieszczą
+  po 10 machin broniących z siłą 100.
+- ✅ **B7. Cechy generałów w bitwie** — ZROBIONE: Porwanie (2·lvl%) i Zabójstwo (2·lvl%)
+  po zwycięstwie, Zranienie (3·lvl%, na 3 dni) także przy porażce.
+- ✅ **B8. Panteon** — ZROBIONE: `GET /api/coalition/pantheon` + zakładka
+  Panteon w Statystykach.
 
 ### Drobne / kalibracja
-- **B9.** Auto-cast / auto-sell i zdarzenia losowe (plagi) z listy tury — brak.
-- **B10.** Bazowe produkcje profesji przybliżone (`ResourceService.cs:16-24`) — do kalibracji.
-- **B11.** Zgadywane stałe: próg głodu 5%, tempo expa generałów — do weryfikacji z manualem.
-- **B12.** Nieaktualny komentarz TODO w `DailyResetService.cs:232` (funkcja już jest niżej).
+- ✅ **B9.** ZROBIONE: plagi losowe przy przeliczeniu (Zaraza 3%, Szarańcza 3%,
+  Chochliki 2% — z odpornościami rasowymi) oraz auto-rzucanie wybranego pozytywnego
+  zaklęcia na siebie po przeliczeniu (`Kingdom.AutoCastSpellType`).
+  Auto-SELL many jest bezprzedmiotowe — w tym modelu mana nie znika po turze,
+  tylko dąży do pojemności wyznaczanej przez druidów (świadoma decyzja projektowa).
+- ⏸ **B10.** Bazowe produkcje profesji (`ResourceService.cs:16-24`) — wartości
+  przybliżone z zachowanymi proporcjami; oryginalny manual nie podaje pełnych baz
+  (docs/MECHANIKA.md §15). Kalibrować dopiero na podstawie testów rozgrywki.
+- ⏸ **B11.** Próg głodu 5% i tempo expa generałów — jw.: brak danych źródłowych,
+  wartości działają; do strojenia po testach z graczami.
+- ✅ **B12.** Nieaktualny komentarz w `DailyResetService` — usunięty.
 
 ---
 
 ## C. Wyniki audytu — frontend (red-dragon-client)
 
-- **C1. Brak odświeżania danych** — zero pollingu; gracz nie widzi nowej wiadomości
-  ani wyników przeliczenia bez ręcznego odświeżenia. Potrzebne: badge nieprzeczytanych
-  wiadomości, sygnał „było przeliczenie — zobacz raporty", odliczanie do 5:00.
-- **C2. Trasy osierocone** — `/research` i `/dragons` istnieją w routingu,
-  ale nie prowadzi do nich żaden link w menu.
-- **C3. Martwe linki w headerze** — Aktualności / Doradcy / Czat to `javascript:void(0)`.
-- **C4. Nawigacja rozbita** — sidebar (12 pozycji) vs górny pasek (forum, wiadomości,
-  labirynt) — do ujednolicenia.
-- **C5. Widok Smoków ubogi** — tylko podgląd, akcja deleguje do `/magic`.
+- ✅ **C1. Brak odświeżania danych** — ZROBIONE: `GET /api/notification/status`
+  + polling co 60 s, badge poczty i raportów w nagłówku, licznik do 5:00.
+- ✅ **C2. Trasy osierocone** — ZROBIONE: Nauka i Smoki w menu bocznym.
+- ✅ **C3. Martwe linki w headerze** — ZROBIONE: usunięte (Wieści/Doradcy/Czat),
+  w zamian link Raporty z badge.
+- ✅ **C4. Nawigacja** — uporządkowana: sidebar ma wszystkie widoki gry, górny pasek
+  to skróty (Szczegóły/Forum/Poczta/Raporty/Labirynt) + licznik przeliczenia.
+- ✅ **C5. Widok Smoków** — ZROBIONE: stan budynków smoczych, tempo wabienia,
+  orientacyjny koszt przywołania, przywołanie bezpośrednio z widoku.
