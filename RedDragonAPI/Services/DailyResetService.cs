@@ -227,9 +227,8 @@ public class DailyResetService : BackgroundService
             }
 
             // 5. Spadek siły zaklęć (oryginalny wzór):
-            //    biała magia: nowa = siła·0,45 − ziemia/100
-            //    czarna magia: nowa = siła·0,6 − ziemia/100
-            //    (bonusy generała z Białą magią — do uzupełnienia po systemie generałów)
+            //    biała magia: nowa = siła·(0,45 + lvlBM/200)·(1+s·0,1) − ziemia/100
+            //    czarna magia: nowa = siła·(0,6 − lvlBM/200) − ziemia/100
             var activeSpells = await context.ActiveSpells
                 .Include(s => s.Spell)
                 .Include(s => s.Kingdom)

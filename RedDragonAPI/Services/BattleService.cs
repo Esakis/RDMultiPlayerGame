@@ -864,6 +864,21 @@ public class BattleService : IBattleService
             ?? new RaceDefinition { Name = raceName };
     }
 
+    /// <summary>
+    /// Poziom najlepszego generała o danej cesze głównej, obecnego w domu i zdolnego
+    /// do działania (docs/MECHANIKA.md §11 — „liczy się najlepszy"). 0 = brak.
+    /// </summary>
+    private async Task<int> BestHomeGeneralLevelAsync(int kingdomId, string primaryTrait)
+    {
+        var now = DateTime.UtcNow;
+        var generals = await _context.Generals.AsNoTracking()
+            .Where(g => g.KingdomId == kingdomId && g.PrimaryTrait == primaryTrait
+                        && !g.IsPending && !g.IsImprisoned && !g.IsOutside
+                        && (g.WoundedUntil == null || g.WoundedUntil <= now))
+            .ToListAsync();
+        return generals.Select(g => g.Level).DefaultIfEmpty(0).Max();
+    }
+
     private static int TrainedMages(Kingdom kingdom)
     {
         var mages = kingdom.Professions?.FirstOrDefault(p => p.ProfessionType == "Magowie");
@@ -989,6 +1004,11 @@ public class BattleService : IBattleService
         // Nauka stosowana Człowieka: szkoła magiczna +10% siły zaklęć
         if (kingdom.Race == "Człowiek" && kingdom.AppliedScienceSchool == "Magic")
             powerVal *= 1.10m;
+
+        // Generał Mag (docs/MECHANIKA.md §11): +lvl/(lvl+50) siły magicznej
+        int mageGeneralLvl = await BestHomeGeneralLevelAsync(kingdom.Id, "Mag");
+        if (mageGeneralLvl > 0)
+            powerVal *= 1m + (decimal)mageGeneralLvl / (mageGeneralLvl + 50m);
 
         long power = (long)powerVal;
 
@@ -1436,6 +1456,14 @@ public class BattleService : IBattleService
                                   * actionDef.SuccessBaseRate);
         var defThieves = defender.MilitaryUnits.FirstOrDefault(u => u.UnitType.EndsWith("_Zlodziej"));
         long defensePower = (long)((defThieves?.Quantity ?? 0) * (1m + defenderRace.ThiefPowerModifier));
+
+        // Generał Złodziej (docs/MECHANIKA.md §11): +lvl/(lvl+50) siły złodziei — po obu stronach
+        int atkThiefGenLvl = await BestHomeGeneralLevelAsync(attacker.Id, "Zlodziej");
+        if (atkThiefGenLvl > 0)
+            attackPower = (long)(attackPower * (1m + (decimal)atkThiefGenLvl / (atkThiefGenLvl + 50m)));
+        int defThiefGenLvl = await BestHomeGeneralLevelAsync(defender.Id, "Zlodziej");
+        if (defThiefGenLvl > 0)
+            defensePower = (long)(defensePower * (1m + (decimal)defThiefGenLvl / (defThiefGenLvl + 50m)));
 
         // Pakty złodziejskie: złodzieje partnera (w domu) pomagają bronić
         var thiefPartners = await PactService.GetActivePactPartnersAsync(_context, defender.Id, "Zlodziejski");

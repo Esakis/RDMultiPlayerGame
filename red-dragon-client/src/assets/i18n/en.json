@@ -133,7 +133,7 @@
     "general": "General",
     "staff": "Military staff",
     "loading": "Loading generals...",
-    "hint": "Generals arrive randomly when you use turns — the more you have, the rarer new ones appear (when you have none, the next one is guaranteed). You must accept or reject each new general. A Chief increases attack power by his level in percent, a Defender strengthens defense the same way. A general leading an attack returns after the recalculation.",
+    "hint": "Generals arrive randomly when you use turns — the more you have, the rarer new ones appear (when you have none, the next one is guaranteed). You must accept or reject each new general. A Chief increases attack power by his level in percent, a Defender strengthens defense the same way. A Merchant boosts merchants' income, a Professor speeds up novice training, a Mage strengthens spells and a Thief empowers thief actions (the best general at home counts). A general leading an attack returns after the recalculation.",
     "newGeneral": "A new general has reported for duty",
     "rerollTip": "Reroll the secondary trait",
     "noRerolls": "No attempts left",

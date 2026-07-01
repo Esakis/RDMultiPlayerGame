@@ -67,6 +67,20 @@ public class ResourceService : IResourceService
             .FirstOrDefaultAsync(r => r.Name == kingdom.Race)
             ?? new RaceDefinition { Name = kingdom.Race };
 
+        // Cechy główne generałów (docs/MECHANIKA.md §11) — liczy się najlepszy generał w domu:
+        // Kupiec: +1,5·lvl/(lvl+50) produktywności kupców; Profesor: +lvl p.p. szkolenia nowicjuszy.
+        var nowUtc = DateTime.UtcNow;
+        var homeGenerals = await _context.Generals.AsNoTracking()
+            .Where(g => g.KingdomId == kingdom.Id && !g.IsPending && !g.IsImprisoned && !g.IsOutside
+                        && (g.WoundedUntil == null || g.WoundedUntil <= nowUtc)
+                        && (g.PrimaryTrait == "Kupiec" || g.PrimaryTrait == "Profesor"))
+            .ToListAsync();
+        int merchantGeneralLvl = homeGenerals.Where(g => g.PrimaryTrait == "Kupiec")
+            .Select(g => g.Level).DefaultIfEmpty(0).Max();
+        int professorGeneralLvl = homeGenerals.Where(g => g.PrimaryTrait == "Profesor")
+            .Select(g => g.Level).DefaultIfEmpty(0).Max();
+        decimal merchantGeneralMult = 1m + 1.5m * merchantGeneralLvl / (merchantGeneralLvl + 50m);
+
         bool Has(string buildingType) => kingdom.Buildings
             .Any(b => b.BuildingType == buildingType && b.Quantity > 0 && !b.IsUnderConstruction);
 
@@ -222,7 +236,9 @@ public class ResourceService : IResourceService
                                     .SumAsync(k => (long)k.Land);
                         }
                         decimal goldPerMerchant = 500m * tradeLand / (tradeLand + prof.WorkerCount * 10m);
-                        production = (long)(prof.WorkerCount * goldPerMerchant * Productivity(prof, race.BonusMerchants));
+                        production = (long)(prof.WorkerCount * goldPerMerchant
+                                            * Productivity(prof, race.BonusMerchants)
+                                            * merchantGeneralMult);
                         merchantGold = production;
                         kingdom.Gold += production;
                     }
@@ -500,7 +516,8 @@ public class ResourceService : IResourceService
         var schools = kingdom.Buildings.FirstOrDefault(b => b.BuildingType == "Szkoly" && !b.IsUnderConstruction);
         decimal s = schools?.Quantity ?? 0;
         decimal trainedDenom = 3.5m - 250m * s / (kingdom.Land + 100m * s + 99m);
-        decimal trainedPct = Math.Clamp(100m / trainedDenom / 100m, 0.05m, 0.90m);
+        // Generał Profesor: +lvl punktów procentowych szkolenia na turę (docs/MECHANIKA.md §11)
+        decimal trainedPct = Math.Clamp(100m / trainedDenom / 100m + professorGeneralLvl / 100m, 0.05m, 0.95m);
         foreach (var prof in kingdom.Professions.Where(p => p.NoviceCount > 0))
         {
             int trained = Math.Max(1, (int)(prof.NoviceCount * trainedPct));

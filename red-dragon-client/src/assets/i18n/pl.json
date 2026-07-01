@@ -133,7 +133,7 @@
     "general": "Generał",
     "staff": "Sztab wojskowy",
     "loading": "Wczytywanie generałów...",
-    "hint": "Generałowie przychodzą losowo przy wykorzystywaniu tur — im więcej ich masz, tym rzadziej zjawiają się nowi (gdy nie masz żadnego, kolejny przyjdzie na pewno). Każdego nowego generała musisz przyjąć lub odrzucić. Wódz zwiększa siłę ataku o swój poziom w procentach, Obrońca tak samo wzmacnia obronę. Generał prowadzący atak wraca po przeliczeniu.",
+    "hint": "Generałowie przychodzą losowo przy wykorzystywaniu tur — im więcej ich masz, tym rzadziej zjawiają się nowi (gdy nie masz żadnego, kolejny przyjdzie na pewno). Każdego nowego generała musisz przyjąć lub odrzucić. Wódz zwiększa siłę ataku o swój poziom w procentach, Obrońca tak samo wzmacnia obronę. Kupiec zwiększa dochód kupców, Profesor przyspiesza szkolenie nowicjuszy, Mag wzmacnia zaklęcia, a Złodziej — akcje złodziejskie (liczy się najlepszy generał obecny w domu). Generał prowadzący atak wraca po przeliczeniu.",
     "newGeneral": "Nowy generał zgłosił się do służby",
     "rerollTip": "Przelosuj cechę drugorzędną",
     "noRerolls": "Brak prób",
