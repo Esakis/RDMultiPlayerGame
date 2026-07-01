@@ -64,3 +64,16 @@
 }
 
 .hint { font-style: italic; color: #a08a60; font-size: 12px; }
+.hint.warn { color: #ff9b6b; }
+
+.planned-attacks {
+  border: 1px solid #c9a86a; background: rgba(60, 45, 15, 0.25); padding: 10px 14px; margin: 12px 0;
+  h3 { color: #c9a86a; margin: 0 0 4px; }
+  .rd-table { margin-bottom: 4px; }
+}
+
+.general-pick {
+  margin: 8px 0 12px;
+  label { font-size: 13px; color: #c9a86a; }
+  select { background: #2a1208; color: #e8d5b0; border: 1px solid #5a3a1a; padding: 3px 6px; margin-left: 6px; min-width: 260px; }
+}

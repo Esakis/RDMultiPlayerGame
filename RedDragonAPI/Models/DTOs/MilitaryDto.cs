@@ -68,7 +68,22 @@ public class SetTrainingDto
 public class AttackDto
 {
     public int TargetKingdomId { get; set; }
+    /// <summary>Generał prowadzący atak — wymagany, atak bez generała nie wyrusza.</summary>
+    public int GeneralId { get; set; }
     public Dictionary<string, int> Units { get; set; } = new();
+}
+
+/// <summary>Zaplanowany (zakolejkowany) atak oczekujący na przeliczenie o 5:00.</summary>
+public class PlannedAttackDto
+{
+    public int Id { get; set; }
+    public int TargetKingdomId { get; set; }
+    public string TargetName { get; set; } = string.Empty;
+    public int GeneralId { get; set; }
+    public string GeneralName { get; set; } = string.Empty;
+    public Dictionary<string, int> Units { get; set; } = new();
+    public DateTime ScheduledFor { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
 
 public class BattleReportDto

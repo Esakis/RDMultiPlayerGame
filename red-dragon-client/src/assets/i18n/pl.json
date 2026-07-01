@@ -340,6 +340,25 @@
     "noUnits": "Nie masz jednostek do ataku — zwerbuj wojsko.",
     "attackBtn": "Atakuj ({{n}} jedn.)",
     "errLoad": "Błąd wczytywania państw.",
+    "queued": "Atak zaplanowany — wykona się przy przeliczeniu o 5:00.",
+    "errNoTarget": "Wybierz cel.",
+    "errNoGeneral": "Wybierz generała, który poprowadzi atak.",
+    "errNoUnits": "Wybierz jednostki do ataku.",
+    "errAttack": "Błąd ataku.",
+    "general": {
+      "label": "Generał prowadzący",
+      "choose": "— wybierz generała —",
+      "none": "Brak dostępnego generała — atak musi prowadzić zdrowy generał przebywający w domu."
+    },
+    "planned": {
+      "title": "Zaplanowane ataki",
+      "hint": "Te ataki wykonają się przy najbliższym przeliczeniu o 5:00. Do tego czasu możesz je odwołać — tura i generał wrócą do księstwa.",
+      "target": "Cel",
+      "general": "Generał",
+      "units": "Jednostki",
+      "cancel": "Odwołaj",
+      "cancelled": "Atak odwołany."
+    },
     "reason": {
       "attackable": "Atakowalne",
       "protected": "Nowicjusz (chroniony)",

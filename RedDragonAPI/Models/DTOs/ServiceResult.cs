@@ -39,6 +39,8 @@ public class TurnResultDto
 public class MilitaryAttackData
 {
     public Dictionary<string, int> Units { get; set; } = new();
+    /// <summary>Generał prowadzący atak (0 w starych rekordach — wtedy dobierany automatycznie).</summary>
+    public int GeneralId { get; set; }
 }
 
 public class BattleResult

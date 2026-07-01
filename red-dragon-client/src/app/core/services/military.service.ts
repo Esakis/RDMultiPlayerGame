@@ -4,6 +4,17 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MilitaryUnit, UnitDefinition, RecruitUnitsDto, BattleReport, ServiceResult, TrainingInfo } from '../models/kingdom.model';
 
+export interface PlannedAttack {
+  id: number;
+  targetKingdomId: number;
+  targetName: string;
+  generalId: number;
+  generalName: string;
+  units: { [unitType: string]: number };
+  scheduledFor: string;
+  createdAt: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -40,8 +51,16 @@ export class MilitaryService {
     return this.http.post<ServiceResult>(`${this.apiUrl}/military/training`, dto);
   }
 
-  attack(targetKingdomId: number, units: { [key: string]: number }): Observable<ServiceResult> {
-    return this.http.post<ServiceResult>(`${this.apiUrl}/battle/attack`, { targetKingdomId, units });
+  attack(targetKingdomId: number, generalId: number, units: { [key: string]: number }): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/battle/attack`, { targetKingdomId, generalId, units });
+  }
+
+  getPlannedAttacks(): Observable<PlannedAttack[]> {
+    return this.http.get<PlannedAttack[]>(`${this.apiUrl}/battle/planned`);
+  }
+
+  cancelPlannedAttack(id: number): Observable<ServiceResult> {
+    return this.http.delete<ServiceResult>(`${this.apiUrl}/battle/planned/${id}`);
   }
 
   getBattleReports(): Observable<BattleReport[]> {

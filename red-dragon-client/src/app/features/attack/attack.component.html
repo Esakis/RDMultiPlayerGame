@@ -14,6 +14,32 @@
     {{ 'atk.enemyCoalitions' | translate }}: <strong>{{ enemyCoalitionNames.join(', ') }}</strong>
   </div>
 
+  <!-- Zaplanowane ataki (czekają na przeliczenie o 5:00) -->
+  <div class="planned-attacks" *ngIf="plannedAttacks.length > 0">
+    <h3>{{ 'atk.planned.title' | translate }}</h3>
+    <p class="hint">{{ 'atk.planned.hint' | translate }}</p>
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th>{{ 'atk.planned.target' | translate }}</th>
+          <th>{{ 'atk.planned.general' | translate }}</th>
+          <th>{{ 'atk.planned.units' | translate }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of plannedAttacks">
+          <td class="name">{{ p.targetName }}</td>
+          <td>{{ p.generalName }}</td>
+          <td>{{ unitsSummary(p.units) }}</td>
+          <td>
+            <button class="btn-cancel" (click)="cancelPlanned(p.id)">{{ 'atk.planned.cancel' | translate }}</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <ng-container *ngIf="!loading">
     <div class="filters">
       <label>{{ 'atk.show' | translate }}:
@@ -52,6 +78,20 @@
     <!-- Wybór jednostek -->
     <div class="attack-form" *ngIf="selectedTarget as t">
       <h3>{{ 'atk.attackOn' | translate }}: {{ t.name }} ({{ 'bld.acres' | translate:{ n: (t.land | number) } }})</h3>
+
+      <!-- Generał prowadzący atak -->
+      <div class="general-pick">
+        <label>{{ 'atk.general.label' | translate }}:
+          <select [(ngModel)]="selectedGeneralId">
+            <option [ngValue]="null">{{ 'atk.general.choose' | translate }}</option>
+            <option *ngFor="let g of availableGenerals" [ngValue]="g.id">
+              {{ g.name }} ({{ 'gen.trait.' + g.primaryTrait | translate }}, {{ 'gen.level' | translate }} {{ g.level }})
+            </option>
+          </select>
+        </label>
+        <p class="hint warn" *ngIf="availableGenerals.length === 0">{{ 'atk.general.none' | translate }}</p>
+      </div>
+
       <table class="rd-table units">
         <thead><tr><th>{{ 'atk.unit' | translate }}</th><th>{{ 'mil.attack' | translate }}</th><th>{{ 'atk.available' | translate }}</th><th>{{ 'atk.send' | translate }}</th></tr></thead>
         <tbody>
@@ -67,7 +107,7 @@
       </table>
       <p class="hint" *ngIf="myUnits.length === 0">{{ 'atk.noUnits' | translate }}</p>
       <div class="actions">
-        <button class="btn-attack" (click)="launchAttack()" [disabled]="totalSelected <= 0">
+        <button class="btn-attack" (click)="launchAttack()" [disabled]="totalSelected <= 0 || !selectedGeneralId">
           {{ 'atk.attackBtn' | translate:{ n: (totalSelected | number) } }}
         </button>
         <button class="btn-cancel" (click)="selectedTarget = null">{{ 'common.cancel' | translate }}</button>

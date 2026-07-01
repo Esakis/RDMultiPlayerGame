@@ -15,6 +15,7 @@ export interface General {
   status: string;
   isPending: boolean;
   secondaryRerollsLeft: number;
+  isAvailable: boolean;
 }
 
 @Injectable({ providedIn: 'root' })

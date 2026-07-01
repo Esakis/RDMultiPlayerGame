@@ -30,6 +30,25 @@ public class BattleController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("planned")]
+    public async Task<ActionResult<List<PlannedAttackDto>>> GetPlannedAttacks()
+    {
+        var userId = GetUserId();
+        return Ok(await _battleService.GetPlannedAttacksAsync(userId));
+    }
+
+    [HttpDelete("planned/{id:int}")]
+    public async Task<ActionResult> CancelPlannedAttack(int id)
+    {
+        var userId = GetUserId();
+        var result = await _battleService.CancelPlannedAttackAsync(userId, id);
+
+        if (!result.Success)
+            return BadRequest(result.Message);
+
+        return Ok(result);
+    }
+
     [HttpGet("reports")]
     public async Task<ActionResult<List<BattleReportDto>>> GetReports()
     {

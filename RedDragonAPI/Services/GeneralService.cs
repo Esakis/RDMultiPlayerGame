@@ -113,6 +113,8 @@ public class GeneralService : IGeneralService
             ExperienceToNextLevel = g.ExperienceToNextLevel,
             IsPending = g.IsPending,
             SecondaryRerollsLeft = Math.Max(0, 2 - g.SecondaryRerollsUsed),
+            IsAvailable = !g.IsPending && !g.IsImprisoned && !g.IsOutside
+                          && (!g.WoundedUntil.HasValue || g.WoundedUntil <= DateTime.UtcNow),
             Status = g.IsPending ? "Oczekuje na decyzję"
                 : g.IsImprisoned ? "Więziony"
                 : g.IsOutside ? "Poza księstwem"

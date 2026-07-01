@@ -59,6 +59,8 @@ public class GeneralDto
     public string Status { get; set; } = string.Empty;
     public bool IsPending { get; set; }
     public int SecondaryRerollsLeft { get; set; }
+    /// <summary>Czy generał jest w domu i zdolny do akcji (może np. poprowadzić atak).</summary>
+    public bool IsAvailable { get; set; }
 }
 
 /// <summary>Stan paktów księstwa: lista współczłonków koalicji z aktywnymi typami paktów

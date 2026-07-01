@@ -6,6 +6,8 @@ namespace RedDragonAPI.Services;
 public interface IBattleService
 {
     Task<ServiceResult> QueueAttackAsync(int userId, AttackDto dto);
+    Task<List<PlannedAttackDto>> GetPlannedAttacksAsync(int userId);
+    Task<ServiceResult> CancelPlannedAttackAsync(int userId, int actionId);
     Task<List<BattleReportDto>> GetBattleReportsAsync(int userId);
     Task<BattleResult> ExecuteMilitaryAttackAsync(QueuedAction action);
     Task ExecuteThiefActionAsync(QueuedAction action);

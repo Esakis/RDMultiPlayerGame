@@ -340,6 +340,25 @@
     "noUnits": "You have no units to attack with — recruit an army.",
     "attackBtn": "Attack ({{n}} units)",
     "errLoad": "Error loading countries.",
+    "queued": "Attack planned — it will execute at the 5:00 recalculation.",
+    "errNoTarget": "Select a target.",
+    "errNoGeneral": "Select a general to lead the attack.",
+    "errNoUnits": "Select units for the attack.",
+    "errAttack": "Attack error.",
+    "general": {
+      "label": "Leading general",
+      "choose": "— select a general —",
+      "none": "No general available — an attack must be led by a healthy general who is at home."
+    },
+    "planned": {
+      "title": "Planned attacks",
+      "hint": "These attacks will execute at the next 5:00 recalculation. Until then you can cancel them — the turn and the general will return.",
+      "target": "Target",
+      "general": "General",
+      "units": "Units",
+      "cancel": "Cancel",
+      "cancelled": "Attack cancelled."
+    },
     "reason": {
       "attackable": "Attackable",
       "protected": "Novice (protected)",

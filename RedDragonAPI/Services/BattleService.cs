@@ -60,12 +60,33 @@ public class BattleService : IBattleService
         }
 
         // Sprawdź czy gracz ma wystarczającą ilość jednostek
-        foreach (var unit in dto.Units)
+        var unitsToSend = dto.Units.Where(u => u.Value > 0).ToDictionary(u => u.Key, u => u.Value);
+        if (unitsToSend.Count == 0)
+            return ServiceResult.Fail("Wybierz jednostki do ataku.");
+
+        foreach (var unit in unitsToSend)
         {
             var militaryUnit = kingdom.MilitaryUnits.FirstOrDefault(m => m.UnitType == unit.Key);
             if (militaryUnit == null || militaryUnit.Quantity < unit.Value)
                 return ServiceResult.Fail($"Za mało jednostek typu {unit.Key}.");
         }
+
+        // Atak musi prowadzić generał — dostępny (w domu, zdrowy, nieuwięziony).
+        var general = await _context.Generals
+            .FirstOrDefaultAsync(g => g.Id == dto.GeneralId && g.KingdomId == kingdom.Id);
+        if (general == null)
+            return ServiceResult.Fail("Wybierz generała, który poprowadzi atak.");
+        if (general.IsPending)
+            return ServiceResult.Fail("Ten generał czeka w poczekalni — najpierw go przyjmij.");
+        if (general.IsImprisoned)
+            return ServiceResult.Fail("Ten generał jest uwięziony.");
+        if (general.IsOutside)
+            return ServiceResult.Fail("Ten generał już prowadzi inny atak.");
+        if (general.WoundedUntil.HasValue && general.WoundedUntil > DateTime.UtcNow)
+            return ServiceResult.Fail("Ten generał jest ranny i nie może prowadzić ataku.");
+
+        // Generał wyrusza z armią — do przeliczenia jest poza księstwem
+        general.IsOutside = true;
 
         // Zakolejkuj atak
         var action = new QueuedAction
@@ -73,7 +94,7 @@ public class BattleService : IBattleService
             KingdomId = kingdom.Id,
             TargetKingdomId = target.Id,
             ActionType = "MilitaryAttack",
-            ActionData = JsonSerializer.Serialize(new MilitaryAttackData { Units = dto.Units }),
+            ActionData = JsonSerializer.Serialize(new MilitaryAttackData { Units = unitsToSend, GeneralId = general.Id }),
             ScheduledFor = GetNextResetTime(),
             Status = "Pending"
         };
@@ -85,7 +106,80 @@ public class BattleService : IBattleService
 
         await _context.SaveChangesAsync();
 
-        return ServiceResult.Ok($"Atak na {target.Name} został zakolejkowany. Wykonanie podczas najbliższego przeliczenia.");
+        return ServiceResult.Ok($"Atak na {target.Name} pod wodzą generała {general.Name} został zaplanowany. Wykonanie podczas najbliższego przeliczenia o 5:00.");
+    }
+
+    /// <summary>Zaplanowane (jeszcze niewykonane) ataki księstwa gracza.</summary>
+    public async Task<List<PlannedAttackDto>> GetPlannedAttacksAsync(int userId)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null) return new List<PlannedAttackDto>();
+
+        var actions = await _context.QueuedActions
+            .Include(a => a.TargetKingdom)
+            .Where(a => a.KingdomId == kingdom.Id && a.ActionType == "MilitaryAttack" && a.Status == "Pending")
+            .OrderBy(a => a.CreatedAt)
+            .ToListAsync();
+
+        var generalIds = new List<int>();
+        var parsed = new List<(QueuedAction action, MilitaryAttackData data)>();
+        foreach (var a in actions)
+        {
+            var data = a.ActionData == null ? null : JsonSerializer.Deserialize<MilitaryAttackData>(a.ActionData);
+            if (data == null) continue;
+            parsed.Add((a, data));
+            if (data.GeneralId > 0) generalIds.Add(data.GeneralId);
+        }
+
+        var generalNames = await _context.Generals
+            .Where(g => generalIds.Contains(g.Id))
+            .ToDictionaryAsync(g => g.Id, g => g.Name);
+
+        return parsed.Select(p => new PlannedAttackDto
+        {
+            Id = p.action.Id,
+            TargetKingdomId = p.action.TargetKingdomId ?? 0,
+            TargetName = p.action.TargetKingdom?.Name ?? "?",
+            GeneralId = p.data.GeneralId,
+            GeneralName = generalNames.GetValueOrDefault(p.data.GeneralId, "—"),
+            Units = p.data.Units,
+            ScheduledFor = p.action.ScheduledFor,
+            CreatedAt = p.action.CreatedAt
+        }).ToList();
+    }
+
+    /// <summary>Odwołuje zaplanowany atak przed przeliczeniem: zwraca turę i generała do domu.</summary>
+    public async Task<ServiceResult> CancelPlannedAttackAsync(int userId, int actionId)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+        if (kingdom == null)
+            return ServiceResult.Fail("Nie znaleziono księstwa.");
+
+        var action = await _context.QueuedActions.FirstOrDefaultAsync(a =>
+            a.Id == actionId && a.KingdomId == kingdom.Id && a.ActionType == "MilitaryAttack");
+        if (action == null)
+            return ServiceResult.Fail("Nie znaleziono zaplanowanego ataku.");
+        if (action.Status != "Pending")
+            return ServiceResult.Fail("Tego ataku nie można już odwołać — został wykonany lub anulowany.");
+
+        action.Status = "Cancelled";
+
+        // Generał wraca do domu
+        var data = action.ActionData == null ? null : JsonSerializer.Deserialize<MilitaryAttackData>(action.ActionData);
+        if (data != null && data.GeneralId > 0)
+        {
+            var general = await _context.Generals
+                .FirstOrDefaultAsync(g => g.Id == data.GeneralId && g.KingdomId == kingdom.Id);
+            if (general != null) general.IsOutside = false;
+        }
+
+        // Zwrot zużytej tury
+        kingdom.TurnsAvailable = Math.Min(kingdom.MaxTurns, kingdom.TurnsAvailable + 1);
+
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok("Atak został odwołany. Tura wróciła do puli, a generał do księstwa.");
     }
 
     public async Task<List<BattleReportDto>> GetBattleReportsAsync(int userId)
@@ -166,6 +260,33 @@ public class BattleService : IBattleService
         int SecLevel(IEnumerable<General> gens, string trait) =>
             gens.Where(g => g.SecondaryTrait == trait).Select(g => g.Level).DefaultIfEmpty(0).Max();
 
+        // Atak prowadzi generał wskazany przy planowaniu. Jeśli w międzyczasie wypadł z gry
+        // (porwany, zabity, uwięziony, ranny) — armia zawraca i atak nie dochodzi do skutku.
+        General? leadingGeneral;
+        if (attackData.GeneralId > 0)
+        {
+            leadingGeneral = attackerGenerals.FirstOrDefault(g => g.Id == attackData.GeneralId);
+            if (leadingGeneral == null)
+            {
+                _context.KingdomEvents.Add(new KingdomEvent
+                {
+                    KingdomId = attacker.Id,
+                    Category = "Battle",
+                    Message = $"Atak na {defender.Name} nie doszedł do skutku — generał prowadzący wypadł z gry (porwany, uwięziony lub ranny)."
+                });
+                await _context.SaveChangesAsync();
+                return new BattleResult { Success = false };
+            }
+        }
+        else
+        {
+            // Stare zlecenia bez generała: dobierz najlepszego Wodza w domu (zgodność wsteczna)
+            leadingGeneral = attackerGenerals
+                .Where(g => g.PrimaryTrait == "Wodz" && !g.IsOutside)
+                .OrderByDescending(g => g.Experience)
+                .FirstOrDefault();
+        }
+
         // Smokobójstwo (atakujący, Dracopedia §11): zabija lvl% smoków obrońcy oraz
         // z szansą lvl/4% burzy wabiki smoków (Portal, Smokodrap) — przed wyliczeniem obrony.
         int dragonSlayLvl = SecLevel(attackerGenerals, "Smokobojstwo");
@@ -201,14 +322,12 @@ public class BattleService : IBattleService
         if (attacker.Race == "Człowiek" && attacker.AppliedScienceSchool == "Military")
             attackPower = (long)(attackPower * 1.10m);
 
-        // Generałowie: Wódz zwiększa atak o lvl%, Obrońca (najlepszy w domu) obronę o lvl%
-        var leadingGeneral = attackerGenerals
-            .Where(g => g.PrimaryTrait == "Wodz" && !g.IsOutside)
-            .OrderByDescending(g => g.Experience)
-            .FirstOrDefault();
+        // Generałowie: prowadzący Wódz zwiększa atak o lvl% (inny generał prowadzi bez bonusu),
+        // Obrońca (najlepszy w domu) zwiększa obronę o lvl%
         if (leadingGeneral != null)
         {
-            attackPower = (long)(attackPower * (1.0 + leadingGeneral.Level / 100.0));
+            if (leadingGeneral.PrimaryTrait == "Wodz")
+                attackPower = (long)(attackPower * (1.0 + leadingGeneral.Level / 100.0));
             leadingGeneral.IsOutside = true; // prowadzi atak — wraca po przeliczeniu
         }
 

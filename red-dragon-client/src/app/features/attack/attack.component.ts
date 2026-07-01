@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { MilitaryService } from '../../core/services/military.service';
+import { MilitaryService, PlannedAttack } from '../../core/services/military.service';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { CoalitionService, War } from '../../core/services/coalition.service';
+import { GeneralService, General } from '../../core/services/general.service';
 import { KingdomSummary, Kingdom, MilitaryUnit } from '../../core/models/kingdom.model';
 
 interface TargetRow {
@@ -28,6 +29,9 @@ export class AttackComponent implements OnInit {
 
   selectedTarget: KingdomSummary | null = null;
   unitsToSend: { [unitType: string]: number } = {};
+  availableGenerals: General[] = [];
+  selectedGeneralId: number | null = null;
+  plannedAttacks: PlannedAttack[] = [];
 
   loading = true;
   message = '';
@@ -37,12 +41,15 @@ export class AttackComponent implements OnInit {
     private military: MilitaryService,
     private kingdomService: KingdomService,
     private coalitionService: CoalitionService,
+    private generalService: GeneralService,
     private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.kingdomService.getMyKingdom().subscribe(k => this.myKingdom = k);
     this.military.getMyArmy().subscribe(a => this.myUnits = a.filter(u => u.quantity > 0 && !u.unitType.endsWith('_Zlodziej')));
+    this.loadGenerals();
+    this.loadPlannedAttacks();
     this.coalitionService.getWars().subscribe({
       next: (wars: War[]) => {
         this.enemyCoalitionIds = new Set(wars.filter(w => w.opponentCoalitionId).map(w => w.opponentCoalitionId));
@@ -85,31 +92,70 @@ export class AttackComponent implements OnInit {
   selectTarget(k: KingdomSummary): void {
     this.selectedTarget = k;
     this.unitsToSend = {};
+    this.selectedGeneralId = this.availableGenerals.length === 1 ? this.availableGenerals[0].id : null;
   }
 
   get totalSelected(): number {
     return Object.values(this.unitsToSend).reduce((s, n) => s + (Number(n) || 0), 0);
   }
 
+  loadGenerals(): void {
+    this.generalService.getGenerals().subscribe({
+      next: g => this.availableGenerals = g.filter(x => x.isAvailable),
+      error: () => {}
+    });
+  }
+
+  loadPlannedAttacks(): void {
+    this.military.getPlannedAttacks().subscribe({
+      next: p => this.plannedAttacks = p,
+      error: () => {}
+    });
+  }
+
+  unitsSummary(units: { [unitType: string]: number }): string {
+    return Object.entries(units)
+      .map(([type, n]) => `${type.split('_').pop()} ×${n}`)
+      .join(', ');
+  }
+
+  cancelPlanned(id: number): void {
+    this.message = '';
+    this.error = '';
+    this.military.cancelPlannedAttack(id).subscribe({
+      next: r => {
+        this.message = r.message || this.translate.instant('atk.planned.cancelled');
+        this.loadPlannedAttacks();
+        this.loadGenerals();
+        this.kingdomService.getMyKingdom().subscribe(k => this.myKingdom = k);
+      },
+      error: e => { this.error = e.error?.message || e.error || this.translate.instant('atk.errAttack'); }
+    });
+  }
+
   launchAttack(): void {
     this.message = '';
     this.error = '';
-    if (!this.selectedTarget) { this.error = 'Wybierz cel.'; return; }
+    if (!this.selectedTarget) { this.error = this.translate.instant('atk.errNoTarget'); return; }
+    if (!this.selectedGeneralId) { this.error = this.translate.instant('atk.errNoGeneral'); return; }
     const units: { [k: string]: number } = {};
     for (const u of this.myUnits) {
       const q = Number(this.unitsToSend[u.unitType]) || 0;
       if (q > 0) units[u.unitType] = q;
     }
-    if (Object.keys(units).length === 0) { this.error = 'Wybierz jednostki do ataku.'; return; }
+    if (Object.keys(units).length === 0) { this.error = this.translate.instant('atk.errNoUnits'); return; }
 
-    this.military.attack(this.selectedTarget.id, units).subscribe({
+    this.military.attack(this.selectedTarget.id, this.selectedGeneralId, units).subscribe({
       next: r => {
-        this.message = r.message || 'Atak zakolejkowany.';
+        this.message = r.message || this.translate.instant('atk.queued');
         this.selectedTarget = null;
         this.unitsToSend = {};
+        this.selectedGeneralId = null;
         this.military.getMyArmy().subscribe(a => this.myUnits = a.filter(u => u.quantity > 0 && !u.unitType.endsWith('_Zlodziej')));
+        this.loadGenerals();
+        this.loadPlannedAttacks();
       },
-      error: e => { this.error = e.error?.message || e.error || 'Błąd ataku.'; }
+      error: e => { this.error = e.error?.message || e.error || this.translate.instant('atk.errAttack'); }
     });
   }
 }
