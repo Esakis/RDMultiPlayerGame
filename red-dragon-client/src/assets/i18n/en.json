@@ -672,6 +672,17 @@
       "pps": "Palace of Final Judgement",
       "coalitions": "Coalitions"
     },
+    "sharedPwd": {
+      "title": "Coalition shared password",
+      "hint": "The shared password lets you log in to any coalition duchy with its login and this password (alongside the original password). It only works for coalition members.",
+      "status": "Status",
+      "on": "enabled",
+      "off": "disabled",
+      "placeholder": "new shared password (min. 6 characters)",
+      "setBtn": "Set password",
+      "clearBtn": "Disable",
+      "confirmClear": "Disable the coalition shared password?"
+    },
     "ann": {
       "title": "Coalition notice board",
       "hint": "Announcements are visible to the whole coalition. Only the Imperator and the Main Commander can edit them. Entries never expire — they stay until deleted.",

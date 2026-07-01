@@ -41,6 +41,10 @@ export class CoalitionComponent implements OnInit {
   annContent = '';
   annFormOpen = false;
 
+  // Wspólne hasło koalicji
+  sharedPwdStatus: { enabled: boolean; canManage: boolean } | null = null;
+  sharedPwd = '';
+
   constructor(private coalitionService: CoalitionService, private kingdomService: KingdomService,
               private translate: TranslateService) {}
 
@@ -120,6 +124,34 @@ export class CoalitionComponent implements OnInit {
     this.coalitionService.getElection().subscribe({ next: e => this.election = e, error: () => this.election = null });
     this.coalitionService.getTreasury().subscribe({ next: t => this.treasury = t, error: () => this.treasury = null });
     this.coalitionService.getAnnouncements().subscribe({ next: a => this.announcements = a, error: () => this.announcements = [] });
+    this.coalitionService.getSharedPasswordStatus().subscribe({ next: s => this.sharedPwdStatus = s, error: () => this.sharedPwdStatus = null });
+  }
+
+  // ===== Wspólne hasło koalicji =====
+
+  setSharedPassword(): void {
+    if (!this.sharedPwd) return;
+    this.coalitionService.setSharedPassword(this.sharedPwd).subscribe({
+      next: res => {
+        this.message = res.message || 'OK';
+        this.sharedPwd = '';
+        this.coalitionService.getSharedPasswordStatus().subscribe(s => this.sharedPwdStatus = s);
+        this.clearMsg();
+      },
+      error: err => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
+  }
+
+  clearSharedPassword(): void {
+    if (!confirm(this.translate.instant('pol.sharedPwd.confirmClear'))) return;
+    this.coalitionService.setSharedPassword(null).subscribe({
+      next: res => {
+        this.message = res.message || 'OK';
+        this.coalitionService.getSharedPasswordStatus().subscribe(s => this.sharedPwdStatus = s);
+        this.clearMsg();
+      },
+      error: err => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
   }
 
   // ===== Tablica ogłoszeń =====

@@ -47,6 +47,25 @@
           </div>
         </div>
 
+        <!-- Wspólne hasło koalicji (Imperator/GD) -->
+        <div class="commander-management" *ngIf="sharedPwdStatus?.canManage">
+          <h4>{{ 'pol.sharedPwd.title' | translate }}</h4>
+          <p class="hint">{{ 'pol.sharedPwd.hint' | translate }}</p>
+          <p>
+            {{ 'pol.sharedPwd.status' | translate }}:
+            <strong>{{ (sharedPwdStatus?.enabled ? 'pol.sharedPwd.on' : 'pol.sharedPwd.off') | translate }}</strong>
+          </p>
+          <div class="form-row">
+            <input type="password" [(ngModel)]="sharedPwd" [placeholder]="'pol.sharedPwd.placeholder' | translate">
+            <button class="btn-action" (click)="setSharedPassword()" [disabled]="!sharedPwd">
+              {{ 'pol.sharedPwd.setBtn' | translate }}
+            </button>
+            <button class="btn-danger" *ngIf="sharedPwdStatus?.enabled" (click)="clearSharedPassword()">
+              {{ 'pol.sharedPwd.clearBtn' | translate }}
+            </button>
+          </div>
+        </div>
+
         <!-- Kasa koalicji -->
         <div class="treasury-section" *ngIf="treasury?.hasCoalition as _t">
           <h4>{{ 'pol.treasury.title' | translate }}</h4>

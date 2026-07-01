@@ -67,13 +67,24 @@ public class AuthController : ControllerBase
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
 
-        if (user == null || !PasswordHasher.Verify(dto.Password, user.PasswordHash))
+        if (user == null)
+            return Unauthorized("Nieprawidłowy email lub hasło.");
+
+        var kingdom = await _context.Kingdoms
+            .Include(k => k.Coalition)
+            .FirstOrDefaultAsync(k => k.UserId == user.Id && k.Era.IsActive);
+
+        // Hasło oryginalne albo wspólne hasło koalicji (docs/TODO.md A4):
+        // wspólne hasło działa tylko, dopóki księstwo należy do koalicji, która je ustawiła.
+        bool ownPassword = PasswordHasher.Verify(dto.Password, user.PasswordHash);
+        bool sharedPassword = !ownPassword
+            && kingdom?.Coalition?.SharedPasswordHash != null
+            && PasswordHasher.Verify(dto.Password, kingdom.Coalition.SharedPasswordHash);
+
+        if (!ownPassword && !sharedPassword)
             return Unauthorized("Nieprawidłowy email lub hasło.");
 
         user.LastLogin = DateTime.UtcNow;
-
-        var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == user.Id && k.Era.IsActive);
 
         if (kingdom == null)
             return BadRequest("Nie znaleziono księstwa dla aktywnej ery.");

@@ -143,6 +143,14 @@ export class CoalitionService {
     return this.http.post<ServiceResult>(`${this.apiUrl}/appoint-main-commander`, { kingdomId });
   }
 
+  getSharedPasswordStatus(): Observable<{ enabled: boolean; canManage: boolean }> {
+    return this.http.get<{ enabled: boolean; canManage: boolean }>(`${this.apiUrl}/shared-password`);
+  }
+
+  setSharedPassword(password: string | null): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/shared-password`, { password });
+  }
+
   getAnnouncements(): Observable<Announcement[]> {
     return this.http.get<Announcement[]>(`${this.apiUrl}/announcements`);
   }

@@ -35,6 +35,14 @@ public class Coalition
     public long TreasuryGold { get; set; } = 0;
     public long TreasuryBudulec { get; set; } = 0;
 
+    /// <summary>
+    /// Hash wspólnego hasła koalicji (docs/TODO.md A4): pozwala zalogować się na dowolne
+    /// księstwo koalicji jego loginem + tym hasłem. Ustawiają Imperator/Głównodowodzący;
+    /// null = wyłączone.
+    /// </summary>
+    [MaxLength(500)]
+    public string? SharedPasswordHash { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public Era Era { get; set; } = null!;

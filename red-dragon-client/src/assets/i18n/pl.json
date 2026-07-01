@@ -672,6 +672,17 @@
       "pps": "Pałac Sądu Ostatecznego",
       "coalitions": "Koalicje"
     },
+    "sharedPwd": {
+      "title": "Wspólne hasło koalicji",
+      "hint": "Wspólne hasło pozwala zalogować się na każde księstwo koalicji jego loginem i tym hasłem (obok hasła oryginalnego). Działa tylko dla członków koalicji.",
+      "status": "Status",
+      "on": "włączone",
+      "off": "wyłączone",
+      "placeholder": "nowe wspólne hasło (min. 6 znaków)",
+      "setBtn": "Ustaw hasło",
+      "clearBtn": "Wyłącz",
+      "confirmClear": "Wyłączyć wspólne hasło koalicji?"
+    },
     "ann": {
       "title": "Tablica ogłoszeń koalicji",
       "hint": "Ogłoszenia widzi cała koalicja. Edytować mogą tylko Imperator i Głównodowodzący. Wpisy nie znikają — dopóki ktoś ich nie usunie.",

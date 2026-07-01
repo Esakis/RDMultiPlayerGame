@@ -46,3 +46,9 @@ public class SaveAnnouncementDto
     public string? Title { get; set; }
     public string ContentHtml { get; set; } = string.Empty;
 }
+
+public class SharedPasswordDto
+{
+    /// <summary>Nowe wspólne hasło; puste/null = wyłączenie wspólnego hasła.</summary>
+    public string? Password { get; set; }
+}

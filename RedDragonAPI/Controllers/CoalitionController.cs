@@ -770,6 +770,57 @@ public class CoalitionController : ControllerBase
         return Ok(new ServiceResult { Success = true, Message = "Ogłoszenie usunięte." });
     }
 
+    // ====================== WSPÓLNE HASŁO KOALICJI (docs/TODO.md A4) ======================
+
+    /// <summary>
+    /// Ustawia lub czyści wspólne hasło koalicji. Pozwala ono zalogować się na dowolne
+    /// księstwo koalicji jego loginem + tym hasłem. Tylko Imperator/Głównodowodzący.
+    /// </summary>
+    [HttpPost("shared-password")]
+    public async Task<ActionResult> SetSharedPassword([FromBody] SharedPasswordDto dto)
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom?.CoalitionId == null) return BadRequest("Nie należysz do koalicji.");
+        if (!CanEditAnnouncements(kingdom))
+            return BadRequest("Tylko Imperator i Głównodowodzący mogą ustawić wspólne hasło.");
+
+        var coalition = await _context.Coalitions.FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+        if (coalition == null) return BadRequest("Nie znaleziono koalicji.");
+
+        if (string.IsNullOrWhiteSpace(dto.Password))
+        {
+            coalition.SharedPasswordHash = null;
+            await _context.SaveChangesAsync();
+            return Ok(new ServiceResult { Success = true, Message = "Wspólne hasło koalicji wyłączone." });
+        }
+
+        if (dto.Password.Length < 6)
+            return BadRequest("Wspólne hasło musi mieć co najmniej 6 znaków.");
+
+        coalition.SharedPasswordHash = PasswordHasher.Hash(dto.Password);
+        await _context.SaveChangesAsync();
+        return Ok(new ServiceResult
+        {
+            Success = true,
+            Message = "Wspólne hasło ustawione. Każde księstwo koalicji można teraz zalogować jego loginem + tym hasłem."
+        });
+    }
+
+    /// <summary>Czy koalicja ma ustawione wspólne hasło (bez ujawniania hasła).</summary>
+    [HttpGet("shared-password")]
+    public async Task<ActionResult> GetSharedPasswordStatus()
+    {
+        var kingdom = await GetCurrentKingdom();
+        if (kingdom?.CoalitionId == null) return Ok(new { enabled = false, canManage = false });
+
+        var coalition = await _context.Coalitions.FirstOrDefaultAsync(c => c.Id == kingdom.CoalitionId);
+        return Ok(new
+        {
+            enabled = coalition?.SharedPasswordHash != null,
+            canManage = CanEditAnnouncements(kingdom)
+        });
+    }
+
     private async Task<Kingdom?> GetCurrentKingdom()
     {
         var userId = GetUserId();
