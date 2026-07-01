@@ -4,6 +4,34 @@ Stan na 2026-07-01. Uwagi od właściciela projektu + wyniki audytu kodu (backen
 
 ---
 
+## PLAN REALIZACJI (kolejność prac)
+
+### Etap 1 — pętla walki: przygotowania za dnia, rozstrzygnięcie o 5:00
+1. [ ] Przebudowa panelu ataków — atak = generał prowadzący + dowolna ilość jednostek;
+       atak trafia do kolejki i rozstrzyga się przy przeliczeniu; widok zaplanowanych
+       ataków z możliwością odwołania przed 5:00.
+2. [ ] Raporty z przeliczenia — raport ataków na moje księstwo + widok koalicyjny.
+3. [ ] Ograniczenia celów — czary ofensywne i złodzieje tylko na cele w stanie
+       wojny/zasadzki; biała magia także na własną koalicję; czary tylko za siebie.
+
+### Etap 2 — narzędzia koalicyjne (Imperator / GD)
+4. [ ] Ataki koalicyjne — Imperator/GD zakładają ataki generałami z dowolnego
+       księstwa koalicji; zwykłe konto tylko ze swojego.
+5. [ ] Tablica ogłoszeń koalicji — wpisy HTML, edycja tylko Imperator/GD, trwałe.
+6. [ ] Wspólne hasło koalicji — logowanie hasłem oryginalnym albo wspólnym.
+
+### Etap 3 — martwe mechaniki z audytu (balans)
+7. [ ] Bonusy produkcyjne generałów (Kupiec, Profesor, Mag, Złodziej).
+8. [ ] Zaklęcie Chochliki (MachineDamage) + realne Upijanie armii.
+9. [ ] Ekonomia wojenna: Renowacja broni, Port towarowy, machiny Goblina w wieżach.
+
+### Etap 4 — widoczność i porządki
+10. [ ] Badge nieprzeczytanych wiadomości, sygnał po przeliczeniu, odliczanie do 5:00.
+11. [ ] Endpoint i widok Panteonu + porządny ranking.
+12. [ ] Nawigacja: podpiąć /research i /dragons, usunąć martwe linki, scalić menu.
+
+---
+
 ## A. Uwagi od właściciela (priorytet — model rozgrywki)
 
 ### A1. Rytm gry: dzień przygotowań → walki raz dziennie o 5:00
