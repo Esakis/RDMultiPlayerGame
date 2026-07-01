@@ -132,7 +132,15 @@
     "portalNone": "none — build a Portal",
     "powerMultiplier": "Army power multiplier",
     "flatAttack": "Extra dragon attack",
-    "summon": "Summon a dragon (Magic)"
+    "summon": "Summon a dragon (Magic)",
+    "buildings": "Dragon buildings",
+    "ministry": "Ministry of Dragons",
+    "expectedArrivals": "Luring (passive arrivals)",
+    "perTurn": "turn",
+    "summonCost": "Estimated summon cost",
+    "youHave": "you have",
+    "summonNow": "Summon a dragon",
+    "summonHint": "Summoning casts the Summon Dragon spell — it costs a turn and mana (the actual cost includes daily inflation and research discounts)."
   },
   "gen": {
     "general": "General",

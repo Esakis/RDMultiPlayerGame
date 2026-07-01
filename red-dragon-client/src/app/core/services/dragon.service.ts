@@ -10,10 +10,20 @@ export interface DragonStatus {
   dracoLevel: number;
   dracoBonusPct: number;
   hasPortal: boolean;
+  hasSmokodrap: boolean;
+  hasMinisterstwo: boolean;
   canSummon: boolean;
   cannotSummonReason?: string;
   powerMultiplier: number;
   flatAttackBonus: number;
+  summonCostEstimate: number;
+  mana: number;
+  expectedArrivalsPerTurn: number;
+}
+
+export interface ServiceResult {
+  success: boolean;
+  message?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -24,5 +34,9 @@ export class DragonService {
 
   getStatus(): Observable<DragonStatus> {
     return this.http.get<DragonStatus>(this.apiUrl);
+  }
+
+  summon(): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/summon`, {});
   }
 }

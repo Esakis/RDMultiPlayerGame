@@ -3,6 +3,7 @@
 
   <p class="lead" [innerHTML]="'drg.lead' | translate"></p>
 
+  <app-notify-relay [message]="message"></app-notify-relay>
   <div class="error-msg" *ngIf="error">{{ error }}</div>
   <div class="loading" *ngIf="loading">{{ 'common.loading' | translate }}</div>
 
@@ -26,8 +27,16 @@
           <td>{{ 'drg.level' | translate }} {{ s.dracoLevel }} / 3 → +{{ s.dracoBonusPct }}%</td>
         </tr>
         <tr>
-          <th>{{ 'drg.portal' | translate }}</th>
-          <td>{{ (s.hasPortal ? 'drg.portalActive' : 'drg.portalNone') | translate }}</td>
+          <th>{{ 'drg.buildings' | translate }}</th>
+          <td>
+            <span [class.built]="s.hasSmokodrap" [class.missing]="!s.hasSmokodrap">Smokodrap</span> ·
+            <span [class.built]="s.hasPortal" [class.missing]="!s.hasPortal">Portal</span> ·
+            <span [class.built]="s.hasMinisterstwo" [class.missing]="!s.hasMinisterstwo">{{ 'drg.ministry' | translate }}</span>
+          </td>
+        </tr>
+        <tr>
+          <th>{{ 'drg.expectedArrivals' | translate }}</th>
+          <td class="bonus">~{{ s.expectedArrivalsPerTurn }} / {{ 'drg.perTurn' | translate }}</td>
         </tr>
         <tr>
           <th>{{ 'drg.powerMultiplier' | translate }}</th>
@@ -37,15 +46,20 @@
           <th>{{ 'drg.flatAttack' | translate }}</th>
           <td class="bonus">+{{ s.flatAttackBonus | number }}</td>
         </tr>
+        <tr>
+          <th>{{ 'drg.summonCost' | translate }}</th>
+          <td>~{{ s.summonCostEstimate | number }} {{ 'res.mana' | translate }} ({{ 'drg.youHave' | translate }}: {{ s.mana | number }})</td>
+        </tr>
       </tbody>
     </table>
 
     <div class="actions">
-      <button class="btn-cast" (click)="goToMagic()" [disabled]="!s.canSummon"
+      <button class="btn-cast" (click)="summon()" [disabled]="!s.canSummon || summoning"
               [title]="s.cannotSummonReason || ''">
-        {{ 'drg.summon' | translate }}
+        {{ 'drg.summonNow' | translate }}
       </button>
       <span class="hint" *ngIf="s.cannotSummonReason">{{ s.cannotSummonReason }}</span>
     </div>
+    <p class="hint">{{ 'drg.summonHint' | translate }}</p>
   </ng-container>
 </div>

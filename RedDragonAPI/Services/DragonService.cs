@@ -69,6 +69,21 @@ public class DragonService : IDragonService
 
         decimal powerMult = 1m + (decimal)dragons / (50m + dragons);
 
+        // Orientacyjny koszt przywołania (baza 500 many · skala ziemi · mnożnik od smoków)
+        long summonCost = (long)(500m * (1m + kingdom.Land / 2000m)
+                                 * DragonHelper.SummonCostMultiplier(dragons));
+
+        // Oczekiwane pasywne przyjścia na turę — ta sama krzywa co ProcessTurnArrivalAsync
+        double taper = Math.Max(0.0, 1.0 - (double)dragons / PassiveArrivalCeiling);
+        double lure = 2.0;
+        if (DragonHelper.Has(kingdom, "Smokodrap")) lure += 2.0;
+        if (DragonHelper.Has(kingdom, "Portal")) lure += 3.0;
+        if (DragonHelper.Has(kingdom, "MinisterstwoSmokow")) lure += 4.0;
+        lure += draco;
+        decimal expectedArrivals = dragons >= Math.Min(cap, PassiveArrivalCeiling)
+            ? 0m
+            : Math.Round((decimal)(lure * taper), 1);
+
         return new DragonStatusDto
         {
             Dragons = dragons,
@@ -77,10 +92,15 @@ public class DragonService : IDragonService
             DracoLevel = draco,
             DracoBonusPct = dracoBonus * 100m,
             HasPortal = DragonHelper.Has(kingdom, "Portal"),
+            HasSmokodrap = DragonHelper.Has(kingdom, "Smokodrap"),
+            HasMinisterstwo = DragonHelper.Has(kingdom, "MinisterstwoSmokow"),
             CanSummon = canSummon,
             CannotSummonReason = reason,
             PowerMultiplier = Math.Round(powerMult, 3),
-            FlatAttackBonus = dragons * 100
+            FlatAttackBonus = dragons * 100,
+            SummonCostEstimate = summonCost,
+            Mana = kingdom.Mana,
+            ExpectedArrivalsPerTurn = expectedArrivals
         };
     }
 

@@ -132,7 +132,15 @@
     "portalNone": "brak — wybuduj Portal",
     "powerMultiplier": "Mnożnik siły armii",
     "flatAttack": "Dodatkowy atak smoków",
-    "summon": "Przywołaj smoka (Magia)"
+    "summon": "Przywołaj smoka (Magia)",
+    "buildings": "Budynki smocze",
+    "ministry": "Ministerstwo smoków",
+    "expectedArrivals": "Wabienie (pasywne przyjścia)",
+    "perTurn": "turę",
+    "summonCost": "Orientacyjny koszt przywołania",
+    "youHave": "posiadasz",
+    "summonNow": "Przywołaj smoka",
+    "summonHint": "Przywołanie rzuca zaklęcie Przywołanie Smoka — kosztuje turę i manę (rzeczywisty koszt uwzględnia drożenie dzienne i rabaty badań)."
   },
   "gen": {
     "general": "Generał",
