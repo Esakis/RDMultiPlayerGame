@@ -42,7 +42,7 @@ public class MarketService : IMarketService
     private async Task<Kingdom?> GetKingdomAsync(int userId) =>
         await _context.Kingdoms
             .Include(k => k.Buildings)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
     private static bool HasMarketAccess(Kingdom kingdom) =>
         kingdom.Buildings.Any(b => b.BuildingType == MarketBuildingType

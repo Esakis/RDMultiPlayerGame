@@ -310,5 +310,41 @@ export interface AuthResponse {
   token: string;
   username: string;
   kingdomId: number;
+  role: string;
   expiresAt: string;
+}
+
+// ── Konto: wiele księstw + opłaty ──────────────────────────────────
+
+export interface AccountKingdom {
+  id: number;
+  name: string;
+  race: string;
+  land: number;
+  age: number;
+  isActive: boolean;
+  isFree: boolean;
+  isPaid: boolean;
+  isImperial: boolean;
+  isSuspended: boolean;
+  requiresPayment: boolean;
+  daysSinceCreation: number;
+  daysToSuspension: number | null;
+  daysToDeletion: number | null;
+  status: string;
+}
+
+export interface PaymentRecord {
+  id: number;
+  kingdomId: number;
+  kingdomName: string;
+  amount: number;
+  method: string;
+  status: string;
+  createdAt: string;
+  username: string | null;
+}
+
+export interface KingdomPrice {
+  price: number;
 }

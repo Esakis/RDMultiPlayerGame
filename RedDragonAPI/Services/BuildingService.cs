@@ -20,7 +20,7 @@ public class BuildingService : IBuildingService
         var kingdom = await _context.Kingdoms
             .Include(k => k.Buildings)
             .Include(k => k.Researches)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null) return new List<BuildingDefinitionDto>();
 
@@ -72,7 +72,7 @@ public class BuildingService : IBuildingService
     {
         var kingdom = await _context.Kingdoms
             .Include(k => k.Buildings).ThenInclude(b => b.Definition)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null) return new List<BuildingDto>();
 
@@ -95,7 +95,7 @@ public class BuildingService : IBuildingService
         var kingdom = await _context.Kingdoms
             .Include(k => k.Buildings)
             .Include(k => k.Researches)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
@@ -224,7 +224,7 @@ public class BuildingService : IBuildingService
     {
         var kingdom = await _context.Kingdoms
             .Include(k => k.Buildings)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");

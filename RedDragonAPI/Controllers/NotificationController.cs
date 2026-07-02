@@ -28,7 +28,7 @@ public class NotificationController : ControllerBase
     {
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return Ok(new { unreadMessages = 0, reportsSinceReset = 0, nextResetAt = (DateTime?)null });
 
         // Granice przeliczenia: codziennie 5:00 czasu serwera (jak DailyResetService)

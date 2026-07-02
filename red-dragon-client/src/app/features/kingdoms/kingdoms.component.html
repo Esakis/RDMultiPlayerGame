@@ -1,0 +1,64 @@
+<div class="kingdoms-page">
+  <h1>Twoje księstwa</h1>
+  <p class="hint">
+    Pierwsze księstwo konta jest darmowe, księstwo imperatorskie jest zawsze darmowe.
+    Każde kolejne kosztuje {{ price }} zł — opłać je w ciągu 20 dni od założenia,
+    inaczej zostanie zawieszone, a po 30 dniach usunięte.
+  </p>
+
+  <div class="error" *ngIf="error">{{ error }}</div>
+  <div class="info" *ngIf="info">{{ info }}</div>
+
+  <div class="loading" *ngIf="loading">Ładowanie…</div>
+
+  <div class="kingdom-list" *ngIf="!loading">
+    <div class="kingdom-card" *ngFor="let k of kingdoms" [class.active]="k.isActive">
+      <div class="card-head">
+        <h2>{{ k.name }}</h2>
+        <span class="badge" [ngClass]="statusClass(k)">{{ k.status }}</span>
+      </div>
+      <div class="card-body">
+        <div>Rasa: <strong>{{ k.race }}</strong></div>
+        <div>Ziemia: <strong>{{ k.land }}</strong> · Wiek: <strong>{{ k.age }} dni</strong></div>
+        <div *ngIf="k.requiresPayment && !k.isSuspended" class="warn">
+          Do opłaty: zostało {{ k.daysToSuspension }} dni (usunięcie za {{ k.daysToDeletion }} dni)
+        </div>
+        <div *ngIf="k.isSuspended" class="warn">
+          Zawieszone za brak opłaty — usunięcie za {{ k.daysToDeletion }} dni
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn primary" (click)="select(k)" [disabled]="k.isSuspended || k.isActive">
+          {{ k.isActive ? 'Wybrane' : 'Graj' }}
+        </button>
+        <button class="btn pay" *ngIf="k.requiresPayment" (click)="goToPayments(k)">
+          Opłać ({{ price }} zł)
+        </button>
+      </div>
+    </div>
+
+    <div class="kingdom-card new-card" *ngIf="!showCreateForm" (click)="showCreateForm = true">
+      <div class="plus">+</div>
+      <div>Załóż nowe księstwo</div>
+      <div class="small">{{ kingdoms.length === 0 ? 'pierwsze darmowe' : price + ' zł, płatne do 20 dni' }}</div>
+    </div>
+
+    <div class="kingdom-card create-form" *ngIf="showCreateForm">
+      <h2>Nowe księstwo</h2>
+      <label>Nazwa
+        <input type="text" [(ngModel)]="newName" maxlength="200" placeholder="Nazwa księstwa">
+      </label>
+      <label>Rasa
+        <select [(ngModel)]="newRace">
+          <option *ngFor="let r of races" [value]="r">{{ r }}</option>
+        </select>
+      </label>
+      <div class="card-actions">
+        <button class="btn primary" (click)="create()" [disabled]="creating">
+          {{ creating ? 'Zakładanie…' : 'Załóż' }}
+        </button>
+        <button class="btn" (click)="showCreateForm = false" [disabled]="creating">Anuluj</button>
+      </div>
+    </div>
+  </div>
+</div>

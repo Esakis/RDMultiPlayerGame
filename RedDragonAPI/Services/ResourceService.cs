@@ -692,7 +692,7 @@ public class ResourceService : IResourceService
         var kingdoms = await _context.Kingdoms
             .Include(k => k.Buildings).ThenInclude(b => b.Definition)
             .Include(k => k.Professions)
-            .Where(k => k.Era.IsActive && !k.IsFrozen)   // zamrożone księstwa pomijamy
+            .Where(k => k.Era.IsActive && !k.IsFrozen && !k.IsSuspended)   // zamrożone księstwa pomijamy
             .ToListAsync();
 
         foreach (var kingdom in kingdoms)

@@ -133,7 +133,7 @@ public class ForumController : ControllerBase
         var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
         return await _context.Kingdoms
             .Include(k => k.Coalition)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
     }
 
     private ForumPostDto MapToDto(ForumPost post)

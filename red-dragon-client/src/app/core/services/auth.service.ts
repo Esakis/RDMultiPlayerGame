@@ -39,20 +39,30 @@ export class AuthService {
     return localStorage.getItem(this.tokenKey);
   }
 
-  getUser(): { username: string; kingdomId: number } | null {
+  getUser(): { username: string; kingdomId: number; role: string } | null {
     const data = localStorage.getItem(this.userKey);
     return data ? JSON.parse(data) : null;
+  }
+
+  isAdmin(): boolean {
+    return this.getUser()?.role === 'Admin';
   }
 
   hasToken(): boolean {
     return !!localStorage.getItem(this.tokenKey);
   }
 
+  /** Podmienia sesję na nowy token, np. po wyborze innego księstwa. */
+  applyAuth(res: AuthResponse): void {
+    this.storeAuth(res);
+  }
+
   private storeAuth(res: AuthResponse): void {
     localStorage.setItem(this.tokenKey, res.token);
     localStorage.setItem(this.userKey, JSON.stringify({
       username: res.username,
-      kingdomId: res.kingdomId
+      kingdomId: res.kingdomId,
+      role: res.role || 'Player'
     }));
     this.isLoggedInSubject.next(true);
   }

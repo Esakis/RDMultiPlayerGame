@@ -43,7 +43,7 @@ public class MagicController : ControllerBase
     public async Task<IActionResult> GetAutoCast()
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == UserId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == UserId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         return Ok(new { spellType = kingdom?.AutoCastSpellType });
     }
 
@@ -55,7 +55,7 @@ public class MagicController : ControllerBase
     public async Task<IActionResult> SetAutoCast([FromBody] SetAutoCastDto dto)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == UserId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == UserId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return BadRequest("Nie znaleziono księstwa.");
 
         if (string.IsNullOrWhiteSpace(dto.SpellType))

@@ -126,6 +126,42 @@ public class Kingdom
     public bool IsFrozen { get; set; } = false;
     public DateTime? FrozenAt { get; set; }
 
+    // ── Opłata za księstwo ─────────────────────────────────────────────
+    // Pierwsze księstwo konta jest darmowe (IsFree), księstwo imperatorskie
+    // (CoalitionRole == "Imperator") jest zawsze zwolnione z opłaty.
+    // Płatne księstwo trzeba opłacić do PaymentDeadlineDays dnia od założenia —
+    // po tym terminie zostaje zawieszone (IsSuspended, nie da się go wybrać),
+    // a po DeletionDays dniach bez opłaty jest trwale usuwane.
+    public const int PaymentDeadlineDays = 20;
+    public const int DeletionDays = 30;
+
+    /// <summary>Księstwo darmowe (pierwsze na koncie) — nie wymaga opłaty.</summary>
+    public bool IsFree { get; set; } = false;
+
+    /// <summary>Czy opłata za księstwo została wniesiona.</summary>
+    public bool IsPaid { get; set; } = false;
+
+    public DateTime? PaidAt { get; set; }
+
+    /// <summary>Zawieszone za brak opłaty — niedostępne do wyboru i gry.</summary>
+    public bool IsSuspended { get; set; } = false;
+
+    /// <summary>Zwolnione z opłaty: darmowe, opłacone albo imperatorskie.</summary>
+    [NotMapped]
+    public bool IsPaymentExempt => IsFree || IsPaid || CoalitionRole == "Imperator";
+
+    /// <summary>Ile pełnych dni istnieje księstwo.</summary>
+    [NotMapped]
+    public int DaysSinceCreation => (int)(DateTime.UtcNow - CreatedAt).TotalDays;
+
+    /// <summary>Czy termin płatności minął (kandydat do zawieszenia).</summary>
+    [NotMapped]
+    public bool IsPaymentOverdue => !IsPaymentExempt && DaysSinceCreation >= PaymentDeadlineDays;
+
+    /// <summary>Czy księstwo kwalifikuje się do usunięcia (30 dni bez opłaty).</summary>
+    [NotMapped]
+    public bool IsPaymentDeletable => !IsPaymentExempt && DaysSinceCreation >= DeletionDays;
+
     // Szkolenie wojska — automatyczny awans jednostek co turę (Dracopedia/Trening).
     // Żołnierze: E0→E1 (wymaga Ołtarza Inicjacji); Elita: E1→E2 (wymaga Koszar Specjalnych).
     public bool TrainSoldiers { get; set; } = false;

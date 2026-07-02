@@ -1,0 +1,62 @@
+<div class="payments-page">
+  <h1>Płatności</h1>
+  <p class="hint">
+    Opłata za księstwo wynosi <strong>{{ price }} zł</strong>. Płatne księstwo trzeba
+    opłacić do 20. dnia od założenia — inaczej zostaje zawieszone, a po 30 dniach usunięte.
+  </p>
+
+  <div class="error" *ngIf="error">{{ error }}</div>
+  <div class="success" *ngIf="success">{{ success }}</div>
+
+  <div class="panel" *ngIf="unpaidKingdoms.length > 0; else nothingToPay">
+    <h2>Opłać księstwo</h2>
+
+    <label>Księstwo
+      <select [(ngModel)]="selectedKingdomId">
+        <option [ngValue]="null">— wybierz —</option>
+        <option *ngFor="let k of unpaidKingdoms" [ngValue]="k.id">
+          {{ k.name }} ({{ k.isSuspended ? 'zawieszone, usunięcie za ' + k.daysToDeletion + ' dni'
+                                         : 'zostało ' + k.daysToSuspension + ' dni' }})
+        </option>
+      </select>
+    </label>
+
+    <div class="methods">
+      <span>Metoda płatności:</span>
+      <label *ngFor="let m of methods" class="method"
+             [class.selected]="method === m">
+        <input type="radio" name="method" [value]="m" [(ngModel)]="method"> {{ m }}
+      </label>
+    </div>
+
+    <button class="btn primary" (click)="pay()" [disabled]="paying || !selectedKingdomId">
+      {{ paying ? 'Przetwarzanie…' : 'Zapłać ' + price + ' zł' }}
+    </button>
+    <p class="small">Płatność testowa — księgowana od razu, bez prawdziwej bramki płatności.</p>
+  </div>
+
+  <ng-template #nothingToPay>
+    <div class="panel">
+      <p>Wszystkie twoje księstwa są opłacone lub darmowe. 🎉</p>
+      <button class="btn" (click)="goToKingdoms()">Przejdź do księstw</button>
+    </div>
+  </ng-template>
+
+  <div class="panel" *ngIf="history.length > 0">
+    <h2>Historia płatności</h2>
+    <table>
+      <thead>
+        <tr><th>Data</th><th>Księstwo</th><th>Kwota</th><th>Metoda</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of history">
+          <td>{{ p.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td>{{ p.kingdomName }}</td>
+          <td>{{ p.amount }} zł</td>
+          <td>{{ p.method }}</td>
+          <td>{{ p.status === 'Completed' ? 'Zaksięgowana' : p.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

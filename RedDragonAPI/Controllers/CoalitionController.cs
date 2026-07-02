@@ -119,7 +119,7 @@ public class CoalitionController : ControllerBase
     {
         var userId = GetUserId();
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null)
             return NotFound("Nie znaleziono księstwa.");
@@ -151,7 +151,7 @@ public class CoalitionController : ControllerBase
     {
         var userId = GetUserId();
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null)
             return NotFound("Nie znaleziono księstwa.");
@@ -185,7 +185,7 @@ public class CoalitionController : ControllerBase
     {
         var userId = GetUserId();
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null)
             return NotFound("Nie znaleziono księstwa.");
@@ -850,7 +850,7 @@ public class CoalitionController : ControllerBase
     {
         var userId = GetUserId();
         return await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
     }
 
     private int GetUserId()

@@ -24,7 +24,7 @@ public class BattleService : IBattleService
     {
         var callerKingdom = await _context.Kingdoms
             .Include(k => k.MilitaryUnits)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (callerKingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
@@ -133,7 +133,7 @@ public class BattleService : IBattleService
     public async Task<List<PlannedAttackDto>> GetPlannedAttacksAsync(int userId)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return new List<PlannedAttackDto>();
 
         return await ProjectPlannedAttacksAsync(new[] { kingdom.Id });
@@ -145,7 +145,7 @@ public class BattleService : IBattleService
     public async Task<List<PlannedAttackDto>> GetCoalitionPlannedAttacksAsync(int userId)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom?.CoalitionId == null || !IsCoalitionCommander(kingdom))
             return new List<PlannedAttackDto>();
 
@@ -202,7 +202,7 @@ public class BattleService : IBattleService
     public async Task<ServiceResult<AttackOptionsDto>> GetAttackOptionsAsync(int userId, int kingdomId)
     {
         var callerKingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (callerKingdom == null)
             return ServiceResult<AttackOptionsDto>.Fail("Nie znaleziono księstwa.");
 
@@ -258,7 +258,7 @@ public class BattleService : IBattleService
     public async Task<ServiceResult> CancelPlannedAttackAsync(int userId, int actionId)
     {
         var callerKingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (callerKingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
 
@@ -299,7 +299,7 @@ public class BattleService : IBattleService
     public async Task<List<BattleReportDto>> GetBattleReportsAsync(int userId)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null) return new List<BattleReportDto>();
 
@@ -314,7 +314,7 @@ public class BattleService : IBattleService
     public async Task<List<BattleReportDto>> GetCoalitionBattleReportsAsync(int userId)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom?.CoalitionId == null) return new List<BattleReportDto>();
 
@@ -956,7 +956,7 @@ public class BattleService : IBattleService
         var kingdom = await _context.Kingdoms
             .Include(k => k.Professions)
             .Include(k => k.Buildings)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return new List<SpellListItemDto>();
 
         var race = await GetRaceAsync(kingdom.Race);
@@ -1001,7 +1001,7 @@ public class BattleService : IBattleService
         var kingdom = await _context.Kingdoms
             .Include(k => k.Professions)
             .Include(k => k.Buildings)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
 
@@ -1454,7 +1454,7 @@ public class BattleService : IBattleService
     {
         var kingdom = await _context.Kingdoms
             .Include(k => k.MilitaryUnits)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
 

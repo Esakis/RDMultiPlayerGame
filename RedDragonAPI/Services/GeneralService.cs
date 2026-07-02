@@ -94,7 +94,7 @@ public class GeneralService : IGeneralService
     public async Task<List<GeneralDto>> GetGeneralsAsync(int userId)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return new List<GeneralDto>();
 
         var generals = await _context.Generals
@@ -126,7 +126,7 @@ public class GeneralService : IGeneralService
     public async Task<ServiceResult> AcceptGeneralAsync(int userId, int generalId)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
 
@@ -147,7 +147,7 @@ public class GeneralService : IGeneralService
     public async Task<ServiceResult> RerollSecondaryTraitAsync(int userId, int generalId)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
 
@@ -174,7 +174,7 @@ public class GeneralService : IGeneralService
     public async Task<ServiceResult> DismissGeneralAsync(int userId, int generalId)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
 

@@ -25,10 +25,16 @@ export class SidebarComponent {
     { label: 'menu.politics', route: '/coalition' },
     { label: 'menu.market', route: '/market' },
     { label: 'menu.stats', route: '/ranking' },
+    { label: 'menu.kingdoms', route: '/kingdoms' },
+    { label: 'menu.payments', route: '/payments' },
     { label: 'menu.options', route: '/options' },
   ];
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router) {
+    if (this.auth.isAdmin()) {
+      this.menuItems.push({ label: 'menu.admin', route: '/admin' });
+    }
+  }
 
   logout(): void {
     this.auth.logout();

@@ -39,6 +39,9 @@
     "politics": "Politics",
     "market": "Market",
     "stats": "Statistics",
+    "kingdoms": "Kingdoms",
+    "payments": "Payments",
+    "admin": "Admin",
     "options": "Options",
     "logout": "Log out",
     "useTurn": "Use turn"

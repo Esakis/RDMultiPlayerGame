@@ -37,7 +37,7 @@ public class DragonService : IDragonService
     {
         var kingdom = await _context.Kingdoms
             .Include(k => k.Buildings)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return null;
 
         long dragons = await _context.MilitaryUnits

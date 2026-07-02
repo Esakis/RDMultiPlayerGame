@@ -123,7 +123,7 @@ public class DailyResetService : BackgroundService
             // Nowicjusz traci ochronę po przekroczeniu obszaru (Kingdom.NoviceLandCap = 30000).
             var kingdoms = await context.Kingdoms
                 .Include(k => k.Buildings).ThenInclude(b => b.Definition)
-                .Where(k => k.Era.IsActive && !k.IsFrozen)
+                .Where(k => k.Era.IsActive && !k.IsFrozen && !k.IsSuspended)
                 .ToListAsync();
 
             // Koalicje w aktywnym stanie wojny — Renowacja broni produkuje wtedy broń
@@ -226,7 +226,7 @@ public class DailyResetService : BackgroundService
                 .Include(k => k.MilitaryUnits)
                 .Include(k => k.Researches)
                 .Include(k => k.Buildings)
-                .Where(k => k.Era.IsActive && !k.IsFrozen && (k.TrainSoldiers || k.TrainElite))
+                .Where(k => k.Era.IsActive && !k.IsFrozen && !k.IsSuspended && (k.TrainSoldiers || k.TrainElite))
                 .ToListAsync();
 
             if (trainingKingdoms.Count > 0)
@@ -335,6 +335,10 @@ public class DailyResetService : BackgroundService
             // 6. Badania kończą się teraz przez Punkty Nauki (ResourceService),
             //    nie przez czas — patrz docs/MECHANIKA.md §13.
 
+            // 7. Opłaty za księstwa: nieopłacone (niedarmowe, nieimperatorskie) po 20 dniach
+            //    zostają zawieszone, a po 30 dniach trwale usunięte (Kingdom.PaymentDeadlineDays/DeletionDays).
+            await EnforceKingdomPaymentsAsync(context);
+
             await context.SaveChangesAsync();
 
             _logger.LogInformation("Przeliczenie zakończone pomyślnie.");
@@ -343,6 +347,88 @@ public class DailyResetService : BackgroundService
         {
             _logger.LogError(ex, "Błąd podczas przeliczenia!");
         }
+    }
+
+    /// <summary>
+    /// Egzekwuje opłaty za księstwa: zawiesza nieopłacone po terminie płatności,
+    /// usuwa (wraz z danymi) po 30 dniach bez opłaty. Zwolnione: darmowe (pierwsze
+    /// na koncie), opłacone i imperatorskie (CoalitionRole == "Imperator").
+    /// </summary>
+    private async Task EnforceKingdomPaymentsAsync(ApplicationDbContext context)
+    {
+        var unpaid = await context.Kingdoms
+            .Include(k => k.User)
+            .Where(k => !k.IsFree && !k.IsPaid && k.CoalitionRole != "Imperator")
+            .ToListAsync();
+
+        foreach (var kingdom in unpaid)
+        {
+            if (kingdom.IsPaymentDeletable)
+            {
+                _logger.LogInformation(
+                    "Usuwam księstwo {Name} (Id {Id}) — {Days} dni bez opłaty.",
+                    kingdom.Name, kingdom.Id, kingdom.DaysSinceCreation);
+                await DeleteKingdomAsync(kingdom, context);
+                continue;
+            }
+
+            if (kingdom.IsPaymentOverdue && !kingdom.IsSuspended)
+            {
+                kingdom.IsSuspended = true;
+                // Zawieszonego księstwa nie da się wybrać — jeśli było aktywne, odepnij.
+                if (kingdom.User.ActiveKingdomId == kingdom.Id)
+                    kingdom.User.ActiveKingdomId = null;
+                context.KingdomEvents.Add(new KingdomEvent
+                {
+                    KingdomId = kingdom.Id,
+                    Category = "Payment",
+                    Message = $"Księstwo zawieszone za brak opłaty. Opłać je, inaczej po " +
+                              $"{Kingdom.DeletionDays} dniach od założenia zostanie usunięte."
+                });
+            }
+        }
+
+        await context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Trwale usuwa księstwo. Kaskady w bazie czyszczą budynki, wojsko, profesje,
+    /// badania, zaklęcia, zdarzenia, własne akcje, posty i generałów; tu ręcznie
+    /// usuwamy rekordy z kluczami Restrict (raporty, wiadomości, pakty, transakcje).
+    /// </summary>
+    private static async Task DeleteKingdomAsync(Kingdom kingdom, ApplicationDbContext context)
+    {
+        int id = kingdom.Id;
+
+        await context.QueuedActions.Where(q => q.TargetKingdomId == id).ExecuteDeleteAsync();
+        await context.BattleReports
+            .Where(b => b.AttackerKingdomId == id || b.DefenderKingdomId == id)
+            .ExecuteDeleteAsync();
+        await context.Messages
+            .Where(m => m.SenderKingdomId == id || m.ReceiverKingdomId == id)
+            .ExecuteDeleteAsync();
+        await context.Pacts
+            .Where(p => p.ProposerKingdomId == id || p.TargetKingdomId == id)
+            .ExecuteDeleteAsync();
+        await context.MarketTransactions
+            .Where(t => t.BuyerKingdomId == id || t.SellerKingdomId == id)
+            .ExecuteDeleteAsync();
+
+        // Posty forum: najpierw cudze odpowiedzi pod postami tego księstwa
+        // (ParentPostId ma Restrict), potem kaskada usunie posty autora.
+        await context.ForumPosts
+            .Where(f => f.ParentPost != null && f.ParentPost.AuthorKingdomId == id)
+            .ExecuteDeleteAsync();
+
+        // Wyczyść odwołania bez klucza obcego
+        await context.Kingdoms
+            .Where(k => k.ImperatorVoteForKingdomId == id)
+            .ExecuteUpdateAsync(s => s.SetProperty(k => k.ImperatorVoteForKingdomId, (int?)null));
+        if (kingdom.User.ActiveKingdomId == id)
+            kingdom.User.ActiveKingdomId = null;
+
+        context.Kingdoms.Remove(kingdom);
+        await context.SaveChangesAsync();
     }
 
     /// <summary>

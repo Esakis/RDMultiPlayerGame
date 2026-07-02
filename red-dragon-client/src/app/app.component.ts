@@ -30,7 +30,8 @@ export class AppComponent implements OnInit {
       filter(e => e instanceof NavigationEnd)
     ).subscribe((e) => {
       const url = (e as NavigationEnd).url;
-      this.showLayout = !['/login', '/register'].includes(url);
+      // /admin ma własny, pełnoekranowy panel (konto admina nie ma księstwa)
+      this.showLayout = !['/login', '/register'].includes(url) && !url.startsWith('/admin');
       if (this.showLayout && this.auth.hasToken()) {
         this.loadKingdom();
       }

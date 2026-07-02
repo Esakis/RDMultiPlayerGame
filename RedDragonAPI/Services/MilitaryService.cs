@@ -20,7 +20,7 @@ public class MilitaryService : IMilitaryService
         var kingdom = await _context.Kingdoms
             .Include(k => k.Buildings)
             .Include(k => k.Researches)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null) return new List<UnitDefinitionDto>();
 
@@ -56,7 +56,7 @@ public class MilitaryService : IMilitaryService
     {
         var kingdom = await _context.Kingdoms
             .Include(k => k.MilitaryUnits).ThenInclude(m => m.Definition)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null) return new List<MilitaryUnitDto>();
 
@@ -82,7 +82,7 @@ public class MilitaryService : IMilitaryService
             .Include(k => k.MilitaryUnits)
             .Include(k => k.Researches)
             .Include(k => k.Professions)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
     }
 
     public async Task<ServiceResult> RecruitUnitsAsync(int userId, RecruitUnitsDto dto)
@@ -255,7 +255,7 @@ public class MilitaryService : IMilitaryService
         var kingdom = await _context.Kingdoms
             .Include(k => k.Buildings)
             .Include(k => k.Researches)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null) return new TrainingInfoDto();
 
@@ -278,7 +278,7 @@ public class MilitaryService : IMilitaryService
     {
         var kingdom = await _context.Kingdoms
             .Include(k => k.Buildings)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");

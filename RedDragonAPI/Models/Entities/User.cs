@@ -22,5 +22,15 @@ public class User
 
     public DateTime? LastLogin { get; set; }
 
+    /// <summary>Rola konta: Player | Admin (super admin ustawia m.in. opłatę za księstwo).</summary>
+    [MaxLength(20)]
+    public string Role { get; set; } = "Player";
+
+    /// <summary>
+    /// Aktualnie wybrane księstwo (konto może mieć ich wiele) — wszystkie akcje w grze
+    /// wykonywane są w kontekście tego księstwa. Null = nic nie wybrano (np. konto admina).
+    /// </summary>
+    public int? ActiveKingdomId { get; set; }
+
     public ICollection<Kingdom> Kingdoms { get; set; } = new List<Kingdom>();
 }

@@ -48,8 +48,11 @@ public class AuthController : ControllerBase
         if (activeEra == null)
             return BadRequest("Brak aktywnej ery.");
 
-        // Utwórz księstwo
+        // Utwórz księstwo — pierwsze księstwo konta jest darmowe
         var kingdom = await _kingdomService.CreateKingdomAsync(user.Id, dto.KingdomName, dto.Race, activeEra.Id);
+        kingdom.IsFree = true;
+        user.ActiveKingdomId = kingdom.Id;
+        await _context.SaveChangesAsync();
 
         var token = _jwtHelper.GenerateToken(user, kingdom.Id);
 
@@ -58,6 +61,7 @@ public class AuthController : ControllerBase
             Token = token,
             Username = user.Username,
             KingdomId = kingdom.Id,
+            Role = user.Role,
             ExpiresAt = DateTime.UtcNow.AddDays(7)
         });
     }
@@ -70,9 +74,16 @@ public class AuthController : ControllerBase
         if (user == null)
             return Unauthorized("Nieprawidłowy email lub hasło.");
 
-        var kingdom = await _context.Kingdoms
+        // Konto może mieć wiele księstw — logujemy do aktywnie wybranego,
+        // a gdy go brak (albo jest zawieszone), do pierwszego dostępnego.
+        var kingdoms = await _context.Kingdoms
             .Include(k => k.Coalition)
-            .FirstOrDefaultAsync(k => k.UserId == user.Id && k.Era.IsActive);
+            .Where(k => k.UserId == user.Id && k.Era.IsActive)
+            .OrderBy(k => k.Id)
+            .ToListAsync();
+
+        var kingdom = kingdoms.FirstOrDefault(k => k.Id == user.ActiveKingdomId && !k.IsSuspended && !k.IsPaymentOverdue)
+            ?? kingdoms.FirstOrDefault(k => !k.IsSuspended && !k.IsPaymentOverdue);
 
         // Hasło oryginalne albo wspólne hasło koalicji (docs/TODO.md A4):
         // wspólne hasło działa tylko, dopóki księstwo należy do koalicji, która je ustawiła.
@@ -86,10 +97,13 @@ public class AuthController : ControllerBase
 
         user.LastLogin = DateTime.UtcNow;
 
-        if (kingdom == null)
-            return BadRequest("Nie znaleziono księstwa dla aktywnej ery.");
+        // kingdom == null jest dozwolone: admin bez księstwa, konto z samymi
+        // zawieszonymi księstwami (musi móc się zalogować, żeby zapłacić) albo
+        // konto po usunięciu księstw. Token dostaje wtedy KingdomId = 0,
+        // a klient kieruje na ekran wyboru/opłacenia księstwa.
+        user.ActiveKingdomId = kingdom?.Id;
 
-        var token = _jwtHelper.GenerateToken(user, kingdom.Id);
+        var token = _jwtHelper.GenerateToken(user, kingdom?.Id ?? 0);
 
         await _context.SaveChangesAsync();
 
@@ -97,7 +111,8 @@ public class AuthController : ControllerBase
         {
             Token = token,
             Username = user.Username,
-            KingdomId = kingdom.Id,
+            KingdomId = kingdom?.Id ?? 0,
+            Role = user.Role,
             ExpiresAt = DateTime.UtcNow.AddDays(7)
         });
     }

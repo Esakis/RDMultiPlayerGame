@@ -73,6 +73,29 @@ if (app.Environment.IsDevelopment())
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.Migrate();
 
+    // Seed: konto super admina i domyślna opłata za księstwo (30 zł)
+    if (!db.Users.Any(u => u.Role == "Admin"))
+    {
+        db.Users.Add(new RedDragonAPI.Models.Entities.User
+        {
+            Email = "admin@reddragon.pl",
+            Username = "SuperAdmin",
+            PasswordHash = PasswordHasher.Hash("Admin123!"),
+            Role = "Admin",
+            CreatedAt = DateTime.UtcNow
+        });
+    }
+    if (!db.GameSettings.Any(s => s.Key == RedDragonAPI.Models.Entities.GameSetting.KingdomPriceKey))
+    {
+        db.GameSettings.Add(new RedDragonAPI.Models.Entities.GameSetting
+        {
+            Key = RedDragonAPI.Models.Entities.GameSetting.KingdomPriceKey,
+            Value = RedDragonAPI.Models.Entities.GameSetting.DefaultKingdomPrice
+                .ToString(System.Globalization.CultureInfo.InvariantCulture)
+        });
+    }
+    db.SaveChanges();
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }

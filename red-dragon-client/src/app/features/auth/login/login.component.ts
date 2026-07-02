@@ -23,8 +23,15 @@ export class LoginComponent {
     this.loading = true;
     this.error = '';
     this.auth.login(this.email, this.password).subscribe({
-      next: () => {
-        this.router.navigate(['/dashboard']);
+      next: (res) => {
+        if (res.role === 'Admin') {
+          this.router.navigate(['/admin']);
+        } else if (!res.kingdomId) {
+          // Brak grywalnego księstwa (np. wszystkie zawieszone) — ekran księstw
+          this.router.navigate(['/kingdoms']);
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
       },
       error: (err) => {
         this.error = err.error || 'Nieprawidłowy email lub hasło.';

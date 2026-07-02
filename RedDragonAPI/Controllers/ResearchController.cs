@@ -94,7 +94,7 @@ public class ResearchController : ControllerBase
         var userId = GetUserId();
         var kingdom = await _context.Kingdoms
             .Include(k => k.Researches).ThenInclude(r => r.Tech)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null)
             return NotFound("Nie znaleziono księstwa.");
@@ -181,7 +181,7 @@ public class ResearchController : ControllerBase
         return await _context.Kingdoms
             .Include(k => k.Researches)
             .Include(k => k.Buildings)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
     }
 
     private (bool canResearch, string? reason) CheckCanResearch(

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
+import { AdminGuard } from './core/guards/admin.guard';
 
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
@@ -22,6 +23,9 @@ import { DragonsComponent } from './features/dragons/dragons.component';
 import { AttackComponent } from './features/attack/attack.component';
 import { ReportsComponent } from './features/reports/reports.component';
 import { OptionsComponent } from './features/options/options.component';
+import { KingdomsComponent } from './features/kingdoms/kingdoms.component';
+import { PaymentsComponent } from './features/payments/payments.component';
+import { AdminComponent } from './features/admin/admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -45,6 +49,9 @@ const routes: Routes = [
   { path: 'attack', component: AttackComponent, canActivate: [AuthGuard] },
   { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard] },
   { path: 'options', component: OptionsComponent, canActivate: [AuthGuard] },
+  { path: 'kingdoms', component: KingdomsComponent, canActivate: [AuthGuard] },
+  { path: 'payments', component: PaymentsComponent, canActivate: [AuthGuard] },
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
   { path: '**', redirectTo: '/dashboard' }
 ];
 

@@ -25,7 +25,7 @@ public class TurnService : ITurnService
         var kingdom = await _context.Kingdoms
             .Include(k => k.Buildings).ThenInclude(b => b.Definition)
             .Include(k => k.Professions)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null)
             return new TurnResultDto { Success = false, Message = "Nie znaleziono księstwa." };

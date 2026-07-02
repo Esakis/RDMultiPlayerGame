@@ -1,0 +1,43 @@
+<div class="admin-page">
+  <div class="admin-head">
+    <h1>Panel super admina</h1>
+    <button class="btn" (click)="logout()">Wyloguj</button>
+  </div>
+
+  <div class="error" *ngIf="error">{{ error }}</div>
+  <div class="success" *ngIf="success">{{ success }}</div>
+
+  <div class="panel">
+    <h2>Opłata za księstwo</h2>
+    <p class="hint">
+      Kwota, jaką gracz płaci za każde kolejne (niedarmowe) księstwo.
+      Aktualnie: <strong>{{ price === null ? '…' : price + ' zł' }}</strong>
+    </p>
+    <div class="price-row">
+      <input type="number" min="0" step="1" [(ngModel)]="newPrice"> zł
+      <button class="btn primary" (click)="savePrice()" [disabled]="saving">
+        {{ saving ? 'Zapisywanie…' : 'Zapisz' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Płatności graczy</h2>
+    <p class="hint" *ngIf="payments.length === 0">Brak płatności.</p>
+    <table *ngIf="payments.length > 0">
+      <thead>
+        <tr><th>Data</th><th>Gracz</th><th>Księstwo</th><th>Kwota</th><th>Metoda</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of payments">
+          <td>{{ p.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td>{{ p.username }}</td>
+          <td>{{ p.kingdomName }}</td>
+          <td>{{ p.amount }} zł</td>
+          <td>{{ p.method }}</td>
+          <td>{{ p.status === 'Completed' ? 'Zaksięgowana' : p.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

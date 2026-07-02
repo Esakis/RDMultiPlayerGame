@@ -24,7 +24,7 @@ public class KingdomService : IKingdomService
             .Include(k => k.MilitaryUnits).ThenInclude(m => m.Definition)
             .Include(k => k.Professions)
             .Include(k => k.ActiveSpells).ThenInclude(s => s.Spell)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null) return null;
 
@@ -190,7 +190,7 @@ public class KingdomService : IKingdomService
         var kingdom = await _context.Kingdoms
             .Include(k => k.Professions)
             .Include(k => k.Buildings)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
@@ -255,7 +255,7 @@ public class KingdomService : IKingdomService
     public async Task<ServiceResult> BuyLandAsync(int userId, int amount)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
         if (kingdom == null)
             return ServiceResult.Fail("Nie znaleziono księstwa.");
@@ -290,7 +290,7 @@ public class KingdomService : IKingdomService
     public async Task<ServiceResult> FreezeAsync(int userId)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
         if (kingdom.IsFrozen) return ServiceResult.Fail("Księstwo jest już zamrożone.");
 
@@ -309,7 +309,7 @@ public class KingdomService : IKingdomService
     public async Task<ServiceResult> UnfreezeAsync(int userId)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
         if (!kingdom.IsFrozen) return ServiceResult.Fail("Księstwo nie jest zamrożone.");
 
@@ -322,7 +322,7 @@ public class KingdomService : IKingdomService
     public async Task<ServiceResult> SetWagesAsync(int userId, int wages)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
 
         // Płaca 0–50 złota na pracownika/turę (manual: max 50 = 100 popularności).
@@ -337,7 +337,7 @@ public class KingdomService : IKingdomService
     public async Task<ServiceResult> DropProtectionAsync(int userId)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
         if (!kingdom.IsProtected) return ServiceResult.Fail("Twoje księstwo nie jest objęte ochroną.");
 
@@ -353,7 +353,7 @@ public class KingdomService : IKingdomService
             return ServiceResult.Fail("Nieznany tryb metamagii.");
 
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
         if (kingdom.Race != "Dżin") return ServiceResult.Fail("Metamagia dostępna tylko dla Dżina.");
 
@@ -371,7 +371,7 @@ public class KingdomService : IKingdomService
     public async Task<ServiceResult> ChargeTotemAsync(int userId, string totem)
     {
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
         if (kingdom.Race != "Olbrzym") return ServiceResult.Fail("Szamanizm dostępny tylko dla Olbrzyma.");
 
@@ -406,7 +406,7 @@ public class KingdomService : IKingdomService
             return ServiceResult.Fail("Nieznana szkoła.");
 
         var kingdom = await _context.Kingdoms
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
         if (kingdom.Race != "Człowiek") return ServiceResult.Fail("Nauka stosowana dostępna tylko dla Człowieka.");
 
@@ -427,7 +427,7 @@ public class KingdomService : IKingdomService
         var kingdom = await _context.Kingdoms
             .Include(k => k.Buildings)
             .Include(k => k.MilitaryUnits)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
         if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
 
         bool hasPalace = kingdom.Buildings.Any(b =>

@@ -52,7 +52,7 @@ public class PactService : IPactService
     private async Task<Kingdom?> GetKingdomAsync(int userId) =>
         await _context.Kingdoms
             .Include(k => k.Buildings)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
     private static bool HasAmbasada(Kingdom k) =>
         k.Buildings.Any(b => b.BuildingType == "Ambasada" && b.Quantity > 0 && !b.IsUnderConstruction);

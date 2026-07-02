@@ -43,6 +43,9 @@ import { DragonsComponent } from './features/dragons/dragons.component';
 import { AttackComponent } from './features/attack/attack.component';
 import { ReportsComponent } from './features/reports/reports.component';
 import { OptionsComponent } from './features/options/options.component';
+import { KingdomsComponent } from './features/kingdoms/kingdoms.component';
+import { PaymentsComponent } from './features/payments/payments.component';
+import { AdminComponent } from './features/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +75,10 @@ import { OptionsComponent } from './features/options/options.component';
     DragonsComponent,
     AttackComponent,
     ReportsComponent,
-    OptionsComponent
+    OptionsComponent,
+    KingdomsComponent,
+    PaymentsComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

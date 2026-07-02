@@ -37,6 +37,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<MarketTransaction> MarketTransactions { get; set; }
     public DbSet<KingdomEvent> KingdomEvents { get; set; }
     public DbSet<CoalitionAnnouncement> CoalitionAnnouncements { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+    public DbSet<GameSetting> GameSettings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -90,6 +92,13 @@ public class ApplicationDbContext : DbContext
             .WithMany()
             .HasForeignKey(c => c.LeaderKingdomId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        // Payment -> User (KingdomId bez FK — historia przeżywa usunięcie księstwa)
+        modelBuilder.Entity<Payment>()
+            .HasOne(p => p.User)
+            .WithMany()
+            .HasForeignKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Building -> Kingdom
         modelBuilder.Entity<Building>()

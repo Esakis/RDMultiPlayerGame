@@ -55,7 +55,7 @@ public class LabyrinthService : ILabyrinthService
     private async Task<Kingdom?> GetKingdomAsync(int userId) =>
         await _context.Kingdoms
             .Include(k => k.Buildings)
-            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive);
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
 
     /// <summary>
     /// Zajazd u Czerwonego Smoka pozwala wejść do labiryntu dwa razy na przeliczenie
