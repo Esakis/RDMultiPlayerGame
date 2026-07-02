@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AccountKingdom, AuthResponse, KingdomPrice, PaymentRecord } from '../models/kingdom.model';
+import { AccountKingdom, AdminKingdom, AuthResponse, KingdomLoginInfo, KingdomPrice, PaymentRecord } from '../models/kingdom.model';
 
 @Injectable({
   providedIn: 'root'
@@ -51,5 +51,21 @@ export class AccountService {
 
   adminGetPayments(): Observable<PaymentRecord[]> {
     return this.http.get<PaymentRecord[]>(`${this.adminUrl}/payments`);
+  }
+
+  adminGetKingdoms(): Observable<AdminKingdom[]> {
+    return this.http.get<AdminKingdom[]>(`${this.adminUrl}/kingdoms`);
+  }
+
+  adminLockKingdom(id: number): Observable<void> {
+    return this.http.post<void>(`${this.adminUrl}/kingdoms/${id}/lock`, {});
+  }
+
+  adminUnlockKingdom(id: number): Observable<void> {
+    return this.http.post<void>(`${this.adminUrl}/kingdoms/${id}/unlock`, {});
+  }
+
+  adminGetKingdomLogins(id: number): Observable<KingdomLoginInfo[]> {
+    return this.http.get<KingdomLoginInfo[]>(`${this.adminUrl}/kingdoms/${id}/logins`);
   }
 }

@@ -71,7 +71,8 @@ public class PaymentController : ControllerBase
 
         kingdom.IsPaid = true;
         kingdom.PaidAt = DateTime.UtcNow;
-        kingdom.IsSuspended = false;
+        // Ręczna blokada admina nie spada po opłaceniu
+        kingdom.IsSuspended = kingdom.AdminLocked;
 
         await _context.SaveChangesAsync();
 

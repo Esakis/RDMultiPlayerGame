@@ -39,6 +39,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<CoalitionAnnouncement> CoalitionAnnouncements { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<GameSetting> GameSettings { get; set; }
+    public DbSet<KingdomLogin> KingdomLogins { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -99,6 +100,15 @@ public class ApplicationDbContext : DbContext
             .WithMany()
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // KingdomLogin -> Kingdom (usunięcie księstwa czyści historię logowań)
+        modelBuilder.Entity<KingdomLogin>()
+            .HasOne(l => l.Kingdom)
+            .WithMany()
+            .HasForeignKey(l => l.KingdomId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<KingdomLogin>().HasIndex(l => l.KingdomId);
 
         // Building -> Kingdom
         modelBuilder.Entity<Building>()

@@ -23,7 +23,8 @@ public static class PaymentRules
         bool exempt = k.IsFree || k.IsPaid || imperial;
         int days = k.DaysSinceCreation;
 
-        string status = imperial ? "Imperatorskie"
+        string status = k.AdminLocked ? "Zablokowane"
+            : imperial ? "Imperatorskie"
             : k.IsFree ? "Darmowe"
             : k.IsPaid ? "Opłacone"
             : (k.IsSuspended || days >= Kingdom.PaymentDeadlineDays) ? "Zawieszone"
@@ -40,7 +41,7 @@ public static class PaymentRules
             IsFree = k.IsFree,
             IsPaid = k.IsPaid,
             IsImperial = imperial,
-            IsSuspended = k.IsSuspended || (!exempt && days >= Kingdom.PaymentDeadlineDays),
+            IsSuspended = k.IsSuspended || k.AdminLocked || (!exempt && days >= Kingdom.PaymentDeadlineDays),
             RequiresPayment = !exempt,
             DaysSinceCreation = days,
             DaysToSuspension = exempt || days >= Kingdom.PaymentDeadlineDays

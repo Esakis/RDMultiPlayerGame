@@ -52,6 +52,12 @@ public class AuthController : ControllerBase
         var kingdom = await _kingdomService.CreateKingdomAsync(user.Id, dto.KingdomName, dto.Race, activeEra.Id);
         kingdom.IsFree = true;
         user.ActiveKingdomId = kingdom.Id;
+        _context.KingdomLogins.Add(new KingdomLogin
+        {
+            UserId = user.Id,
+            KingdomId = kingdom.Id,
+            IpAddress = RequestHelper.GetClientIp(HttpContext)
+        });
         await _context.SaveChangesAsync();
 
         var token = _jwtHelper.GenerateToken(user, kingdom.Id);
@@ -102,6 +108,16 @@ public class AuthController : ControllerBase
         // konto po usunięciu księstw. Token dostaje wtedy KingdomId = 0,
         // a klient kieruje na ekran wyboru/opłacenia księstwa.
         user.ActiveKingdomId = kingdom?.Id;
+
+        if (kingdom != null)
+        {
+            _context.KingdomLogins.Add(new KingdomLogin
+            {
+                UserId = user.Id,
+                KingdomId = kingdom.Id,
+                IpAddress = RequestHelper.GetClientIp(HttpContext)
+            });
+        }
 
         var token = _jwtHelper.GenerateToken(user, kingdom?.Id ?? 0);
 

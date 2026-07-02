@@ -146,6 +146,12 @@ public class Kingdom
     /// <summary>Zawieszone za brak opłaty — niedostępne do wyboru i gry.</summary>
     public bool IsSuspended { get; set; } = false;
 
+    /// <summary>
+    /// Ręczna blokada nałożona przez super admina. Gdy aktywna, IsSuspended też
+    /// jest ustawiane (wspólna ścieżka egzekwowania) i opłacenie nie odblokowuje.
+    /// </summary>
+    public bool AdminLocked { get; set; } = false;
+
     /// <summary>Zwolnione z opłaty: darmowe, opłacone albo imperatorskie.</summary>
     [NotMapped]
     public bool IsPaymentExempt => IsFree || IsPaid || CoalitionRole == "Imperator";

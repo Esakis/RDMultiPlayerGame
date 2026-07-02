@@ -22,6 +22,58 @@
   </div>
 
   <div class="panel">
+    <h2>Księstwa</h2>
+    <p class="hint">Kliknij księstwo, aby zobaczyć adresy IP logowań. Blokada ręczna działa niezależnie od opłat.</p>
+    <p class="hint" *ngIf="kingdoms.length === 0">Brak księstw.</p>
+    <table *ngIf="kingdoms.length > 0">
+      <thead>
+        <tr><th>Księstwo</th><th>Gracz</th><th>Rasa</th><th>Ziemia</th><th>Wiek</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let k of kingdoms">
+          <tr class="kingdom-row" (click)="toggleKingdom(k)" [class.expanded]="expandedKingdomId === k.id">
+            <td>{{ k.name }}</td>
+            <td>{{ k.username }}</td>
+            <td>{{ k.race }}</td>
+            <td>{{ k.land }}</td>
+            <td>{{ k.age }} dni</td>
+            <td>
+              <span class="badge" [class.locked]="k.adminLocked"
+                    [class.suspended]="!k.adminLocked && k.isSuspended">{{ k.status }}</span>
+            </td>
+            <td>
+              <button class="btn" [class.danger]="!k.adminLocked" (click)="lock(k, $event)">
+                {{ k.adminLocked ? 'Odblokuj' : 'Zablokuj' }}
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="expandedKingdomId === k.id" class="logins-row">
+            <td colspan="7">
+              <div class="logins">
+                <h3>Logowania do „{{ k.name }}”</h3>
+                <p class="hint" *ngIf="loginsLoading">Ładowanie…</p>
+                <p class="hint" *ngIf="!loginsLoading && logins.length === 0">Brak zarejestrowanych logowań.</p>
+                <table *ngIf="!loginsLoading && logins.length > 0" class="inner">
+                  <thead>
+                    <tr><th>Adres IP</th><th>Liczba logowań</th><th>Ostatnie logowanie</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let l of logins">
+                      <td>{{ l.ip }}</td>
+                      <td>{{ l.count }}</td>
+                      <td>{{ l.lastAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
     <h2>Płatności graczy</h2>
     <p class="hint" *ngIf="payments.length === 0">Brak płatności.</p>
     <table *ngIf="payments.length > 0">

@@ -348,3 +348,24 @@ export interface PaymentRecord {
 export interface KingdomPrice {
   price: number;
 }
+
+export interface AdminKingdom {
+  id: number;
+  name: string;
+  username: string;
+  race: string;
+  land: number;
+  age: number;
+  status: string;
+  isSuspended: boolean;
+  adminLocked: boolean;
+  isFree: boolean;
+  isPaid: boolean;
+  daysSinceCreation: number;
+}
+
+export interface KingdomLoginInfo {
+  ip: string;
+  count: number;
+  lastAt: string;
+}

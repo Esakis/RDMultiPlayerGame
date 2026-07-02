@@ -69,3 +69,28 @@ public class KingdomPriceDto
 {
     public decimal Price { get; set; }
 }
+
+/// <summary>Księstwo w panelu super admina.</summary>
+public class AdminKingdomDto
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
+    public string Race { get; set; } = string.Empty;
+    public int Land { get; set; }
+    public int Age { get; set; }
+    public string Status { get; set; } = string.Empty;
+    public bool IsSuspended { get; set; }
+    public bool AdminLocked { get; set; }
+    public bool IsFree { get; set; }
+    public bool IsPaid { get; set; }
+    public int DaysSinceCreation { get; set; }
+}
+
+/// <summary>Zgrupowana historia logowań do księstwa (per adres IP).</summary>
+public class KingdomLoginDto
+{
+    public string Ip { get; set; } = string.Empty;
+    public int Count { get; set; }
+    public DateTime LastAt { get; set; }
+}

@@ -91,11 +91,20 @@ public class AccountController : ControllerBase
             await _context.SaveChangesAsync();
         }
 
+        if (kingdom.AdminLocked)
+            return BadRequest("Księstwo zostało zablokowane przez administratora.");
+
         if (kingdom.IsSuspended)
             return BadRequest($"Księstwo jest zawieszone za brak opłaty. Opłać je, aby grać " +
                 $"(po {Kingdom.DeletionDays} dniach od założenia zostanie usunięte).");
 
         user.ActiveKingdomId = kingdom.Id;
+        _context.KingdomLogins.Add(new KingdomLogin
+        {
+            UserId = user.Id,
+            KingdomId = kingdom.Id,
+            IpAddress = RequestHelper.GetClientIp(HttpContext)
+        });
         await _context.SaveChangesAsync();
 
         var token = _jwtHelper.GenerateToken(user, kingdom.Id);

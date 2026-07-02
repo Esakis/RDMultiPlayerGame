@@ -78,3 +78,33 @@ table {
 
   th { color: #d4af37; }
 }
+
+.kingdom-row {
+  cursor: pointer;
+
+  &:hover td { background: rgba(212, 175, 55, 0.08); }
+  &.expanded td { background: rgba(212, 175, 55, 0.12); }
+}
+
+.badge {
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  border: 1px solid #558b2f;
+  color: #9ccc65;
+  white-space: nowrap;
+
+  &.suspended { color: #ffb74d; border-color: #ef6c00; }
+  &.locked { color: #ff8a80; border-color: #c62828; }
+}
+
+.btn.danger { border-color: #c62828; color: #ff8a80; }
+
+.logins-row td { background: rgba(0, 0, 0, 0.4); }
+
+.logins {
+  padding: 8px;
+
+  h3 { color: #d4af37; margin: 0 0 8px; font-size: 1rem; }
+
+  table.inner { max-width: 640px; }
+}
