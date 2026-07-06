@@ -499,6 +499,9 @@ public class ResourceService : IResourceService
                 growth = Math.Max(growth, freeSpace * 0.10m);
                 growth *= (1m + race.PopGrowthModifier);
 
+                // Zamtuz pod Smoczym Ogonem (Dracopedia §14.3): +25% przyrostu nowych poddanych
+                if (Has("Zamtuz")) growth *= 1.25m;
+
                 // Zaklęcia przyrostu (Dracopedia §4): Płodność ×1,3, Szczęście ×1,1,
                 // Pech ×0,9, Kastracja ×0,5 (zawieszone buffy/debuffy mnożą się).
                 if (HasSpell("Plodnosc")) growth *= 1.3m;

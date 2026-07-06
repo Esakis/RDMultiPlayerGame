@@ -28,6 +28,7 @@ public static class BattleCalculator
     private static bool IsDragon(string unitType) => unitType.EndsWith("_Smok");
     private static bool IsThief(string unitType) => unitType.EndsWith("_Zlodziej");
     private static bool IsHoplite(string unitType) => unitType.EndsWith("_Hoplita");
+    private static bool IsElite2(UnitDefinition def) => def.RequiredBuilding == "KoszarySpecjalne";
 
     /// <summary>Siła ataku wysłanej armii (oryginalny wzór, bez generałów).</summary>
     public static long CalculateAttackPower(
@@ -37,6 +38,11 @@ public static class BattleCalculator
     {
         // c = 1, gdy stoi Sanktuarium berserkerów (Cvičiště berserkrovství)
         decimal c = Has(attacker, "SanktuariumBerserkerow") ? 1m : 0m;
+
+        // Pałac: +1 ataku dla elity 2. stopnia; Gildia Wojowników (u Olbrzyma
+        // zastępuje Gildię Złodziei): +1 ataku E2 (Dracopedia §14.3).
+        decimal e2AtkBonus = (Has(attacker, "Palac") ? 1m : 0m)
+            + (attackerRace.Name == "Olbrzym" && Has(attacker, "GildiaZlodziei") ? 1m : 0m);
 
         decimal armyPower = 0;
         long dragons = 0;
@@ -55,7 +61,8 @@ public static class BattleCalculator
             if (IsThief(sent.Key)) continue; // złodzieje nie walczą w polu
 
             // jednostki: hoplita (1+c), elity (s+c); nowicjusze pominięci (wyszkoleni)
-            armyPower += count * (unit.Definition.AttackPower + c);
+            armyPower += count * (unit.Definition.AttackPower + c
+                + (IsElite2(unit.Definition) ? e2AtkBonus : 0m));
         }
 
         // smoki: mnożnik (1 + r/(50+r)) i +100 ataku za smoka
@@ -75,6 +82,9 @@ public static class BattleCalculator
         // k = 1, gdy stoi Klasztor Smoczych Mnichów
         decimal k = Has(defender, "KlasztorMnichow") ? 1m : 0m;
 
+        // Gildia Wojowników (u Olbrzyma zastępuje Gildię Złodziei): +2 obrony E2.
+        decimal e2DefBonus = defenderRace.Name == "Olbrzym" && Has(defender, "GildiaZlodziei") ? 2m : 0m;
+
         decimal armyPower = 0;
         long dragons = 0;
 
@@ -85,7 +95,8 @@ public static class BattleCalculator
             if (IsMachine(unit.UnitType)) continue;   // machiny nie bronią (wyjątek: Goblin w wieżach, niżej)
             if (IsThief(unit.UnitType)) continue;     // złodzieje bronią tylko przed złodziejami
 
-            armyPower += unit.Quantity * (unit.Definition.DefensePower + k);
+            armyPower += unit.Quantity * (unit.Definition.DefensePower + k
+                + (IsElite2(unit.Definition) ? e2DefBonus : 0m));
         }
 
         // Domobrana (Pospolite ruszenie): bronią ludzie w profesjach + złodzieje w domu,
@@ -262,6 +273,8 @@ public static class BattleCalculator
         double rate = !militia ? armyCasualtyRate * 0.25
             : defenseHeld ? armyCasualtyRate * 0.5
             : armyCasualtyRate;
+        // Komando (Dracopedia §14.3): oddziały szybkiego reagowania — straty cywilów −20%
+        if (Has(defender, "Komando")) rate *= 0.8;
         return (int)(defender.Population * Math.Min(rate, 0.33));
     }
 

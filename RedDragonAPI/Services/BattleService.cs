@@ -499,6 +499,10 @@ public class BattleService : IBattleService
         double randomFactor = BattleCalculator.GetRandomFactor();
         attackPower = (long)(attackPower * randomFactor);
 
+        // Nawiedzony las (Dracopedia §14.3): 5% armii inwazyjnej ucieka przed walką
+        if (HasBld(defender, "NawiedzonyLas"))
+            attackPower = (long)(attackPower * 0.95m);
+
         bool attackerWins = attackPower > defensePower;
 
         // Straty (~15% przy równowadze; modyfikatory rasowe: Krasnolud −25%, Ent −50%)
@@ -506,6 +510,11 @@ public class BattleService : IBattleService
             attackData.Units, attackPower, defensePower, attackerWins, attackerRace);
         var defenderCasualties = BattleCalculator.CalculateDefenderCasualties(
             defender.MilitaryUnits, attackPower, defensePower, attackerWins, defenderRace);
+
+        // Ambulatorium polowe (Dracopedia §14.3): mobilny lazaret — straty własne w ataku −50%
+        if (HasBld(attacker, "AmbulatoriumPolowe"))
+            foreach (var key in attackerCasualties.Keys.ToList())
+                attackerCasualties[key] /= 2;
 
         // Uzdrawianie (Dracopedia §11): ratuje lvl% poległych własnych —
         // atakujący ×2 po wygranej, obrońca ×4 po udanej obronie.
@@ -734,8 +743,10 @@ public class BattleService : IBattleService
             var victim = RandomDefenderGeneral();
             if (victim != null)
             {
-                victim.WoundedUntil = DateTime.UtcNow.AddDays(3);
-                NotifyBoth($"Bitwa {attacker.Name} ⚔ {defender.Name}: generał {victim.Name} został ranny (wraca do sił za 3 dni).");
+                // Pałac (Dracopedia §14.3): ranni generałowie wracają do sił 2× szybciej
+                bool defenderPalac = HasBld(defender, "Palac");
+                victim.WoundedUntil = DateTime.UtcNow.AddDays(defenderPalac ? 1.5 : 3);
+                NotifyBoth($"Bitwa {attacker.Name} ⚔ {defender.Name}: generał {victim.Name} został ranny (wraca do sił za {(defenderPalac ? "półtora dnia" : "3 dni")}).");
             }
         }
 

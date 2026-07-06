@@ -214,7 +214,10 @@ public class LabyrinthService : ILabyrinthService
 
         if (roll < 45)
         {
-            general.WoundedUntil = DateTime.UtcNow.AddHours(12);
+            // Pałac (Dracopedia §14.3): ranni generałowie wracają do sił 2× szybciej
+            bool hasPalac = kingdom.Buildings != null && kingdom.Buildings.Any(b =>
+                b.BuildingType == "Palac" && b.Quantity > 0 && !b.IsUnderConstruction);
+            general.WoundedUntil = DateTime.UtcNow.AddHours(hasPalac ? 6 : 12);
             return $"{general.Name} wpadł w pułapkę i wraca ranny z pustymi rękami.";
         }
         if (roll < 70 || !canDie)
