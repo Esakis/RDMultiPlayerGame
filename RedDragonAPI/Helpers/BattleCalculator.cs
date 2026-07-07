@@ -28,6 +28,7 @@ public static class BattleCalculator
     private static bool IsDragon(string unitType) => unitType.EndsWith("_Smok");
     private static bool IsThief(string unitType) => unitType.EndsWith("_Zlodziej");
     private static bool IsHoplite(string unitType) => unitType.EndsWith("_Hoplita");
+    private static bool IsElite1(UnitDefinition def) => def.RequiredBuilding == "OltarzInicjacji";
     private static bool IsElite2(UnitDefinition def) => def.RequiredBuilding == "KoszarySpecjalne";
 
     /// <summary>Siła ataku wysłanej armii (oryginalny wzór, bez generałów).</summary>
@@ -48,6 +49,13 @@ public static class BattleCalculator
         long dragons = 0;
         long machines = 0;
         decimal machineStrength = attackerRace.MachineAttack;
+
+        // Machiny z E1 (manual „armada"/MECHANIKA §8): siła +50%
+        // (Br-Oug wg cechy rasowej: z E1 siła 6 zamiast 8, czyli ×0,75).
+        bool machinesWithE1 = sentUnits.Any(s => s.Value > 0 && attacker.MilitaryUnits.Any(u =>
+            u.UnitType == s.Key && u.Definition != null && IsElite1(u.Definition) && u.Quantity > 0));
+        if (machinesWithE1)
+            machineStrength *= attackerRace.Name == "Br-Oug" ? 0.75m : 1.5m;
 
         foreach (var sent in sentUnits)
         {
@@ -122,12 +130,19 @@ public static class BattleCalculator
             armyPower += (militiaPeople + homeThieves) * (2m + k + raceBonus);
         }
 
-        // Wieże obronne: v·(10+nbr)·(1 + 4v/(v+400)); Człowiek 10, pozostali 15
+        // Wieże obronne: v·(10+nbr)·(1 + 4v/(v+400)); Człowiek 10, pozostali 15;
+        // Br-Oug: wieże słabsze o 33% (manual „vzorce" wzór 16: ×(1−⅓))
         long towers = Count(defender, "WiezeObronne");
         if (towers > 0)
         {
             decimal towerBase = defenderRace.Name == "Człowiek" ? 10m : 15m;
+            if (defenderRace.Name == "Br-Oug") towerBase *= 2m / 3m;
             armyPower += towers * towerBase * (1m + 4m * towers / (towers + 400m));
+
+            // Hoplici w wieżach (manual „armada": do 3 hoplitów/wieżę, +5 obrony każdy)
+            long hoplites = defender.MilitaryUnits
+                .Where(u => IsHoplite(u.UnitType)).Sum(u => (long)u.Quantity);
+            armyPower += Math.Min(hoplites, towers * 3) * 5m;
 
             // Goblińska inżynieria (docs/MECHANIKA.md §2.2): wieże Goblina mieszczą
             // po 10 machin, każda broni z siłą 100.
@@ -164,6 +179,11 @@ public static class BattleCalculator
         // Upojenie armii (akcja złodziejska, docs/MECHANIKA.md §10): −% obrony do przeliczenia
         if (defender.DrunkArmyPct > 0)
             total *= 1m - Math.Min(90, defender.DrunkArmyPct) / 100m;
+
+        // Goblińska inżynieria: machiny Goblina z E2 obniżyły obronę celu
+        // (kara naliczona przy wcześniejszych atakach w tym przeliczeniu)
+        if (defender.SiegeDefensePenalty > 0)
+            total = Math.Max(0, total - defender.SiegeDefensePenalty);
 
         return (long)total;
     }

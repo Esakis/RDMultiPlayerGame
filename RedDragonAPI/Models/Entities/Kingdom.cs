@@ -54,6 +54,13 @@ public class Kingdom
     public int DrunkArmyPct { get; set; } = 0;
 
     /// <summary>
+    /// Goblińska inżynieria (docs/MECHANIKA.md §2.2): machiny Goblina wysłane z E2
+    /// obniżają obronę celu o 20% swojej siły przy kolejnych atakach w tym samym
+    /// przeliczeniu; zerowane w DailyResetService po fazie wojskowej.
+    /// </summary>
+    public long SiegeDefensePenalty { get; set; } = 0;
+
+    /// <summary>
     /// Auto-rzucanie (docs/GAME_DESIGN.md, krok 24 tury): zaklęcie pozytywne rzucane
     /// automatycznie na siebie po każdym przeliczeniu (kosztuje turę i manę). Null = wyłączone.
     /// </summary>

@@ -169,6 +169,9 @@ public class DailyResetService : BackgroundService
                 // Upojenie armii mija — trzeźwieją po przeliczeniu (docs/MECHANIKA.md §10)
                 kingdom.DrunkArmyPct = 0;
 
+                // Kara oblężnicza (machiny Goblina z E2) trwa tylko przez fazę wojskową
+                kingdom.SiegeDefensePenalty = 0;
+
                 // Renowacja broni w czasie wojny (Dracopedia §14.3): 40–50 tys. broni/przeliczenie
                 if (kingdom.CoalitionId != null && warringCoalitions.Contains(kingdom.CoalitionId.Value)
                     && kingdom.Buildings.Any(b => b.BuildingType == "RenowacjaBroni"

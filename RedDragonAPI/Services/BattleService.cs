@@ -444,6 +444,56 @@ public class BattleService : IBattleService
             }
         }
 
+        // Wieże obrońcy kontra machiny (manual „armada"): każda wieża niszczy 3 machiny
+        // i blokuje 12 (wieże Br-Ouga: 2 i 8); machiny Goblina są niezniszczalne (§2.2).
+        var machineKeys = attackData.Units
+            .Where(u => u.Value > 0 && u.Key.EndsWith("_Machina"))
+            .Select(u => u.Key).ToList();
+        if (machineKeys.Count > 0)
+        {
+            long defTowers = defender.Buildings
+                .Where(b => b.BuildingType == "WiezeObronne" && !b.IsUnderConstruction)
+                .Sum(b => (long)b.Quantity);
+            if (defTowers > 0)
+            {
+                long sentMachines = machineKeys.Sum(k => (long)attackData.Units[k]);
+                int destroyPerTower = defender.Race == "Br-Oug" ? 2 : 3;
+                int blockPerTower = defender.Race == "Br-Oug" ? 8 : 12;
+                long destroyed = attacker.Race == "Goblin"
+                    ? 0 : Math.Min(sentMachines, defTowers * destroyPerTower);
+                long blocked = Math.Min(sentMachines, Math.Max(defTowers * blockPerTower, destroyed));
+
+                long toDestroy = destroyed;
+                foreach (var key in machineKeys)
+                {
+                    if (toDestroy <= 0) break;
+                    var unit = attacker.MilitaryUnits.FirstOrDefault(m => m.UnitType == key);
+                    if (unit == null) continue;
+                    int hit = (int)Math.Min(unit.Quantity, toDestroy);
+                    unit.Quantity -= hit;
+                    toDestroy -= hit;
+                }
+
+                // zablokowane (w tym zniszczone) machiny nie uczestniczą w bitwie
+                long toExclude = blocked;
+                foreach (var key in machineKeys)
+                {
+                    if (toExclude <= 0) break;
+                    int cut = (int)Math.Min(attackData.Units[key], toExclude);
+                    attackData.Units[key] -= cut;
+                    toExclude -= cut;
+                }
+
+                if (destroyed > 0)
+                    _context.KingdomEvents.Add(new KingdomEvent
+                    {
+                        KingdomId = attacker.Id,
+                        Category = "Battle",
+                        Message = $"Wieże obronne {defender.Name} zniszczyły {destroyed} machin i zablokowały {blocked}."
+                    });
+            }
+        }
+
         // Siły wg oryginalnych wzorów (docs/MECHANIKA.md §8)
         long attackPower = BattleCalculator.CalculateAttackPower(attacker, attackData.Units, attackerRace);
         long defensePower = BattleCalculator.CalculateDefensePower(defender, defenderRace);
@@ -502,6 +552,10 @@ public class BattleService : IBattleService
         // Nawiedzony las (Dracopedia §14.3): 5% armii inwazyjnej ucieka przed walką
         if (HasBld(defender, "NawiedzonyLas"))
             attackPower = (long)(attackPower * 0.95m);
+
+        // Straszny lasek Elfa (cecha rasowa, MECHANIKA §2.2): odstrasza 10% armii inwazyjnej
+        if (defender.Race == "Elf")
+            attackPower = (long)(attackPower * 0.90m);
 
         bool attackerWins = attackPower > defensePower;
 
@@ -655,6 +709,40 @@ public class BattleService : IBattleService
                 var special = defender.Buildings.FirstOrDefault(x => x.Definition != null && x.Definition.IsSpecial && x.Quantity > 0 && !x.IsUnderConstruction);
                 if (special != null) special.Quantity = 0;
             }
+        }
+
+        // Machiny wojenne (manual „armada", MECHANIKA §2.2): wysłane z hoplitami burzą
+        // infrastrukturę — pełny efekt (20% infrastruktury i 5 budynków specjalnych)
+        // przy 2,5 machiny na akr obrońcy (Br-Oug burzy o 40% słabiej); wysłane z E1
+        // tylko zdobywają ziemię. Machiny Goblina z E2 obniżają obronę celu o 20%
+        // swojej siły przy kolejnych atakach w tym przeliczeniu.
+        long activeMachines = attackData.Units
+            .Where(u => u.Value > 0 && u.Key.EndsWith("_Machina")).Sum(u => (long)u.Value);
+        if (activeMachines > 0)
+        {
+            bool UnitKindSent(Func<Models.Entities.UnitDefinition, bool> pred) =>
+                attackData.Units.Any(u => u.Value > 0 && attacker.MilitaryUnits.Any(m =>
+                    m.UnitType == u.Key && m.Definition != null && pred(m.Definition)));
+            bool withHoplites = attackData.Units.Any(u => u.Value > 0 && u.Key.EndsWith("_Hoplita"));
+            bool withE1 = UnitKindSent(d => d.RequiredBuilding == "OltarzInicjacji");
+            bool withE2 = UnitKindSent(d => d.RequiredBuilding == "KoszarySpecjalne");
+
+            if (attackerWins && withHoplites && !withE1)
+            {
+                decimal scale = Math.Min(1m, activeMachines / (2.5m * Math.Max(1, defender.Land)));
+                if (attacker.Race == "Br-Oug") scale *= 0.6m;
+                foreach (var b in defender.Buildings.Where(x => x.Definition != null
+                    && !x.Definition.IsSpecial && x.Quantity > 0 && !x.IsUnderConstruction))
+                    b.Quantity = Math.Max(0, b.Quantity - (int)(b.Quantity * 0.20m * scale));
+                foreach (var special in defender.Buildings
+                    .Where(x => x.Definition != null && x.Definition.IsSpecial
+                        && x.Quantity > 0 && !x.IsUnderConstruction)
+                    .OrderBy(_ => Random.Shared.Next()).Take((int)(5m * scale)))
+                    special.Quantity = 0;
+            }
+
+            if (attacker.Race == "Goblin" && withE2)
+                defender.SiegeDefensePenalty += (long)(activeMachines * attackerRace.MachineAttack * 0.20m);
         }
 
         // Rabunek (atakujący, Dracopedia §11): po wygranej niszczy 2·lvl% zapasów obrońcy

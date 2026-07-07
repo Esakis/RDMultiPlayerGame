@@ -237,6 +237,8 @@ public class LabyrinthService : ILabyrinthService
     private async Task<string> ApplyTreasureAsync(Kingdom kingdom, General general, string type, int lvl, int fortune, Random rng)
     {
         decimal luckMult = 1m + fortune / 100m;
+        // Elf (cecha rasowa, MECHANIKA §2.2): 1,5× łupy z labiryntu
+        if (kingdom.Race == "Elf") luckMult *= 1.5m;
         double rand = 0.8 + rng.NextDouble() * 0.4; // 0,8–1,2
 
         switch (type)
