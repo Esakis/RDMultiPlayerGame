@@ -234,6 +234,14 @@
     "withdraw": "Withdraw",
     "noMine": "You have no posted orders.",
     "taxNote": "Market tax: 15% (Accounting research lowers it to 12/8/5%) — paid by the gold recipient.",
+    "exchange": {
+      "title": "State bazaar",
+      "hint": "Instant exchange at fixed rates — gold for resources and resources for gold. Requires no Trade Routes Crossing and no tax; rates are worse than the player market.",
+      "buyPrice": "Buy (you pay)",
+      "sellPrice": "Sell (you get)",
+      "buy": "Buy",
+      "sell": "Sell"
+    },
     "history": "Transaction history",
     "tax": "Tax",
     "counterparty": "Counterparty",

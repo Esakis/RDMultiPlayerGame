@@ -32,6 +32,12 @@ export interface CreateMarketOrder {
   pricePerUnit: number;
 }
 
+export interface ExchangeRate {
+  resource: string;
+  buyPrice: number;   // cena kupna 1 szt. (płacisz złotem)
+  sellPrice: number;  // cena skupu 1 szt. (dostajesz złoto)
+}
+
 export interface MarketTransaction {
   id: number;
   resource: string;
@@ -68,5 +74,13 @@ export class MarketService {
 
   getHistory(): Observable<MarketTransaction[]> {
     return this.http.get<MarketTransaction[]>(`${this.apiUrl}/history`);
+  }
+
+  getExchangeRates(): Observable<ExchangeRate[]> {
+    return this.http.get<ExchangeRate[]>(`${this.apiUrl}/exchange`);
+  }
+
+  exchange(resource: string, direction: 'Buy' | 'Sell', quantity: number): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/exchange`, { resource, direction, quantity });
   }
 }

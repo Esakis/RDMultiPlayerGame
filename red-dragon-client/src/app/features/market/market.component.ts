@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { MarketService, MarketOrder, CreateMarketOrder, MarketTransaction } from '../../core/services/market.service';
+import { MarketService, MarketOrder, CreateMarketOrder, MarketTransaction, ExchangeRate } from '../../core/services/market.service';
 import { PactService, PactStatus, PactMember } from '../../core/services/pact.service';
 
 @Component({
@@ -28,6 +28,10 @@ export class MarketComponent implements OnInit {
   // Formularz nowej oferty
   form: CreateMarketOrder = { orderType: 'Sell', resource: 'Food', quantity: 0, pricePerUnit: 0 };
 
+  // === Targ państwowy (stałe kursy) ===
+  exchangeRates: ExchangeRate[] = [];
+  exchangeQty: { [resource: string]: number } = {};
+
   // Ilość do zrealizowania per oferta
   fillQty: { [orderId: number]: number } = {};
 
@@ -48,6 +52,25 @@ export class MarketComponent implements OnInit {
   ngOnInit(): void {
     this.load();
     this.loadPacts();
+    this.market.getExchangeRates().subscribe({
+      next: r => this.exchangeRates = r,
+      error: () => this.exchangeRates = []
+    });
+  }
+
+  /** Wymiana na targu państwowym po stałym kursie. */
+  exchange(resource: string, direction: 'Buy' | 'Sell'): void {
+    this.message = '';
+    this.error = '';
+    const qty = this.exchangeQty[resource] || 0;
+    if (qty <= 0) {
+      this.error = this.translate.instant('mkt.errPositive');
+      return;
+    }
+    this.market.exchange(resource, direction, qty).subscribe({
+      next: r => { this.message = r.message ?? ''; this.exchangeQty[resource] = 0; this.load(); },
+      error: e => { this.error = e.error || this.translate.instant('mkt.errFill'); }
+    });
   }
 
   load(): void {

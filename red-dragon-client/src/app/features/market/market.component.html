@@ -7,6 +7,35 @@
 
   <p class="hint no-access" *ngIf="!loading && !hasAccess">{{ noAccessReason }}</p>
 
+  <!-- Targ państwowy — stałe kursy, dostępny bez budynku rynkowego -->
+  <div class="order-form exchange" *ngIf="!loading && exchangeRates.length > 0">
+    <h3>{{ 'mkt.exchange.title' | translate }}</h3>
+    <p class="hint">{{ 'mkt.exchange.hint' | translate }}</p>
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th>{{ 'mkt.resource' | translate }}</th>
+          <th class="num">{{ 'mkt.exchange.buyPrice' | translate }}</th>
+          <th class="num">{{ 'mkt.exchange.sellPrice' | translate }}</th>
+          <th>{{ 'mkt.quantity' | translate }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of exchangeRates">
+          <td class="name">{{ resourceLabel(r.resource) }}</td>
+          <td class="num">{{ r.buyPrice | number }} {{ 'mkt.goldShort' | translate }}</td>
+          <td class="num">{{ r.sellPrice | number }} {{ 'mkt.goldShort' | translate }}</td>
+          <td><input type="number" min="1" [(ngModel)]="exchangeQty[r.resource]" placeholder="0"></td>
+          <td>
+            <button class="btn-cast" (click)="exchange(r.resource, 'Buy')">{{ 'mkt.exchange.buy' | translate }}</button>
+            <button class="btn-cast" (click)="exchange(r.resource, 'Sell')">{{ 'mkt.exchange.sell' | translate }}</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <ng-container *ngIf="!loading && hasAccess">
     <!-- Wystawienie nowej oferty -->
     <div class="order-form">

@@ -37,6 +37,24 @@ public class FillMarketOrderDto
     public long Quantity { get; set; }
 }
 
+/// <summary>Kurs targu państwowego (stałe ceny wymiany złota za zasób).</summary>
+public class ExchangeRateDto
+{
+    public string Resource { get; set; } = string.Empty;
+    /// <summary>Cena kupna 1 jednostki (gracz płaci złotem).</summary>
+    public long BuyPrice { get; set; }
+    /// <summary>Cena skupu 1 jednostki (gracz otrzymuje złoto).</summary>
+    public long SellPrice { get; set; }
+}
+
+public class ExchangeDto
+{
+    public string Resource { get; set; } = string.Empty;
+    /// <summary>"Buy" = kup zasób za złoto, "Sell" = sprzedaj zasób za złoto.</summary>
+    public string Direction { get; set; } = string.Empty;
+    public long Quantity { get; set; }
+}
+
 public class MarketTransactionDto
 {
     public int Id { get; set; }

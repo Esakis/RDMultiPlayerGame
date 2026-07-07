@@ -234,6 +234,14 @@
     "withdraw": "Wycofaj",
     "noMine": "Nie masz wystawionych ofert.",
     "taxNote": "Podatek rynkowy: 15% (badania Rachunkowość obniżają do 12/8/5%) — płaci go odbiorca złota.",
+    "exchange": {
+      "title": "Targ państwowy",
+      "hint": "Natychmiastowa wymiana po stałych kursach — złoto za zasoby i zasoby za złoto. Nie wymaga Skrzyżowania szlaków handlowych ani podatku; kursy są gorsze niż na rynku graczy.",
+      "buyPrice": "Kupno (płacisz)",
+      "sellPrice": "Skup (dostajesz)",
+      "buy": "Kup",
+      "sell": "Sprzedaj"
+    },
     "history": "Historia transakcji",
     "tax": "Podatek",
     "counterparty": "Kontrahent",

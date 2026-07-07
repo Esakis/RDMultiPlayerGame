@@ -12,6 +12,8 @@ public interface IMarketService
     Task<ServiceResult> FillOrderAsync(int userId, FillMarketOrderDto dto);
     Task<ServiceResult> CancelOrderAsync(int userId, int orderId);
     Task<List<MarketTransactionDto>> GetHistoryAsync(int userId);
+    List<ExchangeRateDto> GetExchangeRates();
+    Task<ServiceResult> ExchangeAsync(int userId, ExchangeDto dto);
 }
 
 /// <summary>
@@ -31,6 +33,22 @@ public class MarketService : IMarketService
     public static readonly string[] TradableResources = { "Food", "Stone", "Weapons", "Mana" };
 
     public static readonly string[] OrderTypes = { "Sell", "Buy" };
+
+    /// <summary>
+    /// Targ państwowy — stałe kursy wymiany złota za zasoby (Buy = gracz kupuje,
+    /// Sell = gracz sprzedaje/skup). Spread jest celowy: rynek graczy zawsze może
+    /// zaoferować lepszą cenę, targ to gwarantowana wymiana bez budynku rynkowego.
+    /// Wartości względem produkcji profesji (alchemik 10 zł, chłop 5 jedzenia,
+    /// kamieniarz 5 kamienia, płatnerz 3 bronie, druid 1 mana na turę).
+    /// </summary>
+    public static readonly IReadOnlyDictionary<string, (long Buy, long Sell)> ExchangeRates =
+        new Dictionary<string, (long, long)>
+        {
+            ["Food"] = (4, 1),
+            ["Stone"] = (4, 1),
+            ["Weapons"] = (8, 2),
+            ["Mana"] = (20, 5)
+        };
 
     private readonly ApplicationDbContext _context;
 
@@ -252,6 +270,52 @@ public class MarketService : IMarketService
         order.Status = "Cancelled";
         await _context.SaveChangesAsync();
         return ServiceResult.Ok("Ofertę wycofano, depozyt zwrócono.");
+    }
+
+    public List<ExchangeRateDto> GetExchangeRates() =>
+        ExchangeRates.Select(r => new ExchangeRateDto
+        {
+            Resource = r.Key,
+            BuyPrice = r.Value.Buy,
+            SellPrice = r.Value.Sell
+        }).ToList();
+
+    /// <summary>
+    /// Targ państwowy: natychmiastowa wymiana po stałym kursie — złoto za zasób
+    /// (Buy) lub zasób za złoto (Sell). Nie wymaga Skrzyżowania szlaków handlowych
+    /// i nie podlega podatkowi rynkowemu (spread kursu jest marżą targu).
+    /// </summary>
+    public async Task<ServiceResult> ExchangeAsync(int userId, ExchangeDto dto)
+    {
+        var kingdom = await GetKingdomAsync(userId);
+        if (kingdom == null)
+            return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (!ExchangeRates.TryGetValue(dto.Resource, out var rate))
+            return ServiceResult.Fail("Tym zasobem nie handluje targ.");
+        if (dto.Direction is not ("Buy" or "Sell"))
+            return ServiceResult.Fail("Nieznany kierunek wymiany.");
+        if (dto.Quantity <= 0)
+            return ServiceResult.Fail("Ilość musi być dodatnia.");
+
+        if (dto.Direction == "Buy")
+        {
+            long cost = dto.Quantity * rate.Buy;
+            if (kingdom.Gold < cost)
+                return ServiceResult.Fail($"Za mało złota (potrzeba {cost}, masz {kingdom.Gold}).");
+            kingdom.Gold -= cost;
+            AddResource(kingdom, dto.Resource, dto.Quantity);
+            await _context.SaveChangesAsync();
+            return ServiceResult.Ok($"Kupiono na targu {dto.Quantity} {ResourceName(dto.Resource)} za {cost} złota.");
+        }
+
+        long stock = GetResource(kingdom, dto.Resource);
+        if (stock < dto.Quantity)
+            return ServiceResult.Fail($"Za mało zasobu (masz {stock}).");
+        long payout = dto.Quantity * rate.Sell;
+        AddResource(kingdom, dto.Resource, -dto.Quantity);
+        kingdom.Gold += payout;
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok($"Sprzedano na targu {dto.Quantity} {ResourceName(dto.Resource)} za {payout} złota.");
     }
 
     /// <summary>Stawka podatku rynkowego wg poziomu badań Rachunkowość (Calculating/Reckoning/Accountancy).</summary>

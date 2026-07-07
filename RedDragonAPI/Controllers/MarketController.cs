@@ -52,4 +52,19 @@ public class MarketController : ControllerBase
     {
         return Ok(await _marketService.GetHistoryAsync(UserId));
     }
+
+    /// <summary>Targ państwowy — stałe kursy wymiany złota za zasoby.</summary>
+    [HttpGet("exchange")]
+    public IActionResult GetExchangeRates()
+    {
+        return Ok(_marketService.GetExchangeRates());
+    }
+
+    /// <summary>Wymiana na targu po stałym kursie (Buy = kup zasób, Sell = sprzedaj).</summary>
+    [HttpPost("exchange")]
+    public async Task<IActionResult> Exchange([FromBody] ExchangeDto dto)
+    {
+        var result = await _marketService.ExchangeAsync(UserId, dto);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
 }
