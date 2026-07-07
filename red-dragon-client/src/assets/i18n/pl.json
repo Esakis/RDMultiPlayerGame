@@ -385,6 +385,14 @@
       "cancel": "Odwołaj",
       "cancelled": "Atak odwołany."
     },
+    "commando": {
+      "title": "Komando łuczników",
+      "hint": "Elfy mogą wysłać komando łuczników do księstwa z aktywnym paktem wojskowym: wspierany zyskuje +20% obrony, a Ty tracisz 20% własnej. Komando wraca po przeliczeniu; jedno księstwo może przyjąć tylko jedno komando (Elfy nie mogą przyjmować).",
+      "active": "Komando łuczników wspiera księstwo {{name}}.",
+      "cancel": "Odwołaj komando",
+      "send": "Wyślij komando",
+      "noTargets": "Brak celów — komando można wysłać tylko do sojusznika (nie-Elfa) z aktywnym paktem wojskowym."
+    },
     "fromKingdom": "Atakuj z księstwa",
     "fromOwn": "moje księstwo",
     "fromTurns": "Dostępne tury tego księstwa: {{n}}",
@@ -476,7 +484,11 @@
     "attackMoved": "Ataki planujesz teraz w panelu Walka — atak musi poprowadzić generał, a wykonuje się przy przeliczeniu o 5:00.",
     "attackTarget": "Cel ataku",
     "chooseTarget": "-- Wybierz cel --",
-    "queueAttack": "Zakolejkuj Atak"
+    "queueAttack": "Zakolejkuj Atak",
+    "rearmTitle": "Dozbrojenie",
+    "rearmInfo": "Krasnoludy mogą dozbroić elity: maksymalnie 2 punkty +1 do ataku lub obrony E1/E2 za broń (1. punkt: ziemia×50, 2. punkt: ziemia×100 broni). Bonusy znikają po przeliczeniu.",
+    "rearmCurrent": "Obecne dozbrojenie",
+    "rearmNextCost": "następny punkt kosztuje {{n}} broni"
   },
   "eco": {
     "manageTitle": "Zarządzanie Zawodami",
@@ -506,7 +518,13 @@
     },
     "maxWorkers": "Limit",
     "novicePct": "% nowicjuszy",
-    "unemployed": "Bezrobotni"
+    "unemployed": "Bezrobotni",
+    "hodokvas": {
+      "hint": "Hodokvas — uczta Hobbitów (wymaga popularności 80+): natychmiast +20 popularności (nawet ponad 100), przyrost ludności +50%, ale jedzenie 5/osobę i szkolenie nowicjuszy wolniejsze o 40%. Zakończyć można najwcześniej po 4 turach.",
+      "start": "Rozpocznij hodokvas",
+      "running": "Hodokvas trwa (odegrane tury: {{n}}/4 do możliwego zakończenia).",
+      "stop": "Zakończ hodokvas"
+    }
   },
   "res2": {
     "lead": "Naukowcy produkują <strong>Punkty Nauki (SP)</strong>, które inwestujesz w wybraną dziedzinę. Najedź na ikonę, by zobaczyć efekt i koszt; kliknij dostępną dziedzinę, by rozpocząć badanie. Zmiana niedokończonej dziedziny kosztuje 1/3 zainwestowanych SP.",

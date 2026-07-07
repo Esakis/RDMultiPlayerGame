@@ -355,11 +355,13 @@ public class ResourceService : IResourceService
 
         // === 4. Jedzenie ===
         // ludność je wg rasy (Olbrzym 2); armia je 1 (Nekromant — armia nieumarłych nie je)
+        // Hodokvas Hobbita: w czasie uczty ludność je 5 jednostek na osobę
         bool armyEats = kingdom.Race != "Nekromant";
         int totalSoldiers = militaryUnits
             .Where(u => !u.UnitType.EndsWith("_Smok"))
             .Sum(u => u.Quantity);
-        long foodNeeded = (long)(kingdom.Population * race.FoodPerPop)
+        decimal foodPerPop = kingdom.HodokvasActive ? 5m : race.FoodPerPop;
+        long foodNeeded = (long)(kingdom.Population * foodPerPop)
                           + (armyEats ? totalSoldiers : 0);
         kingdom.Food -= foodNeeded;
 
@@ -411,39 +413,56 @@ public class ResourceService : IResourceService
         kingdom.Budulec = 0;
 
         // === 6. Popularność (oryginalny algorytm z manuala, kolejno a→f; bazowo cel = 2 × płace) ===
-        int popularity = kingdom.Popularity;
-
-        // a) +1 za każdy stojący budynek specjalny (bez limitu — zgodnie z manualem)
-        int specialsStanding = kingdom.Buildings
-            .Count(b => b.Definition != null && b.Definition.IsSpecial && b.Quantity > 0 && !b.IsUnderConstruction);
-        popularity += specialsStanding;
-
-        // b) Dobry humor: +1 za każdy aktywny czar; c) Zły humor: −1 za każdy aktywny czar
-        popularity += kingdom.ActiveSpells.Count(s => s.Spell != null && s.Spell.EffectType == "PopularityBuff");
-        popularity -= kingdom.ActiveSpells.Count(s => s.Spell != null && s.Spell.EffectType == "PopularityDebuff");
-
-        // d) niedobór jedzenia: −1…−15 wg skali (policzone w sekcji 4)
-        popularity -= foodShortagePenalty;
-
-        // e) zbliżanie do celu: ±(1 + |cel − pop|/10).
-        //    Cel to 2× płace; Zajazd u Czerwonego Smoka obniża próg — płaca 42 daje 100%.
-        int target = Has("ZajazdCzerwonego")
-            ? Math.Min(100, (int)Math.Round(kingdom.Wages * 100m / 42m))
-            : Math.Min(100, kingdom.Wages * 2);
-        if (popularity < target)
-            popularity += 1 + (target - popularity) / 10;
-        else if (popularity > target)
-            popularity -= 1 + (popularity - target) / 10;
-
-        // f) −15, jeśli brakło złota na pensje
         bool wagesUnpaid = kingdom.Gold < 0;
-        if (wagesUnpaid)
-        {
-            popularity -= 15;
-            kingdom.Gold = 0;
-        }
 
-        kingdom.Popularity = Math.Clamp(popularity, 0, 100);
+        // Hodokvas Hobbita: popularność w czasie uczty nie rośnie (może przekraczać 100),
+        // spada tylko z kar za brak jedzenia/złota.
+        if (kingdom.HodokvasActive)
+        {
+            int hodokvasPop = kingdom.Popularity - foodShortagePenalty;
+            if (wagesUnpaid)
+            {
+                hodokvasPop -= 15;
+                kingdom.Gold = 0;
+            }
+            kingdom.Popularity = Math.Max(0, hodokvasPop);
+            kingdom.HodokvasTurnsPlayed++;
+        }
+        else
+        {
+            int popularity = kingdom.Popularity;
+
+            // a) +1 za każdy stojący budynek specjalny (bez limitu — zgodnie z manualem)
+            int specialsStanding = kingdom.Buildings
+                .Count(b => b.Definition != null && b.Definition.IsSpecial && b.Quantity > 0 && !b.IsUnderConstruction);
+            popularity += specialsStanding;
+
+            // b) Dobry humor: +1 za każdy aktywny czar; c) Zły humor: −1 za każdy aktywny czar
+            popularity += kingdom.ActiveSpells.Count(s => s.Spell != null && s.Spell.EffectType == "PopularityBuff");
+            popularity -= kingdom.ActiveSpells.Count(s => s.Spell != null && s.Spell.EffectType == "PopularityDebuff");
+
+            // d) niedobór jedzenia: −1…−15 wg skali (policzone w sekcji 4)
+            popularity -= foodShortagePenalty;
+
+            // e) zbliżanie do celu: ±(1 + |cel − pop|/10).
+            //    Cel to 2× płace; Zajazd u Czerwonego Smoka obniża próg — płaca 42 daje 100%.
+            int target = Has("ZajazdCzerwonego")
+                ? Math.Min(100, (int)Math.Round(kingdom.Wages * 100m / 42m))
+                : Math.Min(100, kingdom.Wages * 2);
+            if (popularity < target)
+                popularity += 1 + (target - popularity) / 10;
+            else if (popularity > target)
+                popularity -= 1 + (popularity - target) / 10;
+
+            // f) −15, jeśli brakło złota na pensje
+            if (wagesUnpaid)
+            {
+                popularity -= 15;
+                kingdom.Gold = 0;
+            }
+
+            kingdom.Popularity = Math.Clamp(popularity, 0, 100);
+        }
 
         // === Dezercja: niezapłacony żołd lub niska popularność = ucieczka armii ===
         // (Nekromant — armia nieumarłych nie dezerteruje; smoki zostają)
@@ -502,6 +521,9 @@ public class ResourceService : IResourceService
                 // Zamtuz pod Smoczym Ogonem (Dracopedia §14.3): +25% przyrostu nowych poddanych
                 if (Has("Zamtuz")) growth *= 1.25m;
 
+                // Hodokvas Hobbita: +50% przyrostu w czasie uczty
+                if (kingdom.HodokvasActive) growth *= 1.5m;
+
                 // Zaklęcia przyrostu (Dracopedia §4): Płodność ×1,3, Szczęście ×1,1,
                 // Pech ×0,9, Kastracja ×0,5 (zawieszone buffy/debuffy mnożą się).
                 if (HasSpell("Plodnosc")) growth *= 1.3m;
@@ -531,6 +553,8 @@ public class ResourceService : IResourceService
         decimal trainedDenom = 3.5m - 250m * s / (kingdom.Land + 100m * s + 99m);
         // Generał Profesor: +lvl punktów procentowych szkolenia na turę (docs/MECHANIKA.md §11)
         decimal trainedPct = Math.Clamp(100m / trainedDenom / 100m + professorGeneralLvl / 100m, 0.05m, 0.95m);
+        // Hodokvas Hobbita: szkolenie spada o 40% (względem aktualnej wartości)
+        if (kingdom.HodokvasActive) trainedPct *= 0.6m;
         foreach (var prof in kingdom.Professions.Where(p => p.NoviceCount > 0))
         {
             int trained = Math.Max(1, (int)(prof.NoviceCount * trainedPct));

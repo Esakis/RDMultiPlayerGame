@@ -42,8 +42,11 @@ public static class BattleCalculator
 
         // Pałac: +1 ataku dla elity 2. stopnia; Gildia Wojowników (u Olbrzyma
         // zastępuje Gildię Złodziei): +1 ataku E2 (Dracopedia §14.3).
+        // Dozbrojenie Krasnoluda: punkty +1 ataku E1/E2 kupione za broń (reset po przeliczeniu).
+        decimal e1AtkBonus = attacker.RearmE1Attack;
         decimal e2AtkBonus = (Has(attacker, "Palac") ? 1m : 0m)
-            + (attackerRace.Name == "Olbrzym" && Has(attacker, "GildiaZlodziei") ? 1m : 0m);
+            + (attackerRace.Name == "Olbrzym" && Has(attacker, "GildiaZlodziei") ? 1m : 0m)
+            + attacker.RearmE2Attack;
 
         decimal armyPower = 0;
         long dragons = 0;
@@ -70,6 +73,7 @@ public static class BattleCalculator
 
             // jednostki: hoplita (1+c), elity (s+c); nowicjusze pominięci (wyszkoleni)
             armyPower += count * (unit.Definition.AttackPower + c
+                + (IsElite1(unit.Definition) ? e1AtkBonus : 0m)
                 + (IsElite2(unit.Definition) ? e2AtkBonus : 0m));
         }
 
@@ -91,7 +95,10 @@ public static class BattleCalculator
         decimal k = Has(defender, "KlasztorMnichow") ? 1m : 0m;
 
         // Gildia Wojowników (u Olbrzyma zastępuje Gildię Złodziei): +2 obrony E2.
-        decimal e2DefBonus = defenderRace.Name == "Olbrzym" && Has(defender, "GildiaZlodziei") ? 2m : 0m;
+        // Dozbrojenie Krasnoluda: punkty +1 obrony E1/E2 kupione za broń.
+        decimal e1DefBonus = defender.RearmE1Defense;
+        decimal e2DefBonus = (defenderRace.Name == "Olbrzym" && Has(defender, "GildiaZlodziei") ? 2m : 0m)
+            + defender.RearmE2Defense;
 
         decimal armyPower = 0;
         long dragons = 0;
@@ -104,6 +111,7 @@ public static class BattleCalculator
             if (IsThief(unit.UnitType)) continue;     // złodzieje bronią tylko przed złodziejami
 
             armyPower += unit.Quantity * (unit.Definition.DefensePower + k
+                + (IsElite1(unit.Definition) ? e1DefBonus : 0m)
                 + (IsElite2(unit.Definition) ? e2DefBonus : 0m));
         }
 

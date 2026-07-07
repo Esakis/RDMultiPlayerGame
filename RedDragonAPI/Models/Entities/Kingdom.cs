@@ -60,6 +60,24 @@ public class Kingdom
     /// </summary>
     public long SiegeDefensePenalty { get; set; } = 0;
 
+    // Dozbrojenie Krasnoluda (blog 31. wieku): do 2 punktów +1 atak/obrona dla E1/E2
+    // za broń (1. punkt = ziemia×50, 2. = ziemia×100); reset po przeliczeniu.
+    public int RearmE1Attack { get; set; } = 0;
+    public int RearmE1Defense { get; set; } = 0;
+    public int RearmE2Attack { get; set; } = 0;
+    public int RearmE2Defense { get; set; } = 0;
+
+    /// <summary>
+    /// Komando łuczników Elfa (blog 31. wieku): księstwo z paktem wojskowym wspierane
+    /// łucznikami (+20% jego obrony, −20% obrony Elfa); reset po przeliczeniu.
+    /// </summary>
+    public int? ArcherCommandoTargetId { get; set; }
+
+    // Hodokvas Hobbita (blog 31. wieku): uczta od popularności ≥80 (+20 od razu,
+    // jedzenie 5/os., szkolenie ×0,6, przyrost ×1,5); koniec ręczny po ≥4 turach.
+    public bool HodokvasActive { get; set; } = false;
+    public int HodokvasTurnsPlayed { get; set; } = 0;
+
     /// <summary>
     /// Auto-rzucanie (docs/GAME_DESIGN.md, krok 24 tury): zaklęcie pozytywne rzucane
     /// automatycznie na siebie po każdym przeliczeniu (kosztuje turę i manę). Null = wyłączone.

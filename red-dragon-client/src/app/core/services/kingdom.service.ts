@@ -68,4 +68,16 @@ export class KingdomService {
   changeRace(race: string): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/change-race`, { race });
   }
+
+  rearm(tier: string, stat: string): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/rearm`, { tier, stat });
+  }
+
+  setArcherCommando(targetKingdomId: number | null): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/archer-commando`, { targetKingdomId });
+  }
+
+  setHodokvas(active: boolean): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/hodokvas`, { active });
+  }
 }

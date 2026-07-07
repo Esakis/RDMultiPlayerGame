@@ -73,6 +73,27 @@
       </div>
     </div>
 
+    <!-- Dozbrojenie (mechanika rasowa Krasnoluda) -->
+    <div class="card" *ngIf="kingdom?.race === 'Krasnolud'">
+      <h3>{{ 'mil.rearmTitle' | translate }}</h3>
+      <p class="info">{{ 'mil.rearmInfo' | translate }}</p>
+      <p>
+        {{ 'mil.rearmCurrent' | translate }}:
+        E1 +{{ kingdom?.rearmE1Attack }}/+{{ kingdom?.rearmE1Defense }},
+        E2 +{{ kingdom?.rearmE2Attack }}/+{{ kingdom?.rearmE2Defense }}
+        ({{ rearmPointsUsed }}/2)
+        <span *ngIf="(kingdom?.rearmNextCost || 0) > 0">
+          — {{ 'mil.rearmNextCost' | translate:{ n: (kingdom?.rearmNextCost | number) } }}
+        </span>
+      </p>
+      <div class="action-buttons" *ngIf="rearmPointsUsed < 2">
+        <button (click)="rearm('E1', 'Attack')">E1 +1 {{ 'mil.attack' | translate }}</button>
+        <button (click)="rearm('E1', 'Defense')">E1 +1 {{ 'mil.defense' | translate }}</button>
+        <button (click)="rearm('E2', 'Attack')">E2 +1 {{ 'mil.attack' | translate }}</button>
+        <button (click)="rearm('E2', 'Defense')">E2 +1 {{ 'mil.defense' | translate }}</button>
+      </div>
+    </div>
+
     <!-- Atak — planowanie przeniesione do panelu Walka (wymaga generała prowadzącego) -->
     <div class="card">
       <h3>{{ 'mil.attackPlanTitle' | translate }}</h3>

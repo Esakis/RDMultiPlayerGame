@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MilitaryService } from '../../core/services/military.service';
-import { UnitDefinition, MilitaryUnit, TrainingInfo } from '../../core/models/kingdom.model';
+import { KingdomService } from '../../core/services/kingdom.service';
+import { Kingdom, UnitDefinition, MilitaryUnit, TrainingInfo } from '../../core/models/kingdom.model';
 
 @Component({
   selector: 'app-military',
@@ -23,7 +24,9 @@ export class MilitaryComponent implements OnInit {
   // Żołnierz, Elita 1, Elita 2 / Złodziej, Machina, Smok
   private readonly slotOrder = ['hoplita', 'elita1', 'elita2', 'zlodziej', 'machina', 'smok'];
 
-  constructor(private militaryService: MilitaryService) {}
+  kingdom: Kingdom | null = null;
+
+  constructor(private militaryService: MilitaryService, private kingdomService: KingdomService) {}
 
   ngOnInit(): void { this.load(); }
 
@@ -33,6 +36,22 @@ export class MilitaryComponent implements OnInit {
     });
     this.militaryService.getMyArmy().subscribe(a => { this.myArmy = a; this.loading = false; });
     this.militaryService.getTraining().subscribe(t => this.training = t);
+    this.kingdomService.getMyKingdom().subscribe(k => this.kingdom = k);
+  }
+
+  // ── Dozbrojenie Krasnoluda (blog 31. wieku): max 2 punkty +1 atak/obrona E1/E2 ──
+
+  get rearmPointsUsed(): number {
+    const k = this.kingdom;
+    if (!k) return 0;
+    return k.rearmE1Attack + k.rearmE1Defense + k.rearmE2Attack + k.rearmE2Defense;
+  }
+
+  rearm(tier: string, stat: string): void {
+    this.kingdomService.rearm(tier, stat).subscribe({
+      next: (res) => { this.message = res.message || 'OK'; this.load(); this.clearMsg(); },
+      error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
   }
 
   // Pojedyncza rekrutacja zastąpiona zbiorczym przyciskiem „Rekrutuj" (recruitAll).

@@ -121,6 +121,36 @@ public class KingdomController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
 
+    public record RearmRequest(string Tier, string Stat);
+
+    /// <summary>Dozbrojenie Krasnoluda: +1 atak/obrona E1/E2 za broń (max 2 punkty).</summary>
+    [HttpPost("rearm")]
+    public async Task<ActionResult> Rearm([FromBody] RearmRequest req)
+    {
+        var result = await _kingdomService.RearmAsync(GetUserId(), req.Tier, req.Stat);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
+    public record ArcherCommandoRequest(int? TargetKingdomId);
+
+    /// <summary>Komando łuczników Elfa: wsparcie sojusznika (null = odwołanie).</summary>
+    [HttpPost("archer-commando")]
+    public async Task<ActionResult> SetArcherCommando([FromBody] ArcherCommandoRequest req)
+    {
+        var result = await _kingdomService.SetArcherCommandoAsync(GetUserId(), req.TargetKingdomId);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
+    public record HodokvasRequest(bool Active);
+
+    /// <summary>Hodokvas Hobbita: rozpoczęcie/zakończenie uczty.</summary>
+    [HttpPost("hodokvas")]
+    public async Task<ActionResult> SetHodokvas([FromBody] HodokvasRequest req)
+    {
+        var result = await _kingdomService.SetHodokvasAsync(GetUserId(), req.Active);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
+
     [HttpPost("assign-workers")]
     public async Task<ActionResult> AssignWorkers([FromBody] AssignWorkersDto dto)
     {

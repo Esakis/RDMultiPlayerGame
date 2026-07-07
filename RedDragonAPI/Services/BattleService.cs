@@ -545,6 +545,13 @@ public class BattleService : IBattleService
             }
         }
 
+        // Komando łuczników Elfa (blog 31. wieku): wspierany sojusznik +20% obrony,
+        // Elf wysyłający −20% własnej; nie wpływa na wysokość paktów wojskowych.
+        if (defender.ArcherCommandoTargetId != null)
+            defensePower = (long)(defensePower * 0.80m);
+        if (await _context.Kingdoms.AnyAsync(k => k.ArcherCommandoTargetId == defender.Id))
+            defensePower = (long)(defensePower * 1.20m);
+
         // Losowość ±5%
         double randomFactor = BattleCalculator.GetRandomFactor();
         attackPower = (long)(attackPower * randomFactor);

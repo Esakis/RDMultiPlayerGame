@@ -67,6 +67,27 @@
     </table>
   </div>
 
+  <!-- Komando łuczników (mechanika rasowa Elfa) -->
+  <div class="planned-attacks" *ngIf="myKingdom?.race === 'Elf'">
+    <h3>{{ 'atk.commando.title' | translate }}</h3>
+    <p class="hint">{{ 'atk.commando.hint' | translate }}</p>
+    <ng-container *ngIf="commandoTargetId; else commandoPick">
+      <p>
+        {{ 'atk.commando.active' | translate:{ name: commandoTargetName } }}
+        <button class="btn-cancel" (click)="cancelCommando()">{{ 'atk.commando.cancel' | translate }}</button>
+      </p>
+    </ng-container>
+    <ng-template #commandoPick>
+      <p *ngIf="commandoTargets.length === 0" class="hint">{{ 'atk.commando.noTargets' | translate }}</p>
+      <ul class="commando-targets" *ngIf="commandoTargets.length > 0">
+        <li *ngFor="let t of commandoTargets">
+          {{ t.name }} ({{ t.race }}, {{ t.land | number }})
+          <button (click)="sendCommando(t.kingdomId)">{{ 'atk.commando.send' | translate }}</button>
+        </li>
+      </ul>
+    </ng-template>
+  </div>
+
   <ng-container *ngIf="!loading">
     <!-- Imperator/Głównodowodzący: wybór księstwa, z którego wyrusza atak -->
     <div class="attack-from" *ngIf="isCommander && coalitionMembers.length > 1">

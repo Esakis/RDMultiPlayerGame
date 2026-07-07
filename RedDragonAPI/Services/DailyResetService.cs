@@ -172,6 +172,11 @@ public class DailyResetService : BackgroundService
                 // Kara oblężnicza (machiny Goblina z E2) trwa tylko przez fazę wojskową
                 kingdom.SiegeDefensePenalty = 0;
 
+                // Dozbrojenie Krasnoluda i Komando łuczników Elfa resetują się po przeliczeniu
+                kingdom.RearmE1Attack = kingdom.RearmE1Defense = 0;
+                kingdom.RearmE2Attack = kingdom.RearmE2Defense = 0;
+                kingdom.ArcherCommandoTargetId = null;
+
                 // Renowacja broni w czasie wojny (Dracopedia §14.3): 40–50 tys. broni/przeliczenie
                 if (kingdom.CoalitionId != null && warringCoalitions.Contains(kingdom.CoalitionId.Value)
                     && kingdom.Buildings.Any(b => b.BuildingType == "RenowacjaBroni"

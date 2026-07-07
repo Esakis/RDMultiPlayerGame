@@ -46,6 +46,14 @@ export interface Kingdom {
   totemDragonSlay: number;
   totemDestruction: number;
   appliedScienceSchool: string;
+  rearmE1Attack: number;
+  rearmE1Defense: number;
+  rearmE2Attack: number;
+  rearmE2Defense: number;
+  rearmNextCost: number;
+  archerCommandoTargetId: number | null;
+  hodokvasActive: boolean;
+  hodokvasTurnsPlayed: number;
   isProtected: boolean;
   protectionDaysLeft: number;
   isFrozen: boolean;

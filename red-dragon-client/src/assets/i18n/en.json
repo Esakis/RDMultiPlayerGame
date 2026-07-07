@@ -385,6 +385,14 @@
       "cancel": "Cancel",
       "cancelled": "Attack cancelled."
     },
+    "commando": {
+      "title": "Archer commando",
+      "hint": "Elves can send an archer commando to a duchy with an active military pact: the supported duchy gains +20% defense while you lose 20% of your own. The commando returns after the recount; each duchy can host only one commando (Elves cannot receive one).",
+      "active": "The archer commando is supporting {{name}}.",
+      "cancel": "Recall commando",
+      "send": "Send commando",
+      "noTargets": "No targets — the commando can only be sent to a non-Elf ally with an active military pact."
+    },
     "fromKingdom": "Attack from duchy",
     "fromOwn": "my duchy",
     "fromTurns": "This duchy's available turns: {{n}}",
@@ -476,7 +484,11 @@
     "attackMoved": "You now plan attacks in the Combat panel — an attack must be led by a general and executes at the 5:00 recalculation.",
     "attackTarget": "Attack target",
     "chooseTarget": "-- Choose a target --",
-    "queueAttack": "Queue Attack"
+    "queueAttack": "Queue Attack",
+    "rearmTitle": "Rearmament",
+    "rearmInfo": "Dwarves can rearm their elites: up to 2 points of +1 attack or defense for E1/E2, paid in weapons (1st point: land×50, 2nd point: land×100 weapons). Bonuses reset after the recount.",
+    "rearmCurrent": "Current rearmament",
+    "rearmNextCost": "next point costs {{n}} weapons"
   },
   "eco": {
     "manageTitle": "Profession Management",
@@ -506,7 +518,13 @@
     },
     "maxWorkers": "Limit",
     "novicePct": "% novices",
-    "unemployed": "Unemployed"
+    "unemployed": "Unemployed",
+    "hodokvas": {
+      "hint": "Hodokvas — the Hobbit feast (requires 80+ popularity): instantly +20 popularity (even above 100), population growth +50%, but food consumption is 5/person and novice training is 40% slower. Can be ended after 4 turns at the earliest.",
+      "start": "Start hodokvas",
+      "running": "Hodokvas in progress (turns played: {{n}}/4 until it can be ended).",
+      "stop": "End hodokvas"
+    }
   },
   "res2": {
     "lead": "Scientists produce <strong>Science Points (SP)</strong>, which you invest in a chosen field. Hover over an icon to see its effect and cost; click an available field to start research. Changing an unfinished field costs 1/3 of the invested SP.",

@@ -61,6 +61,15 @@ export class EconomyComponent implements OnInit {
     this.assign(profType, -amount);
   }
 
+  // ── Hodokvas (mechanika rasowa Hobbita, blog 31. wieku) ──
+
+  setHodokvas(active: boolean): void {
+    this.kingdomService.setHodokvas(active).subscribe({
+      next: (res) => { this.message = res.message || 'OK'; this.load(); this.clearMsg(); },
+      error: (err) => { this.message = err.error?.message || err.error || 'Błąd'; this.clearMsg(); }
+    });
+  }
+
   getProductionInfo(profType: string): string {
     const key = `eco.prod.${profType}`;
     const t = this.translate.instant(key);

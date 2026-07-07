@@ -24,6 +24,18 @@ public class KingdomDto
     public int TotemDestruction { get; set; }
     public string AppliedScienceSchool { get; set; } = "None";
 
+    // Mechaniki rasowe (blog 31. wieku): Dozbrojenie Krasnoluda, Komando łuczników
+    // Elfa, Hodokvas Hobbita
+    public int RearmE1Attack { get; set; }
+    public int RearmE1Defense { get; set; }
+    public int RearmE2Attack { get; set; }
+    public int RearmE2Defense { get; set; }
+    /// <summary>Koszt (w broni) kolejnego punktu dozbrojenia; 0 = punkty wyczerpane.</summary>
+    public long RearmNextCost { get; set; }
+    public int? ArcherCommandoTargetId { get; set; }
+    public bool HodokvasActive { get; set; }
+    public int HodokvasTurnsPlayed { get; set; }
+
     // Ludność
     public int Population { get; set; }
     public int Popularity { get; set; }

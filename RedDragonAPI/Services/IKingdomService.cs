@@ -19,4 +19,7 @@ public interface IKingdomService
     Task<ServiceResult> ChargeTotemAsync(int userId, string totem);
     Task<ServiceResult> SetAppliedScienceAsync(int userId, string school);
     Task<ServiceResult> ChangeRaceAsync(int userId, string race);
+    Task<ServiceResult> RearmAsync(int userId, string tier, string stat);
+    Task<ServiceResult> SetArcherCommandoAsync(int userId, int? targetKingdomId);
+    Task<ServiceResult> SetHodokvasAsync(int userId, bool active);
 }

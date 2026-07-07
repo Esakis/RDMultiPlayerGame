@@ -400,6 +400,104 @@ public class KingdomService : IKingdomService
         return ServiceResult.Ok($"Naładowano totem do poziomu {level + 1} (koszt {cost} many).");
     }
 
+    public async Task<ServiceResult> RearmAsync(int userId, string tier, string stat)
+    {
+        if (tier is not ("E1" or "E2") || stat is not ("Attack" or "Defense"))
+            return ServiceResult.Fail("Nieznany cel dozbrojenia.");
+
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
+        if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (kingdom.Race != "Krasnolud")
+            return ServiceResult.Fail("Dozbrojenie dostępne tylko dla Krasnoluda.");
+
+        int points = kingdom.RearmE1Attack + kingdom.RearmE1Defense
+                     + kingdom.RearmE2Attack + kingdom.RearmE2Defense;
+        if (points >= 2)
+            return ServiceResult.Fail("Oba punkty dozbrojenia są już wykorzystane (reset po przeliczeniu).");
+
+        // Blog 31. wieku: 1. punkt = ziemia×50 broni, 2. punkt = ziemia×100
+        long cost = (long)kingdom.Land * (points == 0 ? 50 : 100);
+        if (kingdom.Weapons < cost)
+            return ServiceResult.Fail($"Za mało broni (potrzeba {cost}, masz {kingdom.Weapons}).");
+
+        kingdom.Weapons -= cost;
+        switch ((tier, stat))
+        {
+            case ("E1", "Attack"): kingdom.RearmE1Attack++; break;
+            case ("E1", "Defense"): kingdom.RearmE1Defense++; break;
+            case ("E2", "Attack"): kingdom.RearmE2Attack++; break;
+            default: kingdom.RearmE2Defense++; break;
+        }
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok($"Dozbrojono {tier}: +1 {(stat == "Attack" ? "ataku" : "obrony")} (koszt {cost} broni, do przeliczenia).");
+    }
+
+    public async Task<ServiceResult> SetArcherCommandoAsync(int userId, int? targetKingdomId)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
+        if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (kingdom.Race != "Elf")
+            return ServiceResult.Fail("Komando łuczników dostępne tylko dla Elfa.");
+
+        if (targetKingdomId == null)
+        {
+            if (kingdom.ArcherCommandoTargetId == null)
+                return ServiceResult.Fail("Komando nie jest wysłane.");
+            kingdom.ArcherCommandoTargetId = null;
+            await _context.SaveChangesAsync();
+            return ServiceResult.Ok("Komando łuczników wróciło do domu.");
+        }
+
+        if (targetKingdomId == kingdom.Id)
+            return ServiceResult.Fail("Nie można wysłać komanda do własnego księstwa.");
+        var target = await _context.Kingdoms.FirstOrDefaultAsync(k => k.Id == targetKingdomId);
+        if (target == null) return ServiceResult.Fail("Nie znaleziono księstwa docelowego.");
+        if (target.Race == "Elf")
+            return ServiceResult.Fail("Elfy nie mogą przyjmować komanda łuczników.");
+
+        var partners = await PactService.GetActivePactPartnersAsync(_context, kingdom.Id, "Wojskowy");
+        if (partners.All(p => p.Id != targetKingdomId))
+            return ServiceResult.Fail("Komando można wysłać tylko do księstwa z aktywnym paktem wojskowym.");
+        if (await _context.Kingdoms.AnyAsync(k => k.Id != kingdom.Id && k.ArcherCommandoTargetId == targetKingdomId))
+            return ServiceResult.Fail("To księstwo przyjęło już komando innego Elfa.");
+
+        kingdom.ArcherCommandoTargetId = targetKingdomId;
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok($"Komando łuczników wspiera {target.Name}: +20% jego obrony, −20% własnej (do przeliczenia).");
+    }
+
+    public async Task<ServiceResult> SetHodokvasAsync(int userId, bool active)
+    {
+        var kingdom = await _context.Kingdoms
+            .FirstOrDefaultAsync(k => k.UserId == userId && k.Era.IsActive && k.User.ActiveKingdomId == k.Id && !k.IsSuspended);
+        if (kingdom == null) return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (kingdom.Race != "Hobbit")
+            return ServiceResult.Fail("Hodokvas dostępny tylko dla Hobbita.");
+
+        if (active)
+        {
+            if (kingdom.HodokvasActive) return ServiceResult.Fail("Hodokvas już trwa.");
+            if (kingdom.Popularity < 80)
+                return ServiceResult.Fail("Hodokvas wymaga popularności co najmniej 80.");
+            kingdom.HodokvasActive = true;
+            kingdom.HodokvasTurnsPlayed = 0;
+            kingdom.Popularity += 20; // może przekroczyć 100 — podnosi zaludnienie na akr
+            await _context.SaveChangesAsync();
+            return ServiceResult.Ok("Hodokvas rozpoczęty: +20 popularności, jedzenie 5/osobę, szkolenie −40%, przyrost +50%.");
+        }
+
+        if (!kingdom.HodokvasActive) return ServiceResult.Fail("Hodokvas nie trwa.");
+        if (kingdom.HodokvasTurnsPlayed < 4)
+            return ServiceResult.Fail($"Hodokvas można zakończyć najwcześniej po 4 turach (odegrano {kingdom.HodokvasTurnsPlayed}).");
+        kingdom.HodokvasActive = false;
+        // Blog 31. wieku: po zakończeniu popularność wraca do 100 (jeśli była ≥100)
+        if (kingdom.Popularity >= 100) kingdom.Popularity = 100;
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok("Hodokvas zakończony — spożycie jedzenia i szkolenie wracają do normy.");
+    }
+
     public async Task<ServiceResult> SetAppliedScienceAsync(int userId, string school)
     {
         if (school is not ("None" or "Thief" or "Magic" or "Military"))
@@ -548,6 +646,20 @@ public class KingdomService : IKingdomService
             TotemDragonSlay = kingdom.TotemDragonSlay,
             TotemDestruction = kingdom.TotemDestruction,
             AppliedScienceSchool = kingdom.AppliedScienceSchool,
+            RearmE1Attack = kingdom.RearmE1Attack,
+            RearmE1Defense = kingdom.RearmE1Defense,
+            RearmE2Attack = kingdom.RearmE2Attack,
+            RearmE2Defense = kingdom.RearmE2Defense,
+            RearmNextCost = (kingdom.RearmE1Attack + kingdom.RearmE1Defense
+                             + kingdom.RearmE2Attack + kingdom.RearmE2Defense) switch
+            {
+                0 => (long)kingdom.Land * 50,
+                1 => (long)kingdom.Land * 100,
+                _ => 0
+            },
+            ArcherCommandoTargetId = kingdom.ArcherCommandoTargetId,
+            HodokvasActive = kingdom.HodokvasActive,
+            HodokvasTurnsPlayed = kingdom.HodokvasTurnsPlayed,
             Population = kingdom.Population,
             Popularity = kingdom.Popularity,
             Wages = kingdom.Wages,

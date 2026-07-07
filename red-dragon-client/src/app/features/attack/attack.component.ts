@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MilitaryService, PlannedAttack, AttackOptions, AttackUnit } from '../../core/services/military.service';
 import { KingdomService } from '../../core/services/kingdom.service';
 import { CoalitionService, War } from '../../core/services/coalition.service';
+import { PactService, PactMember } from '../../core/services/pact.service';
 import { KingdomSummary, Kingdom } from '../../core/models/kingdom.model';
 
 interface TargetRow {
@@ -40,10 +41,15 @@ export class AttackComponent implements OnInit {
   message = '';
   error = '';
 
+  // Komando łuczników Elfa (blog 31. wieku)
+  pactMembers: PactMember[] = [];
+  commandoTargetId: number | null = null;
+
   constructor(
     private military: MilitaryService,
     private kingdomService: KingdomService,
     private coalitionService: CoalitionService,
+    private pactService: PactService,
     private translate: TranslateService
   ) {}
 
@@ -53,6 +59,13 @@ export class AttackComponent implements OnInit {
       this.attackFromId = k.id;
       this.loadAttackOptions(k.id);
       this.loadPlannedAttacks();
+      if (k.race === 'Elf') {
+        this.commandoTargetId = k.archerCommandoTargetId;
+        this.pactService.getStatus().subscribe({
+          next: s => this.pactMembers = s.members,
+          error: () => {}
+        });
+      }
     });
     this.coalitionService.getWars().subscribe({
       next: (wars: War[]) => {
@@ -168,6 +181,32 @@ export class AttackComponent implements OnInit {
         this.loadPlannedAttacks();
         if (this.attackFromId) this.loadAttackOptions(this.attackFromId);
       },
+      error: e => { this.error = e.error?.message || e.error || this.translate.instant('atk.errAttack'); }
+    });
+  }
+
+  // ── Komando łuczników Elfa: wsparcie sojusznika z paktem wojskowym ──
+
+  /** Sojusznicy z aktywnym paktem wojskowym, którym można wysłać komando (nie-Elfy). */
+  get commandoTargets(): PactMember[] {
+    return this.pactMembers.filter(m => m.activePacts.includes('Wojskowy') && m.race !== 'Elf');
+  }
+
+  get commandoTargetName(): string {
+    const t = this.pactMembers.find(m => m.kingdomId === this.commandoTargetId);
+    return t?.name || `#${this.commandoTargetId}`;
+  }
+
+  sendCommando(targetKingdomId: number): void {
+    this.kingdomService.setArcherCommando(targetKingdomId).subscribe({
+      next: r => { this.message = r.message || 'OK'; this.commandoTargetId = targetKingdomId; },
+      error: e => { this.error = e.error?.message || e.error || this.translate.instant('atk.errAttack'); }
+    });
+  }
+
+  cancelCommando(): void {
+    this.kingdomService.setArcherCommando(null).subscribe({
+      next: r => { this.message = r.message || 'OK'; this.commandoTargetId = null; },
       error: e => { this.error = e.error?.message || e.error || this.translate.instant('atk.errAttack'); }
     });
   }

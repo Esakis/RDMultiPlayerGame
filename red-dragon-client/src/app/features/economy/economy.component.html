@@ -51,6 +51,26 @@
         </div>
       </div>
     </div>
+
+    <!-- Hodokvas (mechanika rasowa Hobbita) -->
+    <div class="hodokvas-row" *ngIf="kingdom.race === 'Hobbit'">
+      <ng-container *ngIf="!kingdom.hodokvasActive; else hodokvasActiveTpl">
+        <span class="info">{{ 'eco.hodokvas.hint' | translate }}</span>
+        <button class="btn-sm btn-assign" (click)="setHodokvas(true)"
+                [disabled]="kingdom.popularity < 80">
+          {{ 'eco.hodokvas.start' | translate }}
+        </button>
+      </ng-container>
+      <ng-template #hodokvasActiveTpl>
+        <span class="info">
+          {{ 'eco.hodokvas.running' | translate:{ n: kingdom.hodokvasTurnsPlayed } }}
+        </span>
+        <button class="btn-sm btn-remove" (click)="setHodokvas(false)"
+                [disabled]="kingdom.hodokvasTurnsPlayed < 4">
+          {{ 'eco.hodokvas.stop' | translate }}
+        </button>
+      </ng-template>
+    </div>
   </div>
 </div>
 
