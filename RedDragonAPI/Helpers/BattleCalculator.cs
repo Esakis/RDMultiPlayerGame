@@ -188,6 +188,18 @@ public static class BattleCalculator
         if (defender.DrunkArmyPct > 0)
             total *= 1m - Math.Min(90, defender.DrunkArmyPct) / 100m;
 
+        // Padłe legie (MECHANIKA §8): dodatkowa obrona = min(siła zaklęcia,
+        // liczba wyszkolonych magów); u Dżina legie są 3× skuteczniejsze.
+        var legie = defender.ActiveSpells?.FirstOrDefault(s => s.SpellType == "PadleLegiony");
+        if (legie != null)
+        {
+            var magesProf = defender.Professions?.FirstOrDefault(p => p.ProfessionType == "Magowie");
+            long trainedMages = magesProf == null ? 0 : Math.Max(0, magesProf.WorkerCount - magesProf.NoviceCount);
+            long le = Math.Min(legie.Power, trainedMages);
+            if (defenderRace.Name == "Dżin") le *= 3;
+            total += le;
+        }
+
         // Goblińska inżynieria: machiny Goblina z E2 obniżyły obronę celu
         // (kara naliczona przy wcześniejszych atakach w tym przeliczeniu)
         if (defender.SiegeDefensePenalty > 0)

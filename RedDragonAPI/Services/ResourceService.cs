@@ -408,7 +408,8 @@ public class ResourceService : IResourceService
             }
         }
 
-        long budulecLimit = 7500 + kingdom.Land / 4;
+        // Br-Oug (§2.2): podwójny limit infrapunktów (rekompensuje droższe budynki)
+        long budulecLimit = (7500 + kingdom.Land / 4) * (kingdom.Race == "Br-Oug" ? 2 : 1);
         kingdom.BudulecStored = Math.Min(kingdom.BudulecStored + kingdom.Budulec, budulecLimit);
         kingdom.Budulec = 0;
 
@@ -526,10 +527,12 @@ public class ResourceService : IResourceService
 
                 // Zaklęcia przyrostu (Dracopedia §4): Płodność ×1,3, Szczęście ×1,1,
                 // Pech ×0,9, Kastracja ×0,5 (zawieszone buffy/debuffy mnożą się).
-                if (HasSpell("Plodnosc")) growth *= 1.3m;
+                // Nekromant jest odporny na Płodność i Kastrację (§2.2 — nieumarli).
+                bool undead = kingdom.Race == "Nekromant";
+                if (HasSpell("Plodnosc") && !undead) growth *= 1.3m;
                 if (HasSpell("Szczescie")) growth *= 1.1m;
                 if (HasSpell("Pech")) growth *= 0.9m;
-                if (HasSpell("Kastracja")) growth *= 0.5m;
+                if (HasSpell("Kastracja") && !undead) growth *= 0.5m;
 
                 kingdom.Population += (int)growth;
                 if (kingdom.Population > populationCap)

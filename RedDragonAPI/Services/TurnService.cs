@@ -70,6 +70,8 @@ public class TurnService : ITurnService
         int scientistCount = kingdom.Professions
             .FirstOrDefault(p => p.ProfessionType == "Naukowcy")?.WorkerCount ?? 0;
         int generalExpPerTurn = 150 + Math.Min(600, scientistCount);
+        // Człowiek (§2.2): generałowie zdobywają doświadczenie o 20% szybciej
+        if (kingdom.Race == "Człowiek") generalExpPerTurn = (int)(generalExpPerTurn * 1.2);
         var homeGenerals = await _context.Generals
             .Where(g => g.KingdomId == kingdom.Id && !g.IsPending && !g.IsOutside && !g.IsImprisoned)
             .ToListAsync();

@@ -130,6 +130,9 @@ public class BuildingService : IBuildingService
             // Rabat badań: Architektura obniża koszt budulca budynków specjalnych.
             decimal specialDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "SpecialBuildingCostReduction");
             decimal specialCost = definition.BaseCost * (1m - specialDiscount);
+            // Rasy (§2.2): Krasnolud — budynki specjalne o 10% tańsze; Br-Oug — o 50% droższe.
+            if (kingdom.Race == "Krasnolud") specialCost *= 0.9m;
+            if (kingdom.Race == "Br-Oug") specialCost *= 1.5m;
             // Protektorat początkowy (Dracopedia §1): budynki specjalne −60%.
             if (kingdom.IsProtected) specialCost *= 0.4m;
             int budulecCost = Math.Max(1, (int)specialCost);
@@ -159,6 +162,18 @@ public class BuildingService : IBuildingService
         var (budulecPerBuilding, goldPerBuilding) = ComputeEconomicCost(kingdom, ecoDiscount);
         long totalCostGold = (long)goldPerBuilding * quantity;
         int totalCostBudulec = budulecPerBuilding * quantity;
+        // Rasy (§2.2): Człowiek — budynki infrastrukturalne o 10% tańsze (złoto i budulec);
+        // Br-Oug — budynki o 50% droższe.
+        if (kingdom.Race == "Człowiek")
+        {
+            totalCostGold = (long)(totalCostGold * 0.9m);
+            totalCostBudulec = (int)(totalCostBudulec * 0.9m);
+        }
+        if (kingdom.Race == "Br-Oug")
+        {
+            totalCostGold = (long)(totalCostGold * 1.5m);
+            totalCostBudulec = (int)(totalCostBudulec * 1.5m);
+        }
         int totalCostLand = definition.CostLand * quantity;
 
         if (kingdom.Gold < totalCostGold)

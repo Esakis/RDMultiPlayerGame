@@ -433,7 +433,9 @@ public class BattleService : IBattleService
         int dragonSlayLvl = SecLevel(attackerGenerals, "Smokobojstwo");
         if (dragonSlayLvl > 0)
         {
-            decimal killPct = Math.Min(1m, dragonSlayLvl / 100m);
+            // Krasnolud (§2.2): jednostki zabijają o 20% więcej smoków
+            decimal dwarfBonus = attacker.Race == "Krasnolud" ? 1.2m : 1m;
+            decimal killPct = Math.Min(1m, dragonSlayLvl / 100m * dwarfBonus);
             foreach (var d in defender.MilitaryUnits.Where(u => u.UnitType.EndsWith("_Smok") && u.Quantity > 0))
                 d.Quantity = Math.Max(0, d.Quantity - (int)Math.Ceiling(d.Quantity * killPct));
             foreach (var bt in new[] { "Portal", "Smokodrap" })
@@ -608,6 +610,28 @@ public class BattleService : IBattleService
             }
         }
 
+        // Saperzy Gnoma (§2.2): dodatkowi zabici atakującego = liczba saperów/3
+        // (maksymalnie +150% dotychczasowych strat)
+        if (defender.Race == "Gnom")
+        {
+            long sappers = defender.MilitaryUnits
+                .Where(u => u.UnitType == "Gnom_Saper").Sum(u => (long)u.Quantity);
+            long baseLosses = attackerCasualties.Sum(c => (long)c.Value);
+            long extra = Math.Min(sappers / 3, (long)(baseLosses * 1.5));
+            long totalSent = attackData.Units
+                .Where(u => u.Value > 0 && !u.Key.EndsWith("_Smok")).Sum(u => (long)u.Value);
+            if (extra > 0 && totalSent > 0)
+            {
+                foreach (var sent in attackData.Units.Where(u => u.Value > 0 && !u.Key.EndsWith("_Smok")))
+                {
+                    int add = (int)(extra * sent.Value / totalSent);
+                    if (add <= 0) continue;
+                    attackerCasualties[sent.Key] =
+                        (attackerCasualties.TryGetValue(sent.Key, out var v) ? v : 0) + add;
+                }
+            }
+        }
+
         // Zastosuj straty atakującego
         foreach (var casualty in attackerCasualties)
         {
@@ -725,19 +749,28 @@ public class BattleService : IBattleService
         // swojej siły przy kolejnych atakach w tym przeliczeniu.
         long activeMachines = attackData.Units
             .Where(u => u.Value > 0 && u.Key.EndsWith("_Machina")).Sum(u => (long)u.Value);
-        if (activeMachines > 0)
         {
-            bool UnitKindSent(Func<Models.Entities.UnitDefinition, bool> pred) =>
-                attackData.Units.Any(u => u.Value > 0 && attacker.MilitaryUnits.Any(m =>
-                    m.UnitType == u.Key && m.Definition != null && pred(m.Definition)));
+            long SentOf(Func<Models.Entities.UnitDefinition, bool> pred) =>
+                attackData.Units.Where(u => u.Value > 0 && attacker.MilitaryUnits.Any(m =>
+                    m.UnitType == u.Key && m.Definition != null && pred(m.Definition)))
+                    .Sum(u => (long)u.Value);
             bool withHoplites = attackData.Units.Any(u => u.Value > 0 && u.Key.EndsWith("_Hoplita"));
-            bool withE1 = UnitKindSent(d => d.RequiredBuilding == "OltarzInicjacji");
-            bool withE2 = UnitKindSent(d => d.RequiredBuilding == "KoszarySpecjalne");
+            long sentE1 = SentOf(d => d.RequiredBuilding == "OltarzInicjacji");
+            long sentE2 = SentOf(d => d.RequiredBuilding == "KoszarySpecjalne");
 
-            if (attackerWins && withHoplites && !withE1)
+            // Siła burząca: machiny z hoplitami (z E1 tylko zdobywają ziemię);
+            // Br-Oug burzy o 40% słabiej; Olbrzym: machiny +25% burzenia,
+            // a jego E1/E2 burzą same (0,1 / 0,5 budynku — §2.2).
+            decimal demolition = withHoplites && sentE1 == 0 ? activeMachines : 0m;
+            if (attacker.Race == "Olbrzym")
+                demolition = demolition * 1.25m + sentE1 * 0.1m + sentE2 * 0.5m;
+            if (attacker.Race == "Br-Oug")
+                demolition *= 0.6m;
+
+            if (attackerWins && demolition > 0)
             {
-                decimal scale = Math.Min(1m, activeMachines / (2.5m * Math.Max(1, defender.Land)));
-                if (attacker.Race == "Br-Oug") scale *= 0.6m;
+                // pełny efekt (20% infrastruktury i 5 budynków specjalnych) przy 2,5 machiny/akr
+                decimal scale = Math.Min(1m, demolition / (2.5m * Math.Max(1, defender.Land)));
                 foreach (var b in defender.Buildings.Where(x => x.Definition != null
                     && !x.Definition.IsSpecial && x.Quantity > 0 && !x.IsUnderConstruction))
                     b.Quantity = Math.Max(0, b.Quantity - (int)(b.Quantity * 0.20m * scale));
@@ -748,7 +781,7 @@ public class BattleService : IBattleService
                     special.Quantity = 0;
             }
 
-            if (attacker.Race == "Goblin" && withE2)
+            if (attacker.Race == "Goblin" && activeMachines > 0 && sentE2 > 0)
                 defender.SiegeDefensePenalty += (long)(activeMachines * attackerRace.MachineAttack * 0.20m);
         }
 
@@ -846,12 +879,21 @@ public class BattleService : IBattleService
         }
 
         // Doświadczenie generałów: zależne od sumy sił i wyrównania starcia
+        // (Człowiek: generałowie zdobywają doświadczenie o 20% szybciej — §2.2)
         long expGain = (long)((attackPower + defensePower) / 1000.0
             * Math.Min(1.0, (double)Math.Min(attackPower, defensePower) / Math.Max(1, Math.Max(attackPower, defensePower))));
         if (attackerWins && leadingGeneral != null)
-            leadingGeneral.Experience += Math.Max(10, expGain + landCaptured * 5L);
+        {
+            long gain = Math.Max(10, expGain + landCaptured * 5L);
+            if (attacker.Race == "Człowiek") gain = (long)(gain * 1.2);
+            leadingGeneral.Experience += gain;
+        }
         else if (!attackerWins && bestDefenderGeneral != null)
-            bestDefenderGeneral.Experience += Math.Max(10, expGain);
+        {
+            long gain = Math.Max(10, expGain);
+            if (defender.Race == "Człowiek") gain = (long)(gain * 1.2);
+            bestDefenderGeneral.Experience += gain;
+        }
 
         // Raport
         var report = new BattleReport
@@ -913,6 +955,15 @@ public class BattleService : IBattleService
         // Biała magia dla Elfa o 25% tańsza
         if (kingdom.Race == "Elf" && spell.Category == "Biała")
             cost *= 0.75m;
+
+        // Nekromant: Zaraza/Szarańcza/Kastracja/Zły humor o połowę tańsze (§2.2)
+        if (kingdom.Race == "Nekromant"
+            && spell.SpellType is "Zaraza" or "Szarancza" or "Kastracja" or "ZlyHumor")
+            cost *= 0.5m;
+
+        // Br-Oug: Zdjęcie zaklęcia o 50% droższe (§2.2)
+        if (kingdom.Race == "Br-Oug" && spell.SpellType == "ZdjecieZaklecia")
+            cost *= 1.5m;
 
         // Metamagia Dżina: wzmocniona +25% ceny, przyspieszona −10% ceny
         if (kingdom.Race == "Dżin")
@@ -1330,11 +1381,23 @@ public class BattleService : IBattleService
         var antimagic = defender.ActiveSpells.FirstOrDefault(s => s.SpellType == "TarczaAntymagiczna");
         if (antimagic != null) defensePower += antimagic.Power;
 
-        // Pakty magiczne: magowie partnera pomagają bronić (Dżin z Pałacem +5% — uproszczone do bazy)
+        // Elf (blog 31. wieku): jednostki wojskowe mają siłę magiczną — E1 0,5, E2 1,0
+        if (defender.Race == "Elf")
+        {
+            long e1 = defender.MilitaryUnits.Where(u => u.UnitType == "Elf_Lucznik").Sum(u => (long)u.Quantity);
+            long e2 = defender.MilitaryUnits.Where(u => u.UnitType == "Elf_LesnaZjawa").Sum(u => (long)u.Quantity);
+            defensePower += e1 / 2 + e2;
+        }
+
+        // Pakty magiczne: magowie partnera pomagają bronić;
+        // Dżin z Pałacem magicznym: pakty magiczne +5% skuteczności (§2.2)
         var magicPartners = await PactService.GetActivePactPartnersAsync(_context, defender.Id, "Magiczny");
         if (magicPartners.Count > 0)
         {
             decimal efficiency = PactService.PactEfficiency(magicPartners.Count);
+            if (defender.Race == "Dżin" && defender.Buildings.Any(b =>
+                    b.BuildingType == "PalacMagiczny" && b.Quantity > 0 && !b.IsUnderConstruction))
+                efficiency += 0.05m;
             foreach (var partner in magicPartners)
                 defensePower += (long)(TrainedMages(partner) * efficiency);
         }
@@ -1641,6 +1704,11 @@ public class BattleService : IBattleService
         var defThieves = defender.MilitaryUnits.FirstOrDefault(u => u.UnitType.EndsWith("_Zlodziej"));
         long defensePower = (long)((defThieves?.Quantity ?? 0) * (1m + defenderRace.ThiefPowerModifier));
 
+        // Gnom (§2.2): wyszkolone E1 (Nocni Strażnicy) dają dodatkowo 0,5 obrony złodziejskiej
+        if (defender.Race == "Gnom")
+            defensePower += defender.MilitaryUnits
+                .Where(u => u.UnitType == "Gnom_NocnyStraznik").Sum(u => (long)u.Quantity) / 2;
+
         // Generał Złodziej (docs/MECHANIKA.md §11): +lvl/(lvl+50) siły złodziei — po obu stronach
         int atkThiefGenLvl = await BestHomeGeneralLevelAsync(attacker.Id, "Zlodziej");
         if (atkThiefGenLvl > 0)
@@ -1649,11 +1717,13 @@ public class BattleService : IBattleService
         if (defThiefGenLvl > 0)
             defensePower = (long)(defensePower * (1m + (decimal)defThiefGenLvl / (defThiefGenLvl + 50m)));
 
-        // Pakty złodziejskie: złodzieje partnera (w domu) pomagają bronić
+        // Pakty złodziejskie: złodzieje partnera (w domu) pomagają bronić;
+        // Krasnolud (§2.2): pakty złodziejskie mają o 10 p.p. niższą skuteczność
         var thiefPartners = await PactService.GetActivePactPartnersAsync(_context, defender.Id, "Zlodziejski");
         if (thiefPartners.Count > 0)
         {
             decimal efficiency = PactService.PactEfficiency(thiefPartners.Count);
+            if (defender.Race == "Krasnolud") efficiency -= 0.10m;
             foreach (var partner in thiefPartners)
             {
                 int partnerThieves = partner.MilitaryUnits
