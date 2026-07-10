@@ -50,8 +50,27 @@ table {
 
 button {
   font-family: 'Times New Roman', Times, serif;
+  border-radius: 3px;
 }
 
 input, select, textarea {
   font-family: Arial, sans-serif;
+  border-radius: 3px;
+}
+
+/* Wspólny klimat paneli gry (mniej „kwadratowo", bliżej oryginału):
+   miękkie narożniki, cień i winieta jak na starych planszach RD. */
+.card, .post-card, .panel {
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.55),
+              inset 0 0 46px rgba(0, 0, 0, 0.28);
+}
+
+.page-content > h2 {
+  color: #ffd700;
+  font-family: 'Times New Roman', Times, serif;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px #000;
+  border-bottom: 2px solid #8b0000;
+  padding-bottom: 4px;
 }

@@ -26,6 +26,7 @@
     "chat": "Chat"
   },
   "menu": {
+    "forum": "Forum",
     "capital": "Capital",
     "buildings": "Construction",
     "employment": "Employment",

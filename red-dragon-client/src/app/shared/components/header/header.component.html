@@ -23,12 +23,6 @@
     </button>
   </div>
 
-  <div class="header-banner">
-    <a class="banner-link" routerLink="/dashboard">
-      <img class="banner-img" src="assets/img/banner-rd.png" alt="Red Dragon">
-    </a>
-  </div>
-
   <nav class="top-game-menu">
     <a routerLink="/dashboard">{{ 'nav.details' | translate }}</a>
     <a routerLink="/forum">{{ 'nav.forum' | translate }}</a>
@@ -49,6 +43,12 @@
       🌙 <strong>{{ status?.moonPhaseName }}</strong>
     </span>
   </nav>
+
+  <div class="header-banner">
+    <a class="banner-link" routerLink="/dashboard">
+      <img class="banner-img" src="assets/img/banner-rd.png" alt="Red Dragon">
+    </a>
+  </div>
 
   <div class="resources-bar" *ngIf="kingdom">
     <div class="res-item">

@@ -8,9 +8,11 @@
   padding: 8px 20px;
   background: linear-gradient(180deg, #4a0808 0%, #2a0808 100%);
   border: 2px solid #8b0000;
+  border-radius: 7px 7px 0 0;
   color: #ffd700;
   font-size: 14px;
   font-weight: bold;
+  font-family: 'Times New Roman', Times, serif;
   cursor: pointer;
   transition: all 0.2s;
 
@@ -35,9 +37,11 @@
   padding: 6px 16px;
   background: linear-gradient(180deg, #3a0606 0%, #1a0404 100%);
   border: 1px solid #6b0000;
+  border-radius: 5px;
   color: #d4af37;
   font-size: 13px;
   font-weight: bold;
+  font-family: 'Times New Roman', Times, serif;
   cursor: pointer;
   transition: all 0.2s;
 
@@ -90,15 +94,19 @@
 }
 
 .post-card {
-  background: rgba(42, 8, 8, 0.7);
+  background: linear-gradient(180deg, rgba(58, 10, 10, 0.85) 0%, rgba(34, 6, 6, 0.85) 100%);
   border: 1px solid #8b0000;
-  padding: 12px;
+  border-left: 4px solid #a52a00;
+  border-radius: 5px;
+  padding: 12px 14px;
 }
 
 .post-header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
 }
 
 .post-author {
