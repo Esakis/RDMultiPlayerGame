@@ -179,20 +179,37 @@ public class ResourceService : IResourceService
             {
                 case "Alchemicy":
                     production = (long)(prof.WorkerCount * AlchemistGoldBase * Productivity(prof, race.BonusAlchemists));
-                    // Kopalnia złota (budynek specjalny, Dracopedia §14.3): +10% złota alchemików;
-                    // Złoty sierp (MECHANIKA §13) podwaja zysk z kopalni.
+                    kingdom.Gold += production;
+                    // Kopalnia złota (Dracopedia §14.3): ~10% szansy na turę, że górnicy
+                    // trafią na żyłę wartą 80–160% turowej produkcji złota alchemików;
+                    // Złoty sierp (MECHANIKA §13) podwaja szansę. Górnictwo odkrywkowe
+                    // zmienia kopalnię w mniejszy, ale stabilny urobek (MineGold).
                     if (Has("KopalniaZlota"))
                     {
-                        decimal mineBonus = 0.10m;
-                        if (moonPhase == MoonPhaseHelper.ZlotySierp
-                            && MoonPhaseHelper.Affects(kingdom.Race, moonPhase, bloodMoon))
-                            mineBonus *= 2m;
-                        production = (long)(production * (1m + mineBonus));
+                        if (mineGoldRate > 0)
+                        {
+                            kingdom.Gold += (long)(production * mineGoldRate);
+                        }
+                        else
+                        {
+                            double mineChance = 0.10;
+                            if (moonPhase == MoonPhaseHelper.ZlotySierp
+                                && MoonPhaseHelper.Affects(kingdom.Race, moonPhase, bloodMoon))
+                                mineChance *= 2;
+                            if (Random.Shared.NextDouble() < mineChance)
+                            {
+                                long found = (long)(production
+                                    * (0.8m + (decimal)Random.Shared.NextDouble() * 0.8m));
+                                kingdom.Gold += found;
+                                _context.KingdomEvents.Add(new KingdomEvent
+                                {
+                                    KingdomId = kingdom.Id,
+                                    Category = "Economy",
+                                    Message = $"Górnicy natrafili na żyłę złota: +{found:N0} złota."
+                                });
+                            }
+                        }
                     }
-                    kingdom.Gold += production;
-                    // Górnictwo odkrywkowe: dodatkowy stabilny urobek złota
-                    if (mineGoldRate > 0)
-                        kingdom.Gold += (long)(production * mineGoldRate);
                     break;
                 case "Chłopi":
                     production = (long)(prof.WorkerCount * FarmerFoodBase * Productivity(prof, race.BonusFarmers));
@@ -307,9 +324,10 @@ public class ResourceService : IResourceService
         Manufactory("KopalniaDiamentow", 4000m, v => kingdom.Gold += v); // Kopalnia diamentów (złoto)
         Manufactory("ManoweJeziorko", 40m, v => manaCapacity += v);      // Manowe jeziorko (zwiększa pojemność many)
 
-        // Ratusz (budynek specjalny, Dracopedia §14.3): podatek 10 zł/mieszkańca na turę —
-        // główne pasywne źródło złota utrzymujące ekonomię (płace obciążają wszystkich pracowników).
-        if (Has("Ratusz")) kingdom.Gold += kingdom.Population * 10L;
+        // Ratusz (budynek specjalny, Dracopedia §14.3): podatek 10 zł/mieszkańca na turę
+        // (Ludzie 20 zł). Wojsko i złodzieje nie są częścią ludności cywilnej,
+        // więc podatek ich nie obejmuje.
+        if (Has("Ratusz")) kingdom.Gold += kingdom.Population * (kingdom.Race == "Człowiek" ? 20L : 10L);
 
         // Port towarowy (Dracopedia §14.3): 400–600 tys. złota na turę, w czasie wojny ×2.
         if (Has("PortTowarowy"))

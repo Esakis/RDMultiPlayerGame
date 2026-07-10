@@ -78,10 +78,15 @@ Dracopedia = źródło nadrzędne; przy rozbieżnościach przyjmujemy wartości 
       TrainingBuildingsDescriptions).
 
 ### Etap 6 — drobiazgi ekonomiczne — ROZBIEŻNOŚCI
-- [ ] Ratusz: Ludzie 20 zł/obywatela (inni 10); podatek bez wojska i złodziei.
-- [ ] Kopalnia złota: ~10% szansy/turę na skarb 80–160% produkcji złota z tury
+- [x] Ratusz: Ludzie 20 zł/obywatela (inni 10); podatek bez wojska i złodziei.
+      → Population w apce to wyłącznie cywile (niezmiennik Σ profesji = ludność),
+      więc wystarczył wariant Ludzi ×20.
+- [x] Kopalnia złota: ~10% szansy/turę na skarb 80–160% produkcji złota z tury
       (zamiast deterministycznych +10%); z Górnictwem odkrywkowym mniejsze,
       ale regularne; Złoty Sierp ×2 szansy.
+      → Zdarzenie „żyła złota" w KingdomEvents. UWAGA zmiana zachowania:
+      stabilny urobek Górnictwa (MineGold 21%) wymaga teraz posiadania
+      Kopalni złota (wg źródła to przychód Z kopalni; wcześniej działał bez niej).
 
 ### Etap 7 — efekty specjalne nauk poziomów 4–5 — BRAK LOGIKI
 - [ ] Architektura 4: budynki 3. rzędu bez złota, przyspieszanie budowy −50%.
