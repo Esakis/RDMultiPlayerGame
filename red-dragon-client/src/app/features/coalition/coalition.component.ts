@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CoalitionService, PpsStatus, War, Election, Treasury, Announcement } from '../../core/services/coalition.service';
 import { KingdomService } from '../../core/services/kingdom.service';
@@ -46,7 +47,14 @@ export class CoalitionComponent implements OnInit {
   sharedPwd = '';
 
   constructor(private coalitionService: CoalitionService, private kingdomService: KingdomService,
-              private translate: TranslateService) {}
+              private translate: TranslateService, private route: ActivatedRoute) {
+    // Link z górnego paska (Tablica ogłoszeń) otwiera Politykę na wskazanej zakładce.
+    this.route.queryParamMap.subscribe(params => {
+      const tab = params.get('tab') as PolTab | null;
+      if (tab && ['twoja', 'tablica', 'wojny', 'pps', 'koalicje'].includes(tab))
+        this.activeTab = tab;
+    });
+  }
 
   setTab(tab: PolTab): void { this.activeTab = tab; }
 

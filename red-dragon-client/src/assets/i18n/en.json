@@ -22,6 +22,7 @@
     "resetTip": "Daily recalculation at 5:00 — attacks, spells and thief actions execute then, and turns are renewed.",
     "moonTip": "The Moon phase advances every recalculation and modifies game mechanics for a day: New Moon — thieves reveal pacts, Golden Sickle — Gold Mine ×2, Dragon's Eye — dragons ×2, Full Moon — strongest magic, Author's Hump — weaker labyrinth loot, Cracked Shield — weaker Weapon Renovation and Field Ambulance. Blood Moon (randomly instead of Full Moon) — elite training ×2.",
     "labyrinth": "Labyrinth",
+    "announcements": "Announcements",
     "advisors": "Advisors",
     "chat": "Chat"
   },

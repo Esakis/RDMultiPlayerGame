@@ -30,6 +30,7 @@
       {{ 'nav.mail' | translate }}
       <span class="nav-badge" *ngIf="status && status.unreadMessages > 0">{{ status.unreadMessages }}</span>
     </a>
+    <a routerLink="/coalition" [queryParams]="{ tab: 'tablica' }">{{ 'nav.announcements' | translate }}</a>
     <a routerLink="/reports" class="badge-link">
       {{ 'nav.reports' | translate }}
       <span class="nav-badge reports" *ngIf="status && status.reportsSinceReset > 0">{{ status.reportsSinceReset }}</span>
