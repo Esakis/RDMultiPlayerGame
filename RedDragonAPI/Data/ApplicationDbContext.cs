@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RedDragonAPI.Models.Entities;
 
 namespace RedDragonAPI.Data;
