@@ -44,8 +44,7 @@
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%,
                               rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.22) 100%),
               url('/assets/img/stone-tile.png');
-  border: 1px solid #3c352a;
-  border-radius: 2px;
+  border: none;
   color: #5a0000;
   font-size: 13px;
   font-weight: bold;
@@ -53,17 +52,40 @@
   text-align: left;
   text-decoration: none;
   cursor: pointer;
-  line-height: 1.25;
+  line-height: 1.3;
   transition: filter 0.12s, color 0.12s;
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.85),
-              inset 0 1px 0 rgba(255, 255, 255, 0.5),
-              inset 1px 0 0 rgba(255, 255, 255, 0.25),
-              inset 0 -1px 0 rgba(0, 0, 0, 0.35),
-              inset -1px 0 0 rgba(0, 0, 0, 0.2);
+  // Cień podąża za poszarpaną sylwetką (box-shadow byłby ucięty przez clip-path).
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.85));
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.45),
+              inset 0 -2px 2px rgba(0, 0, 0, 0.35);
+
+  // Poszarpane krawędzie — trzy warianty obrysu rotowane po przyciskach.
+  clip-path: polygon(1% 12%, 4% 0%, 24% 6%, 43% 0%, 66% 7%, 82% 1%, 98% 5%,
+                     100% 34%, 97% 55%, 100% 82%, 95% 98%, 71% 93%, 49% 100%,
+                     27% 94%, 9% 100%, 0% 86%, 2% 48%);
+
+  &:nth-child(3n+1) {
+    clip-path: polygon(0% 18%, 6% 2%, 19% 8%, 41% 0%, 58% 6%, 81% 0%, 96% 7%,
+                       100% 26%, 96% 52%, 100% 74%, 97% 100%, 76% 94%, 57% 100%,
+                       34% 93%, 12% 99%, 2% 92%, 3% 55%);
+  }
+
+  &:nth-child(3n+2) {
+    clip-path: polygon(2% 8%, 12% 0%, 33% 7%, 52% 1%, 74% 8%, 91% 0%, 100% 14%,
+                       97% 38%, 100% 62%, 96% 88%, 88% 100%, 63% 92%, 44% 100%,
+                       21% 95%, 5% 100%, 0% 74%, 1% 40%);
+  }
+
+  // Różne długości tabliczek — nieregularny prawy brzeg kolumny.
+  &:nth-child(4n+1) { padding-right: 22px; }
+  &:nth-child(4n+2) { padding-right: 9px; }
+  &:nth-child(4n+3) { padding-right: 30px; }
+  &:nth-child(5n+2) { margin-left: 3px; }
+  &:nth-child(7n+3) { margin-left: 6px; }
 
   &:hover {
     color: #8b0000;
-    filter: brightness(1.1);
+    filter: brightness(1.12) drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.85));
     text-decoration: none;
   }
 
