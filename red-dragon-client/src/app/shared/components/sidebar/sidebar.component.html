@@ -1,4 +1,5 @@
 <nav class="sidebar">
+  <img class="dragon-art" src="assets/img/dragon-side.png" alt="">
   <div class="menu-buttons">
     <a *ngFor="let item of menuItems"
        [routerLink]="item.route"
@@ -11,9 +12,7 @@
 
   <div class="turn-button-container">
     <button type="button" class="turn-btn" (click)="onTurnClick()" [title]="'menu.useTurn' | translate">
-      <div class="turn-circle-outer">
-        <div class="turn-circle-inner"></div>
-      </div>
+      <img src="assets/img/seal-turn.png" alt="Tura">
     </button>
   </div>
 </nav>
