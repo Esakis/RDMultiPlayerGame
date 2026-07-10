@@ -23,8 +23,34 @@ public static class TrainingHelper
         return lvl;
     }
 
-    public static decimal SoldierPromotePct(int level) => SoldierPct[Math.Clamp(level, 0, 5)];
-    public static decimal ElitePromotePct(int level) => ElitePct[Math.Clamp(level, 0, 5)];
+    /// <summary>Koszary (Dracopedia §14.3): +10 p.p. awansu hoplitów do E1 na turę.</summary>
+    public const decimal BarracksSoldierPct = 10m;
+
+    /// <summary>
+    /// Akademia wojskowa (Dracopedia §14.3): +5 p.p. awansu E1→E2 na turę
+    /// (Olbrzym 6, Goblin 4,5).
+    /// </summary>
+    public static decimal AcademyElitePct(string race) => race switch
+    {
+        "Olbrzym" => 6m,
+        "Goblin" => 4.5m,
+        _ => 5m
+    };
+
+    /// <summary>Procent awansu E0→E1 na turę: nauka Trening + Koszary.</summary>
+    public static decimal SoldierPromotePct(int level, bool hasBarracks = false) =>
+        SoldierPct[Math.Clamp(level, 0, 5)] + (hasBarracks ? BarracksSoldierPct : 0m);
+
+    /// <summary>
+    /// Procent awansu E1→E2 na turę: nauka Trening + Akademia wojskowa.
+    /// Krwawy Księżyc podwaja składnik Akademii (fazy_ksiezyca.html).
+    /// </summary>
+    public static decimal ElitePromotePct(int level, string race = "", bool hasAcademy = false, bool bloodMoon = false)
+    {
+        decimal academy = hasAcademy ? AcademyElitePct(race) : 0m;
+        if (bloodMoon) academy *= 2m;
+        return ElitePct[Math.Clamp(level, 0, 5)] + academy;
+    }
 
     // Sloty jednostek niezależne od rasy (po sufiksie typu / opisie definicji).
     public static bool IsHoplita(UnitDefinition d) => d.UnitType.EndsWith("_Hoplita");

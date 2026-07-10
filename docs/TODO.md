@@ -65,10 +65,17 @@ Dracopedia = źródło nadrzędne; przy rozbieżnościach przyjmujemy wartości 
       niepotwierdzony bonus Enta (+1). Hobbit: ziemia ×0,82.
 
 ### Etap 5 — Koszary i Akademia wojskowa jako budynki szkolące — ROZBIEŻNOŚĆ
-- [ ] Koszary: 10% hoplitów→E1/turę; Akademia wojskowa: 5% E1→E2/turę
+- [x] Koszary: 10% hoplitów→E1/turę; Akademia wojskowa: 5% E1→E2/turę
       (Olbrzym 6%, Goblin 4,5%). Zgrać z nauką Trening (TrainingHelper).
-- [ ] Konflikt ról: obecna AkademiaWojskowa podwaja szansę przyjścia generała
+      → Model łączony: procent awansu = nauka Trening + budynek (Koszary
+      +10 p.p. E0→E1, Akademia +5/6/4,5 p.p. E1→E2). Krwawy Księżyc podwaja
+      składnik Akademii (poprawka względem Etapu 1, gdzie podwajał całość).
+      UI (TrainingInfoDto) pokazuje procenty z budynkami. Wyjątek Ożywieńców
+      (koszt E1 800 zł/0 broni) pominięty — nasz Szkielet i tak kosztuje mniej.
+- [x] Konflikt ról: obecna AkademiaWojskowa podwaja szansę przyjścia generała
       (GeneralService) — rozstrzygnąć (przenieść/zostawić jako dodatkową).
+      → Zostaje jako dodatkowa rola (opis budynku zaktualizowany, migracja
+      TrainingBuildingsDescriptions).
 
 ### Etap 6 — drobiazgi ekonomiczne — ROZBIEŻNOŚCI
 - [ ] Ratusz: Ludzie 20 zł/obywatela (inni 10); podatek bez wojska i złodziei.

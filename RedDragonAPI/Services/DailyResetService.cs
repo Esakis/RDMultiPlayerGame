@@ -265,14 +265,19 @@ public class DailyResetService : BackgroundService
 
                     bool hasSoldierBld = kingdom.Buildings.Any(b => b.BuildingType == TrainingHelper.SoldierBuilding && b.Quantity > 0 && !b.IsUnderConstruction);
                     bool hasEliteBld = kingdom.Buildings.Any(b => b.BuildingType == TrainingHelper.EliteBuilding && b.Quantity > 0 && !b.IsUnderConstruction);
+                    bool hasAcademy = kingdom.Buildings.Any(b => b.BuildingType == "AkademiaWojskowa" && b.Quantity > 0 && !b.IsUnderConstruction);
 
+                    // Koszary (Dracopedia): +10 p.p. awansu hoplitów do E1 na turę
                     if (kingdom.TrainSoldiers && hasSoldierBld && hoplitaDef != null && e1Def != null)
-                        PromoteUnits(context, kingdom, hoplitaDef.UnitType, e1Def, TrainingHelper.SoldierPromotePct(level));
+                        PromoteUnits(context, kingdom, hoplitaDef.UnitType, e1Def,
+                            TrainingHelper.SoldierPromotePct(level, hasEliteBld));
 
-                    // Krwawy Księżyc (MECHANIKA §13): szkolenie E1→E2 dwa razy szybsze
-                    decimal eliteMult = bloodMoon && moonPhase == MoonPhaseHelper.Pelnia ? 2m : 1m;
+                    // Akademia wojskowa: +5 p.p. E1→E2 (Olbrzym 6, Goblin 4,5);
+                    // Krwawy Księżyc (MECHANIKA §13) podwaja składnik Akademii.
+                    bool isBloodMoon = bloodMoon && moonPhase == MoonPhaseHelper.Pelnia;
                     if (kingdom.TrainElite && hasEliteBld && e1Def != null && e2Def != null)
-                        PromoteUnits(context, kingdom, e1Def.UnitType, e2Def, TrainingHelper.ElitePromotePct(level) * eliteMult);
+                        PromoteUnits(context, kingdom, e1Def.UnitType, e2Def,
+                            TrainingHelper.ElitePromotePct(level, kingdom.Race, hasAcademy, isBloodMoon));
                 }
             }
 

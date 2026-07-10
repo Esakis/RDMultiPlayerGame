@@ -262,13 +262,14 @@ public class MilitaryService : IMilitaryService
         int level = TrainingHelper.TrainingLevel(kingdom.Researches);
         bool hasSoldierBld = kingdom.Buildings.Any(b => b.BuildingType == TrainingHelper.SoldierBuilding && b.Quantity > 0);
         bool hasEliteBld = kingdom.Buildings.Any(b => b.BuildingType == TrainingHelper.EliteBuilding && b.Quantity > 0);
+        bool hasAcademy = kingdom.Buildings.Any(b => b.BuildingType == "AkademiaWojskowa" && b.Quantity > 0);
 
         return new TrainingInfoDto
         {
             TrainSoldiers = kingdom.TrainSoldiers && hasSoldierBld,
             TrainElite = kingdom.TrainElite && hasEliteBld,
-            SoldierPromotePct = TrainingHelper.SoldierPromotePct(level),
-            ElitePromotePct = TrainingHelper.ElitePromotePct(level),
+            SoldierPromotePct = TrainingHelper.SoldierPromotePct(level, hasEliteBld),
+            ElitePromotePct = TrainingHelper.ElitePromotePct(level, kingdom.Race, hasAcademy),
             CanTrainSoldiers = hasSoldierBld,
             CanTrainElite = hasEliteBld
         };
