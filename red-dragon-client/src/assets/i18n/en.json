@@ -233,7 +233,12 @@
     "remainingOfPosted": "Remaining / Posted",
     "deposit": "Deposit",
     "unitsShort": "units",
-    "goldShort": "g",
+    "goldShort": "gold",
+    "autosell": {
+      "title": "Auto-sell surplus",
+      "hint": "Each turn everything above the set threshold is sold at the market buyout rate. Empty field = auto-sell disabled for the resource.",
+      "off": "off"
+    },
     "withdraw": "Withdraw",
     "noMine": "You have no posted orders.",
     "taxNote": "Market tax: 15% (Accounting research lowers it to 12/8/5%) — paid by the gold recipient.",

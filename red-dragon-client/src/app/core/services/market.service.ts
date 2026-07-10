@@ -38,6 +38,14 @@ export interface ExchangeRate {
   sellPrice: number;  // cena skupu 1 szt. (dostajesz złoto)
 }
 
+/** Progi auto-sprzedaży nadwyżek na targu (null = wyłączona dla zasobu). */
+export interface AutoSell {
+  foodAbove: number | null;
+  stoneAbove: number | null;
+  weaponsAbove: number | null;
+  manaAbove: number | null;
+}
+
 export interface MarketTransaction {
   id: number;
   resource: string;
@@ -82,5 +90,13 @@ export class MarketService {
 
   exchange(resource: string, direction: 'Buy' | 'Sell', quantity: number): Observable<ServiceResult> {
     return this.http.post<ServiceResult>(`${this.apiUrl}/exchange`, { resource, direction, quantity });
+  }
+
+  getAutoSell(): Observable<AutoSell> {
+    return this.http.get<AutoSell>(`${this.apiUrl}/autosell`);
+  }
+
+  setAutoSell(settings: AutoSell): Observable<ServiceResult> {
+    return this.http.post<ServiceResult>(`${this.apiUrl}/autosell`, settings);
   }
 }

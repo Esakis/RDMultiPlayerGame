@@ -14,6 +14,8 @@ public interface IMarketService
     Task<List<MarketTransactionDto>> GetHistoryAsync(int userId);
     List<ExchangeRateDto> GetExchangeRates();
     Task<ServiceResult> ExchangeAsync(int userId, ExchangeDto dto);
+    Task<AutoSellDto?> GetAutoSellAsync(int userId);
+    Task<ServiceResult> SetAutoSellAsync(int userId, AutoSellDto dto);
 }
 
 /// <summary>
@@ -316,6 +318,41 @@ public class MarketService : IMarketService
         kingdom.Gold += payout;
         await _context.SaveChangesAsync();
         return ServiceResult.Ok($"Sprzedano na targu {dto.Quantity} {ResourceName(dto.Resource)} za {payout} złota.");
+    }
+
+    public async Task<AutoSellDto?> GetAutoSellAsync(int userId)
+    {
+        var kingdom = await GetKingdomAsync(userId);
+        if (kingdom == null) return null;
+        return new AutoSellDto
+        {
+            FoodAbove = kingdom.AutoSellFoodAbove,
+            StoneAbove = kingdom.AutoSellStoneAbove,
+            WeaponsAbove = kingdom.AutoSellWeaponsAbove,
+            ManaAbove = kingdom.AutoSellManaAbove
+        };
+    }
+
+    public async Task<ServiceResult> SetAutoSellAsync(int userId, AutoSellDto dto)
+    {
+        var kingdom = await GetKingdomAsync(userId);
+        if (kingdom == null)
+            return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (new[] { dto.FoodAbove, dto.StoneAbove, dto.WeaponsAbove, dto.ManaAbove }
+            .Any(v => v is < 0))
+            return ServiceResult.Fail("Próg auto-sprzedaży nie może być ujemny.");
+
+        kingdom.AutoSellFoodAbove = dto.FoodAbove;
+        kingdom.AutoSellStoneAbove = dto.StoneAbove;
+        kingdom.AutoSellWeaponsAbove = dto.WeaponsAbove;
+        kingdom.AutoSellManaAbove = dto.ManaAbove;
+        await _context.SaveChangesAsync();
+
+        bool any = dto.FoodAbove != null || dto.StoneAbove != null
+                   || dto.WeaponsAbove != null || dto.ManaAbove != null;
+        return ServiceResult.Ok(any
+            ? "Zapisano progi auto-sprzedaży — nadwyżki będą sprzedawane co turę po kursie skupu."
+            : "Auto-sprzedaż wyłączona.");
     }
 
     /// <summary>Stawka podatku rynkowego wg poziomu badań Rachunkowość (Calculating/Reckoning/Accountancy).</summary>

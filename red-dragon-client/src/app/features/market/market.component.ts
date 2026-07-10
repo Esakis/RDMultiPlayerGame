@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { MarketService, MarketOrder, CreateMarketOrder, MarketTransaction, ExchangeRate } from '../../core/services/market.service';
+import { MarketService, MarketOrder, CreateMarketOrder, MarketTransaction, ExchangeRate, AutoSell } from '../../core/services/market.service';
 import { PactService, PactStatus, PactMember } from '../../core/services/pact.service';
 
 @Component({
@@ -32,6 +32,9 @@ export class MarketComponent implements OnInit {
   exchangeRates: ExchangeRate[] = [];
   exchangeQty: { [resource: string]: number } = {};
 
+  // === Auto-sprzedaż nadwyżek (progi; null = wyłączona) ===
+  autoSell: AutoSell = { foodAbove: null, stoneAbove: null, weaponsAbove: null, manaAbove: null };
+
   // Ilość do zrealizowania per oferta
   fillQty: { [orderId: number]: number } = {};
 
@@ -55,6 +58,27 @@ export class MarketComponent implements OnInit {
     this.market.getExchangeRates().subscribe({
       next: r => this.exchangeRates = r,
       error: () => this.exchangeRates = []
+    });
+    this.market.getAutoSell().subscribe({
+      next: a => this.autoSell = a,
+      error: () => {}
+    });
+  }
+
+  /** Zapisuje progi auto-sprzedaży (puste pole = wyłączona dla zasobu). */
+  saveAutoSell(): void {
+    this.message = '';
+    this.error = '';
+    const norm = (v: number | null) => (v === null || v === undefined || (v as unknown) === '' ? null : v);
+    const payload: AutoSell = {
+      foodAbove: norm(this.autoSell.foodAbove),
+      stoneAbove: norm(this.autoSell.stoneAbove),
+      weaponsAbove: norm(this.autoSell.weaponsAbove),
+      manaAbove: norm(this.autoSell.manaAbove)
+    };
+    this.market.setAutoSell(payload).subscribe({
+      next: r => this.message = r.message ?? '',
+      error: e => this.error = e.error || this.translate.instant('mkt.errFill')
     });
   }
 

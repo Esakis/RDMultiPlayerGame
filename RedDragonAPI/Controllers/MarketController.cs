@@ -67,4 +67,20 @@ public class MarketController : ControllerBase
         var result = await _marketService.ExchangeAsync(UserId, dto);
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
+
+    /// <summary>Progi auto-sprzedaży nadwyżek na targu (null = wyłączona).</summary>
+    [HttpGet("autosell")]
+    public async Task<IActionResult> GetAutoSell()
+    {
+        var settings = await _marketService.GetAutoSellAsync(UserId);
+        return settings == null ? NotFound("Nie znaleziono księstwa.") : Ok(settings);
+    }
+
+    /// <summary>Ustawia progi auto-sprzedaży (co turę sprzedawana nadwyżka powyżej progu).</summary>
+    [HttpPost("autosell")]
+    public async Task<IActionResult> SetAutoSell([FromBody] AutoSellDto dto)
+    {
+        var result = await _marketService.SetAutoSellAsync(UserId, dto);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
 }

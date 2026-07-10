@@ -198,6 +198,13 @@ public class Kingdom
     public bool TrainSoldiers { get; set; } = false;
     public bool TrainElite { get; set; } = false;
 
+    // Auto-sprzedaż nadwyżek na targu państwowym (co turę, po produkcji):
+    // wszystko POWYŻEJ progu sprzedawane po kursie skupu targu. Null = wyłączona.
+    public long? AutoSellFoodAbove { get; set; }
+    public long? AutoSellStoneAbove { get; set; }
+    public long? AutoSellWeaponsAbove { get; set; }
+    public long? AutoSellManaAbove { get; set; }
+
     // Timestamps
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime LastActive { get; set; } = DateTime.UtcNow;

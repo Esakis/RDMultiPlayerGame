@@ -55,6 +55,18 @@ public class ExchangeDto
     public long Quantity { get; set; }
 }
 
+/// <summary>
+/// Progi auto-sprzedaży nadwyżek na targu państwowym — co turę wszystko
+/// powyżej progu jest sprzedawane po kursie skupu. Null = wyłączona.
+/// </summary>
+public class AutoSellDto
+{
+    public long? FoodAbove { get; set; }
+    public long? StoneAbove { get; set; }
+    public long? WeaponsAbove { get; set; }
+    public long? ManaAbove { get; set; }
+}
+
 public class MarketTransactionDto
 {
     public int Id { get; set; }

@@ -34,6 +34,27 @@
         </tr>
       </tbody>
     </table>
+
+    <!-- Auto-sprzedaż nadwyżek: co turę wszystko powyżej progu idzie do skupu -->
+    <div class="autosell">
+      <h4>{{ 'mkt.autosell.title' | translate }}</h4>
+      <p class="hint">{{ 'mkt.autosell.hint' | translate }}</p>
+      <div class="autosell-row">
+        <label>{{ resourceLabel('Food') }}
+          <input type="number" min="0" [(ngModel)]="autoSell.foodAbove" [placeholder]="'mkt.autosell.off' | translate">
+        </label>
+        <label>{{ resourceLabel('Stone') }}
+          <input type="number" min="0" [(ngModel)]="autoSell.stoneAbove" [placeholder]="'mkt.autosell.off' | translate">
+        </label>
+        <label>{{ resourceLabel('Weapons') }}
+          <input type="number" min="0" [(ngModel)]="autoSell.weaponsAbove" [placeholder]="'mkt.autosell.off' | translate">
+        </label>
+        <label>{{ resourceLabel('Mana') }}
+          <input type="number" min="0" [(ngModel)]="autoSell.manaAbove" [placeholder]="'mkt.autosell.off' | translate">
+        </label>
+        <button class="btn-cast" (click)="saveAutoSell()">{{ 'common.save' | translate }}</button>
+      </div>
+    </div>
   </div>
 
   <ng-container *ngIf="!loading && hasAccess">

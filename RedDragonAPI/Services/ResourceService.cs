@@ -612,7 +612,44 @@ public class ResourceService : IResourceService
         if (kingdom.Race == "Elf") manaDelta = Math.Max(0, manaDelta);
         kingdom.Mana = Math.Max(0, kingdom.Mana + manaDelta);
 
+        // === 11. Auto-sprzedaż nadwyżek na targu państwowym ===
+        // Wszystko powyżej ustawionego progu sprzedawane po kursie skupu targu
+        // (MarketService.ExchangeRates.Sell). Null = wyłączona dla zasobu.
+        ApplyAutoSell(kingdom);
+
         kingdom.TurnNumber++;
+    }
+
+    /// <summary>Sprzedaje nadwyżki zasobów powyżej progów auto-sprzedaży (targ państwowy).</summary>
+    private void ApplyAutoSell(Kingdom kingdom)
+    {
+        long totalGold = 0;
+        var soldInfo = new List<string>();
+
+        void Sell(string resource, long? threshold, Func<long> get, Action<long> subtract, string label)
+        {
+            if (threshold == null) return;
+            long surplus = get() - threshold.Value;
+            if (surplus <= 0) return;
+            long rate = MarketService.ExchangeRates[resource].Sell;
+            subtract(surplus);
+            totalGold += surplus * rate;
+            soldInfo.Add($"{surplus:N0} {label}");
+        }
+
+        Sell("Food", kingdom.AutoSellFoodAbove, () => kingdom.Food, v => kingdom.Food -= v, "jedzenia");
+        Sell("Stone", kingdom.AutoSellStoneAbove, () => kingdom.Stone, v => kingdom.Stone -= v, "kamienia");
+        Sell("Weapons", kingdom.AutoSellWeaponsAbove, () => kingdom.Weapons, v => kingdom.Weapons -= v, "broni");
+        Sell("Mana", kingdom.AutoSellManaAbove, () => kingdom.Mana, v => kingdom.Mana -= v, "many");
+
+        if (totalGold <= 0) return;
+        kingdom.Gold += totalGold;
+        _context.KingdomEvents.Add(new KingdomEvent
+        {
+            KingdomId = kingdom.Id,
+            Category = "Economy",
+            Message = $"Auto-sprzedaż na targu: {string.Join(", ", soldInfo)} za {totalGold:N0} złota."
+        });
     }
 
     /// <summary>Limit SP/turę: baza wg poziomu Wynalazczości × modyfikator rasy.</summary>
