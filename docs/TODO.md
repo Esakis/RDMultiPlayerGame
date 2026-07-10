@@ -41,8 +41,12 @@ Dracopedia = źródło nadrzędne; przy rozbieżnościach przyjmujemy wartości 
       więc ochrona Ścian w Pełni jest bezprzedmiotowa.
 
 ### Etap 3 — Szpital: redukcja strat w obronie — BRAK
-- [ ] Szpital: −25% strat wojska w obronie (nie działa na straty od gnomich saperów E2).
+- [x] Szpital: −25% strat wojska w obronie (nie działa na straty od gnomich saperów E2).
       Atakową połowę (−50%) ma Ambulatorium polowe — uporządkować podział ról.
+      → BattleService: obrońca ze Szpitalem traci 25% mniej wojska; straty od
+      saperów Gnoma doliczane atakującemu po redukcjach (wyjątek zachowany).
+      Podział ról zostaje: Szpital=obrona, Ambulatorium=atak (opis budynku
+      w seedzie do poprawy przy migracji w Etapie 4).
 
 ### Etap 4 — kalibracja obrony wg Dracopedii — ROZBIEŻNOŚCI
 - [ ] BattleCalculator ma zaszyte ~połowę wartości źródłowych, a seed (DefenseBonus)

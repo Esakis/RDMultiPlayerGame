@@ -588,6 +588,13 @@ public class BattleService : IBattleService
                 attackerCasualties[key] = (int)(attackerCasualties[key] * (1m - reduction));
         }
 
+        // Szpital (Dracopedia §14.3): straty wojska w obronie mniejsze o 25%.
+        // Nie obejmuje strat od gnomich saperów E2 — te dolicza się atakującemu
+        // osobno, już po redukcjach.
+        if (HasBld(defender, "Szpital"))
+            foreach (var key in defenderCasualties.Keys.ToList())
+                defenderCasualties[key] = (int)(defenderCasualties[key] * 0.75m);
+
         // Uzdrawianie (Dracopedia §11): ratuje lvl% poległych własnych —
         // atakujący ×2 po wygranej, obrońca ×4 po udanej obronie.
         int atkHealLvl = SecLevel(attackerGenerals, "Uzdrawianie");
