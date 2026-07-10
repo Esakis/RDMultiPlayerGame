@@ -49,11 +49,20 @@ Dracopedia = źródło nadrzędne; przy rozbieżnościach przyjmujemy wartości 
       w seedzie do poprawy przy migracji w Etapie 4).
 
 ### Etap 4 — kalibracja obrony wg Dracopedii — ROZBIEŻNOŚCI
-- [ ] BattleCalculator ma zaszyte ~połowę wartości źródłowych, a seed (DefenseBonus)
+- [x] BattleCalculator ma zaszyte ~połowę wartości źródłowych, a seed (DefenseBonus)
       jeszcze inne — UI pokazuje co innego niż liczy walka. Ujednolicić:
       Smoczy mur 10%, Smocza bariera 10%, Zamek 15% + −10% strat ludności cywilnej.
-- [ ] Sieć fortec: sekwencja strat ziemi 6/6/6/4,5/3/1,5% (bez Sieci 10/10/8/6/4/2%)
+      → BattleCalculator: Szaniec 5% (+straty cywilów −20%, jak Komando — ta sama
+      funkcja, nie kumulują się), Mur 10%, Bariera 10%, Zamek 15% i −10% strat
+      cywilów; seed + migracja DracopediaDefenseCalibration (opisy i DefenseBonus
+      zsynchronizowane z walką).
+- [x] Sieć fortec: sekwencja strat ziemi 6/6/6/4,5/3/1,5% (bez Sieci 10/10/8/6/4/2%)
       zamiast płaskiego bonusu. Sprawdzić u źródła Szaniec i Pospolite ruszenie.
+      → CalculateLandCaptured liczy przełamane obrony celu od ostatniego
+      przeliczenia (BattleReports); Sieć nie daje już % obrony. Pospolite
+      ruszenie wg źródła: broni CAŁA ludność (nie tylko zatrudnieni) + złodzieje,
+      współczynnik 2 (Goblin 3, Olbrzym 2,5, Br-Oug 1,5, Gnom 1); usunięty
+      niepotwierdzony bonus Enta (+1). Hobbit: ziemia ×0,82.
 
 ### Etap 5 — Koszary i Akademia wojskowa jako budynki szkolące — ROZBIEŻNOŚĆ
 - [ ] Koszary: 10% hoplitów→E1/turę; Akademia wojskowa: 5% E1→E2/turę

@@ -10,7 +10,7 @@ namespace RedDragonAPI.Helpers;
 /// Atak:   u = { [armia z bonusami budynków] · (1 + r/(50+r)) + r·100 + machiny·x }
 ///             · (1 + 0,1·NamiotDowodcy)
 /// Obrona: o = { [armia + domobrana + wieże] · (1 + r/(50+r)) + r·100 }
-///             · (1+0,05·SmoczyMur) · (1+0,07·SmoczaBariera) · (1+0,1·Zamek)
+///             · (1+0,05·Szaniec) · (1+0,1·SmoczyMur) · (1+0,1·SmoczaBariera) · (1+0,15·Zamek)
 /// Straty: ~15% przy równowadze, 0–30% wg przewagi, modyfikatory rasowe.
 /// </summary>
 public static class BattleCalculator
@@ -115,27 +115,24 @@ public static class BattleCalculator
                 + (IsElite2(unit.Definition) ? e2DefBonus : 0m));
         }
 
-        // Domobrana (Pospolite ruszenie): bronią ludzie w profesjach + złodzieje w domu,
-        // z siłą (2 + k + bonus rasowy). Bonusy: Goblin 3, Olbrzym 2,5, Ent +1, Br-Oug 1,5.
+        // Domobrana (Pospolite ruszenie, Dracopedia): broni CAŁA ludność cywilna
+        // (bez wymogu przeszkolenia) + złodzieje w domu, ze współczynnikiem 2 + k.
+        // Wyjątki rasowe: Goblin 3, Olbrzym 2,5, Br-Oug 1,5, Gnom 1.
         if (Has(defender, "PospoliteRuszenie"))
         {
             decimal raceBonus = defenderRace.Name switch
             {
                 "Goblin" => 1m,
-                "Ent" => 1m,
                 "Olbrzym" => 0.5m,
                 "Br-Oug" => -0.5m,
+                "Gnom" => -1m,
                 _ => 0m
             };
 
-            // p = pracujący (poza bezrobotnymi) + złodzieje w domu; brak danych → populacja
-            long militiaPeople = defender.Professions != null && defender.Professions.Any()
-                ? defender.Professions.Where(p => p.ProfessionType != "Bezrobotni").Sum(p => (long)p.WorkerCount)
-                : defender.Population;
             long homeThieves = defender.MilitaryUnits
                 .Where(u => IsThief(u.UnitType)).Sum(u => (long)u.Quantity);
 
-            armyPower += (militiaPeople + homeThieves) * (2m + k + raceBonus);
+            armyPower += (defender.Population + homeThieves) * (2m + k + raceBonus);
         }
 
         // Wieże obronne: v·(10+nbr)·(1 + 4v/(v+400)); Człowiek 10, pozostali 15;
@@ -168,13 +165,13 @@ public static class BattleCalculator
         decimal dragonMult = 1m + dragons / (50m + dragons);
         decimal total = armyPower * dragonMult + dragons * 100m;
 
-        // budynki obronne: Smoczy mur +5%, Smocza bariera +7%, Zamek +10%,
-        // Sieć fortec +5% (dodatkowo zmniejsza straty ziemi)
-        if (Has(defender, "Szaniec")) total *= 1.03m;
-        if (Has(defender, "SmoczyMur")) total *= 1.05m;
-        if (Has(defender, "SmoczaBariera")) total *= 1.07m;
-        if (Has(defender, "Zamek")) total *= 1.10m;
-        if (Has(defender, "SiecFortec")) total *= 1.05m;
+        // budynki obronne (Dracopedia): Szaniec +5%, Smoczy mur +10%,
+        // Smocza bariera +10%, Zamek +15%. Sieć fortec nie daje % obrony —
+        // zmniejsza utratę ziemi (CalculateLandCaptured).
+        if (Has(defender, "Szaniec")) total *= 1.05m;
+        if (Has(defender, "SmoczyMur")) total *= 1.10m;
+        if (Has(defender, "SmoczaBariera")) total *= 1.10m;
+        if (Has(defender, "Zamek")) total *= 1.15m;
 
         // Tarcze bojowe (Dracopedia §8): Tarcza wojenna +24% obrony,
         // Słabość −24% obrony (zawieszone na obrońcy jako ActiveSpell).
@@ -215,14 +212,18 @@ public static class BattleCalculator
     }
 
     /// <summary>
-    /// Zdobyta ziemia: pierwszy przechodzący atak zabiera ~11% obszaru obrońcy
-    /// (Hobbit w obronie 9%; z Siecią fortec odpowiednio 9%/7%).
+    /// Zdobyta ziemia (Dracopedia, Sieć wojennych fortec): kolejne przechodzące
+    /// ataki w tym przeliczeniu zabierają 10/10/8/6/4/2% obszaru obrońcy,
+    /// a z Siecią fortec 6/6/6/4,5/3/1,5%. Hobbit w obronie traci ×0,82
+    /// (odpowiednik dawnych 9% zamiast 11%).
     /// </summary>
-    public static int CalculateLandCaptured(Kingdom defender, RaceDefinition defenderRace)
+    public static int CalculateLandCaptured(Kingdom defender, RaceDefinition defenderRace, int priorBreaches)
     {
-        decimal pct = 0.11m;
-        if (defenderRace.Name == "Hobbit") pct = 0.09m;
-        if (Has(defender, "SiecFortec")) pct -= 0.02m;
+        decimal[] withFort = { 6m, 6m, 6m, 4.5m, 3m, 1.5m };
+        decimal[] withoutFort = { 10m, 10m, 8m, 6m, 4m, 2m };
+        var seq = Has(defender, "SiecFortec") ? withFort : withoutFort;
+        decimal pct = seq[Math.Clamp(priorBreaches, 0, seq.Length - 1)] / 100m;
+        if (defenderRace.Name == "Hobbit") pct *= 0.82m;
         return (int)(defender.Land * pct);
     }
 
@@ -313,8 +314,11 @@ public static class BattleCalculator
         double rate = !militia ? armyCasualtyRate * 0.25
             : defenseHeld ? armyCasualtyRate * 0.5
             : armyCasualtyRate;
-        // Komando (Dracopedia §14.3): oddziały szybkiego reagowania — straty cywilów −20%
-        if (Has(defender, "Komando")) rate *= 0.8;
+        // Komando/Szaniec (Dracopedia: ten sam budynek pod różnymi nazwami er) —
+        // straty cywilów −20%; efekty się nie kumulują.
+        if (Has(defender, "Komando") || Has(defender, "Szaniec")) rate *= 0.8;
+        // Zamek (Dracopedia): schronienie dla cywilów — straty ludności −10%
+        if (Has(defender, "Zamek")) rate *= 0.9;
         return (int)(defender.Population * Math.Min(rate, 0.33));
     }
 

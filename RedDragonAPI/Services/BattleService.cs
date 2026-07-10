@@ -694,8 +694,17 @@ public class BattleService : IBattleService
 
         if (attackerWins)
         {
-            // pierwszy przechodzący atak: ~11% obszaru (Hobbit 9%, Sieć fortec −2 p.p.)
-            landCaptured = BattleCalculator.CalculateLandCaptured(defender, defenderRace);
+            // Sekwencja strat ziemi (Dracopedia, Sieć fortec): kolejne przechodzące
+            // ataki w tym przeliczeniu zabierają coraz mniej — liczymy wcześniejsze
+            // przełamane obrony celu od ostatniego przeliczenia (5:00).
+            var nowLocal = DateTime.Now;
+            var lastResetUtc = (nowLocal.Hour >= 5
+                ? nowLocal.Date.AddHours(5)
+                : nowLocal.Date.AddDays(-1).AddHours(5)).ToUniversalTime();
+            int priorBreaches = await _context.BattleReports.CountAsync(b =>
+                b.DefenderKingdomId == defender.Id && b.BattleType == "Military"
+                && b.Result == "Victory" && b.OccurredAt >= lastResetUtc);
+            landCaptured = BattleCalculator.CalculateLandCaptured(defender, defenderRace, priorBreaches);
             resourcesStolen = BattleCalculator.CalculateResourcesStolen(defender);
 
             // Szamanizm Olbrzyma: totemy Grabieży / Niszczycielstwa / Smokobójstwa
