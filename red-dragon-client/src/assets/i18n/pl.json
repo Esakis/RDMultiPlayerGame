@@ -263,8 +263,11 @@
     "errPact": "Błąd zmiany paktu.",
     "pactsTitle": "Pakty sojusznicze",
     "pactsNoCoalition": "Pakty zawierasz wyłącznie z członkami swojej koalicji. Dołącz do koalicji, aby paktować.",
-    "pactsIntro": "Z każdym sojusznikiem możesz zawrzeć <strong>dowolną kombinację 4 paktów</strong> (po jednym każdego typu). Pakt handlowy dolicza ziemię sojusznika do efektywności kupców; pakty wojskowy, magiczny i złodziejski wspomagają obronę Twojego księstwa. Zaznacz pakty, które chcesz zawrzeć.",
-    "pactsCount": "Zawarte pakty",
+    "pactsIntro": "Pakty <strong>wojskowy, magiczny i złodziejski</strong> zawierasz z konkretnym sojusznikiem — to jego armia, magowie i złodzieje wspomagają Twoją obronę. Pakt <strong>handlowy</strong> nie wskazuje państwa: to udział w wymianie handlowej koalicji. Świeżo zawarty pakt do najbliższego przeliczenia działa z połową wartości.",
+    "pactsCount": "Zawarte pakty obronne",
+    "tradeCol": "Handel",
+    "tradeColTip": "Czy to księstwo uczestniczy w wymianie handlowej koalicji (jego ziemia liczy się Twoim kupcom, gdy sam masz włączony handel).",
+    "halfPactTip": "Pakt połówkowy — zawarty po ostatnim przeliczeniu, do najbliższego przeliczenia działa z połową wartości.",
     "defensivePacts": "Pakty obronne",
     "ambasadaHas": "Ambasada zwiększyła Twój limit o 1.",
     "ambasadaBuild": "Zbuduj budynek specjalny Ambasada, aby zwiększyć limit o 1.",
@@ -284,7 +287,7 @@
       "Zlodziejski": "Złodziejski"
     },
     "pactDesc": {
-      "Handlowy": "Ziemia sojusznika dolicza się do efektywności Twoich kupców (100%, bez limitu).",
+      "Handlowy": "Udział w wymianie handlowej koalicji — ziemia współczłonków z włączonym handlem dolicza się Twoim kupcom (poza limitem paktów).",
       "Wojskowy": "Armia sojusznika pozostawiona w domu pomaga bronić Twojego księstwa.",
       "Magiczny": "Magowie sojusznika pomagają bronić przed wrogą magią.",
       "Zlodziejski": "Złodzieje sojusznika pomagają bronić przed atakami złodziejskimi."

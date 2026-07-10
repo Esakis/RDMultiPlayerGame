@@ -458,7 +458,7 @@ public class KingdomService : IKingdomService
             return ServiceResult.Fail("Elfy nie mogą przyjmować komanda łuczników.");
 
         var partners = await PactService.GetActivePactPartnersAsync(_context, kingdom.Id, "Wojskowy");
-        if (partners.All(p => p.Id != targetKingdomId))
+        if (partners.All(p => p.Partner.Id != targetKingdomId))
             return ServiceResult.Fail("Komando można wysłać tylko do księstwa z aktywnym paktem wojskowym.");
         if (await _context.Kingdoms.AnyAsync(k => k.Id != kingdom.Id && k.ArcherCommandoTargetId == targetKingdomId))
             return ServiceResult.Fail("To księstwo przyjęło już komando innego Elfa.");

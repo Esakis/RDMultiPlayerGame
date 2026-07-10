@@ -32,4 +32,12 @@ public class PactController : ControllerBase
         var result = await _pactService.SetPactAsync(UserId, dto);
         return result.Success ? Ok(result) : BadRequest(result.Message);
     }
+
+    /// <summary>Pakt handlowy (kupiecki) — bez partnera; włącz/wyłącz udział w wymianie koalicji.</summary>
+    [HttpPost("trade")]
+    public async Task<IActionResult> SetTrade([FromBody] SetTradePactDto dto)
+    {
+        var result = await _pactService.SetTradePactAsync(UserId, dto.Enabled);
+        return result.Success ? Ok(result) : BadRequest(result.Message);
+    }
 }

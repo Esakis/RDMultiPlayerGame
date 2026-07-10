@@ -199,3 +199,32 @@
     }
   }
 }
+
+// Pakt handlowy (przelacznik bez partnera) i znacznik paktu polowkowego
+.trade-pact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 4px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid #5a3a1a;
+  border-radius: 4px;
+
+  .pact-check { display: flex; align-items: center; gap: 6px; color: #e8d5b0; }
+}
+
+.half-badge {
+  display: inline-block;
+  min-width: 16px;
+  text-align: center;
+  background: #5a4a2a;
+  color: #ffd27b;
+  border: 1px solid #c9a86a;
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 15px;
+  cursor: help;
+}
+
+.trade-flag { color: #9fd49f; font-weight: bold; }

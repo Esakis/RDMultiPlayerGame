@@ -69,16 +69,20 @@ public class GeneralDto
     public bool IsAvailable { get; set; }
 }
 
-/// <summary>Stan paktów księstwa: lista współczłonków koalicji z aktywnymi typami paktów
-/// oraz informacja o globalnym limicie paktów.</summary>
+/// <summary>Stan paktów księstwa: pakt handlowy (bez partnera) + lista współczłonków
+/// koalicji z aktywnymi typami paktów obronnych i informacją o limicie.</summary>
 public class PactStatusDto
 {
     public bool InCoalition { get; set; }
-    /// <summary>Maks. łączna liczba paktów (baza 5 + Ambasada).</summary>
+    /// <summary>Maks. łączna liczba paktów obronnych (baza 5 + Ambasada).</summary>
     public int Limit { get; set; }
-    /// <summary>Liczba aktualnie zawartych paktów (wszystkich typów).</summary>
+    /// <summary>Liczba aktualnie zawartych paktów obronnych.</summary>
     public int UsedSlots { get; set; }
     public bool HasAmbasada { get; set; }
+    /// <summary>Pakt handlowy (kupiecki) — bez partnera, udział w wymianie koalicji.</summary>
+    public bool TradePactEnabled { get; set; }
+    /// <summary>Czy pakt handlowy działa jeszcze połowicznie (do najbliższego przeliczenia).</summary>
+    public bool TradePactHalf { get; set; }
     public List<PactMemberDto> Members { get; set; } = new();
 }
 
@@ -88,16 +92,26 @@ public class PactMemberDto
     public string Name { get; set; } = string.Empty;
     public string Race { get; set; } = string.Empty;
     public int Land { get; set; }
-    /// <summary>Aktywne typy paktów z tym księstwem: Handlowy | Magiczny | Wojskowy | Zlodziejski.
-    /// Z każdym księstwem można mieć po jednym pakcie każdego typu (do 4 łącznie).</summary>
+    /// <summary>Czy członek uczestniczy w wymianie handlowej koalicji (jego ziemia
+    /// liczy się Twoim kupcom, gdy sam też masz włączony handel).</summary>
+    public bool TradePactEnabled { get; set; }
+    /// <summary>Aktywne typy paktów OBRONNYCH z tym księstwem: Magiczny | Wojskowy | Zlodziejski.</summary>
     public List<string> ActivePacts { get; set; } = new();
+    /// <summary>Typy paktów zawarte po ostatnim przeliczeniu — działają z połową wartości.</summary>
+    public List<string> HalfPacts { get; set; } = new();
 }
 
 public class SetPactDto
 {
     public int TargetKingdomId { get; set; }
-    /// <summary>Typ paktu: Handlowy | Magiczny | Wojskowy | Zlodziejski.</summary>
-    public string PactType { get; set; } = "Handlowy";
+    /// <summary>Typ paktu obronnego: Magiczny | Wojskowy | Zlodziejski.</summary>
+    public string PactType { get; set; } = "Wojskowy";
     /// <summary>true = zawrzyj pakt tego typu, false = zerwij.</summary>
     public bool Active { get; set; }
+}
+
+public class SetTradePactDto
+{
+    /// <summary>true = włącz pakt handlowy, false = zerwij.</summary>
+    public bool Enabled { get; set; }
 }

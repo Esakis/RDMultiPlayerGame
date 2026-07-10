@@ -242,27 +242,26 @@ public class ResourceService : IResourceService
                     break;
                 case "Kupcy":
                     // Oryginalny wzór: złoto na kupca = 500·z/(z + ob·10),
-                    // z — obszar własny + obszar partnerów paktu HANDLOWEGO.
-                    // Pakt handlowy jest jednym z 4 typów paktu (urza-pakt.txt) — aby
-                    // doliczyć obszar sojusznika do handlu, trzeba mieć z nim aktywny pakt handlowy.
+                    // z — obszar własny + obszar współczłonków koalicji uczestniczących
+                    // w wymianie handlowej (pakt handlowy nie wskazuje partnera — to
+                    // przełącznik udziału w handlu). Świeżo włączony handel (własny lub
+                    // partnera) liczy się połowicznie do najbliższego przeliczenia.
                     if (prof.WorkerCount > 0)
                     {
                         long tradeLand = kingdom.Land;
-                        if (kingdom.CoalitionId != null)
+                        if (kingdom.CoalitionId != null && kingdom.TradePactEnabled)
                         {
-                            var tradePartnerIds = await _context.Pacts
-                                .Where(p => p.Status == "Active" && p.PactType == "Handlowy"
-                                            && (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id))
-                                .Select(p => p.ProposerKingdomId == kingdom.Id
-                                    ? p.TargetKingdomId
-                                    : p.ProposerKingdomId)
-                                .Distinct()
+                            decimal myMult = PactService.IsHalf(kingdom.TradePactSince) ? 0.5m : 1m;
+                            var tradePartners = await _context.Kingdoms
+                                .Where(k => k.CoalitionId == kingdom.CoalitionId
+                                            && k.Id != kingdom.Id && k.TradePactEnabled)
+                                .Select(k => new { k.Land, k.TradePactSince })
                                 .ToListAsync();
-
-                            if (tradePartnerIds.Count > 0)
-                                tradeLand += await _context.Kingdoms
-                                    .Where(k => tradePartnerIds.Contains(k.Id))
-                                    .SumAsync(k => (long)k.Land);
+                            foreach (var partner in tradePartners)
+                            {
+                                decimal mult = PactService.IsHalf(partner.TradePactSince) ? 0.5m : 1m;
+                                tradeLand += (long)(partner.Land * mult * myMult);
+                            }
                         }
                         decimal goldPerMerchant = 500m * tradeLand / (tradeLand + prof.WorkerCount * 10m);
                         production = (long)(prof.WorkerCount * goldPerMerchant

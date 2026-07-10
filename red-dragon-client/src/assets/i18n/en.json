@@ -263,8 +263,11 @@
     "errPact": "Error changing the pact.",
     "pactsTitle": "Alliance pacts",
     "pactsNoCoalition": "You can only make pacts with members of your coalition. Join a coalition to make pacts.",
-    "pactsIntro": "With each ally you can sign <strong>any combination of 4 pacts</strong> (one of each type). The trade pact adds the ally's land to your merchants' efficiency; the military, magic and thief pacts help defend your duchy. Check the pacts you want to sign.",
-    "pactsCount": "Signed pacts",
+    "pactsIntro": "The <strong>military, magic and thief</strong> pacts are signed with a specific ally — it is their army, mages and thieves that support your defense. The <strong>trade</strong> pact does not point at a duchy: it is participation in the coalition's trade exchange. A freshly signed pact works at half value until the next recalculation.",
+    "pactsCount": "Signed defensive pacts",
+    "tradeCol": "Trade",
+    "tradeColTip": "Whether this duchy participates in the coalition's trade exchange (its land counts toward your merchants when your trade is enabled too).",
+    "halfPactTip": "Half pact — signed after the last recalculation, works at half value until the next one.",
     "defensivePacts": "Defensive pacts",
     "ambasadaHas": "The Embassy increased your limit by 1.",
     "ambasadaBuild": "Build the special Embassy building to increase the limit by 1.",
@@ -284,7 +287,7 @@
       "Zlodziejski": "Thief"
     },
     "pactDesc": {
-      "Handlowy": "The ally's land counts toward your merchants' efficiency (100%, no limit).",
+      "Handlowy": "Participation in the coalition's trade exchange — the land of co-members with trade enabled counts toward your merchants (outside the pact limit).",
       "Wojskowy": "The ally's army left at home helps defend your duchy.",
       "Magiczny": "The ally's mages help defend against enemy magic.",
       "Zlodziejski": "The ally's thieves help defend against thief attacks."

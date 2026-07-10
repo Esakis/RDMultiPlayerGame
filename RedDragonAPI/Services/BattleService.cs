@@ -532,18 +532,19 @@ public class BattleService : IBattleService
             defensePower = (long)(defensePower * (1.0 + bestDefenderGeneral.Level / 100.0));
 
         // Pakty wojskowe: armia partnera w domu broni (bez wież i domobrany),
-        // skuteczność 50%/45%/40% wg liczby paktów
+        // skuteczność 50%/45%/40% wg liczby paktów.
+        // Pakt połówkowy (świeżo zawarty): połowa wartości do najbliższego przeliczenia.
         var militaryPartners = await PactService.GetActivePactPartnersAsync(_context, defender.Id, "Wojskowy");
         if (militaryPartners.Count > 0)
         {
             decimal efficiency = PactService.PactEfficiency(militaryPartners.Count);
-            foreach (var partner in militaryPartners)
+            foreach (var (partner, half) in militaryPartners)
             {
                 long partnerDefense = partner.MilitaryUnits
                     .Where(u => u.Definition != null && u.Quantity > 0
                                 && !u.UnitType.EndsWith("_Zlodziej") && !u.UnitType.EndsWith("_Machina"))
                     .Sum(u => (long)u.Quantity * u.Definition!.DefensePower);
-                defensePower += (long)(partnerDefense * efficiency);
+                defensePower += (long)(partnerDefense * efficiency * (half ? 0.5m : 1m));
             }
         }
 
@@ -1422,7 +1423,8 @@ public class BattleService : IBattleService
         }
 
         // Pakty magiczne: magowie partnera pomagają bronić;
-        // Dżin z Pałacem magicznym: pakty magiczne +5% skuteczności (§2.2)
+        // Dżin z Pałacem magicznym: pakty magiczne +5% skuteczności (§2.2).
+        // Pakt połówkowy (świeżo zawarty): połowa wartości do najbliższego przeliczenia.
         var magicPartners = await PactService.GetActivePactPartnersAsync(_context, defender.Id, "Magiczny");
         if (magicPartners.Count > 0)
         {
@@ -1430,8 +1432,8 @@ public class BattleService : IBattleService
             if (defender.Race == "Dżin" && defender.Buildings.Any(b =>
                     b.BuildingType == "PalacMagiczny" && b.Quantity > 0 && !b.IsUnderConstruction))
                 efficiency += 0.05m;
-            foreach (var partner in magicPartners)
-                defensePower += (long)(TrainedMages(partner) * efficiency);
+            foreach (var (partner, half) in magicPartners)
+                defensePower += (long)(TrainedMages(partner) * efficiency * (half ? 0.5m : 1m));
         }
         var mirror = defender.ActiveSpells.FirstOrDefault(s => s.SpellType == "ZwierciadloMagiczne");
 
@@ -1784,18 +1786,19 @@ public class BattleService : IBattleService
             defensePower = (long)(defensePower * (1m + (decimal)defThiefGenLvl / (defThiefGenLvl + 50m)));
 
         // Pakty złodziejskie: złodzieje partnera (w domu) pomagają bronić;
-        // Krasnolud (§2.2): pakty złodziejskie mają o 10 p.p. niższą skuteczność
+        // Krasnolud (§2.2): pakty złodziejskie mają o 10 p.p. niższą skuteczność.
+        // Pakt połówkowy (świeżo zawarty): połowa wartości do najbliższego przeliczenia.
         var thiefPartners = await PactService.GetActivePactPartnersAsync(_context, defender.Id, "Zlodziejski");
         if (thiefPartners.Count > 0)
         {
             decimal efficiency = PactService.PactEfficiency(thiefPartners.Count);
             if (defender.Race == "Krasnolud") efficiency -= 0.10m;
-            foreach (var partner in thiefPartners)
+            foreach (var (partner, half) in thiefPartners)
             {
                 int partnerThieves = partner.MilitaryUnits
                     .Where(u => u.UnitType.EndsWith("_Zlodziej"))
                     .Sum(u => u.Quantity);
-                defensePower += (long)(partnerThieves * efficiency);
+                defensePower += (long)(partnerThieves * efficiency * (half ? 0.5m : 1m));
             }
         }
 

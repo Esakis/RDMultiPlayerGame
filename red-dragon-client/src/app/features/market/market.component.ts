@@ -43,7 +43,8 @@ export class MarketComponent implements OnInit {
   pactMessage = '';
   pactError = '';
 
-  private readonly pactKeys = ['Handlowy', 'Wojskowy', 'Magiczny', 'Zlodziejski'];
+  // Pakty obronne wskazują konkretnego partnera; Handlowy to osobny przełącznik.
+  private readonly pactKeys = ['Wojskowy', 'Magiczny', 'Zlodziejski'];
 
   get pactTypes(): { value: string; label: string }[] {
     return this.pactKeys.map(v => ({ value: v, label: this.pactLabel(v) }));
@@ -196,6 +197,21 @@ export class MarketComponent implements OnInit {
     this.pactMessage = '';
     this.pactError = '';
     this.pactService.setPact(member.kingdomId, type, active).subscribe({
+      next: r => { this.pactMessage = r.message ?? ''; this.loadPacts(); },
+      error: e => { this.pactError = e.error || this.translate.instant('mkt.errPact'); this.loadPacts(); }
+    });
+  }
+
+  /** Czy pakt danego typu z danym księstwem jest jeszcze połówkowy. */
+  isHalfPact(member: PactMember, type: string): boolean {
+    return member.halfPacts?.includes(type) ?? false;
+  }
+
+  /** Włącza/wyłącza pakt handlowy (bez partnera — udział w wymianie koalicji). */
+  toggleTradePact(enabled: boolean): void {
+    this.pactMessage = '';
+    this.pactError = '';
+    this.pactService.setTradePact(enabled).subscribe({
       next: r => { this.pactMessage = r.message ?? ''; this.loadPacts(); },
       error: e => { this.pactError = e.error || this.translate.instant('mkt.errPact'); this.loadPacts(); }
     });

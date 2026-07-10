@@ -192,6 +192,18 @@
 
   <ng-container *ngIf="pacts.inCoalition">
     <p class="hint" [innerHTML]="'mkt.pactsIntro' | translate"></p>
+
+    <!-- Pakt handlowy — bez partnera: udział w wymianie handlowej koalicji -->
+    <div class="trade-pact">
+      <label class="pact-check pact-handlowy">
+        <input type="checkbox" [checked]="pacts.tradePactEnabled"
+               (change)="toggleTradePact($any($event.target).checked)">
+        <strong>{{ 'mkt.pact.Handlowy' | translate }}</strong>
+      </label>
+      <span class="hint">{{ 'mkt.pactDesc.Handlowy' | translate }}</span>
+      <span class="half-badge" *ngIf="pacts.tradePactHalf" [title]="'mkt.halfPactTip' | translate">½</span>
+    </div>
+
     <p class="hint slots">
       {{ 'mkt.pactsCount' | translate }}: <strong>{{ pacts.usedSlots }} / {{ pacts.limit }}</strong>.
       {{ (pacts.hasAmbasada ? 'mkt.ambasadaHas' : 'mkt.ambasadaBuild') | translate }}
@@ -201,17 +213,25 @@
       <thead>
         <tr>
           <th>{{ 'rank.duchy' | translate }}</th>
+          <th class="num">{{ 'pol.col.land' | translate }}</th>
+          <th class="pact-col">{{ 'mkt.tradeCol' | translate }}</th>
           <th *ngFor="let t of pactTypes" class="pact-col">{{ t.label }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let m of pacts.members">
           <td>{{ m.name }}</td>
+          <td class="num">{{ m.land | number }}</td>
+          <td class="pact-col trade-flag" [title]="'mkt.tradeColTip' | translate">
+            {{ m.tradePactEnabled ? '✓' : '—' }}
+          </td>
           <td *ngFor="let t of pactTypes" class="pact-col">
             <label class="pact-check" [ngClass]="pactClass(t.value)">
               <input type="checkbox" [checked]="hasPact(m, t.value)"
                      [disabled]="pactDisabled(m, t.value)"
                      (change)="togglePact(m, t.value, $any($event.target).checked)">
+              <span class="half-badge" *ngIf="isHalfPact(m, t.value)"
+                    [title]="'mkt.halfPactTip' | translate">½</span>
             </label>
           </td>
         </tr>
@@ -223,6 +243,10 @@
       <li *ngFor="let t of pactTypes">
         <span class="pact-badge" [ngClass]="pactClass(t.value)">{{ t.label }}</span>
         <span>{{ pactDescription(t.value) }}</span>
+      </li>
+      <li>
+        <span class="half-badge">½</span>
+        <span>{{ 'mkt.halfPactTip' | translate }}</span>
       </li>
     </ul>
   </ng-container>

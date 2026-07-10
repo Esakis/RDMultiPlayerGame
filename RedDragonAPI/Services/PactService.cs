@@ -9,28 +9,26 @@ public interface IPactService
 {
     Task<PactStatusDto> GetPactStatusAsync(int userId);
     Task<ServiceResult> SetPactAsync(int userId, SetPactDto dto);
+    Task<ServiceResult> SetTradePactAsync(int userId, bool enabled);
 }
 
 /// <summary>
-/// Pakty wewnątrz koalicji wg modelu gry (docs/zrodla/urza-pakt.txt):
-/// istnieją 4 typy paktów (Handlowy, Magiczny, Wojskowy, Zlodziejski). Z każdym
-/// współczłonkiem koalicji można zawrzeć DOWOLNĄ KOMBINACJĘ tych paktów, ale tylko
-/// jeden pakt danego typu — więc maksymalnie 4 różne pakty z jednym księstwem.
-/// Każdy pakt to osobny rekord (wspólny dla obu stron, natychmiastowy/jednostronny).
-/// Pakt handlowy dolicza obszar sojusznika do efektywności kupców; pakty obronne
-/// (Magiczny/Wojskowy/Zlodziejski) wspomagają obronę. Limit łącznej liczby paktów:
-/// baza 5 + Ambasada (+1). Skuteczność obronna wg liczby paktów danego typu: 50%/45%/40%.
+/// Pakty wewnątrz koalicji (docs/zrodla/urza-pakt.txt + decyzje projektowe 2026-07-10):
+/// - Pakty OBRONNE (Magiczny | Wojskowy | Zlodziejski) wskazują KONKRETNEGO partnera
+///   z koalicji — po jednym pakcie danego typu z jednym księstwem. Wartości obronne
+///   (magowie/armia/złodzieje) pochodzą od wskazanego partnera. Limit: 5 + Ambasada.
+/// - Pakt HANDLOWY (kupiecki) nie wskazuje partnera: to udział w wymianie handlowej
+///   koalicji (kupcy liczą ziemię współczłonków z włączonym handlem). Poza limitem.
+/// - PAKTY POŁÓWKOWE: świeżo zawarty pakt (obronny lub handlowy) do najbliższego
+///   przeliczenia (5:00) działa z POŁOWĄ wartości; po przeliczeniu — pełną.
+/// Skuteczność obronna wg liczby paktów danego typu: 50%/45%/40%.
 /// </summary>
 public class PactService : IPactService
 {
     public const int BasePactLimit = 5; // +1 z Ambasadą
     public const string TradePactType = "Handlowy";
 
-    /// <summary>Wszystkie dozwolone typy paktów.</summary>
-    public static readonly string[] AllPactTypes =
-        { "Handlowy", "Magiczny", "Wojskowy", "Zlodziejski" };
-
-    /// <summary>Typy paktów obronnych (wspomagają obronę).</summary>
+    /// <summary>Typy paktów obronnych (per partner, wspomagają obronę).</summary>
     public static readonly string[] DefensePactTypes =
         { "Magiczny", "Wojskowy", "Zlodziejski" };
 
@@ -41,6 +39,23 @@ public class PactService : IPactService
         2 => 0.45m,
         _ => 0.40m
     };
+
+    /// <summary>
+    /// Początek bieżącej doby gry (ostatnie przeliczenie o 5:00 czasu serwera) w UTC.
+    /// Pakty zawarte po tym momencie działają połowicznie do następnego przeliczenia.
+    /// </summary>
+    public static DateTime LastResetUtc()
+    {
+        var nowLocal = DateTime.Now;
+        var lastResetLocal = nowLocal.Hour >= 5
+            ? nowLocal.Date.AddHours(5)
+            : nowLocal.Date.AddDays(-1).AddHours(5);
+        return lastResetLocal.ToUniversalTime();
+    }
+
+    /// <summary>Czy pakt zawarty w danym momencie jest jeszcze połówkowy.</summary>
+    public static bool IsHalf(DateTime? confirmedAtUtc) =>
+        confirmedAtUtc.HasValue && confirmedAtUtc.Value >= LastResetUtc();
 
     private readonly ApplicationDbContext _context;
 
@@ -68,7 +83,9 @@ public class PactService : IPactService
         {
             HasAmbasada = HasAmbasada(kingdom),
             Limit = LimitFor(kingdom),
-            InCoalition = kingdom.CoalitionId != null
+            InCoalition = kingdom.CoalitionId != null,
+            TradePactEnabled = kingdom.TradePactEnabled,
+            TradePactHalf = kingdom.TradePactEnabled && IsHalf(kingdom.TradePactSince)
         };
         if (kingdom.CoalitionId == null) return dto;
 
@@ -77,25 +94,32 @@ public class PactService : IPactService
                         && (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id))
             .ToListAsync();
 
-        // Aktywne typy paktów per partner (może być kilka typów z jednym księstwem).
-        var typesByPartner = pacts
+        // Aktywne typy paktów per partner + które z nich są jeszcze połówkowe.
+        var byPartner = pacts
             .GroupBy(p => p.ProposerKingdomId == kingdom.Id ? p.TargetKingdomId : p.ProposerKingdomId)
-            .ToDictionary(g => g.Key, g => g.Select(p => p.PactType).Distinct().ToList());
+            .ToDictionary(g => g.Key, g => g.ToList());
         dto.UsedSlots = pacts.Count;
 
         var members = await _context.Kingdoms
             .Where(k => k.CoalitionId == kingdom.CoalitionId && k.Id != kingdom.Id)
-            .Select(k => new { k.Id, k.Name, k.Race, k.Land })
+            .Select(k => new { k.Id, k.Name, k.Race, k.Land, k.TradePactEnabled })
             .ToListAsync();
 
         dto.Members = members
-            .Select(m => new PactMemberDto
+            .Select(m =>
             {
-                KingdomId = m.Id,
-                Name = m.Name,
-                Race = m.Race,
-                Land = m.Land,
-                ActivePacts = typesByPartner.TryGetValue(m.Id, out var t) ? t : new List<string>()
+                var partnerPacts = byPartner.TryGetValue(m.Id, out var list) ? list : new List<Pact>();
+                return new PactMemberDto
+                {
+                    KingdomId = m.Id,
+                    Name = m.Name,
+                    Race = m.Race,
+                    Land = m.Land,
+                    TradePactEnabled = m.TradePactEnabled,
+                    ActivePacts = partnerPacts.Select(p => p.PactType).Distinct().ToList(),
+                    HalfPacts = partnerPacts.Where(p => IsHalf(p.ConfirmedAt))
+                        .Select(p => p.PactType).Distinct().ToList()
+                };
             })
             .OrderBy(m => m.Name)
             .ToList();
@@ -111,6 +135,11 @@ public class PactService : IPactService
         if (kingdom.CoalitionId == null)
             return ServiceResult.Fail("Pakty można zawierać tylko w obrębie koalicji.");
 
+        if (dto.PactType == TradePactType)
+            return ServiceResult.Fail("Pakt handlowy nie wskazuje partnera — włącz go przełącznikiem handlu.");
+        if (!DefensePactTypes.Contains(dto.PactType))
+            return ServiceResult.Fail("Nieznany typ paktu.");
+
         var target = await _context.Kingdoms.FirstOrDefaultAsync(k => k.Id == dto.TargetKingdomId);
         if (target == null)
             return ServiceResult.Fail("Nie znaleziono księstwa partnera.");
@@ -118,9 +147,6 @@ public class PactService : IPactService
             return ServiceResult.Fail("Nie można zawrzeć paktu z samym sobą.");
         if (target.CoalitionId != kingdom.CoalitionId)
             return ServiceResult.Fail("Partner musi należeć do Twojej koalicji.");
-
-        if (!AllPactTypes.Contains(dto.PactType))
-            return ServiceResult.Fail("Nieznany typ paktu.");
 
         // Istniejący pakt TEGO TYPU z tym partnerem (rekord wspólny w obu kierunkach).
         var existing = await _context.Pacts.FirstOrDefaultAsync(p => p.Status == "Active" &&
@@ -142,7 +168,7 @@ public class PactService : IPactService
         if (existing != null)
             return ServiceResult.Ok($"Pakt {dto.PactType.ToLower()} z księstwem {target.Name} już obowiązuje.");
 
-        // Limit łącznej liczby paktów (wszystkich typów).
+        // Limit łącznej liczby paktów obronnych.
         int used = await _context.Pacts.CountAsync(p => p.Status == "Active" &&
             (p.ProposerKingdomId == kingdom.Id || p.TargetKingdomId == kingdom.Id));
         int limit = LimitFor(kingdom);
@@ -159,11 +185,35 @@ public class PactService : IPactService
             ConfirmedAt = DateTime.UtcNow
         });
         await _context.SaveChangesAsync();
-        return ServiceResult.Ok($"Zawarto pakt {dto.PactType.ToLower()} z księstwem {target.Name}.");
+        return ServiceResult.Ok(
+            $"Zawarto pakt {dto.PactType.ToLower()} z księstwem {target.Name}. " +
+            "Do najbliższego przeliczenia działa z połową wartości.");
     }
 
-    /// <summary>Aktywni partnerzy paktów obronnych danego typu dla księstwa.</summary>
-    public static async Task<List<Kingdom>> GetActivePactPartnersAsync(
+    public async Task<ServiceResult> SetTradePactAsync(int userId, bool enabled)
+    {
+        var kingdom = await GetKingdomAsync(userId);
+        if (kingdom == null)
+            return ServiceResult.Fail("Nie znaleziono księstwa.");
+        if (kingdom.CoalitionId == null)
+            return ServiceResult.Fail("Pakt handlowy działa tylko w obrębie koalicji.");
+
+        if (kingdom.TradePactEnabled == enabled)
+            return ServiceResult.Ok(enabled ? "Pakt handlowy już obowiązuje." : "Pakt handlowy nie jest zawarty.");
+
+        kingdom.TradePactEnabled = enabled;
+        kingdom.TradePactSince = enabled ? DateTime.UtcNow : null;
+        await _context.SaveChangesAsync();
+        return ServiceResult.Ok(enabled
+            ? "Zawarto pakt handlowy — kupcy skorzystają z ziemi współczłonków z włączonym handlem. Do najbliższego przeliczenia działa z połową wartości."
+            : "Zerwano pakt handlowy.");
+    }
+
+    /// <summary>
+    /// Aktywni partnerzy paktów obronnych danego typu dla księstwa
+    /// wraz z flagą paktu połówkowego (zawarty po ostatnim przeliczeniu).
+    /// </summary>
+    public static async Task<List<(Kingdom Partner, bool Half)>> GetActivePactPartnersAsync(
         ApplicationDbContext context, int kingdomId, string pactType)
     {
         var pacts = await context.Pacts
@@ -171,15 +221,16 @@ public class PactService : IPactService
                         && (p.ProposerKingdomId == kingdomId || p.TargetKingdomId == kingdomId))
             .ToListAsync();
 
-        var partnerIds = pacts
-            .Select(p => p.ProposerKingdomId == kingdomId ? p.TargetKingdomId : p.ProposerKingdomId)
-            .Distinct()
-            .ToList();
+        var halfByPartner = pacts
+            .GroupBy(p => p.ProposerKingdomId == kingdomId ? p.TargetKingdomId : p.ProposerKingdomId)
+            .ToDictionary(g => g.Key, g => g.Any(p => IsHalf(p.ConfirmedAt)));
 
-        return await context.Kingdoms
+        var partners = await context.Kingdoms
             .Include(k => k.MilitaryUnits).ThenInclude(m => m.Definition)
             .Include(k => k.Professions)
-            .Where(k => partnerIds.Contains(k.Id))
+            .Where(k => halfByPartner.Keys.Contains(k.Id))
             .ToListAsync();
+
+        return partners.Select(k => (k, halfByPartner[k.Id])).ToList();
     }
 }

@@ -205,6 +205,13 @@ public class Kingdom
     public long? AutoSellWeaponsAbove { get; set; }
     public long? AutoSellManaAbove { get; set; }
 
+    // Pakt handlowy (kupiecki) — nie wskazuje partnera: to udział w wymianie
+    // handlowej koalicji. Kupcy liczą ziemię wszystkich współczłonków, którzy
+    // też mają włączony pakt handlowy. Nie zajmuje limitu paktów obronnych.
+    public bool TradePactEnabled { get; set; } = false;
+    /// <summary>Kiedy włączono pakt handlowy — do pełnego przeliczenia działa połowicznie.</summary>
+    public DateTime? TradePactSince { get; set; }
+
     // Timestamps
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime LastActive { get; set; } = DateTime.UtcNow;
