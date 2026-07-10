@@ -31,10 +31,14 @@ Dracopedia = źródło nadrzędne; przy rozbieżnościach przyjmujemy wartości 
       i Krwawym Księżycem. Efekty magiczne Pełni (Lustro/Ściany) — w Etapie 2.
 
 ### Etap 2 — obrona magiczna z budynków — BRAK
-- [ ] Ściany magiczne: +15% obrony magicznej.
-- [ ] Lustro magiczne: +12% obrony magicznej, 25% szansy odbicia czaru (Dżin 50%);
+- [x] Ściany magiczne: +15% obrony magicznej.
+- [x] Lustro magiczne: +12% obrony magicznej, 25% szansy odbicia czaru (Dżin 50%);
       w Pełni 50%/75% odbicia, bez obrony magicznej; nie dotyczy Olbrzymów.
       Wpiąć w pojedynek magiczny (BattleService).
+      → ExecuteSpellAsync: odbicie stosuje efekt czaru na rzucającym (raport
+      "Reflected"); tylko czary z TargetType=Enemy. Uwaga: akcja „Sabotaż budynku
+      specjalnego" nie istnieje w grze (Burzenie niszczy tylko infrastrukturę),
+      więc ochrona Ścian w Pełni jest bezprzedmiotowa.
 
 ### Etap 3 — Szpital: redukcja strat w obronie — BRAK
 - [ ] Szpital: −25% strat wojska w obronie (nie działa na straty od gnomich saperów E2).

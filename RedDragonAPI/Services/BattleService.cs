@@ -1349,7 +1349,13 @@ public class BattleService : IBattleService
         if (data == null) return;
 
         var spell = await _context.SpellDefinitions.FirstOrDefaultAsync(s => s.SpellType == data.SpellType);
-        var attacker = await _context.Kingdoms.FirstOrDefaultAsync(k => k.Id == action.KingdomId);
+        // Atakujący z pełnymi kolekcjami — Lustro magiczne może odbić czar w rzucającego
+        var attacker = await _context.Kingdoms
+            .Include(k => k.Professions)
+            .Include(k => k.Buildings).ThenInclude(b => b.Definition)
+            .Include(k => k.MilitaryUnits).ThenInclude(m => m.Definition)
+            .Include(k => k.ActiveSpells)
+            .FirstOrDefaultAsync(k => k.Id == action.KingdomId);
         var defender = await _context.Kingdoms
             .Include(k => k.Professions)
             .Include(k => k.Buildings).ThenInclude(b => b.Definition)
@@ -1412,6 +1418,40 @@ public class BattleService : IBattleService
                 defensePower += (long)(TrainedMages(partner) * efficiency);
         }
         var mirror = defender.ActiveSpells.FirstOrDefault(s => s.SpellType == "ZwierciadloMagiczne");
+
+        bool HasSpecial(string type) => defender.Buildings.Any(b =>
+            b.BuildingType == type && b.Quantity > 0 && !b.IsUnderConstruction);
+
+        // Pełnia (MECHANIKA §13): Lustro traci obronę magiczną, ale odbija częściej.
+        // Efekt Pełni nie dotyczy Olbrzymów (fazy_ksiezyca.html).
+        var (moonPhase, bloodMoon) = await MoonPhaseHelper.GetAsync(_context);
+        bool fullMoon = moonPhase == MoonPhaseHelper.Pelnia
+            && MoonPhaseHelper.Affects(defender.Race, moonPhase, bloodMoon)
+            && defender.Race != "Olbrzym";
+
+        // Lustro magiczne (Dracopedia §14.3): odbija wrogi czar w rzucającego —
+        // 25% szansy (Dżin 50%), w Pełni 50% (Dżin 75%).
+        bool hasMirrorBld = HasSpecial("LustroMagiczne");
+        if (hasMirrorBld && spell.TargetType == "Enemy")
+        {
+            double reflectChance = fullMoon
+                ? (defender.Race == "Dżin" ? 0.75 : 0.50)
+                : (defender.Race == "Dżin" ? 0.50 : 0.25);
+            if (Random.Shared.NextDouble() < reflectChance)
+            {
+                var attackerRaceDef = await GetRaceAsync(attacker.Race);
+                string reflectedInfo = ApplySpellEffect(spell, attacker, attackerRaceDef, attackPower);
+                ReportMagic(attacker, defender, spell, "Reflected",
+                    $"Lustro magiczne odbiło zaklęcie w rzucającego! {reflectedInfo}");
+                await _context.SaveChangesAsync();
+                return;
+            }
+        }
+
+        // Ściany magiczne: +15% obrony magicznej; Lustro magiczne: +12%
+        // (w Pełni Lustro nie daje obrony magicznej)
+        if (HasSpecial("ScianyMagiczne")) defensePower = (long)(defensePower * 1.15m);
+        if (hasMirrorBld && !fullMoon) defensePower = (long)(defensePower * 1.12m);
 
         double chance = Helpers.BattleCalculator.ThiefSuccessChance(attackPower, Math.Max(1, defensePower));
         bool success = Random.Shared.NextDouble() < chance;
