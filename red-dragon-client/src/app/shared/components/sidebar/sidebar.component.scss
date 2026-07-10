@@ -18,20 +18,20 @@
 }
 
 .dragon-art {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 118px;
+  display: block;
+  width: 112px;
+  margin: 0 auto;
   opacity: 0.9;
   pointer-events: none;
 }
 
+// Przyciski zaczynają się POD grafiką smoka (bez nakładania na obrazek).
 .menu-buttons {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 96px 6px 8px 8px;
+  padding: 6px 6px 8px 8px;
   gap: 3px;
 }
 
@@ -93,13 +93,18 @@
   transition: transform 0.15s;
   filter: drop-shadow(0 0 6px rgba(255, 180, 0, 0.25));
 
+  // Medalion jest KOŁEM — przycinamy do okręgu i lekko powiększamy.
   img {
-    width: 62px;
+    width: 74px;
+    height: 74px;
     display: block;
+    border-radius: 50%;
+    border: 2px solid #8a6a20;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
   }
 
   &:hover {
-    transform: scale(1.08);
+    transform: scale(1.1);
     filter: drop-shadow(0 0 10px rgba(255, 200, 40, 0.55));
   }
 

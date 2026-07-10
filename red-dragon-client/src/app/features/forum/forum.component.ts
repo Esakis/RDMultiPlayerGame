@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ForumService } from '../../core/services/forum.service';
-import { ForumPost } from '../../core/models/kingdom.model';
+import { CoalitionService } from '../../core/services/coalition.service';
+import { KingdomService } from '../../core/services/kingdom.service';
+import { ForumPost, Kingdom, KingdomSummary } from '../../core/models/kingdom.model';
 
 @Component({
   selector: 'app-forum',
@@ -19,10 +21,34 @@ export class ForumComponent implements OnInit {
   replyingTo: ForumPost | null = null;
   replyBody = '';
 
-  constructor(private forumService: ForumService, private translate: TranslateService) {}
+  // Lista księstw koalicji (pasek u góry forum)
+  kingdom: Kingdom | null = null;
+  coalitionMembers: KingdomSummary[] = [];
+
+  constructor(private forumService: ForumService, private translate: TranslateService,
+              private coalitionService: CoalitionService, private kingdomService: KingdomService) {}
 
   ngOnInit(): void {
     this.loadPosts();
+    this.loadCoalitionMembers();
+  }
+
+  /** Członkowie mojej koalicji — wyświetlani u góry forum. */
+  private loadCoalitionMembers(): void {
+    this.kingdomService.getMyKingdom().subscribe({
+      next: k => {
+        this.kingdom = k;
+        if (!k.coalitionId) return;
+        this.coalitionService.getCoalitions().subscribe({
+          next: cs => {
+            const mine = cs.find(c => c.id === k.coalitionId);
+            this.coalitionMembers = mine ? mine.members : [];
+          },
+          error: () => this.coalitionMembers = []
+        });
+      },
+      error: () => {}
+    });
   }
 
   switchTab(tab: 'general' | 'coalition'): void {

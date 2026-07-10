@@ -330,6 +330,7 @@
     "noMagic": "Your race does not wield magic (0 magic books)."
   },
   "forum": {
+    "rosterTitle": "Coalition duchies",
     "general": "General Forum",
     "coalition": "Coalition Forum",
     "important": "Important",

@@ -1,6 +1,17 @@
-<div class="page-content">
+<div class="page-content forum-page">
   <h2>{{ 'menu.forum' | translate }}</h2>
   <app-notify-relay [message]="message"></app-notify-relay>
+
+  <!-- Lista księstw koalicji -->
+  <div class="coalition-roster" *ngIf="kingdom?.coalitionId && coalitionMembers.length > 0">
+    <span class="roster-title">{{ 'forum.rosterTitle' | translate }} {{ kingdom?.coalitionName }}:</span>
+    <span class="roster-member" *ngFor="let m of coalitionMembers"
+          [class.mine]="m.id === kingdom?.id"
+          [class.imperator]="m.coalitionRole === 'Imperator'"
+          [class.commander]="m.coalitionRole === 'MainCommander'">
+      {{ m.name }}
+    </span>
+  </div>
 
   <div class="forum-tabs">
     <button class="tab-btn" [class.active]="activeTab === 'general'" (click)="switchTab('general')">{{ 'forum.general' | translate }}</button>

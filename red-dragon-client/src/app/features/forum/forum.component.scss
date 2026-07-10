@@ -1,5 +1,46 @@
+// Forum wyśrodkowane, z oddechem po bokach
+.forum-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px 28px 40px;
+}
+
+// Lista księstw koalicji u góry forum
+.coalition-roster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 8px 14px;
+  background: rgba(42, 8, 8, 0.6);
+  border: 1px solid #8b0000;
+  border-radius: 5px;
+
+  .roster-title {
+    color: #c9a86a;
+    font-weight: bold;
+    margin-right: 4px;
+  }
+
+  .roster-member {
+    padding: 1px 10px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid #5a2a2a;
+    border-radius: 10px;
+    color: #d4c5b0;
+    font-size: 13px;
+
+    &.mine { border-color: #ffd700; color: #ffd700; }
+    &.imperator { border-color: #3c9a3c; color: #9fd49f; }
+    &.commander { border-color: #4a6ac9; color: #a8b6e4; }
+  }
+}
+
 .forum-tabs {
   display: flex;
+  justify-content: center;
   gap: 2px;
   margin-bottom: 10px;
 }
@@ -29,6 +70,7 @@
 
 .subforum-tabs {
   display: flex;
+  justify-content: center;
   gap: 2px;
   margin-bottom: 15px;
 }
