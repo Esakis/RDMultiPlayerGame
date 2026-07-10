@@ -12,9 +12,12 @@ większość budynków specjalnych działa. Poniżej realne braki, wg kolejnośc
 Dracopedia = źródło nadrzędne; przy rozbieżnościach przyjmujemy wartości źródłowe.
 
 ### Etap 0 — brakujące źródła
-- [ ] Pobrać z Dracopedii (Wayback): strony o miesiącach/fazach księżyca
+- [x] Pobrać z Dracopedii (Wayback): strony o miesiącach/fazach księżyca
       (Pełnia, Krwawy Księżyc, Złoty Sierp, Pęknięta Tarcza), kategorie Czary,
       Akcje złodziejskie, Pojęcia. Zapisać w docs/zrodla, uzupełnić MECHANIKA.md.
+      → 19 stron w docs/zrodla/dracopedia_pojecia/ (m.in. fazy_ksiezyca, wzory,
+      rozpiska_magiczna, zawody); „Karawany" i „Wzmacniacze magii" nie były
+      zarchiwizowane (404). Fazy księżyca opisane w MECHANIKA.md §13.
 
 ### Etap 1 — system miesięcy (faz księżyca) — BRAK CAŁKOWITY
 - [ ] Cykl faz przy przeliczeniu dziennym + wskaźnik fazy w UI.

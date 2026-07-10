@@ -426,6 +426,23 @@ maskowanie. Generał może zginąć w walce, z rąk złodziei, w labiryncie lub 
   bez pay-to-win.
 - **Mrożenie (zmrazení)** — zawieszenie gubernatu na czas nieobecności.
 - **Status nowicjusza** — ochrona przed atakami, osobne statystyki.
+- **Fazy Księżyca** (Dracopedia, `docs/zrodla/dracopedia_pojecia/fazy_ksiezyca.html`) —
+  7 faz; 6 zmienia się cyklicznie co przeliczenie, siódma (Krwawy Księżyc) losowo
+  zastępuje Pełnię w danym cyklu. Każda faza działa przez jedno przeliczenie:
+  1. **Nów** — udane akcje złodziejskie ujawniają dodatkowo 1–6 paktów celu (wg PZA).
+  2. **Złoty sierp** — szansa na zysk z Kopalni złota ×2.
+  3. **Oko smoka** — podwaja smoki przychodzące co turę (Portal) i znalezione w labiryncie.
+  4. **Pełnia** — najsilniejsza magia: Lustro magiczne traci właściwości (w tym obronę
+     magiczną), zamiast tego 50% szansy odbicia czaru (75% u Dżinów); Ściany magiczne
+     niepodatne na Sabotaż budynku specjalnego.
+  5. **Garb Autora** — ograniczona Świątynia bogactwa Autora (dodatkowe wejścia do
+     labiryntu częściej zawodzą, zyski −50%); mniej złota i zapasów z labiryntu.
+  6. **Pęknięta tarcza** — Renowacja broni mocno ograniczona; Ambulatorium polowe
+     obniża straty ataku tylko o 20% (zamiast 50%).
+  7. **Krwawy Księżyc** — wszystkie właściwości Pełni + Akademia wojskowa ×2
+     (szkolenie E1→E2 z 5% do 10%; Ork 8%, Goblin 9%, Olbrzym 12%).
+  **Wyjątek:** Br-Ougowie odporni na efekty faz poza Krwawym Księżycem i Nowiem
+  (Nów ich dotyczy i z niego korzystają).
 
 ## 14. POLSKI SERWER reddragon.pl — manual/2 (2007, pobrany w całości!)
 
