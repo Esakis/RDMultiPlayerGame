@@ -4,6 +4,63 @@ Stan na 2026-07-01. Uwagi od właściciela projektu + wyniki audytu kodu (backen
 
 ---
 
+## PLAN 2026-07-10 — audyt Dracopedia vs aplikacja (runda 2)
+
+Świeży audyt źródeł (docs/zrodla/dracopedia, dracopedia_budynki) vs kod.
+Zweryfikowane w kodzie: wszystkie 22 nauki są w grze (koszty SP i drzewko zgodne),
+większość budynków specjalnych działa. Poniżej realne braki, wg kolejności prac.
+Dracopedia = źródło nadrzędne; przy rozbieżnościach przyjmujemy wartości źródłowe.
+
+### Etap 0 — brakujące źródła
+- [ ] Pobrać z Dracopedii (Wayback): strony o miesiącach/fazach księżyca
+      (Pełnia, Krwawy Księżyc, Złoty Sierp, Pęknięta Tarcza), kategorie Czary,
+      Akcje złodziejskie, Pojęcia. Zapisać w docs/zrodla, uzupełnić MECHANIKA.md.
+
+### Etap 1 — system miesięcy (faz księżyca) — BRAK CAŁKOWITY
+- [ ] Cykl faz przy przeliczeniu dziennym + wskaźnik fazy w UI.
+- [ ] Efekty bazowe: Złoty Sierp (Kopalnia złota ×2 szansy), Krwawy Księżyc
+      (awans E1→E2 ×2), Pełnia (efekty magiczne), Pęknięta Tarcza (Szpital −20%
+      zamiast −50% w ataku). Szczegóły wg źródeł z Etapu 0.
+
+### Etap 2 — obrona magiczna z budynków — BRAK
+- [ ] Ściany magiczne: +15% obrony magicznej.
+- [ ] Lustro magiczne: +12% obrony magicznej, 25% szansy odbicia czaru (Dżin 50%);
+      w Pełni 50%/75% odbicia, bez obrony magicznej; nie dotyczy Olbrzymów.
+      Wpiąć w pojedynek magiczny (BattleService).
+
+### Etap 3 — Szpital: redukcja strat w obronie — BRAK
+- [ ] Szpital: −25% strat wojska w obronie (nie działa na straty od gnomich saperów E2).
+      Atakową połowę (−50%) ma Ambulatorium polowe — uporządkować podział ról.
+
+### Etap 4 — kalibracja obrony wg Dracopedii — ROZBIEŻNOŚCI
+- [ ] BattleCalculator ma zaszyte ~połowę wartości źródłowych, a seed (DefenseBonus)
+      jeszcze inne — UI pokazuje co innego niż liczy walka. Ujednolicić:
+      Smoczy mur 10%, Smocza bariera 10%, Zamek 15% + −10% strat ludności cywilnej.
+- [ ] Sieć fortec: sekwencja strat ziemi 6/6/6/4,5/3/1,5% (bez Sieci 10/10/8/6/4/2%)
+      zamiast płaskiego bonusu. Sprawdzić u źródła Szaniec i Pospolite ruszenie.
+
+### Etap 5 — Koszary i Akademia wojskowa jako budynki szkolące — ROZBIEŻNOŚĆ
+- [ ] Koszary: 10% hoplitów→E1/turę; Akademia wojskowa: 5% E1→E2/turę
+      (Olbrzym 6%, Goblin 4,5%). Zgrać z nauką Trening (TrainingHelper).
+- [ ] Konflikt ról: obecna AkademiaWojskowa podwaja szansę przyjścia generała
+      (GeneralService) — rozstrzygnąć (przenieść/zostawić jako dodatkową).
+
+### Etap 6 — drobiazgi ekonomiczne — ROZBIEŻNOŚCI
+- [ ] Ratusz: Ludzie 20 zł/obywatela (inni 10); podatek bez wojska i złodziei.
+- [ ] Kopalnia złota: ~10% szansy/turę na skarb 80–160% produkcji złota z tury
+      (zamiast deterministycznych +10%); z Górnictwem odkrywkowym mniejsze,
+      ale regularne; Złoty Sierp ×2 szansy.
+
+### Etap 7 — efekty specjalne nauk poziomów 4–5 — BRAK LOGIKI
+- [ ] Architektura 4: budynki 3. rzędu bez złota, przyspieszanie budowy −50%.
+- [ ] Architektura 5: szybsza budowa rzędów 6–7.
+- [ ] Rekrutacja 4–5: zweryfikować sens (karawany nie istnieją) — wdrożyć lub
+      świadomie pominąć z adnotacją. Czarodziejstwo 5: 25% (źródło) vs 30% (kod).
+
+Uwaga: kalibracja B10/B11 pozostaje osobno (wymaga żywych graczy).
+
+---
+
 ## PLAN REALIZACJI (kolejność prac)
 
 ### Etap 1 — pętla walki: przygotowania za dnia, rozstrzygnięcie o 5:00
