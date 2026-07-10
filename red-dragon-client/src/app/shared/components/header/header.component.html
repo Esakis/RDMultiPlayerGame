@@ -45,6 +45,10 @@
     <span class="reset-countdown" *ngIf="countdown" [title]="'nav.resetTip' | translate">
       ⏳ {{ 'nav.reset' | translate }}: <strong>{{ countdown }}</strong>
     </span>
+    <span class="moon-phase" *ngIf="status?.moonPhaseName" [title]="'nav.moonTip' | translate"
+          [class.blood-moon]="status?.bloodMoon">
+      🌙 <strong>{{ status?.moonPhaseName }}</strong>
+    </span>
   </nav>
 
   <div class="resources-bar" *ngIf="kingdom">

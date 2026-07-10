@@ -20,10 +20,15 @@ Dracopedia = źródło nadrzędne; przy rozbieżnościach przyjmujemy wartości 
       zarchiwizowane (404). Fazy księżyca opisane w MECHANIKA.md §13.
 
 ### Etap 1 — system miesięcy (faz księżyca) — BRAK CAŁKOWITY
-- [ ] Cykl faz przy przeliczeniu dziennym + wskaźnik fazy w UI.
-- [ ] Efekty bazowe: Złoty Sierp (Kopalnia złota ×2 szansy), Krwawy Księżyc
-      (awans E1→E2 ×2), Pełnia (efekty magiczne), Pęknięta Tarcza (Szpital −20%
-      zamiast −50% w ataku). Szczegóły wg źródeł z Etapu 0.
+- [x] Cykl faz przy przeliczeniu dziennym + wskaźnik fazy w UI.
+      → MoonPhaseHelper (GameSettings: MoonPhase/MoonBloodMoon), przesuw w
+      DailyResetService, wskaźnik 🌙 w nagłówku (polling /notification/status).
+- [x] Efekty bazowe wg fazy_ksiezyca.html: Nów (akcje złodziejskie ujawniają 1–6
+      paktów celu), Złoty Sierp (Kopalnia złota ×2), Oko Smoka (smoki z wabienia
+      i labiryntu ×2), Garb Autora (łupy z labiryntu −50%), Pęknięta Tarcza
+      (Ambulatorium −20% zamiast −50%, Renowacja broni ¼), Krwawy Księżyc
+      (losowo zamiast Pełni, awans E1→E2 ×2). Br-Oug odporny poza Nowiem
+      i Krwawym Księżycem. Efekty magiczne Pełni (Lustro/Ściany) — w Etapie 2.
 
 ### Etap 2 — obrona magiczna z budynków — BRAK
 - [ ] Ściany magiczne: +15% obrony magicznej.

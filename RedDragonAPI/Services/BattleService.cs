@@ -574,10 +574,19 @@ public class BattleService : IBattleService
         var defenderCasualties = BattleCalculator.CalculateDefenderCasualties(
             defender.MilitaryUnits, attackPower, defensePower, attackerWins, defenderRace);
 
+        // Faza Księżyca (MECHANIKA §13): Pęknięta tarcza osłabia Ambulatorium i Renowację broni
+        var (moonPhase, bloodMoon) = await MoonPhaseHelper.GetAsync(_context);
+        bool CrackedShield(Kingdom k) => moonPhase == MoonPhaseHelper.PeknietaTarcza
+            && MoonPhaseHelper.Affects(k.Race, moonPhase, bloodMoon);
+
         // Ambulatorium polowe (Dracopedia §14.3): mobilny lazaret — straty własne w ataku −50%
+        // (w Pękniętej tarczy tylko −20%)
         if (HasBld(attacker, "AmbulatoriumPolowe"))
+        {
+            decimal reduction = CrackedShield(attacker) ? 0.20m : 0.50m;
             foreach (var key in attackerCasualties.Keys.ToList())
-                attackerCasualties[key] /= 2;
+                attackerCasualties[key] = (int)(attackerCasualties[key] * (1m - reduction));
+        }
 
         // Uzdrawianie (Dracopedia §11): ratuje lvl% poległych własnych —
         // atakujący ×2 po wygranej, obrońca ×4 po udanej obronie.
@@ -657,10 +666,11 @@ public class BattleService : IBattleService
         // Renowacja broni (Dracopedia §14.3): odzyskuje 5 broni za każdego własnego poległego
         bool HasBld(Kingdom k2, string type) => k2.Buildings.Any(b =>
             b.BuildingType == type && b.Quantity > 0 && !b.IsUnderConstruction);
+        // (Pęknięta tarcza: odzysk broni mocno ograniczony — 1 zamiast 5)
         if (attackerDead > 0 && HasBld(attacker, "RenowacjaBroni"))
-            attacker.Weapons += attackerDead * 5;
+            attacker.Weapons += attackerDead * (CrackedShield(attacker) ? 1 : 5);
         if (defenderDead > 0 && HasBld(defender, "RenowacjaBroni"))
-            defender.Weapons += defenderDead * 5;
+            defender.Weapons += defenderDead * (CrackedShield(defender) ? 1 : 5);
 
         // Gniew Enta: Ent, który poniósł straty, wpada w szał (+100% ataku do przeliczenia)
         if (defender.Race == "Ent" && defenderDead > 0) defender.EntWrathActive = true;
@@ -1755,6 +1765,30 @@ public class BattleService : IBattleService
         else
         {
             effectInfo = ApplyThiefEffect(actionDef, attacker, defender, data.Thieves);
+
+            // Nów (MECHANIKA §13): udana akcja złodziejska ujawnia dodatkowo 1–6 paktów
+            // obronnych celu (źródło uzależnia liczbę od PZA — tu losowo).
+            var (moonPhase, _) = await MoonPhaseHelper.GetAsync(_context);
+            if (moonPhase == MoonPhaseHelper.Now)
+            {
+                var pacts = await _context.Pacts
+                    .Where(p => p.Status == "Active"
+                                && (p.ProposerKingdomId == defender.Id || p.TargetKingdomId == defender.Id))
+                    .Include(p => p.ProposerKingdom)
+                    .Include(p => p.TargetKingdom)
+                    .ToListAsync();
+                if (pacts.Count > 0)
+                {
+                    int reveal = Math.Min(pacts.Count, Random.Shared.Next(1, 7));
+                    var revealed = pacts.OrderBy(_ => Random.Shared.Next()).Take(reveal)
+                        .Select(p => $"{p.PactType} z {(p.ProposerKingdomId == defender.Id ? p.TargetKingdom.Name : p.ProposerKingdom.Name)}");
+                    effectInfo += $" Nów ujawnia pakty: {string.Join(", ", revealed)}.";
+                }
+                else
+                {
+                    effectInfo += " Nów: cel nie ma paktów obronnych.";
+                }
+            }
         }
 
         _context.BattleReports.Add(new BattleReport

@@ -10,6 +10,9 @@ export interface GameStatus {
   reportsSinceReset: number;
   nextResetAt: string | null;
   serverTimeUtc: string;
+  moonPhase?: number;
+  moonPhaseName?: string;
+  bloodMoon?: boolean;
 }
 
 /**

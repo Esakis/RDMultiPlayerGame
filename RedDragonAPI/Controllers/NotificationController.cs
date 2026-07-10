@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RedDragonAPI.Data;
+using RedDragonAPI.Helpers;
 
 namespace RedDragonAPI.Controllers;
 
@@ -46,12 +47,18 @@ public class NotificationController : ControllerBase
             (b.AttackerKingdomId == kingdom.Id || b.DefenderKingdomId == kingdom.Id)
             && b.OccurredAt >= lastResetUtc);
 
+        // Faza Księżyca (MECHANIKA §13) — wskaźnik w nagłówku gry
+        var (moonPhase, bloodMoon) = await MoonPhaseHelper.GetAsync(_context);
+
         return Ok(new
         {
             unreadMessages,
             reportsSinceReset,
             nextResetAt = nextResetLocal.ToUniversalTime(),
-            serverTimeUtc = DateTime.UtcNow
+            serverTimeUtc = DateTime.UtcNow,
+            moonPhase,
+            moonPhaseName = MoonPhaseHelper.DisplayName(moonPhase, bloodMoon),
+            bloodMoon
         });
     }
 }

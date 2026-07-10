@@ -58,6 +58,11 @@ public class DailyResetService : BackgroundService
 
         try
         {
+            // 0. Faza Księżyca przesuwa się o jedną na każdym przeliczeniu (MECHANIKA §13)
+            //    i obowiązuje przez całe przeliczenie oraz następujący po nim dzień.
+            var (moonPhase, bloodMoon) = await MoonPhaseHelper.AdvanceAsync(context);
+            _logger.LogInformation("Faza Księżyca: {Phase}", MoonPhaseHelper.DisplayName(moonPhase, bloodMoon));
+
             // 1. Wykonaj zakolejkowane akcje w oryginalnej kolejności faz:
             //    złodziejska → magiczna → wojskowa (potem budowy)
             var phaseOrder = new Dictionary<string, int>
@@ -183,6 +188,10 @@ public class DailyResetService : BackgroundService
                                                   && b.Quantity > 0 && !b.IsUnderConstruction))
                 {
                     int warWeapons = Random.Shared.Next(40_000, 50_001);
+                    // Pęknięta tarcza (MECHANIKA §13): odzysk broni mocno ograniczony (¼)
+                    if (moonPhase == MoonPhaseHelper.PeknietaTarcza
+                        && MoonPhaseHelper.Affects(kingdom.Race, moonPhase, bloodMoon))
+                        warWeapons /= 4;
                     kingdom.Weapons += warWeapons;
                     context.KingdomEvents.Add(new KingdomEvent
                     {
@@ -260,8 +269,10 @@ public class DailyResetService : BackgroundService
                     if (kingdom.TrainSoldiers && hasSoldierBld && hoplitaDef != null && e1Def != null)
                         PromoteUnits(context, kingdom, hoplitaDef.UnitType, e1Def, TrainingHelper.SoldierPromotePct(level));
 
+                    // Krwawy Księżyc (MECHANIKA §13): szkolenie E1→E2 dwa razy szybsze
+                    decimal eliteMult = bloodMoon && moonPhase == MoonPhaseHelper.Pelnia ? 2m : 1m;
                     if (kingdom.TrainElite && hasEliteBld && e1Def != null && e2Def != null)
-                        PromoteUnits(context, kingdom, e1Def.UnitType, e2Def, TrainingHelper.ElitePromotePct(level));
+                        PromoteUnits(context, kingdom, e1Def.UnitType, e2Def, TrainingHelper.ElitePromotePct(level) * eliteMult);
                 }
             }
 

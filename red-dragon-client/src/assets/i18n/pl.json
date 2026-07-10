@@ -20,6 +20,7 @@
     "reports": "Raporty",
     "reset": "Przeliczenie za",
     "resetTip": "Codzienne przeliczenie o 5:00 — wtedy wykonują się ataki, czary i akcje złodziei oraz odnawiają się tury.",
+    "moonTip": "Faza Księżyca zmienia się co przeliczenie i przez dobę modyfikuje mechanikę: Nów — złodzieje ujawniają pakty, Złoty sierp — Kopalnia złota ×2, Oko smoka — smoki ×2, Pełnia — najsilniejsza magia, Garb Autora — słabsze łupy z labiryntu, Pęknięta tarcza — słabsza Renowacja broni i Ambulatorium. Krwawy Księżyc (losowo zamiast Pełni) — dodatkowo szkolenie elity ×2.",
     "labyrinth": "Labirynt",
     "advisors": "Doradcy",
     "chat": "Chat"

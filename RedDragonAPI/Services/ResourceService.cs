@@ -107,6 +107,9 @@ public class ResourceService : IResourceService
         decimal productionBonus = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "ProductionBonus");
         double scienceBonus = (double)await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "ScienceBonus");
 
+        // Faza Księżyca (MECHANIKA §13) — Złoty sierp podwaja zysk z Kopalni złota
+        var (moonPhase, bloodMoon) = await MoonPhaseHelper.GetAsync(_context);
+
         // Budynki specjalne ekonomii (Dracopedia §7.2 — Świątynia/Ołtarz/Monument ekonomii
         // odwzorowane jako nazwane budynki): bonusy % do produkcji wszystkich profesji.
         if (Has("SwiatyniaAutora")) productionBonus += 0.04m;   // Świątynia bogactwa Autora (świątynia +4%)
@@ -176,8 +179,16 @@ public class ResourceService : IResourceService
             {
                 case "Alchemicy":
                     production = (long)(prof.WorkerCount * AlchemistGoldBase * Productivity(prof, race.BonusAlchemists));
-                    // Kopalnia złota (budynek specjalny, Dracopedia §14.3): +10% złota alchemików.
-                    if (Has("KopalniaZlota")) production = (long)(production * 1.10m);
+                    // Kopalnia złota (budynek specjalny, Dracopedia §14.3): +10% złota alchemików;
+                    // Złoty sierp (MECHANIKA §13) podwaja zysk z kopalni.
+                    if (Has("KopalniaZlota"))
+                    {
+                        decimal mineBonus = 0.10m;
+                        if (moonPhase == MoonPhaseHelper.ZlotySierp
+                            && MoonPhaseHelper.Affects(kingdom.Race, moonPhase, bloodMoon))
+                            mineBonus *= 2m;
+                        production = (long)(production * (1m + mineBonus));
+                    }
                     kingdom.Gold += production;
                     // Górnictwo odkrywkowe: dodatkowy stabilny urobek złota
                     if (mineGoldRate > 0)

@@ -135,6 +135,12 @@ public class DragonService : IDragonService
         if (DragonHelper.Has(kingdom, "MinisterstwoSmokow")) lure += 4.0;
         lure += draco; // każdy poziom badań o smokach +1
 
+        // Oko smoka (MECHANIKA §13): podwaja ilość smoków przychodzących co turę
+        var (moonPhase, bloodMoon) = await MoonPhaseHelper.GetAsync(_context);
+        if (moonPhase == MoonPhaseHelper.OkoSmoka
+            && MoonPhaseHelper.Affects(kingdom.Race, moonPhase, bloodMoon))
+            lure *= 2.0;
+
         // Oczekiwana liczba smoków tej tury = siła wabienia × współczynnik malejący.
         double expected = lure * taper;
         int arrivals = (int)expected;

@@ -150,3 +150,9 @@
   margin-left: auto; color: #c9a86a; font-size: 12px; white-space: nowrap;
   strong { color: #ffd27b; font-variant-numeric: tabular-nums; }
 }
+
+.moon-phase {
+  color: #a8b6d4; font-size: 12px; white-space: nowrap; cursor: help;
+  strong { color: #d5e0f5; }
+  &.blood-moon strong { color: #ff6b5e; }
+}

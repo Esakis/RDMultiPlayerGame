@@ -239,6 +239,11 @@ public class LabyrinthService : ILabyrinthService
         decimal luckMult = 1m + fortune / 100m;
         // Elf (cecha rasowa, MECHANIKA §2.2): 1,5× łupy z labiryntu
         if (kingdom.Race == "Elf") luckMult *= 1.5m;
+        // Garb Autora (MECHANIKA §13): zyski ze znalezisk o połowę niższe
+        var (moonPhase, bloodMoon) = await MoonPhaseHelper.GetAsync(_context);
+        if (moonPhase == MoonPhaseHelper.GarbAutora
+            && MoonPhaseHelper.Affects(kingdom.Race, moonPhase, bloodMoon))
+            luckMult *= 0.5m;
         double rand = 0.8 + rng.NextDouble() * 0.4; // 0,8–1,2
 
         switch (type)
@@ -306,6 +311,12 @@ public class LabyrinthService : ILabyrinthService
         int maxFromLab = dragons >= 240 ? 1
             : dragons >= 150 ? Math.Max(1, 5 - (int)((dragons - 150) * 4 / 90))
             : 5;
+
+        // Oko smoka (MECHANIKA §13): podwaja smoki znalezione w labiryncie
+        var (moonPhase, bloodMoon) = await MoonPhaseHelper.GetAsync(_context);
+        if (moonPhase == MoonPhaseHelper.OkoSmoka
+            && MoonPhaseHelper.Affects(kingdom.Race, moonPhase, bloodMoon))
+            maxFromLab *= 2;
 
         long canAdd = Math.Min(maxFromLab, cap - dragons);
         if (canAdd <= 0)
