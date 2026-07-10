@@ -42,6 +42,12 @@ public class CoalitionController : ControllerBase
 
         var races = await _context.RaceDefinitions.ToDictionaryAsync(r => r.Name);
 
+        // Aktywne wojny per koalicja (do kolumny statystyk)
+        var activeWars = await _context.Wars
+            .Where(w => w.Status == "Active")
+            .Select(w => new { w.DeclaringCoalitionId, w.TargetCoalitionId })
+            .ToListAsync();
+
         var result = coalitions.Select(c =>
         {
             var members = c.Members
@@ -58,6 +64,16 @@ public class CoalitionController : ControllerBase
                 MaxMembers = c.MaxMembers,
                 PSOProgress = c.PSOProgress,
                 TotalLand = members.Sum(m => (long)m.Land),
+                TotalPopulation = members.Sum(m => (long)m.Population),
+                TotalArmy = members.Sum(m => (long)m.Military),
+                TotalAttack = members.Sum(m => m.AttackPower),
+                TotalDefense = members.Sum(m => m.DefensePower),
+                TotalMana = members.Sum(m => m.Magic),
+                TotalThiefPower = members.Sum(m => m.ThiefPower),
+                TotalBuildings = members.Sum(m => (long)m.BuildingCount),
+                AvgLand = members.Count > 0 ? (long)members.Average(m => (double)m.Land) : 0,
+                ActiveWars = activeWars.Count(w =>
+                    w.DeclaringCoalitionId == c.Id || w.TargetCoalitionId == c.Id),
                 Members = members
             };
         })

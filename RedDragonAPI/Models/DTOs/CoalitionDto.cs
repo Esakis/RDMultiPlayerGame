@@ -11,6 +11,16 @@ public class CoalitionDto
     public int MaxMembers { get; set; }
     public decimal PSOProgress { get; set; }
     public long TotalLand { get; set; }
+    // Agregaty statystyk koalicji (Σ po członkach)
+    public long TotalPopulation { get; set; }
+    public long TotalArmy { get; set; }
+    public long TotalAttack { get; set; }
+    public long TotalDefense { get; set; }
+    public long TotalMana { get; set; }
+    public long TotalThiefPower { get; set; }
+    public long TotalBuildings { get; set; }
+    public long AvgLand { get; set; }
+    public int ActiveWars { get; set; }
     public List<KingdomSummaryDto> Members { get; set; } = new();
 }
 

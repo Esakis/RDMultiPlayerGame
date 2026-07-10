@@ -828,16 +828,24 @@
       "tag": "Tag",
       "leader": "Leader",
       "land": "Area",
+      "avgLand": "Avg. area",
+      "population": "Population",
+      "army": "Army",
       "members": "Members",
       "military": "Military power",
+      "attack": "Attack",
+      "defense": "Defense",
       "magic": "Magic power",
       "thief": "Thief power",
+      "buildings": "Buildings",
+      "wars": "Wars",
       "pso": "PFJ"
     },
     "member": {
       "member": "Member",
       "role": "Role",
-      "race": "Race"
+      "race": "Race",
+      "built": "Built"
     },
     "detail": {
       "back": "‹ Back to list"

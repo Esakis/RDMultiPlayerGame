@@ -73,25 +73,6 @@ export class CoalitionComponent implements OnInit {
   }
 
   /** Siła wojskowa = suma ataku i obrony. */
-  memberMilitary(m: KingdomSummary): number {
-    return (m.attackPower ?? 0) + (m.defensePower ?? 0);
-  }
-
-  /** Łączna siła wojskowa koalicji (Σ atak + obrona członków). */
-  coalitionMilitary(c: Coalition): number {
-    return c.members.reduce((s, m) => s + this.memberMilitary(m), 0);
-  }
-
-  /** Łączna siła magiczna koalicji (Σ many członków). */
-  coalitionMagic(c: Coalition): number {
-    return c.members.reduce((s, m) => s + (m.magic ?? 0), 0);
-  }
-
-  /** Łączna siła złodziejska koalicji (Σ siły złodziejskiej członków). */
-  coalitionThief(c: Coalition): number {
-    return c.members.reduce((s, m) => s + (m.thiefPower ?? 0), 0);
-  }
-
   /** Etykieta roli członka koalicji (tłumaczona). */
   roleLabel(role: string | null | undefined): string {
     switch (role) {

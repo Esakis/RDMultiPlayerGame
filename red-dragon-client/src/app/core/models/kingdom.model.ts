@@ -252,6 +252,16 @@ export interface Coalition {
   maxMembers: number;
   psoProgress: number;
   totalLand: number;
+  // Agregaty statystyk koalicji (Σ po członkach, liczone na backendzie)
+  totalPopulation: number;
+  totalArmy: number;
+  totalAttack: number;
+  totalDefense: number;
+  totalMana: number;
+  totalThiefPower: number;
+  totalBuildings: number;
+  avgLand: number;
+  activeWars: number;
   members: KingdomSummary[];
 }
 

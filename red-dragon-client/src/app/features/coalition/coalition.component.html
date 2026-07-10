@@ -282,8 +282,11 @@
           <thead>
             <tr>
               <th>#</th><th>{{ 'pol.col.name' | translate }}</th><th>{{ 'pol.col.tag' | translate }}</th><th>{{ 'pol.col.leader' | translate }}</th>
-              <th class="num">{{ 'pol.col.land' | translate }}</th><th class="num">{{ 'pol.col.members' | translate }}</th>
-              <th class="num">{{ 'pol.col.military' | translate }}</th><th class="num">{{ 'pol.col.magic' | translate }}</th><th class="num">{{ 'pol.col.thief' | translate }}</th>
+              <th class="num">{{ 'pol.col.land' | translate }}</th><th class="num">{{ 'pol.col.population' | translate }}</th>
+              <th class="num">{{ 'pol.col.members' | translate }}</th>
+              <th class="num">{{ 'pol.col.attack' | translate }}</th><th class="num">{{ 'pol.col.defense' | translate }}</th>
+              <th class="num">{{ 'pol.col.magic' | translate }}</th><th class="num">{{ 'pol.col.thief' | translate }}</th>
+              <th class="num">{{ 'pol.col.wars' | translate }}</th>
               <th class="num">{{ 'pol.col.pso' | translate }}</th><th></th>
             </tr>
           </thead>
@@ -296,10 +299,13 @@
               <td class="tag">[{{ c.tag }}]</td>
               <td>{{ c.leaderName || '-' }}</td>
               <td class="num land">{{ c.totalLand | number }}</td>
+              <td class="num">{{ c.totalPopulation | number }}</td>
               <td class="num">{{ c.memberCount }}/{{ c.maxMembers }}</td>
-              <td class="num mil">{{ coalitionMilitary(c) | number }}</td>
-              <td class="num mag">{{ coalitionMagic(c) | number }}</td>
-              <td class="num thf">{{ coalitionThief(c) | number }}</td>
+              <td class="num mil">{{ c.totalAttack | number }}</td>
+              <td class="num mil">{{ c.totalDefense | number }}</td>
+              <td class="num mag">{{ c.totalMana | number }}</td>
+              <td class="num thf">{{ c.totalThiefPower | number }}</td>
+              <td class="num" [class.war]="c.activeWars > 0">{{ c.activeWars }}</td>
               <td class="num pso">{{ c.psoProgress }}%</td>
               <td>
                 <button class="btn-sm" *ngIf="!kingdom?.coalitionId && c.memberCount < c.maxMembers"
@@ -324,13 +330,21 @@
         <div class="detail-stats">
           <span>{{ 'pol.col.leader' | translate }}: <strong>{{ c.leaderName || '-' }}</strong></span>
           <span>{{ 'pol.col.land' | translate }}: <strong class="land">{{ c.totalLand | number }}</strong></span>
+          <span>{{ 'pol.col.avgLand' | translate }}: <strong>{{ c.avgLand | number }}</strong></span>
           <span>{{ 'pol.col.members' | translate }}: <strong>{{ c.memberCount }}/{{ c.maxMembers }}</strong></span>
           <span>{{ 'pol.col.pso' | translate }}: <strong class="pso">{{ c.psoProgress }}%</strong></span>
         </div>
         <div class="detail-stats">
-          <span>{{ 'pol.col.military' | translate }}: <strong class="mil">{{ coalitionMilitary(c) | number }}</strong></span>
-          <span>{{ 'pol.col.magic' | translate }}: <strong class="mag">{{ coalitionMagic(c) | number }}</strong></span>
-          <span>{{ 'pol.col.thief' | translate }}: <strong class="thf">{{ coalitionThief(c) | number }}</strong></span>
+          <span>{{ 'pol.col.population' | translate }}: <strong>{{ c.totalPopulation | number }}</strong></span>
+          <span>{{ 'pol.col.army' | translate }}: <strong>{{ c.totalArmy | number }}</strong></span>
+          <span>{{ 'pol.col.attack' | translate }}: <strong class="mil">{{ c.totalAttack | number }}</strong></span>
+          <span>{{ 'pol.col.defense' | translate }}: <strong class="mil">{{ c.totalDefense | number }}</strong></span>
+          <span>{{ 'pol.col.magic' | translate }}: <strong class="mag">{{ c.totalMana | number }}</strong></span>
+          <span>{{ 'pol.col.thief' | translate }}: <strong class="thf">{{ c.totalThiefPower | number }}</strong></span>
+        </div>
+        <div class="detail-stats">
+          <span>{{ 'pol.col.buildings' | translate }}: <strong>{{ c.totalBuildings | number }}</strong></span>
+          <span>{{ 'pol.col.wars' | translate }}: <strong [class.war]="c.activeWars > 0">{{ c.activeWars }}</strong></span>
         </div>
 
         <table class="coalition-table member-table">
@@ -338,7 +352,11 @@
             <tr>
               <th>{{ 'pol.member.member' | translate }}</th><th>{{ 'pol.member.role' | translate }}</th><th>{{ 'pol.member.race' | translate }}</th>
               <th class="num">{{ 'pol.col.land' | translate }}</th>
-              <th class="num">{{ 'pol.col.military' | translate }}</th><th class="num">{{ 'pol.col.magic' | translate }}</th><th class="num">{{ 'pol.col.thief' | translate }}</th>
+              <th class="num">{{ 'pol.col.population' | translate }}</th>
+              <th class="num">{{ 'pol.member.built' | translate }}</th>
+              <th class="num">{{ 'pol.col.army' | translate }}</th>
+              <th class="num">{{ 'pol.col.attack' | translate }}</th><th class="num">{{ 'pol.col.defense' | translate }}</th>
+              <th class="num">{{ 'pol.col.magic' | translate }}</th><th class="num">{{ 'pol.col.thief' | translate }}</th>
             </tr>
           </thead>
           <tbody>
@@ -347,7 +365,11 @@
               <td class="m-role" [ngClass]="roleClass(m.coalitionRole)">{{ roleLabel(m.coalitionRole) }}</td>
               <td class="m-race">{{ m.race }}</td>
               <td class="num">{{ m.land | number }}</td>
-              <td class="num mil">{{ memberMilitary(m) | number }}</td>
+              <td class="num">{{ m.population | number }}</td>
+              <td class="num">{{ m.builtPercent }}%</td>
+              <td class="num">{{ m.military | number }}</td>
+              <td class="num mil">{{ m.attackPower | number }}</td>
+              <td class="num mil">{{ m.defensePower | number }}</td>
               <td class="num mag">{{ m.magic | number }}</td>
               <td class="num thf">{{ m.thiefPower | number }}</td>
             </tr>

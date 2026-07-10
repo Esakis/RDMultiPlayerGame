@@ -828,16 +828,24 @@
       "tag": "Tag",
       "leader": "Lider",
       "land": "Obszar",
+      "avgLand": "Śr. obszar",
+      "population": "Ludność",
+      "army": "Armia",
       "members": "Członkowie",
       "military": "Siła wojskowa",
+      "attack": "Atak",
+      "defense": "Obrona",
       "magic": "Siła magiczna",
       "thief": "Siła złodziejska",
+      "buildings": "Budynki",
+      "wars": "Wojny",
       "pso": "PSO"
     },
     "member": {
       "member": "Członek",
       "role": "Rola",
-      "race": "Rasa"
+      "race": "Rasa",
+      "built": "Zabudowa"
     },
     "detail": {
       "back": "‹ Wróć do listy"
