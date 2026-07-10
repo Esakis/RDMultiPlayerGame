@@ -118,7 +118,8 @@ public class ResourceService : IResourceService
         // Górnictwo odkrywkowe: stabilny urobek złota = % złota alchemików (Dracopedia).
         decimal mineGoldRate = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "MineGold");
         // Inżynieria zaawansowana: murarze zużywają 10% mniej kamienia.
-        bool masonsStoneSaver = await _context.Researches.AnyAsync(r =>
+        // U Elfa poziom 4 działa zamiast tego jako rabat 32% na zabudowania (Dracopedia).
+        bool masonsStoneSaver = kingdom.Race != "Elf" && await _context.Researches.AnyAsync(r =>
             r.KingdomId == kingdom.Id && r.IsCompleted && r.TechType == "Inzynieria4");
 
         decimal inventedBonus = 1m + (kingdom.Education / 100m) + productionBonus;

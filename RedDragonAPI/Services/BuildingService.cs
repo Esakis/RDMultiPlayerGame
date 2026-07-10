@@ -27,7 +27,7 @@ public class BuildingService : IBuildingService
         var definitions = await _context.BuildingDefinitions.ToListAsync();
 
         // Rabat badań Inżynieria — wspólny dla wyceny i sprawdzenia możliwości budowy.
-        decimal ecoDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "EcoBuildingCostReduction");
+        decimal ecoDiscount = await EcoDiscountAsync(kingdom);
 
         return definitions.Select(d =>
         {
@@ -106,7 +106,7 @@ public class BuildingService : IBuildingService
         if (definition == null)
             return ServiceResult.Fail("Nieznany typ budynku.");
 
-        decimal ecoDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "EcoBuildingCostReduction");
+        decimal ecoDiscount = await EcoDiscountAsync(kingdom);
         var (canBuild, reason) = CheckCanBuild(kingdom, definition, ecoDiscount);
         if (!canBuild)
             return ServiceResult.Fail(reason!);
@@ -127,15 +127,7 @@ public class BuildingService : IBuildingService
                     $"Już wznosisz budynek specjalny: {inProgress?.DisplayName ?? kingdom.CurrentSpecialBuilding}. Najpierw go dokończ.");
             }
 
-            // Rabat badań: Architektura obniża koszt budulca budynków specjalnych.
-            decimal specialDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "SpecialBuildingCostReduction");
-            decimal specialCost = definition.BaseCost * (1m - specialDiscount);
-            // Rasy (§2.2): Krasnolud — budynki specjalne o 10% tańsze; Br-Oug — o 50% droższe.
-            if (kingdom.Race == "Krasnolud") specialCost *= 0.9m;
-            if (kingdom.Race == "Br-Oug") specialCost *= 1.5m;
-            // Protektorat początkowy (Dracopedia §1): budynki specjalne −60%.
-            if (kingdom.IsProtected) specialCost *= 0.4m;
-            int budulecCost = Math.Max(1, (int)specialCost);
+            int budulecCost = await ComputeSpecialBudulecCostAsync(kingdom, definition);
 
             kingdom.CurrentSpecialBuilding = dto.BuildingType;
             kingdom.SpecialBuildingCost = budulecCost;
@@ -256,12 +248,75 @@ public class BuildingService : IBuildingService
         int quantity = Math.Min(Math.Max(1, dto.Quantity), building.Quantity);
         building.Quantity -= quantity;
 
+        // Inżynieria 5 (Dracopedia): wyburzanie budynków zwraca 80% budulca.
+        // U Ożywieńców (Nekromant) poziom działa zamiast tego jako rabat 32%.
+        long refund = 0;
+        if (kingdom.Race != "Nekromant" && await HasTechAsync(kingdom.Id, "Inzynieria5"))
+        {
+            if (definition.IsSpecial)
+            {
+                refund = (long)(await ComputeSpecialBudulecCostAsync(kingdom, definition) * 0.8m);
+            }
+            else
+            {
+                var (budulecPer, _) = ComputeEconomicCost(kingdom, await EcoDiscountAsync(kingdom));
+                decimal raceMult = kingdom.Race == "Człowiek" ? 0.9m
+                    : kingdom.Race == "Br-Oug" ? 1.5m : 1m;
+                refund = (long)(budulecPer * raceMult * quantity * 0.8m);
+            }
+            kingdom.BudulecStored += refund;
+        }
+
         // Budynek bez sztuk i bez trwającej budowy można usunąć z bazy (zwalnia drzewko specjalne).
         if (building.Quantity == 0 && !building.IsUnderConstruction)
             _context.Buildings.Remove(building);
 
         await _context.SaveChangesAsync();
-        return ServiceResult.Ok($"Wyburzono {quantity}x {definition.DisplayName}. Zajmowana ziemia została zwolniona.");
+        string refundInfo = refund > 0 ? $" Odzyskano {refund} budulca (Inżynieria nowoczesna)." : "";
+        return ServiceResult.Ok($"Wyburzono {quantity}x {definition.DisplayName}. Zajmowana ziemia została zwolniona.{refundInfo}");
+    }
+
+    /// <summary>Ukończone badanie danego typu.</summary>
+    private Task<bool> HasTechAsync(int kingdomId, string techType) =>
+        _context.Researches.AnyAsync(r => r.KingdomId == kingdomId && r.TechType == techType && r.IsCompleted);
+
+    /// <summary>
+    /// Rabat Inżynierii na zabudowania gospodarcze. Wyjątki (Dracopedia):
+    /// Elf z Inżynierią 4 oraz Ożywieniec (Nekromant) z Inżynierią 5 mają 32%
+    /// zamiast efektów specjalnych tych poziomów.
+    /// </summary>
+    private async Task<decimal> EcoDiscountAsync(Kingdom kingdom)
+    {
+        decimal d = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "EcoBuildingCostReduction");
+        if (kingdom.Race == "Elf" && await HasTechAsync(kingdom.Id, "Inzynieria4")) d = Math.Max(d, 0.32m);
+        if (kingdom.Race == "Nekromant" && await HasTechAsync(kingdom.Id, "Inzynieria5")) d = Math.Max(d, 0.32m);
+        return d;
+    }
+
+    /// <summary>
+    /// Koszt budulca budynku specjalnego z rabatami: Architektura (u Enta poz. 4/5
+    /// dają 21%/30% zamiast efektów specjalnych), rasa, protektorat. Architektura 5:
+    /// budynki 6. i 7. rzędu budują się o turę szybciej — przy stałej produkcji
+    /// budulca odpowiada to kosztowi ×(t−1)/t.
+    /// </summary>
+    private async Task<int> ComputeSpecialBudulecCostAsync(Kingdom kingdom, BuildingDefinition definition)
+    {
+        decimal specialDiscount = await ResearchEffects.MaxEffectAsync(_context, kingdom.Id, "SpecialBuildingCostReduction");
+        if (kingdom.Race == "Ent")
+        {
+            if (await HasTechAsync(kingdom.Id, "Architektura5")) specialDiscount = Math.Max(specialDiscount, 0.30m);
+            else if (await HasTechAsync(kingdom.Id, "Architektura4")) specialDiscount = Math.Max(specialDiscount, 0.21m);
+        }
+        decimal specialCost = definition.BaseCost * (1m - specialDiscount);
+        // Rasy (§2.2): Krasnolud — budynki specjalne o 10% tańsze; Br-Oug — o 50% droższe.
+        if (kingdom.Race == "Krasnolud") specialCost *= 0.9m;
+        if (kingdom.Race == "Br-Oug") specialCost *= 1.5m;
+        // Protektorat początkowy (Dracopedia §1): budynki specjalne −60%.
+        if (kingdom.IsProtected) specialCost *= 0.4m;
+        if (definition.Row >= 6 && definition.BuildTime > 1
+            && await HasTechAsync(kingdom.Id, "Architektura5"))
+            specialCost *= (definition.BuildTime - 1m) / definition.BuildTime;
+        return Math.Max(1, (int)specialCost);
     }
 
     /// <summary>

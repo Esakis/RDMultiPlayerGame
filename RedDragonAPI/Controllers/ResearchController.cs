@@ -189,6 +189,10 @@ public class ResearchController : ControllerBase
     {
         // W Red Dragon badania prowadzą naukowcy (profesja) inwestując Punkty Nauki —
         // nie ma wymogu budynku „uniwersytetu". Wymagane są jedynie wcześniejsze dziedziny.
+        // Ent (Dracopedia/Inżynieria): poziomy 4 i 5 niedostępne.
+        if (kingdom.Race == "Ent" && techDef.TechType is "Inzynieria4" or "Inzynieria5")
+            return (false, "Enty nie mają dostępu do zaawansowanej Inżynierii.");
+
         if (!string.IsNullOrEmpty(techDef.RequiredTech))
         {
             var prereq = kingdom.Researches.FirstOrDefault(r => r.TechType == techDef.RequiredTech && r.IsCompleted);

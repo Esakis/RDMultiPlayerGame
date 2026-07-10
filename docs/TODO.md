@@ -89,10 +89,21 @@ Dracopedia = źródło nadrzędne; przy rozbieżnościach przyjmujemy wartości 
       Kopalni złota (wg źródła to przychód Z kopalni; wcześniej działał bez niej).
 
 ### Etap 7 — efekty specjalne nauk poziomów 4–5 — BRAK LOGIKI
-- [ ] Architektura 4: budynki 3. rzędu bez złota, przyspieszanie budowy −50%.
-- [ ] Architektura 5: szybsza budowa rzędów 6–7.
-- [ ] Rekrutacja 4–5: zweryfikować sens (karawany nie istnieją) — wdrożyć lub
+- [x] Architektura 4: budynki 3. rzędu bez złota, przyspieszanie budowy −50%.
+      → Bezprzedmiotowe w naszym modelu (specjalne kosztują wyłącznie budulec,
+      mechaniki przyspieszania nie ma) — pominięte z adnotacją w opisie nauki.
+      Wdrożony wyjątek Enta: poz. 4 = rabat 21%, poz. 5 = 30% na specjalne.
+- [x] Architektura 5: szybsza budowa rzędów 6–7.
+      → Budynki specjalne rzędów 6–7: koszt budulca ×(t−1)/t (odpowiednik
+      1 tury przy stałej produkcji budulca).
+- [x] Rekrutacja 4–5: zweryfikować sens (karawany nie istnieją) — wdrożyć lub
       świadomie pominąć z adnotacją. Czarodziejstwo 5: 25% (źródło) vs 30% (kod).
+      → Rekrutacja 4–5 pominięte z adnotacją w opisach (karawany nie istnieją;
+      „ranni generałowie lvl/3" — źródło zbyt lakoniczne). Czarodziejstwo
+      skorygowane do źródła: 3/6/15/20/25% (było 4,5/9/15/21/30). Dodatkowo
+      z Inżynierii: poz. 5 = wyburzanie zwraca 80% budulca; wyjątki rasowe
+      (Elf poz. 4 → rabat 32%, Ożywieniec poz. 5 → rabat 32%, Ent bez dostępu
+      do poz. 4–5 — walidacja badań). Migracja ScienceTier45Effects.
 
 Uwaga: kalibracja B10/B11 pozostaje osobno (wymaga żywych graczy).
 
